@@ -19,7 +19,7 @@ namespace Cianfrusaglie.Models {
 
         public virtual ICollection< User > BlockedUsers { get; set; }
 
-        [Required, DataType( DataType.Password )]
+        [Required, DataType( DataType.Password ), MinLength( 3 )]
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
