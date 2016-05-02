@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8C8442E9-F63B-4391-B3FE-AA93B8793F8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D66A03CF-09F2-4BA4-B328-62D7EF2BAAAE}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cianfrusaglie", "src\Cianfrusaglie\Cianfrusaglie.xproj", "{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C} = {8C8442E9-F63B-4391-B3FE-AA93B8793F8B}
+	EndGlobalSection
+EndGlobal
