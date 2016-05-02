@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cianfrusaglie", "src\Cianfrusaglie\Cianfrusaglie.xproj", "{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cianfrusaglie.Tests", "src\Cianfrusaglie.Tests\Cianfrusaglie.Tests.xproj", "{B95B595D-01C8-4DB7-8E45-298DD90E979B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,11 +24,16 @@ Global
 		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B95B595D-01C8-4DB7-8E45-298DD90E979B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B95B595D-01C8-4DB7-8E45-298DD90E979B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B95B595D-01C8-4DB7-8E45-298DD90E979B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B95B595D-01C8-4DB7-8E45-298DD90E979B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DCAEE4F7-436A-40D0-BA3A-E58B2C22FB5C} = {8C8442E9-F63B-4391-B3FE-AA93B8793F8B}
+		{B95B595D-01C8-4DB7-8E45-298DD90E979B} = {8C8442E9-F63B-4391-B3FE-AA93B8793F8B}
 	EndGlobalSection
 EndGlobal
