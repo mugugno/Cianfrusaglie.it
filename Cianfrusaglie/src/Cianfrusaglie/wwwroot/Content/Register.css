@@ -1,33 +1,32 @@
 ﻿#wrapper-register{
-    background:#f0eeee;
     bottom:0;
     height: 100%;
     margin: 0;
 
     /*Leggero gradiente*/
-    background-color: #f0eeee;
+    background-color: #EAEAEA;
     background-position: center center;
     background-repeat: no-repeat;
     /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#f0eeee));
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#EAEAEA));
     /* Safari 5.1+, Chrome 10+ */
-    background: -webkit-radial-gradient(circle, #fff, #f0eeee);
+    background: -webkit-radial-gradient(circle, #fff, #EAEAEA);
     /* Firefox 3.6+ */
-    background: -moz-radial-gradient(circle, #fff, #f0eeee);
+    background: -moz-radial-gradient(circle, #fff, #EAEAEA);
     /* IE 10 */
-    background: -ms-radial-gradient(circle, #fff, #f0eeee);
+    background: -ms-radial-gradient(circle, #fff, #EAEAEA);
 }
 
 #register{
     padding-top:4em;
-    width: 30em;
+    width: 22em;
     margin: auto;
 }
 
 .form-register{
     padding-top:4em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    font-size:1.2em;
+    font-size:1em;
     padding:1.5em;
     border: 1px solid #b8b8b8;
     background:#fff;
