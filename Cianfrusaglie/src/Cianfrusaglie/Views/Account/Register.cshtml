@@ -1,35 +1,40 @@
 ﻿@using System.Threading.Tasks
-@model  Cianfrusaglie.ViewModels.RegisterViewModel 
+@model  Cianfrusaglie.ViewModels.Account.RegisterViewModel 
 @{
     ViewData[ "Title" ] = "Register";
 }
 <div id="wrapper-register">
     <div id="register">
-        <h1><a href="">CIANFRUSAGLIE.it</a></h1>
+        <h1><a href="">CIANFRUSAGLIE.it</a>
+        </h1>
         <form asp-action="Register" asp-controller="Account" class="form-horizontal form-register" method="post" role="form">
-            
-            <h2><strong>Registrati</strong></h2>
+
+            <h2><strong>Registrati</strong>
+            </h2>
             <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                <input asp-for="Email" class="form-control" />
+                <label asp-for="Email" class="control-label">Indirizzo email</label><br/>
+                <input asp-for="Email" class="form-control"/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label">Password</label><br />
-                <input asp-for="Password" type="password" class="form-control" />
+                <label asp-for="Password" class="control-label">Password</label><br/>
+                <input asp-for="Password" type="password" class="form-control"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
-                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br/>
+                <input asp-for="ConfirmPassword" type="password" class="form-control"/>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
             </div>
             <div class="form-group">
-                <br /><button class="btn btn-default" type="submit">Crea il tuo account</button>
+                <br/><button class="btn btn-default" type="submit">Crea il tuo account</button>
             </div>
             <h4><a href="">Effettua l'accesso</a></h4>
         </form>
     </div>
 </div>
+@*@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}*@
