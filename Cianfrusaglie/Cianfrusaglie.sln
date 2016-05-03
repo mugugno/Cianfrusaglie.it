@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3A38CE49-34A8-49F7-8E52-0E9302AF76A4}"
 EndProject
@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cianfrusaglie", "src\Cianfrusaglie\Cianfrusaglie.xproj", "{34E6E6B7-247B-4863-910A-3DF9752B72E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9277D34C-88BF-46C9-BEBC-9D18206E4D81}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cianfrusaglie.Tests", "test\Cianfrusaglie.Tests\Cianfrusaglie.Tests.xproj", "{243CEE87-58C3-4B4E-BADA-92604C678755}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,11 +26,16 @@ Global
 		{34E6E6B7-247B-4863-910A-3DF9752B72E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34E6E6B7-247B-4863-910A-3DF9752B72E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34E6E6B7-247B-4863-910A-3DF9752B72E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{243CEE87-58C3-4B4E-BADA-92604C678755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{243CEE87-58C3-4B4E-BADA-92604C678755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{243CEE87-58C3-4B4E-BADA-92604C678755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{243CEE87-58C3-4B4E-BADA-92604C678755}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{34E6E6B7-247B-4863-910A-3DF9752B72E5} = {3A38CE49-34A8-49F7-8E52-0E9302AF76A4}
+		{243CEE87-58C3-4B4E-BADA-92604C678755} = {9277D34C-88BF-46C9-BEBC-9D18206E4D81}
 	EndGlobalSection
 EndGlobal
