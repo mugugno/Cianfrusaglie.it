@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Cianfrusaglie.Models {
-    public class User {
+    public class User : IdentityUser {
         public int Id { get; set; }
 
         [Required, EmailAddress, MinLength( 7 ), MaxLength( 30 )]

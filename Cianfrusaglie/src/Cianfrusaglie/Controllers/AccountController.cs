@@ -12,7 +12,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 
-namespace MvcMovie.Controllers {
+namespace Cianfrusaglie.Controllers {
     [Authorize]
     public class AccountController : Controller {
         private readonly UserManager< User > _userManager;
