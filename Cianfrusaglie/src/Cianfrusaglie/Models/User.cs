@@ -6,7 +6,7 @@ namespace Cianfrusaglie.Models {
     public class User {
         public int Id { get; set; }
 
-        [Required, EmailAddress]
+        [Required, EmailAddress, MinLength( 7 ), MaxLength( 30 )]
         public string Email { get; set; }
 
         [Required, MinLength( 3 ), MaxLength( 25 )]
@@ -23,5 +23,8 @@ namespace Cianfrusaglie.Models {
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
+        public virtual ICollection<Message> SendedMessages { get; set; }
+        public virtual ICollection<Message> ReceivedMessages { get; set; }  
     }
 }
