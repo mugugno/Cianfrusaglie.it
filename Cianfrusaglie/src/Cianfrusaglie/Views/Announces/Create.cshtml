@@ -1,0 +1,62 @@
+@model Announce
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<div id="wrapper-create">
+    <div id="create">
+        <form asp-action="Create" asp-controller="Announces" class="form-horizontal form-create" method="post" role="form">
+            <div class="form-horizontal">
+                <h4>Announce</h4>
+                <hr />
+                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="City" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PublishDate" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="PublishDate" class="form-control" />
+                        <span asp-validation-for="PublishDate" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Range" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Range" class="form-control" />
+                        <span asp-validation-for="Range" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Pubblica Annuncio</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+
+@*@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}*@

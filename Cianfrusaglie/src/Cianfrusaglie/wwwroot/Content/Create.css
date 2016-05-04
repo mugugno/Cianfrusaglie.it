@@ -1,0 +1,79 @@
+﻿#wrapper-create{
+    bottom:0;
+    height: 100%;
+    margin: 0;
+
+    /*Leggero gradiente*/
+    background-color: #EAEAEA;
+    background-position: center center;
+    background-repeat: no-repeat;
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#EAEAEA));
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-radial-gradient(circle, #fff, #EAEAEA);
+    /* Firefox 3.6+ */
+    background: -moz-radial-gradient(circle, #fff, #EAEAEA);
+    /* IE 10 */
+    background: -ms-radial-gradient(circle, #fff, #EAEAEA);
+}
+
+#create{
+    padding-top:4em;
+    width: 80%;
+    margin: auto;
+}
+
+.form-create{
+    padding-top:4em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-size:1em;
+    padding:1.5em;
+    border: 1px solid #b8b8b8;
+    background:#fff;
+    border-radius: 10px;
+}
+.form-create h2{
+    font-weight:100;
+}
+#create h1{
+    text-align:center;
+    font-size:2.5em;
+}
+#create h1 a{
+    color:#FFC107;
+    text-decoration: none;
+}
+.form-create input{
+    width:100%;
+    margin-bottom:1.2em;
+    height:2.2em;
+    padding:.2em;  
+    font-weight:100;
+}
+.form-create h4{
+    text-align:left;
+    margin:0;
+    padding:0;
+}
+.form-create h4 a{
+    color:#FFC107;
+    font-size:1em;
+    font-weight:100;
+}
+.form-create button[type="submit"]{
+    width:100%;
+    margin-bottom:1.2em;
+    height:2.8em;
+    cursor:pointer;
+    padding:0;
+    border: 1px solid #BD900A;
+    font-size:1em;
+    background: #FFC107;
+    background: -webkit-linear-gradient(#FFC107, #FFE082); /* For Safari 5.1 to 6.0 */
+    background: -webkit-linear-gradient(#FFC107, #FFE082); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#FFC107, #FFE082); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#FFC107, #FFE082); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#FFC107, #FFE082); /* Standard syntax */
+    border-radius: 5px;
+}
+
