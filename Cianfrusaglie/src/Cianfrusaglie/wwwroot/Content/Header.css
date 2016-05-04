@@ -1,0 +1,20 @@
+﻿#pageHeader h1{
+    margin:0;
+    padding:0;
+}
+
+#pageHeader {
+    width:100%;
+}
+
+#menuRight {
+   float: right;
+}
+
+#footer {
+    position:absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+
