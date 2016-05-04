@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160504115109_Announce_base")]
+    partial class Announce_base
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -38,15 +39,6 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int>("Range");
 
                     b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
-                {
-                    b.Property<int>("AnnounceId");
-
-                    b.Property<int>("CategoryId");
-
-                    b.HasKey("AnnounceId", "CategoryId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Category", b =>
@@ -228,17 +220,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("AuthorId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
-
-                    b.HasOne("Cianfrusaglie.Models.Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Category", b =>

@@ -14,11 +14,12 @@ namespace Cianfrusaglie.Models
 
         public string City { get; set; } //TODO tabella con le città?!
 
-        public virtual ICollection< User > BlockedUsers { get; set; }
-
         public bool RememberMe { get; set; }
 
-        public virtual ICollection<Message> SentMessages { get; set; }
+      public virtual ICollection<Announce> PublishedAnnounces { get; set; }
+
+      public virtual ICollection<User> BlockedUsers { get; set; }
+      public virtual ICollection<Message> SentMessages { get; set; }
         public virtual ICollection<Message> ReceivedMessages { get; set; }
     }
 }

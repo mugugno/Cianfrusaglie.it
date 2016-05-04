@@ -6,15 +6,14 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 
-namespace Cianfrusaglie.Models
-{
-    public class ApplicationDbContext : IdentityDbContext<User>
-    {
+namespace Cianfrusaglie.Models{
+    public class ApplicationDbContext : IdentityDbContext<User>{
         public DbSet<Category> Categories { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Announce> Announces { get; set; } 
+        public DbSet<AnnounceCategory> AnnounceCategories { get; set; } 
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
+        protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
@@ -22,7 +21,21 @@ namespace Cianfrusaglie.Models
             builder.Entity<Category>().HasIndex(c => c.Name).IsUnique(true);
             builder.Entity<Category>().HasOne(c => c.OverCategory).WithMany(c => c.SubCategories);
 
-            builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity<Announce>().HasOne( u => u.Author ).WithMany( u => u.PublishedAnnounces ).OnDelete( DeleteBehavior.Restrict );
+
+         builder.Entity<AnnounceCategory>().HasKey( x => new { x.AnnounceId, x.CategoryId } );
+
+         builder.Entity<AnnounceCategory>()
+             .HasOne( pc => pc.Announce )
+             .WithMany( p => p.AnnounceCategories )
+             .HasForeignKey( pc => pc.AnnounceId );
+
+         builder.Entity<AnnounceCategory>()
+             .HasOne( pc => pc.Category )
+             .WithMany( c => c.CategoryAnnounces )
+             .HasForeignKey( pc => pc.CategoryId );
+
+         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
             builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete( DeleteBehavior.Restrict );
         }
     }

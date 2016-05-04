@@ -10,5 +10,6 @@ namespace Cianfrusaglie.Models {
 
       public virtual Category OverCategory { get; set; }
       public virtual ICollection< Category > SubCategories { get; set; }
+      public virtual ICollection< AnnounceCategory > CategoryAnnounces { get; set; }
    }
 }
