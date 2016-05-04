@@ -16,7 +16,8 @@ namespace Cianfrusaglie.Models {
       public virtual string City { get; set; } //TODO tabella città...
       [Range( 0, int.MinValue )]
       public virtual int Range { get; set; } //TODO in metri?!
-      //public virtual ICollection<Category> Categories { get; set; }
+      
+      public virtual ICollection<AnnounceCategory> AnnounceCategories { get; set; }
 
       //public virtual ICollection<AnnounceGat> Gats { get; set; }
       //public virtual ICollection<Interested> Interested { get; set; }
