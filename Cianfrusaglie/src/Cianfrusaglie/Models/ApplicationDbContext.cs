@@ -12,6 +12,7 @@ namespace Cianfrusaglie.Models
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Message> Messages { get; set; }
+      public DbSet<Announce> Announces { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -22,7 +23,9 @@ namespace Cianfrusaglie.Models
             builder.Entity<Category>().HasIndex(c => c.Name).IsUnique(true);
             builder.Entity<Category>().HasOne(c => c.OverCategory).WithMany(c => c.SubCategories);
 
-            builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity<Announce>().HasOne( u => u.Author ).WithMany( u => u.PublishedAnnounces ).OnDelete( DeleteBehavior.Restrict );
+
+         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
             builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete( DeleteBehavior.Restrict );
         }
     }
