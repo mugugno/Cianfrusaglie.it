@@ -14,7 +14,7 @@ namespace Cianfrusaglie.Models {
       public bool RememberMe { get; set; }
 
       public virtual ICollection< Announce > PublishedAnnounces { get; set; }
-
+      public virtual ICollection<Interested> InterestedAnnounces { get; set; } 
       public virtual ICollection< User > BlockedUsers { get; set; }
       public virtual ICollection< Message > SentMessages { get; set; }
       public virtual ICollection< Message > ReceivedMessages { get; set; }

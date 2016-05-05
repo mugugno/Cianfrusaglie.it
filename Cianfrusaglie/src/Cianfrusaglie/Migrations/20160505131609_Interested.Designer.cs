@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160505131609_Interested")]
+    partial class Interested
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -149,7 +150,7 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int?>("AnnounceId")
                         .IsRequired();
 
-                    b.Property<DateTime?>("ChooseDate");
+                    b.Property<DateTime>("ChooseDate");
 
                     b.Property<DateTime>("DateTime");
 

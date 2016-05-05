@@ -20,7 +20,7 @@ namespace Cianfrusaglie.Models {
       public virtual ICollection<AnnounceCategory> AnnounceCategories { get; set; }
 
       public virtual ICollection<AnnounceGat> AnnouncesGats { get; set; }
-      //public virtual ICollection<Interested> Interested { get; set; }
+      public virtual ICollection<Interested> Interested { get; set; }
       public virtual ICollection<AnnounceFormFieldsValues> AnnouncesFormFields { get; set; }
 
       public virtual ICollection<FeedBack> FeedBacks { get; set; }
