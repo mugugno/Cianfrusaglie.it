@@ -3,7 +3,8 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Cianfrusaglie.Models;
-
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 namespace Cianfrusaglie.Controllers
 {
     public class AnnouncesController : Controller
@@ -53,7 +54,7 @@ namespace Cianfrusaglie.Controllers
             {
                 _context.Announces.Add(announce);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("Index");
             }
             return View(announce);
         }
@@ -65,7 +66,6 @@ namespace Cianfrusaglie.Controllers
             {
                 return HttpNotFound();
             }
-
             Announce announce = _context.Announces.Single(m => m.Id == id);
             if (announce == null)
             {
@@ -79,6 +79,11 @@ namespace Cianfrusaglie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Announce announce)
         {
+            if (!User.GetUserId().Equals(announce.Author.Id))
+            {
+                //TODO la pagina!!!!!
+                return HttpBadRequest();
+            }
             if (ModelState.IsValid)
             {
                 _context.Update(announce);
