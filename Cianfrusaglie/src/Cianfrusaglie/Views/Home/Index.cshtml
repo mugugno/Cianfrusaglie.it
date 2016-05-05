@@ -2,10 +2,10 @@
     ViewData["Title"] = "Cianfrusaglie.it";
 }
 
-<div id="pageHeader" class="container">
-    <h1 class="col-md-3">@ViewData["Title"]</h1>
-    <form id="barraRicerca" class="navbar-form col-md-6" role="search">
-        <div class="form-group">
+<div id="pageHeader" class="container ">
+    <form class="navbar-form" role="search">
+        <h1 class="col-md-3">questo<strong>e</strong>quello</h1>
+        <div id="barraRicerca" class="form-group col-sm-12">
             <input type="text" class="form-control" placeholder="Search">
             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
             <a href="#">Ricerca Avanzata</a>
@@ -13,25 +13,16 @@
     </form>
 </div>
 
+
 <nav id="horizontalMenu" class="navbar navbar-default">
-    <div class="container-fluid">
-        <ul class="nav navbar-nav">
-            <li>
-                <a href="www.google.it">Home</a>
-            </li>
-            <li>
-                <a href="www.google.it">Ricerca per Categoria</a>
-            </li>
-        </ul>
         <ul class="nav navbar-nav" id="menuRight">
             <li>
-                <a href="Account/Register" id="regLink">Registrazione</a>
+                <a href="Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
             </li>
             <li>
-                <a href="Account/Login" id="logLink">Login</a>
+                <a href="Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"> Login</a>
             </li>
         </ul>
-    </div>
 </nav>
 
 <div id="homeCarousel" class="carousel slide" data-ride="carousel">
@@ -68,153 +59,8 @@
         <span class="sr-only">Next</span>
     </a>
 </div>
-<!--<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="brand" href="#">A dropdown example</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li class="active">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Explore the Monkeys</a>
-
-                        <ul class="dropdown-menu" role="menu">
-                            <li data-submenu-id="submenu-patas">
-                                <a href="#">Patas</a>
-                                <div id="submenu-patas" class="popover">
-                                    <h3 class="popover-title">Patas</h3>
-                                    <div class="popover-content">scimmia1</div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-snub-nosed">
-                                <a href="#">Golden Snub-Nosed</a>
-                                <div id="submenu-snub-nosed" class="popover">
-                                    <h3 class="popover-title">Golden Snub-Nosed</h3>
-                                    <div class="popover-content">scimmia2</div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-duoc-langur">
-                                <a href="#">Duoc Langur</a>
-                                <div id="submenu-duoc-langur" class="popover">
-                                    <h3 class="popover-title">Duoc Langur</h3>
-                                    <div class="popover-content"><img src="img/duoc-langur.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-pygmy">
-                                <a href="#">Baby Pygmy Marmoset</a>
-                                <div id="submenu-pygmy" class="popover">
-                                    <h3 class="popover-title">Baby Pygmy Marmoset</h3>
-                                    <div class="popover-content"><img src="img/pygmy.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-tamarin">
-                                <a href="#">Black Lion Tamarin</a>
-                                <div id="submenu-tamarin" class="popover">
-                                    <h3 class="popover-title">Black Lion Tamarin</h3>
-                                    <div class="popover-content"><img src="img/tamarin.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-monk">
-                                <a href="#">Monk Saki</a>
-                                <div id="submenu-monk" class="popover">
-                                    <h3 class="popover-title">Monk Saki</h3>
-                                    <div class="popover-content"><img src="img/monk.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-gabon">
-                                <a href="#">Gabon Talapoin</a>
-                                <div id="submenu-gabon" class="popover">
-                                    <h3 class="popover-title">Gabon</h3>
-                                    <div class="popover-content"><img src="img/gabon.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-grivet">
-                                <a href="#">Grivet</a>
-                                <div id="submenu-grivet" class="popover">
-                                    <h3 class="popover-title">Grivet</h3>
-                                    <div class="popover-content"><img src="img/grivet.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-red-leaf">
-                                <a href="#">Red Leaf</a>
-                                <div id="submenu-red-leaf" class="popover">
-                                    <h3 class="popover-title">Red Leaf</h3>
-                                    <div class="popover-content"><img src="img/red-leaf.png"></div>
-                                </div>
-                            </li>
-                            <li data-submenu-id="submenu-king-colobus">
-                                <a href="#">King Colobus</a>
-                                <div id="submenu-king-colobus" class="popover">
-                                    <h3 class="popover-title">King Colobus</h3>
-                                    <div class="popover-content"><img src="img/colobus.png"></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<script>
-        var $menu = $(".dropdown-menu");
-        // jQuery-menu-aim: <meaningful part of the example>
-        // Hook up events to be fired on menu row activation.
-        $menu.menuAim({
-            activate: activateSubmenu,
-            deactivate: deactivateSubmenu
-        });
-        // jQuery-menu-aim: </meaningful part of the example>
-        // jQuery-menu-aim: the following JS is used to show and hide the submenu
-        // contents. Again, this can be done in any number of ways. jQuery-menu-aim
-        // doesn't care how you do this, it just fires the activate and deactivate
-        // events at the right times so you know when to show and hide your submenus.
-        function activateSubmenu(row) {
-            var $row = $(row),
-                submenuId = $row.data("submenuId"),
-                $submenu = $("#" + submenuId),
-                height = $menu.outerHeight(),
-                width = $menu.outerWidth();
-            // Show the submenu
-            $submenu.css({
-                display: "block",
-                top: -1,
-                left: width - 3,  // main should overlay submenu
-                height: height - 4  // padding for main dropdown's arrow
-            });
-            // Keep the currently activated row's highlighted look
-            $row.find("a").addClass("maintainHover");
-        }
-        function deactivateSubmenu(row) {
-            var $row = $(row),
-                submenuId = $row.data("submenuId"),
-                $submenu = $("#" + submenuId);
-            // Hide the submenu and remove the row's highlighted look
-            $submenu.css("display", "none");
-            $row.find("a").removeClass("maintainHover");
-        }
-        // Bootstrap's dropdown menus immediately close on document click.
-        // Don't let this event close the menu if a submenu is being clicked.
-        // This event propagation control doesn't belong in the menu-aim plugin
-        // itself because the plugin is agnostic to bootstrap.
-        $(".dropdown-menu li").click(function(e) {
-            e.stopPropagation();
-        });
-        $(document).click(function() {
-            // Simply hide the submenu on any click. Again, this is just a hacked
-            // together menu/submenu structure to show the use of jQuery-menu-aim.
-            $(".popover").css("display", "none");
-            $("a.maintainHover").removeClass("maintainHover");
-        });
-</script>-->
-
 
 <div id="footer" class="panel-footer">
     Noi abbiamo un bel Footer perchè siamo i Mugugno.
 </div>
+
