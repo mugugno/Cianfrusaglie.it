@@ -8,6 +8,7 @@ namespace Cianfrusaglie.Models {
       [Required]
       public string Text { get; set; }
 
+      [DataType( DataType.DateTime )]
       public DateTime DateTime { get; set; }
 
       [Required]

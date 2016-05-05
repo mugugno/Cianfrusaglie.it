@@ -10,8 +10,10 @@ namespace Cianfrusaglie.Models {
       [Required]
       public virtual User Author { get; set; }
 
-      [Required]
+      [DataType( DataType.DateTime )]
       public virtual DateTime PublishDate { get; set; }
+      [DataType( DataType.DateTime )]
+      public virtual Nullable<DateTime> DeadLine { get; set; }
 
       [Required, MinLength( 3 ), MaxLength( 50 )]
       public virtual string Title { get; set; }

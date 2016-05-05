@@ -5,7 +5,7 @@ namespace Cianfrusaglie.Models {
    public class Interested {
       public int Id { get; set; }
 
-      [Required]
+      [DataType( DataType.DateTime )]
       public virtual DateTime DateTime { get; set; }
 
       [Required]

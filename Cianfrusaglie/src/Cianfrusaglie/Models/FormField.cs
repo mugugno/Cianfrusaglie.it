@@ -8,7 +8,6 @@ namespace Cianfrusaglie.Models {
       [Required, MinLength( 3 ), MaxLength( 30 )]
       public virtual string Name { get; set; }
 
-      //Fatto ClaFranck
       [Required]
       public virtual string Type { get; set; }
 

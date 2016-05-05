@@ -7,7 +7,7 @@ namespace Cianfrusaglie.Models {
       [Range( 0, 5 )]
       public virtual int Vote { get; set; }
 
-      [Required]
+      [DataType( DataType.DateTime )]
       public virtual DateTime DateTime { get; set; }
 
       [MaxLength( 99 )]
