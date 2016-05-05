@@ -12,6 +12,8 @@ namespace Cianfrusaglie.Models{
         public DbSet<Message> Messages { get; set; }
         public DbSet<Announce> Announces { get; set; } 
         public DbSet<AnnounceCategory> AnnounceCategories { get; set; } 
+        public DbSet<CategoryFormField> CategoryFormFields { get; set; } 
+        public DbSet<FormField> FormFields { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
@@ -37,6 +39,19 @@ namespace Cianfrusaglie.Models{
 
          builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
             builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete( DeleteBehavior.Restrict );
-        }
+
+         //---
+         builder.Entity<CategoryFormField>().HasKey( x => new { x.FormFieldId, x.CategoryId } );
+
+         builder.Entity<CategoryFormField>()
+             .HasOne( pc => pc.FormField )
+             .WithMany( p => p.CategoriesFormFields )
+             .HasForeignKey( pc => pc.FormFieldId );
+
+         builder.Entity<CategoryFormField>()
+             .HasOne( pc => pc.Category )
+             .WithMany( c => c.CategoriesFormFields )
+             .HasForeignKey( pc => pc.CategoryId );
+      }
     }
 }
