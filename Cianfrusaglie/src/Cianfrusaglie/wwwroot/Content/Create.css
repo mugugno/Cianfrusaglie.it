@@ -1,5 +1,6 @@
-﻿#wrapper-register{
+﻿#wrapper-create{
     bottom:0;
+    height: 100%;
     margin: 0;
 
     /*Leggero gradiente*/
@@ -16,13 +17,13 @@
     background: -ms-radial-gradient(circle, #fff, #EAEAEA);
 }
 
-#register{
+#create{
     padding-top:4em;
-    width: 22em;
+    width: 80%;
     margin: auto;
 }
 
-.form-register{
+.form-create{
     padding-top:4em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-size:1em;
@@ -31,36 +32,35 @@
     background:#fff;
     border-radius: 10px;
 }
-.form-register h2{
+.form-create h2{
     font-weight:100;
 }
-#register h1{
+#create h1{
     text-align:center;
     font-size:2.5em;
 }
-#register h1 a{
+#create h1 a{
     color:#FFC107;
     text-decoration: none;
 }
-.form-register input{
+.form-create input{
     width:100%;
     margin-bottom:1.2em;
     height:2.2em;
     padding:.2em;  
     font-weight:100;
 }
-.form-register h4{
-    text-align:right;
+.form-create h4{
+    text-align:left;
     margin:0;
     padding:0;
 }
-.form-register h4 a{
+.form-create h4 a{
     color:#FFC107;
     font-size:1em;
-    
     font-weight:100;
 }
-.form-register button[type="submit"]{
+.form-create button[type="submit"]{
     width:100%;
     margin-bottom:1.2em;
     height:2.8em;
