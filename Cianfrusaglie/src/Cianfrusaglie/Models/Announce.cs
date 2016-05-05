@@ -14,15 +14,15 @@ namespace Cianfrusaglie.Models {
       public virtual bool Closed { get; set; }
       [Required]
       public virtual string City { get; set; } //TODO tabella città...
-      [Range( 0, int.MinValue )]
+      [Range( 0, int.MaxValue )]
       public virtual int Range { get; set; } //TODO in metri?!
       
       public virtual ICollection<AnnounceCategory> AnnounceCategories { get; set; }
 
-      //public virtual ICollection<AnnounceGat> Gats { get; set; }
-      //public virtual ICollection<Interested> Interested { get; set; }
-      //public virtual ICollection<FormFieldValues> FormFieldsValues { get; set; }
+      public virtual ICollection<AnnounceGat> AnnouncesGats { get; set; }
+      public virtual ICollection<Interested> Interested { get; set; }
+      public virtual ICollection<AnnounceFormFieldsValues> AnnouncesFormFields { get; set; }
 
-      //public virtual FeedBackOnAnnounce FeedBackOnAnnounce { get; set; }
+      public virtual ICollection<FeedBack> FeedBacks { get; set; }
    }
 }

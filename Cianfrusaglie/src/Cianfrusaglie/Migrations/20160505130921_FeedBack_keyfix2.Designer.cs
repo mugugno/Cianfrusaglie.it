@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160505130921_FeedBack_keyfix2")]
+    partial class FeedBack_keyfix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -137,24 +138,6 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 25);
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Interested", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("AnnounceId")
-                        .IsRequired();
-
-                    b.Property<DateTime?>("ChooseDate");
-
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
 
                     b.HasKey("Id");
                 });
@@ -393,17 +376,6 @@ namespace Cianfrusaglie.Migrations
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .HasPrincipalKey("SenderId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Interested", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
-
-                    b.HasOne("Cianfrusaglie.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>

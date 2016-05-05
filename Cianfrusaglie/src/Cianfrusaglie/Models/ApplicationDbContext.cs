@@ -12,6 +12,13 @@ namespace Cianfrusaglie.Models{
         public DbSet<Message> Messages { get; set; }
         public DbSet<Announce> Announces { get; set; } 
         public DbSet<AnnounceCategory> AnnounceCategories { get; set; } 
+        public DbSet<CategoryFormField> CategoryFormFields { get; set; } 
+        public DbSet<FormField> FormFields { get; set; } 
+        public DbSet<AnnounceFormFieldsValues> AnnounceFormFieldsValues { get; set; } 
+        public DbSet<Gat> Gats { get; set; }
+        public DbSet<AnnounceGat> AnnounceGats { get; set; }  
+        public DbSet<FeedBack> FeedBacks { get; set; } 
+        public DbSet<Interested> Interested { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
@@ -37,6 +44,59 @@ namespace Cianfrusaglie.Models{
 
          builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
             builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete( DeleteBehavior.Restrict );
-        }
+
+         //---
+         builder.Entity<CategoryFormField>().HasKey( x => new { x.FormFieldId, x.CategoryId } );
+
+         builder.Entity<CategoryFormField>()
+             .HasOne( pc => pc.FormField )
+             .WithMany( p => p.CategoriesFormFields )
+             .HasForeignKey( pc => pc.FormFieldId );
+
+         builder.Entity<CategoryFormField>()
+             .HasOne( pc => pc.Category )
+             .WithMany( c => c.CategoriesFormFields )
+             .HasForeignKey( pc => pc.CategoryId );
+
+
+         builder.Entity<AnnounceFormFieldsValues>().HasKey( x => new { x.FormFieldId, x.AnnounceId } );
+
+         builder.Entity<AnnounceFormFieldsValues>()
+             .HasOne( pc => pc.FormField )
+             .WithMany( p => p.AnnouncesFormFields )
+             .HasForeignKey( pc => pc.FormFieldId );
+
+         builder.Entity<AnnounceFormFieldsValues>()
+             .HasOne( pc => pc.Announce )
+             .WithMany( c => c.AnnouncesFormFields )
+             .HasForeignKey( pc => pc.AnnounceId );
+
+
+         builder.Entity<AnnounceGat>().HasKey( x => new { x.GatId, x.AnnounceId } );
+
+         builder.Entity<AnnounceGat>()
+             .HasOne( pc => pc.Announce )
+             .WithMany( p => p.AnnouncesGats )
+             .HasForeignKey( pc => pc.AnnounceId );
+
+         builder.Entity<AnnounceGat>()
+             .HasOne( pc => pc.Gat )
+             .WithMany( c => c.AnnouncesGats )
+             .HasForeignKey( pc => pc.GatId );
+
+
+           builder.Entity< FeedBack >().HasKey( f => new {f.AnnounceId, f.SenderId, f.ReceiverId} );
+           builder.Entity< FeedBack >().HasOne( u => u.Sender ).WithMany( u => u.SentFeedBacks ).HasForeignKey(
+              f => f.SenderId ).OnDelete( DeleteBehavior.Restrict );
+
+         builder.Entity< FeedBack >().HasOne( u => u.Receiver ).WithMany( u => u.ReceivedFeedBacks ).HasForeignKey(
+              f => f.ReceiverId ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< FeedBack >().HasOne( u => u.Announce ).WithMany( u => u.FeedBacks ).HasForeignKey(
+              f => f.AnnounceId ).OnDelete( DeleteBehavior.Restrict );
+
+
+         builder.Entity<Interested>().HasOne( u => u.Announce ).WithMany( u => u.Interested ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity<Interested>().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).OnDelete( DeleteBehavior.Restrict );
+      }
     }
 }

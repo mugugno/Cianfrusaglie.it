@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160505122530_FormFields")]
+    partial class FormFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -49,27 +50,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasKey("AnnounceId", "CategoryId");
                 });
 
-            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceFormFieldsValues", b =>
-                {
-                    b.Property<int>("FormFieldId");
-
-                    b.Property<int>("AnnounceId");
-
-                    b.Property<string>("Value")
-                        .IsRequired();
-
-                    b.HasKey("FormFieldId", "AnnounceId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceGat", b =>
-                {
-                    b.Property<int>("GatId");
-
-                    b.Property<int>("AnnounceId");
-
-                    b.HasKey("GatId", "AnnounceId");
-                });
-
             modelBuilder.Entity("Cianfrusaglie.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -96,24 +76,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasKey("FormFieldId", "CategoryId");
                 });
 
-            modelBuilder.Entity("Cianfrusaglie.Models.FeedBack", b =>
-                {
-                    b.Property<int>("AnnounceId");
-
-                    b.Property<int>("SenderId");
-
-                    b.Property<int>("ReceiverId");
-
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<string>("Text")
-                        .HasAnnotation("MaxLength", 99);
-
-                    b.Property<int>("Vote");
-
-                    b.HasKey("AnnounceId", "SenderId", "ReceiverId");
-                });
-
             modelBuilder.Entity("Cianfrusaglie.Models.FormField", b =>
                 {
                     b.Property<int>("Id")
@@ -124,36 +86,6 @@ namespace Cianfrusaglie.Migrations
                         .HasAnnotation("MaxLength", 30);
 
                     b.Property<string>("Type")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Gat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 25);
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Interested", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("AnnounceId")
-                        .IsRequired();
-
-                    b.Property<DateTime?>("ChooseDate");
-
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -212,13 +144,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("ReceiverId");
-
                     b.Property<bool>("RememberMe");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("SenderId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -338,28 +266,6 @@ namespace Cianfrusaglie.Migrations
                         .HasForeignKey("CategoryId");
                 });
 
-            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceFormFieldsValues", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
-
-                    b.HasOne("Cianfrusaglie.Models.FormField")
-                        .WithMany()
-                        .HasForeignKey("FormFieldId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceGat", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
-
-                    b.HasOne("Cianfrusaglie.Models.Gat")
-                        .WithMany()
-                        .HasForeignKey("GatId");
-                });
-
             modelBuilder.Entity("Cianfrusaglie.Models.Category", b =>
                 {
                     b.HasOne("Cianfrusaglie.Models.Category")
@@ -376,34 +282,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.FormField")
                         .WithMany()
                         .HasForeignKey("FormFieldId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.FeedBack", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
-
-                    b.HasOne("Cianfrusaglie.Models.User")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId");
-
-                    b.HasOne("Cianfrusaglie.Models.User")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Interested", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
-
-                    b.HasOne("Cianfrusaglie.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
