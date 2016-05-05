@@ -17,6 +17,7 @@ namespace Cianfrusaglie.Models{
         public DbSet<AnnounceFormFieldsValues> AnnounceFormFieldsValues { get; set; } 
         public DbSet<Gat> Gats { get; set; }
         public DbSet<AnnounceGat> AnnounceGats { get; set; }  
+        public DbSet<FeedBack> FeedBacks { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
@@ -81,6 +82,16 @@ namespace Cianfrusaglie.Models{
              .HasOne( pc => pc.Gat )
              .WithMany( c => c.AnnouncesGats )
              .HasForeignKey( pc => pc.GatId );
+
+
+           builder.Entity< FeedBack >().HasKey( f => new {f.AnnounceId, f.SenderId, f.ReceiverId} );
+           builder.Entity< FeedBack >().HasOne( u => u.Sender ).WithMany( u => u.SentFeedBacks ).HasForeignKey(
+              f => f.SenderId ).OnDelete( DeleteBehavior.Restrict );
+
+         builder.Entity< FeedBack >().HasOne( u => u.Receiver ).WithMany( u => u.ReceivedFeedBacks ).HasForeignKey(
+              f => f.ReceiverId ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< FeedBack >().HasOne( u => u.Announce ).WithMany( u => u.FeedBacks ).HasForeignKey(
+              f => f.AnnounceId ).OnDelete( DeleteBehavior.Restrict );
       }
     }
 }

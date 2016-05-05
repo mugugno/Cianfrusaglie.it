@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160505130144_FeedBack_keyfix")]
+    partial class FeedBack_keyfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -98,20 +99,23 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.FeedBack", b =>
                 {
-                    b.Property<int>("AnnounceId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("SenderId");
-
-                    b.Property<int>("ReceiverId");
+                    b.Property<int?>("AnnounceId");
 
                     b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("ReceiverId");
+
+                    b.Property<string>("SenderId");
 
                     b.Property<string>("Text")
                         .HasAnnotation("MaxLength", 99);
 
                     b.Property<int>("Vote");
 
-                    b.HasKey("AnnounceId", "SenderId", "ReceiverId");
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.FormField", b =>
@@ -194,13 +198,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("ReceiverId");
-
                     b.Property<bool>("RememberMe");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("SenderId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -368,13 +368,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId");
+                        .HasForeignKey("ReceiverId");
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId");
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>

@@ -23,6 +23,6 @@ namespace Cianfrusaglie.Models {
       //public virtual ICollection<Interested> Interested { get; set; }
       public virtual ICollection<AnnounceFormFieldsValues> AnnouncesFormFields { get; set; }
 
-      //public virtual FeedBackOnAnnounce FeedBackOnAnnounce { get; set; }
+      public virtual ICollection<FeedBack> FeedBacks { get; set; }
    }
 }
