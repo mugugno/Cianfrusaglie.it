@@ -15,6 +15,8 @@ namespace Cianfrusaglie.Models{
         public DbSet<CategoryFormField> CategoryFormFields { get; set; } 
         public DbSet<FormField> FormFields { get; set; } 
         public DbSet<AnnounceFormFieldsValues> AnnounceFormFieldsValues { get; set; } 
+        public DbSet<Gat> Gats { get; set; }
+        public DbSet<AnnounceGat> AnnounceGats { get; set; }  
 
         protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
@@ -66,6 +68,19 @@ namespace Cianfrusaglie.Models{
              .HasOne( pc => pc.Announce )
              .WithMany( c => c.AnnouncesFormFields )
              .HasForeignKey( pc => pc.AnnounceId );
+
+
+         builder.Entity<AnnounceGat>().HasKey( x => new { x.GatId, x.AnnounceId } );
+
+         builder.Entity<AnnounceGat>()
+             .HasOne( pc => pc.Announce )
+             .WithMany( p => p.AnnouncesGats )
+             .HasForeignKey( pc => pc.AnnounceId );
+
+         builder.Entity<AnnounceGat>()
+             .HasOne( pc => pc.Gat )
+             .WithMany( c => c.AnnouncesGats )
+             .HasForeignKey( pc => pc.GatId );
       }
     }
 }
