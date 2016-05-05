@@ -9,7 +9,7 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public DateTime BirthDate { get; set; }
 
-      public string City { get; set; } //TODO tabella con le città?!
+      public string City { get; set; }
 
       public bool RememberMe { get; set; }
 

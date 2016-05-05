@@ -16,6 +16,7 @@ namespace Cianfrusaglie.Models {
       public DbSet< FeedBack > FeedBacks { get; set; }
       public DbSet< Interested > Interested { get; set; }
       public DbSet< FieldDefaultValue > FieldDefaultValues { get; set; }
+      public DbSet< ImageUrl > ImageUrls { get; set; }
 
       protected override void OnModelCreating( ModelBuilder builder ) {
          base.OnModelCreating( builder );
@@ -86,6 +87,10 @@ namespace Cianfrusaglie.Models {
 
 
          builder.Entity< FieldDefaultValue >().HasOne( f => f.FormField ).WithMany( f => f.DefaultValues ).OnDelete(
+            DeleteBehavior.Restrict );
+
+
+         builder.Entity< ImageUrl >().HasOne( i => i.Announce ).WithMany( a => a.Images ).OnDelete(
             DeleteBehavior.Restrict );
       }
    }

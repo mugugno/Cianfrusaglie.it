@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Device.Location;
 
 namespace Cianfrusaglie.Models {
    public class Announce {
@@ -12,8 +13,13 @@ namespace Cianfrusaglie.Models {
       [Required]
       public virtual DateTime PublishDate { get; set; }
 
+      [Required, MinLength( 3 ), MaxLength( 50 )]
+      public virtual string Title { get; set; }
+
       [Required, MinLength( 10 ), MaxLength( 255 )]
       public virtual string Description { get; set; }
+
+      public virtual ICollection< ImageUrl > Images { get; set; } 
 
       public virtual bool Closed { get; set; }
 
