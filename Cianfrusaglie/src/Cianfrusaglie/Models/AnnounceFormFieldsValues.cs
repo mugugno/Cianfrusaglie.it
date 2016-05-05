@@ -3,16 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cianfrusaglie.Models {
    public class AnnounceFormFieldsValues {
-	   
-	  [ForeignKey("Announce")]
+      [ForeignKey( "Announce" )]
       public int AnnounceId { get; set; }
+
       public virtual Announce Announce { get; set; }
-      
-      [ForeignKey("FormField")]
+
+      [ForeignKey( "FormField" )]
       public int FormFieldId { get; set; }
+
       public virtual FormField FormField { get; set; }
+
       [Required]
-      public string Value{ get; set;}
+      public string Value { get; set; }
    }
 }
-
