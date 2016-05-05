@@ -12,9 +12,9 @@ namespace Cianfrusaglie.Models {
       [Required]
       public virtual string Type { get; set; }//Da decidere se fare enum, vale S,D,IM,I(Stringa,Double,Immagine,Integer)
       
-      //public virtual ICollection< String > DefaultValues { get; set; }
+      public virtual ICollection< FieldDefaultValue > DefaultValues { get; set; }
       public virtual ICollection< CategoryFormField > CategoriesFormFields { get; set; } 
-      public virtual ICollection<AnnounceFormFieldsValues> AnnouncesFormFields { get; set; }
+      public virtual ICollection< AnnounceFormFieldsValues > AnnouncesFormFields { get; set; }
 
    }
 }

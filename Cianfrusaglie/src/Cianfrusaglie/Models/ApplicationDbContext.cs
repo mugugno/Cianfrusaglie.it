@@ -19,6 +19,7 @@ namespace Cianfrusaglie.Models{
         public DbSet<AnnounceGat> AnnounceGats { get; set; }  
         public DbSet<FeedBack> FeedBacks { get; set; } 
         public DbSet<Interested> Interested { get; set; } 
+        public DbSet<FieldDefaultValue> FieldDefaultValues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
@@ -97,6 +98,10 @@ namespace Cianfrusaglie.Models{
 
          builder.Entity<Interested>().HasOne( u => u.Announce ).WithMany( u => u.Interested ).OnDelete( DeleteBehavior.Restrict );
          builder.Entity<Interested>().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).OnDelete( DeleteBehavior.Restrict );
-      }
+
+
+           builder.Entity< FieldDefaultValue >().HasOne( f => f.FormField ).WithMany( f => f.DefaultValues ).OnDelete(
+              DeleteBehavior.Restrict );
+        }
     }
 }
