@@ -21,7 +21,7 @@ namespace Cianfrusaglie.Models {
 
       //public virtual ICollection<AnnounceGat> Gats { get; set; }
       //public virtual ICollection<Interested> Interested { get; set; }
-      //public virtual ICollection<FormFieldValues> FormFieldsValues { get; set; }
+      public virtual ICollection<AnnounceFormFieldsValues> AnnouncesFormFields { get; set; }
 
       //public virtual FeedBackOnAnnounce FeedBackOnAnnounce { get; set; }
    }

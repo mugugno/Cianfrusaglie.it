@@ -14,7 +14,7 @@ namespace Cianfrusaglie.Models {
       
       //public virtual ICollection< String > DefaultValues { get; set; }
       public virtual ICollection< CategoryFormField > CategoriesFormFields { get; set; } 
-      //public virtual ICollection<AnnounceFormField> AnnouncesFormFields { get; set; }
+      public virtual ICollection<AnnounceFormFieldsValues> AnnouncesFormFields { get; set; }
 
    }
 }
