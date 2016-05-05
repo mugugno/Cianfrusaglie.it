@@ -2,19 +2,195 @@
     ViewData["Title"] = "Cianfrusaglie.it";
 }
 
+<div id="wrap">
 <div id="pageHeader" class="container ">
     <form class="navbar-form" role="search">
-        <h1 class="col-md-3">questo<strong>e</strong>quello</h1>
-        <div id="barraRicerca" class="form-group col-sm-12">
-            <input type="text" class="form-control" placeholder="Search">
-            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-            <a href="#">Ricerca Avanzata</a>
+        <div id="title" class="col-md-3">
+            <h1>questo<strong>e</strong>quello</h1>
+            <h5>Il posto giusto per le tue cianfrusaglie</h5>
+        </div>
+        <div id="barraRicerca" class="form-group">
+            <input type="text" class="form-control" placeholder="Cerca" size="75">
+            <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-search"></span></button>
+            <br /><a href="#">Ricerca Avanzata</a>
+        </div>
+        <div id="icone" class="form-horizontal">
+
         </div>
     </form>
 </div>
 
 
-<nav id="horizontalMenu" class="navbar navbar-default">
+<nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100">
+    <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse js-navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="dropdown dropdown-large">
+                <a href="#">Home</a>
+            </li>
+            <li class="dropdown dropdown-large">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scegli per categoria <b class="caret"></b></a>
+
+                <ul class="dropdown-menu dropdown-menu-large row">
+                    <li class="col-sm-6">
+                        <ul>
+                            <li class="dropdown-header">Libri, Musica e Film</li>
+                            <li><a href="#">Libri</a></li>
+                            <li><a href="#">Musica</a></li>
+                            <li><a href="#">Film</a></li>
+                            <li class="divider"></li>
+                            <li><img class"img-responsive" src="http://placehold.it/200x150" /></li>
+                        </ul>
+                    </li>
+                    <li class="col-sm-6">
+                        <ul>
+                            <li class="dropdown-header">Panda</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Button dropdowns</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+
+            </li>
+            <li class="dropdown dropdown-large">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+
+                <ul class="dropdown-menu dropdown-menu-large row">
+                    <li class="col-sm-6">
+                        <ul>
+                            <li class="dropdown-header">Sword of Truths</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Theme/Character</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="col-sm-6">
+                        <ul>
+                            <li class="dropdown-header">by brand</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li><img class"img-responsive" src="http://placehold.it/200x150" /></li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+
+            </li>
+
+            <li class="dropdown dropdown-large">
+                <a href="#">Some link</a>
+            </li>
+            <li class="dropdown dropdown-large">
+                <a href="#">Some link</a>
+            </li>
+
+            <li class="dropdown dropdown-large">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+
+                <ul class="dropdown-menu dropdown-menu-large row">
+                    <li class="col-sm-3">
+                        <ul>
+                            <li class="dropdown-header">Sword of Truths</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Theme/Character</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="col-sm-3">
+                        <ul>
+                            <li class="dropdown-header">by brand</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li><img class"img-responsive" src="http://placehold.it/200x150" /></li>
+                        </ul>
+                    </li>
+                    <li class="col-sm-3">
+                        <ul>
+                            <li class="dropdown-header">Sword of Truths</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Theme/Character</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="col-sm-3">
+                        <ul>
+                            <li class="dropdown-header">by brand</li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li><a href="#">Example</a></li>
+                            <li class="divider"></li>
+                            <li><img class"img-responsive" src="http://placehold.it/200x150" /></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </li>
+
+
+
+        </ul>
         <ul class="nav navbar-nav" id="menuRight">
             <li>
                 <a href="Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
@@ -25,6 +201,7 @@
         </ul>
 </nav>
 
+<div class="container-fluid">
 <div id="homeCarousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
@@ -59,6 +236,9 @@
         <span class="sr-only">Next</span>
     </a>
 </div>
+
+</div>
+    </div>
 
 <div id="footer" class="panel-footer">
     Noi abbiamo un bel Footer perchè siamo i Mugugno.
