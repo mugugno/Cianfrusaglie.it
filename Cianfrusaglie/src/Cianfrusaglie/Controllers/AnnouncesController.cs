@@ -124,5 +124,10 @@ namespace Cianfrusaglie.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public IActionResult SubmitAnnounce()
+        {
+            return View();
+        }
     }
 }
