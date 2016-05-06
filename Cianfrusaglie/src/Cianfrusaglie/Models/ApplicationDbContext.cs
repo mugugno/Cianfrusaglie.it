@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 
 namespace Cianfrusaglie.Models {
-   public class ApplicationDbContext : IdentityDbContext< User > {
+
+   public class ApplicationDbContext : IdentityDbContext< User, IdentityRole, string> {
       public DbSet< Category > Categories { get; set; }
       public DbSet< Message > Messages { get; set; }
       public DbSet< Announce > Announces { get; set; }
@@ -18,7 +20,12 @@ namespace Cianfrusaglie.Models {
       public DbSet< FieldDefaultValue > FieldDefaultValues { get; set; }
       public DbSet< ImageUrl > ImageUrls { get; set; }
 
-      protected override void OnModelCreating( ModelBuilder builder ) {
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+           
+        }
+
+        protected override void OnModelCreating( ModelBuilder builder ) {
          base.OnModelCreating( builder );
          // Customize the ASP.NET Identity model and override the defaults if needed.
          // For example, you can rename the ASP.NET Identity table names and more.

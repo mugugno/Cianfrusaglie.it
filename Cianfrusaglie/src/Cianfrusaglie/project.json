@@ -38,6 +38,8 @@
     "dnx451": {
       "frameworkAssemblies": {
         "System.Device": "4.0.0.0"
+      },
+      "dependencies": {
       }
     },
     "dnxcore50": { }
