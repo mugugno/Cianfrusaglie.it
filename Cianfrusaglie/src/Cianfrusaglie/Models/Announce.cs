@@ -17,7 +17,7 @@ namespace Cianfrusaglie.Models {
       [Required, MinLength( 3 ), MaxLength( 50 )]
       public virtual string Title { get; set; }
 
-      [Required, MinLength( 10 ), MaxLength( 255 )]
+      [MaxLength( 255 )]
       public virtual string Description { get; set; }
 
       public virtual ICollection< ImageUrl > Images { get; set; } 
