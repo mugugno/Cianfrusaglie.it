@@ -9,16 +9,16 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public DateTime BirthDate { get; set; }
 
-      public string City { get; set; } //TODO tabella con le città?!
+      public string City { get; set; }
 
       public bool RememberMe { get; set; }
 
       public virtual ICollection< Announce > PublishedAnnounces { get; set; }
-      public virtual ICollection<Interested> InterestedAnnounces { get; set; } 
+      public virtual ICollection< Interested > InterestedAnnounces { get; set; }
       public virtual ICollection< User > BlockedUsers { get; set; }
       public virtual ICollection< Message > SentMessages { get; set; }
       public virtual ICollection< Message > ReceivedMessages { get; set; }
       public virtual ICollection< FeedBack > SentFeedBacks { get; set; }
-      public virtual ICollection<FeedBack> ReceivedFeedBacks { get; set; }
+      public virtual ICollection< FeedBack > ReceivedFeedBacks { get; set; }
    }
 }

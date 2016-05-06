@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160505153245_Announce_campi_mancanti")]
+    partial class Announce_campi_mancanti
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -28,8 +29,6 @@ namespace Cianfrusaglie.Migrations
                         .IsRequired();
 
                     b.Property<bool>("Closed");
-
-                    b.Property<DateTime?>("DeadLine");
 
                     b.Property<string>("Description")
                         .IsRequired()

@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160505141308_FieldDefaultValue")]
+    partial class FieldDefaultValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -29,8 +30,6 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("Closed");
 
-                    b.Property<DateTime?>("DeadLine");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 255);
@@ -38,10 +37,6 @@ namespace Cianfrusaglie.Migrations
                     b.Property<DateTime>("PublishDate");
 
                     b.Property<int>("Range");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
                 });
@@ -157,20 +152,6 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 25);
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.ImageUrl", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("AnnounceId")
-                        .IsRequired();
-
-                    b.Property<string>("Url")
-                        .IsRequired();
 
                     b.HasKey("Id");
                 });
@@ -434,13 +415,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.FormField")
                         .WithMany()
                         .HasForeignKey("FormFieldId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.ImageUrl", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.Announce")
-                        .WithMany()
-                        .HasForeignKey("AnnounceId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Interested", b =>
