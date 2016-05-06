@@ -17,61 +17,133 @@
     }
 
 }
+@foreach (var c in GetCategories())
+{
+    <p>@c</p>
+}
 <h2>CreateDescriptionAnnounce</h2>
 
-<form asp-action="CreateDescriptionAnnounce">
-    <div class="form-horizontal">
-        <h4>Descrizione dell'articolo</h4>
-        <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-                @foreach (var c in GetCategories())
-                {
-                    <p>@c</p>
-                }
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger" />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel-group" id="panel-423221">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-156024">Categoria #1</a>
+                    </div>
+                    <div id="panel-element-156024" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <label for="checkboxes-0">
+                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+                                            Sottocategoria #1
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label for="checkboxes-1">
+                                            <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
+                                            Sottocategoria #2
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-817288">Categoria #2</a>
+                    </div>
+                    <div id="panel-element-817288" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <label for="checkboxes-0">
+                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+                                            Sottocategoria #1
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label for="checkboxes-1">
+                                            <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
+                                            Sottocategoria #2
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-487057">Categoria #3</a>
+                    </div>
+                    <div id="panel-element-487057" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <label for="checkboxes-0">
+                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+                                            Sottocategoria #1
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label for="checkboxes-1">
+                                            <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
+                                            Sottocategoria #2
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="PublishDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Range" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Range" class="form-control" />
-                <span asp-validation-for="Range" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Title" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+        <div class="col-md-6">
+            <form role="form">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">
+                        Email address
+                    </label>
+                    <input type="email" class="form-control" id="exampleInputEmail1">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">
+                        Password
+                    </label>
+                    <input type="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">
+                        File input
+                    </label>
+                    <input type="file" id="exampleInputFile">
+                    <p class="help-block">
+                        Example block-level help text here.
+                    </p>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Check me out
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default">
+                    Submit
+                </button>
+            </form>
         </div>
     </div>
-</form>
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}
