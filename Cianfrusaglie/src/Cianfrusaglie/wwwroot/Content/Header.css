@@ -11,17 +11,19 @@
     padding-right: 0px;
     padding-left: 0px;
 }
-
+#title a {
+    text-decoration: none;
+}
 .affix {
       top: 0;
       width: 100%;
   }
 
-  .affix + .container-fluid {
+.affix + .container-fluid {
       padding-top: 60px;
-  }
+}
 
-h1{
+#wrap h1{
     font-family: 'Lato', sans-serif;
     color: orange;
     margin-bottom:0;
@@ -29,7 +31,7 @@ h1{
     font-size:3em;
 }
 
-h5{
+#wrap h5{
     font-family: 'Lato', sans-serif;
     color: orange;
     margin-top:0;
