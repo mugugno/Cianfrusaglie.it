@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Policy;
 
 namespace Cianfrusaglie.Models {
    public class ImageUrl {
