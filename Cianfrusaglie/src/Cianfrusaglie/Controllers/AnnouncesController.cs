@@ -42,6 +42,10 @@ namespace Cianfrusaglie.Controllers
         // GET: Announces/Create
         public IActionResult Create()
         {
+            //TODO scrivere in maniera più furba ma ora va benissimo così!
+            ViewData["formFields"] = _context.FormFields.ToList();
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             return View();
         }
 
@@ -81,7 +85,6 @@ namespace Cianfrusaglie.Controllers
         {
             if (!User.GetUserId().Equals(announce.Author.Id))
             {
-                //TODO la pagina!!!!!
                 return HttpBadRequest();
             }
             if (ModelState.IsValid)
@@ -120,6 +123,11 @@ namespace Cianfrusaglie.Controllers
             _context.Announces.Remove(announce);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult SubmitAnnounce()
+        {
+            return View();
         }
     }
 }
