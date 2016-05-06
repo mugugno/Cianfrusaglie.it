@@ -37,8 +37,6 @@
     margin-top:0;
 }
 
-
-
 #pageHeader {
     width:100%;
     height:100px;
@@ -47,7 +45,9 @@
     border-bottom-color: orange;
     border-top: 1px solid;
     border-top-color: orange;
+    background-color: white;
 }
+
 
 #barraRicerca {
     position: absolute;
@@ -55,6 +55,32 @@
     transform: translateY(-60%);
 }
 
+#linkHome {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left:0;
+    padding-right:0;
+    text-align: center;
+}
+
+#linkRegala, #LinkVendi, #linkBaratta {
+    padding-bottom:0;
+    padding-left: 100px;
+    padding-right: 100px;
+    font-size: large;
+    font-style:italic; 
+    color: #333333;
+}
+
+.btn-round.btn-lg {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding: 6px 6px;
+    font-size: 60px;
+    line-height: 2;
+    border-radius: 100px;
+}
 
 #horizontalMenu {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
@@ -69,6 +95,10 @@
 #footer {
     height: 40px;
     bottom:0;
+    text-align: center;
+    font-weight: bold;
+    border-top: 1px solid;
+    border-top-color: orange;
 }
 
 .dropdown-large {
