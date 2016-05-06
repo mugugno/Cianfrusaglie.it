@@ -85,7 +85,6 @@ namespace Cianfrusaglie.Controllers
         {
             if (!User.GetUserId().Equals(announce.Author.Id))
             {
-                //TODO la pagina!!!!!
                 return HttpBadRequest();
             }
             if (ModelState.IsValid)

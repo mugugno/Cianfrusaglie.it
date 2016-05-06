@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 
 namespace Cianfrusaglie.Models {
-   public class ApplicationDbContext : IdentityDbContext< User > {
+
+   public class ApplicationDbContext : IdentityDbContext< User, IdentityRole, string> {
       public DbSet< Category > Categories { get; set; }
       public DbSet< Message > Messages { get; set; }
       public DbSet< Announce > Announces { get; set; }
@@ -18,7 +20,12 @@ namespace Cianfrusaglie.Models {
       public DbSet< FieldDefaultValue > FieldDefaultValues { get; set; }
       public DbSet< ImageUrl > ImageUrls { get; set; }
 
-      protected override void OnModelCreating( ModelBuilder builder ) {
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+           
+        }
+
+        protected override void OnModelCreating( ModelBuilder builder ) {
          base.OnModelCreating( builder );
          // Customize the ASP.NET Identity model and override the defaults if needed.
          // For example, you can rename the ASP.NET Identity table names and more.
@@ -36,10 +43,10 @@ namespace Cianfrusaglie.Models {
          builder.Entity< AnnounceCategory >().HasOne( pc => pc.Category ).WithMany( c => c.CategoryAnnounces )
             .HasForeignKey( pc => pc.CategoryId );
 
-         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete(
-            DeleteBehavior.Restrict );
-         builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete(
-            DeleteBehavior.Restrict );
+         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).HasForeignKey(
+            m => m.SenderId ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).HasForeignKey(
+            m => m.ReceiverId ).OnDelete( DeleteBehavior.Restrict );
 
          //---
          builder.Entity< CategoryFormField >().HasKey( x => new {x.FormFieldId, x.CategoryId} );

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Cianfrusaglie.Tests Class Library",
   "authors": [ "mugugno" ],
@@ -10,15 +10,22 @@
     "EntityFramework.Commands": "7.0.0-rc1-final",
     "EntityFramework.Core": "7.0.0-rc1-final",
     "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
+    "EntityFramework.InMemory": "7.0.0-rc1-final",
+    "xunit.runner.dnx": "2.1.0-rc1-build204",
+    "EntityFramework.Relational": "7.0.0-rc1-final",
+    "xunit": "2.2.0-beta1-build3239",
     "Cianfrusaglie": "1.0.0-*",
-    "xunit": "2.1.0",
-    "xunit.runner.dnx": "2.1.0-rc1-build204"
+    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final"
   },
   "commands": {
     "test": "xunit.runner.dnx"
   },
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+
+    "dnxcore50": {
+      "dependencies": {
+        "moq.netcore": "4.4.0-beta8"
+      }
+    }
   }
 }
