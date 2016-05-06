@@ -24,9 +24,6 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("AuthorId")
                         .IsRequired();
 
-                    b.Property<string>("City")
-                        .IsRequired();
-
                     b.Property<bool>("Closed");
 
                     b.Property<DateTime?>("DeadLine");
@@ -34,6 +31,9 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 255);
+
+                    b.Property<int?>("GeoCoordinateId")
+                        .IsRequired();
 
                     b.Property<DateTime>("PublishDate");
 
@@ -83,14 +83,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 25);
+                        .HasAnnotation("Relational:ColumnType", "varchar(99)");
 
                     b.Property<int?>("OverCategoryId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.CategoryFormField", b =>
@@ -161,6 +158,18 @@ namespace Cianfrusaglie.Migrations
                     b.HasKey("Id");
                 });
 
+            modelBuilder.Entity("Cianfrusaglie.Models.GeoCoordinateEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Cianfrusaglie.Models.ImageUrl", b =>
                 {
                     b.Property<int>("Id")
@@ -220,8 +229,6 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("BirthDate");
 
-                    b.Property<string>("City");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -229,6 +236,9 @@ namespace Cianfrusaglie.Migrations
                         .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<int?>("GeoCoordinateId")
+                        .IsRequired();
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -359,6 +369,10 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("AuthorId");
+
+                    b.HasOne("Cianfrusaglie.Models.GeoCoordinateEntity")
+                        .WithMany()
+                        .HasForeignKey("GeoCoordinateId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -467,6 +481,10 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>
                 {
+                    b.HasOne("Cianfrusaglie.Models.GeoCoordinateEntity")
+                        .WithMany()
+                        .HasForeignKey("GeoCoordinateId");
+
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");

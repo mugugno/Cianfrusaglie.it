@@ -37,7 +37,6 @@
   "frameworks": {
     "dnx451": {
       "frameworkAssemblies": {
-        "System.Device": "4.0.0.0"
       }
     },
     "dnxcore50": { }

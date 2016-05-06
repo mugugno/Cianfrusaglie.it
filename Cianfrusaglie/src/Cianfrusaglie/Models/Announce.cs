@@ -25,7 +25,7 @@ namespace Cianfrusaglie.Models {
       public virtual bool Closed { get; set; }
 
       [Required]
-      public virtual string City { get; set; } //TODO tabella città...
+      public virtual GeoCoordinateEntity GeoCoordinate { get; set; }
 
       [Range( 0, int.MaxValue )]
       public virtual int Range { get; set; } //TODO in metri?!
