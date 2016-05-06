@@ -4,6 +4,7 @@
     left: 0;
     right: 0;
     margin: 0;
+    min-height: 100%;
     position: absolute;
     /*Leggero gradiente*/
     background-color: #EAEAEA;
@@ -23,6 +24,10 @@
     padding-top:2em;
     width: 28em;
     margin: auto;
+}
+
+#tabellaForm {
+    margin-top: 10px;
 }
 #register i {
     color: #d4d4d4;
@@ -44,6 +49,10 @@
 #register h1{
     text-align:center;
     font-size:2.5em;
+}
+#register h5{
+    color:#FFC107;
+    text-align:center;
 }
 #register h1 a{
     color:#FFC107;
