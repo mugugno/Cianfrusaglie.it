@@ -23,15 +23,17 @@
     margin: auto;
 }
 
-.form-create{
+.form-create {
     padding-top:4em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-size:1em;
     padding:1.5em;
     border: 1px solid #b8b8b8;
     background:#fff;
+    -ms-border-radius: 10px;
     border-radius: 10px;
 }
+
 .form-create h2{
     font-weight:100;
 }
@@ -77,3 +79,6 @@
     border-radius: 5px;
 }
 
+#checkbox {
+
+}

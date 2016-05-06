@@ -4,6 +4,8 @@
     ViewData["Title"] = "CreateDescriptionAnnounce";
 }
 
+<h2>CreateDescriptionAnnounce</h2>
+
 @functions
 {
     private IEnumerable<String> GetCategories()
@@ -17,18 +19,23 @@
     }
 
 }
-<h2>CreateDescriptionAnnounce</h2>
-
 <form asp-action="CreateDescriptionAnnounce">
     <div class="form-horizontal">
         <h4>Descrizione dell'articolo</h4>
-        <hr />
+        <hr/>
         <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
         <div class="form-group">
-                @foreach (var c in GetCategories())
-                {
-                    <input>@c</input>
-                }
+            @foreach (var c in GetCategories())
+            {
+                <p>@c</p>
+            }
+        </div>
+        <div class="form-group">
+            <label asp-for="DeadLine" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="DeadLine" class="form-control" />
+                <span asp-validation-for="DeadLine" class="text-danger" />
+            </div>
         </div>
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
