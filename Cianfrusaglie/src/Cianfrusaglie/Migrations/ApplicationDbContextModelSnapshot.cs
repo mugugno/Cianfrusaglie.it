@@ -83,14 +83,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 25);
+                        .HasAnnotation("Relational:ColumnType", "varchar(99)");
 
                     b.Property<int?>("OverCategoryId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.CategoryFormField", b =>
