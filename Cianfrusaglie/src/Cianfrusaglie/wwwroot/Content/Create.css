@@ -1,23 +1,4 @@
-﻿#wrapper-create{
-    bottom:0;
-    height: 100%;
-    margin: 0;
-
-    /*Leggero gradiente*/
-    background-color: #EAEAEA;
-    background-position: center center;
-    background-repeat: no-repeat;
-    /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#EAEAEA));
-    /* Safari 5.1+, Chrome 10+ */
-    background: -webkit-radial-gradient(circle, #fff, #EAEAEA);
-    /* Firefox 3.6+ */
-    background: -moz-radial-gradient(circle, #fff, #EAEAEA);
-    /* IE 10 */
-    background: -ms-radial-gradient(circle, #fff, #EAEAEA);
-}
-
-#create{
+﻿#create{
     padding-top:4em;
     width: 50%;
     margin: auto;
@@ -79,6 +60,7 @@
     border-radius: 5px;
 }
 
-#checkbox {
-
+.panel-group {
+    margin-top: 15px;
 }
+

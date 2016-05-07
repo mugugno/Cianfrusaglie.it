@@ -1,3 +1,4 @@
+@using System.Security.Cryptography
 @model Cianfrusaglie.Models.Announce
 
 @{
@@ -16,69 +17,44 @@
         }
     }
 
-}
-@foreach (var c in GetCategories())
-{
-    <p>@c</p>
-}
-<h2>CreateDescriptionAnnounce</h2>
+    private IEnumerable<String> GetSubCategories(String macro)
+    {
+        for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
+        {
+            var subCat = ViewData["formCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
+                yield return subCat[j].Name;
+        }
+    }
 
-<div class="container-fluid">
-    <div class="row">
+}
+
+
+<div id="wrap">
+
+    <div class="panel-group col-md-3" id="panelCategorie">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a class="panel-title" data-toggle="collapse" data-parent="#panelCategorie">Seleziona le categorie </a>
+            </div>
+            <div class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="form-group">
+                        @foreach (var cat in GetCategories())
+                        {
+                            <div class="checkbox">
+                                <label><input id="@(cat)+'Check'" type="checkbox" value="">@cat</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="insTag">
         <div class="col-md-6">
             <div class="panel-group" id="panel-423221">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-156024">Categoria #1</a>
-                    </div>
-                    <div id="panel-element-156024" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label for="checkboxes-0">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
-                                            Sottocategoria #1
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label for="checkboxes-1">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
-                                            Sottocategoria #2
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a class="panel-title" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-817288">Categoria #2</a>
-                    </div>
-                    <div id="panel-element-817288" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label for="checkboxes-0">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
-                                            Sottocategoria #1
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label for="checkboxes-1">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
-                                            Sottocategoria #2
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="panel-title" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-487057">Categoria #3</a>
@@ -107,7 +83,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+
+        <div class="container-fluid" id="infoObbligatorie">
             <form role="form">
                 <div class="form-group">
                     <label for="exampleInputEmail1">
@@ -140,10 +117,10 @@
                 </button>
             </form>
         </div>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

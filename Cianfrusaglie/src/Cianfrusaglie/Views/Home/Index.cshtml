@@ -1,170 +1,220 @@
-﻿@{
+﻿
+@functions
+{
+    private IEnumerable<String> GetCategories()
+    {
+        for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
+        {
+            var categories = ViewData["formCategories"] as List<Category>;
+            if (categories != null && categories[i].OverCategory == null)
+                yield return categories[i].Name;
+        }
+    }
+
+    private IEnumerable<String> GetSubCategories(String macro)
+    {
+        for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
+        {
+            var subCat = ViewData["formCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
+                yield return subCat[j].Name;
+        }
+    }
+
+    private IEnumerable<Announce> GetAnnounces()
+    {
+        for (var j = 0; j < (ViewData["numberOfAnnounces"] as int? ?? 0); j++)
+        {
+            var announce = ViewData["listAnnounces"] as List<Announce>;
+            yield return announce[j];
+        }
+    }
+
+    //Estrae un annuncio random da mettere in homepage
+    /*private Announce getRandomAnnounce()
+    {
+        Random random = new Random();
+        int idRandom = random.Next(1, ViewData["numberOfAnnounces"] as int? ?? 0);
+        foreach (var announce in GetAnnounces())
+        {
+            if (announce.Id == idRandom)
+                return announce;
+        }
+    }*/
 
 }
 
 <div id="wrap">
+    <nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse js-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown dropdown-large">
+                    <a href="~/">Home</a>
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cerca per categoria <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-menu-large">
+                        @foreach (var macro in GetCategories())
+                        {
+                            <li>
+                                <a href="#">@macro</a>
+                                <ul class="dropdown-menu sub-menu">
+                                    <li class="dropdown-header">@macro</li>
+                                    <li class="divider"></li>
+                                    <!-- TODO spostare i menu all'altezza giusta ed eliminare submenu in mistery box-->
+                                    @foreach (var sub in GetSubCategories(@macro))
+                                    {
+                                        <li><a href="#">@sub</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="#">Cerca nei tuoi dintorni</a>
+                    <!--TODO da implementare-->
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="#" data-toggle="modal" data-target="#myWindow">Sto Cercando</a>
+                    <div class="modal" id="myWindow" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Non sei registrato</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Registati o effettua login per consultare la lista degli annunci.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
 
-<nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100">
-    <div class="navbar-header">
-        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="#">Come funziona <strong>nonhounnome.it</strong></a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav" id="menuRight">
+                <li>
+                    <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                </li>
+                <li>
+                    <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"> Login</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="containerPrincipale">
+        <div id="homeCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#homeCarousel" data-slide-to="1"></li>
+                <li data-target="#homeCarousel" data-slide-to="2"></li>
+                <li data-target="#homeCarousel" data-slide-to="3"></li>
+                <li data-target="#homeCarousel" data-slide-to="4"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img src="https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/Goldbox/2016/it_xsite_goldbox_1500x300._CB293654318_.jpg"/>
+                </div>
+                <div class="item">
+                    <img src="https://images-eu.ssl-images-amazon.com/images/G/29/_home_and_kitchen/2015/DesignShop/Redesign/BigGraphics/IT_Home_Desingshop-restyle_25-6-2015_4500x900._UX1500_SX1500_CB317222603_.jpg"/>
+                </div>
+                <div class="item">
+                    <img src="https://images-eu.ssl-images-amazon.com/images/G/29/_tools/billboard/it_tools_08-03-2016_professional-store_1500x300._CB294026631_.jpg"/>
+                </div>
+                <div class="item">
+                    <img src="https://images-eu.ssl-images-amazon.com/images/G/29/prime/2016/shipping_benefit/IT_Prime-shipping-visuals_11-04-2016_1500x300._CB274900098_.jpg"/>
+                </div>
+                <div class="item">
+                    <img src="https://images-eu.ssl-images-amazon.com/images/G/29/kindle/merch/2016/campaigns/mday/mday-gw-d-it-1500x300._CB275612559_.jpg"/>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <div id="linkHome">
+            <form class="form-inline" role="form">
+                <div class="form-group" id="linkRegala">
+                    <a href="~/Announces/Create" role="button"class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
+                    <br/><br/><label>REGALA</label>
+                </div>
+                <div class="form-group" id="linkVendi">
+                    <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                    <br/><br/><label>VENDI</label>
+                </div>
+                <div class="form-group" id="linkBaratta">
+                    <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
+                    <br/><br/><label>BARATTA</label>
+                </div>
+            </form>
+        </div>
+
+        <div id="vetrinaAnnunci" class="row">
+            <div class="col-sm-4">
+                <h3>annuncio titolo 1</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 2</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 3</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+        </div>
+        <div id="vetrinaAnnunci" class="row">
+            <div class="col-sm-4">
+                <h3>annuncio titolo 1</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 2</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 3</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+        </div>
+
     </div>
-    <div class="collapse navbar-collapse js-navbar-collapse">
-        <ul class="nav navbar-nav">
-            <li class="dropdown dropdown-large">
-                <a href="#">Home</a>
-            </li>
-            <li class="dropdown dropdown-large">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scegli per categoria <b class="caret"></b></a>
-
-                <ul class="dropdown-menu dropdown-menu-large row">
-                    <li class="col-sm-6">
-                        <ul>
-                            <li class="dropdown-header">Libri, Musica e Film</li>
-                            <li><a href="#">Libri</a></li>
-                            <li><a href="#">Musica</a></li>
-                            <li><a href="#">Film</a></li>
-                            <li class="divider"></li>
-                        </ul>
-                    </li>
-                    <li class="col-sm-6">
-                    @for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
-                    {
-                        <ul>
-                            <li class="dropdown-header">
-                            @{
-                                var categories = ViewData["formCategories"] as List<Category>;
-                            }
-                            @if (categories != null && categories[i].OverCategory == null)
-                            {
-                                @categories[i].Name
-                            }</li>
-                            <li><a href="#">@categories[i]</a></li>
-                            <li><a href="#">Musica</a></li>
-                            <li><a href="#">Film</a></li>
-                            <li class="divider"></li>
-                        </ul>}
-                    </li>
-                         </ul>
-
-            </li>
-            <li class="dropdown dropdown-large">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-
-                <ul class="dropdown-menu dropdown-menu-large row">
-                    <li class="col-sm-6">
-                        <ul>
-                            <li class="dropdown-header">Sword of Truths</li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Theme/Character</li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-
-                        </ul>
-                    </li>
-                    <li class="col-sm-6">
-                        <ul>
-                            <li class="dropdown-header">by brand</li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li><a href="#">Example</a></li>
-                            <li class="divider"></li>
-                            <li><img class="img-responsive" src="http://placehold.it/200x150" /></li>
-                        </ul>
-                    </li>
-
-
-                </ul>
-
-            </li>
-
-            <li class="dropdown dropdown-large">
-                <a href="#">Some link</a>
-            </li>
-            <li class="dropdown dropdown-large">
-                <a href="#">Some link</a>
-            </li>
-
-            
-    <ul class="nav navbar-nav" id="menuRight">
-        <li>
-            <a href="Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
-        </li>
-        <li>
-            <a href="Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"> Login</span></a>
-        </li>
-    </ul>
-        </div>
-</nav>
-
-<div class="container-fluid">
-<div id="homeCarousel" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#homeCarousel" data-slide-to="1"></li>
-        <li data-target="#homeCarousel" data-slide-to="2"></li>
-        <li data-target="#homeCarousel" data-slide-to="3"></li>
-        <li data-target="#homeCarousel" data-slide-to="4"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/Goldbox/2016/it_xsite_goldbox_1500x300._CB293654318_.jpg" />
-        </div>
-        <div class="item">
-            <img src="https://images-eu.ssl-images-amazon.com/images/G/29/_home_and_kitchen/2015/DesignShop/Redesign/BigGraphics/IT_Home_Desingshop-restyle_25-6-2015_4500x900._UX1500_SX1500_CB317222603_.jpg" />
-        </div>
-        <div class="item">
-            <img src="https://images-eu.ssl-images-amazon.com/images/G/29/_tools/billboard/it_tools_08-03-2016_professional-store_1500x300._CB294026631_.jpg" />
-        </div>
-        <div class="item">
-            <img src="https://images-eu.ssl-images-amazon.com/images/G/29/prime/2016/shipping_benefit/IT_Prime-shipping-visuals_11-04-2016_1500x300._CB274900098_.jpg" />
-        </div>
-        <div class="item">
-            <img src="https://images-eu.ssl-images-amazon.com/images/G/29/kindle/merch/2016/campaigns/mday/mday-gw-d-it-1500x300._CB275612559_.jpg" />
-        </div>
-    </div>
-    <a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
-<div id="linkHome">
-    <form class="form-inline" role="form">
-        <div class="form-group" id="linkRegala">
-            <button type="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></button>
-            <br /><br /><label>REGALA</label>
-        </div>
-        <div class="form-group" id="linkVendi">
-            <button type="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></button>
-            <br /><br /><label>VENDI</label>
-        </div>
-        <div class="form-group" id="linkBaratta">
-            <button type="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></button>
-            <br /><br /><label>BARATTA</label>
-        </div>
-    </form>
-</div>
-</div>
-    </div>
 
 
 
