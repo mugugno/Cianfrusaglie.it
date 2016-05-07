@@ -54,8 +54,11 @@ namespace Cianfrusaglie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Announce announce)
         {
+            var idlogged = User.GetUserId();
+            announce.Author = _context.Users.First(u => u.Id.Equals(idlogged));
             if (ModelState.IsValid)
             {
+                
                 _context.Announces.Add(announce);
                 _context.SaveChanges();
                 return Redirect("Index");

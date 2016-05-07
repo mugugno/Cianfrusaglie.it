@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160506135409_NoGeoCoordinateRequired")]
+    partial class NoGeoCoordinateRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -29,6 +30,7 @@ namespace Cianfrusaglie.Migrations
                     b.Property<DateTime?>("DeadLine");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasAnnotation("MaxLength", 255);
 
                     b.Property<int?>("GeoCoordinateId")
@@ -208,9 +210,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<int>("ReceiverId");
+                    b.Property<string>("ReceiverId")
+                        .IsRequired();
 
-                    b.Property<int>("SenderId");
+                    b.Property<string>("SenderId")
+                        .IsRequired();
 
                     b.Property<string>("Text")
                         .IsRequired();
@@ -254,15 +258,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<int>("ReceiverId");
 
-                    b.Property<int>("ReceiverId1");
-
                     b.Property<bool>("RememberMe");
 
                     b.Property<string>("SecurityStamp");
 
                     b.Property<int>("SenderId");
-
-                    b.Property<int>("SenderId1");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -435,12 +435,12 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId1");
+                        .HasPrincipalKey("ReceiverId");
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId1");
+                        .HasPrincipalKey("SenderId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.FieldDefaultValue", b =>
@@ -472,13 +472,11 @@ namespace Cianfrusaglie.Migrations
                 {
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId");
+                        .HasForeignKey("ReceiverId");
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId");
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>
