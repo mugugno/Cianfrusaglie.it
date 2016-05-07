@@ -43,10 +43,10 @@ namespace Cianfrusaglie.Models {
          builder.Entity< AnnounceCategory >().HasOne( pc => pc.Category ).WithMany( c => c.CategoryAnnounces )
             .HasForeignKey( pc => pc.CategoryId );
 
-         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete(
-            DeleteBehavior.Restrict );
-         builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete(
-            DeleteBehavior.Restrict );
+         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).HasForeignKey(
+            m => m.SenderId ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).HasForeignKey(
+            m => m.ReceiverId ).OnDelete( DeleteBehavior.Restrict );
 
          //---
          builder.Entity< CategoryFormField >().HasKey( x => new {x.FormFieldId, x.CategoryId} );

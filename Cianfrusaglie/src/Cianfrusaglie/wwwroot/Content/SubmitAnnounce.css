@@ -1,4 +1,4 @@
-﻿#wrapper-create{
+﻿#wrapper-submit-announce{
     bottom:0;
     height: 100%;
     margin: 0;
@@ -17,52 +17,52 @@
     background: -ms-radial-gradient(circle, #fff, #EAEAEA);
 }
 
-#create{
+#submit-announce{
     padding-top:4em;
     width: 50%;
     margin: auto;
 }
 
-.form-create {
+.form-submit-announce {
     padding-top:4em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-size:1em;
     padding:1.5em;
     border: 1px solid #b8b8b8;
     background:#fff;
-    -ms-border-radius: 10px;
+    /*-ms-border-radius: 10px;*/
     border-radius: 10px;
 }
 
-.form-create h2{
+.form-submit-announce h2{
     font-weight:100;
 }
-#create h1{
+#submit-announce h1{
     text-align:center;
     font-size:2.5em;
 }
-#create h1 a{
+#submit-announce h1 a{
     color:#FFC107;
     text-decoration: none;
 }
-.form-create input{
+.form-submit-announce input{
     width:100%;
     margin-bottom:1.2em;
     height:2.2em;
     padding:.2em;  
     font-weight:100;
 }
-.form-create h4{
+.form-submit-announce h4{
     text-align:left;
     margin:0;
     padding:0;
 }
-.form-create h4 a{
+.form-submit-announce h4 a{
     color:#FFC107;
     font-size:1em;
     font-weight:100;
 }
-.form-create button[type="submit"]{
+.form-submit-announce button[type="submit"]{
     width:100%;
     margin-bottom:1.2em;
     height:2.8em;
@@ -82,3 +82,4 @@
 #checkbox {
 
 }
+    
