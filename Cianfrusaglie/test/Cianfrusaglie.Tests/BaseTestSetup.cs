@@ -34,6 +34,17 @@ namespace Cianfrusaglie.Tests
             _context.Users.Add(new User() { UserName = "pippopaolo4", Email = "pippopaolo4@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
         }
 
+        private void CreateAnnounces()
+        {
+            var announce = new Announce();
+            var usr = _context.Users.First();
+            announce.Author = usr;
+            announce.Title = "Un annuncio bello bello";
+            announce.Description = "Sono bello";
+            announce.GeoCoordinate = new GeoCoordinateEntity();
+            _context.Announces.Add(announce);
+            _context.SaveChanges();
+        }
       
     }
 }
