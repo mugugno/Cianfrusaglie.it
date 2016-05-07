@@ -9,22 +9,24 @@ namespace Cianfrusaglie.Tests
     public class AnnounceTest : BaseTestSetup
     {
 
-        //private AnnouncesController donation;
+        private AnnouncesController _donation;
+        private AccountController _accountController;
         //private ApplicationDbContext Context = new ApplicationDbContext();
 
-        //public DonationTest()
-        //{
-        //    donation = new AnnouncesController(Context);
-        //}
+        public AnnounceTest()
+        {
+            _donation = new AnnouncesController(Context);
+        }
 
         [Fact]
-        public void CorrectInsertionIsOK()
+        public void CorrectInsertionIsOk()
         {
             var announce = new Announce();
-            var usr = _context.Users.First();
+            var usr = Context.Users.First();
             announce.Author = usr;
             announce.Title = "Un annuncio bello bello";
             announce.Description = "Sono bello";
+            
             
 
             ////TODO: Add fields...
