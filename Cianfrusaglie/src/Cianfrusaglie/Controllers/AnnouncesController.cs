@@ -19,7 +19,9 @@ namespace Cianfrusaglie.Controllers
         // GET: Announces
         public IActionResult Index()
         {
-            return View(_context.Announces.ToList());
+            ViewData["listAnnounces"] = _context.Announces.ToList();
+            ViewData["numberOfAnnounces"] = _context.Announces.ToList().Count;
+            return View();
         }
 
         // GET: Announces/Details/5

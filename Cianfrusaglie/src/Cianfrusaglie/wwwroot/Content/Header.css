@@ -11,8 +11,16 @@
     padding-right: 0px;
     padding-left: 0px;
 }
+#title {
+     padding-left:0;
+    padding-right: 0;
+   float: left;
+}
+
 #title a {
+    color:#FFC107;
     text-decoration: none;
+    text-align: center;
 }
 .affix {
       top: 0;
@@ -25,16 +33,18 @@
 
 #wrap h1{
     font-family: 'Lato', sans-serif;
-    color: orange;
+    color:#FFC107;
     margin-bottom:0;
     margin-top:10px;
     font-size:3em;
+    text-align: center;
 }
 
 #wrap h5{
     font-family: 'Lato', sans-serif;
-    color: orange;
+    color:#FFC107;
     margin-top:0;
+    text-align: center;
 }
 
 #pageHeader {
@@ -42,15 +52,19 @@
     height:100px;
     position: relative;
     border-bottom: 1px solid;
-    border-bottom-color: orange;
+    border-bottom-color: #FFC107;
     border-top: 1px solid;
-    border-top-color: orange;
+    border-top-color: #FFC107;
     background-color: white;
+    display: inline-block;
+    padding-right: 0;
+    padding-left: 0;
 }
 
 
 #barraRicerca {
     position: absolute;
+    float: left;
     top: 60%;
     transform: translateY(-60%);
 }
@@ -98,12 +112,9 @@
     text-align: center;
     font-weight: bold;
     border-top: 1px solid;
-    border-top-color: orange;
+    border-top-color: #FFC107;
 }
 
-.dropdown-large {
-  position: static !important;
-}
 .dropdown-menu-large {
   margin-left: 16px;
   margin-right: 16px;
@@ -164,5 +175,50 @@
   }
 }
 
+.sub-menu {
+    display: inline-block;
+    left: 100%;
+    position: absolute;
+    top: auto;
+    visibility: hidden;
+    margin-top: 10px;
+}
+
+.dropdown-menu li:hover .sub-menu {
+    visibility: visible;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
 
 
+.dropdown-menu .sub-menu:before {
+    border-bottom: 7px solid transparent;
+    border-left: none;
+    border-right: 7px solid rgba(0, 0, 0, 0.2);
+    border-top: 7px solid transparent;
+    left: -7px;
+    top: 10px;
+}
+.dropdown-menu .sub-menu:after {
+    border-top: 6px solid transparent;
+    border-left: none;
+    border-right: 6px solid #fff;
+    border-bottom: 6px solid transparent;
+    left: 10px;
+    top: 11px;
+    left: -6px;
+}
+
+#vetrinaAnnunci {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 1px solid;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background: #f5f5f5;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
