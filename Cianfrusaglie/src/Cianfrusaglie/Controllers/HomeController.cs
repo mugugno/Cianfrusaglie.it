@@ -1,11 +1,21 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Cianfrusaglie.Models;
+using Microsoft.AspNet.Mvc;
+using System.Linq;
 
 namespace Cianfrusaglie.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext _context;
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             return View();
         }
 
@@ -27,5 +37,7 @@ namespace Cianfrusaglie.Controllers
         {
             return View();
         }
+
+       
     }
 }

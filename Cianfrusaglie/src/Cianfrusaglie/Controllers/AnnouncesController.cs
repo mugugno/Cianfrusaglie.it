@@ -19,7 +19,9 @@ namespace Cianfrusaglie.Controllers
         // GET: Announces
         public IActionResult Index()
         {
-            return View(_context.Announces.ToList());
+            ViewData["listAnnounces"] = _context.Announces.ToList();
+            ViewData["numberOfAnnounces"] = _context.Announces.ToList().Count;
+            return View();
         }
 
         // GET: Announces/Details/5
@@ -54,8 +56,11 @@ namespace Cianfrusaglie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Announce announce)
         {
+            var idlogged = User.GetUserId();
+            announce.Author = _context.Users.First(u => u.Id.Equals(idlogged));
             if (ModelState.IsValid)
             {
+                
                 _context.Announces.Add(announce);
                 _context.SaveChanges();
                 return Redirect("Index");
@@ -123,6 +128,11 @@ namespace Cianfrusaglie.Controllers
             _context.Announces.Remove(announce);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult SubmitAnnounce()
+        {
+            return View();
         }
     }
 }

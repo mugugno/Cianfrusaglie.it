@@ -5,80 +5,66 @@
 }
 
 <h2>CreateDescriptionAnnounce</h2>
-
-@functions
-{
-    private IEnumerable<String> GetCategories()
-    {
-        for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
-        {
-            var categories = ViewData["formCategories"] as List<Category>;
-            if (categories != null && categories[i].OverCategory == null)
-                yield return categories[i].Name;
-        }
-    }
-
-}
-<form asp-action="CreateDescriptionAnnounce">
-    <div class="form-horizontal">
-        <h4>Descrizione dell'articolo</h4>
-        <hr/>
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            @foreach (var c in GetCategories())
-            {
-                <p>@c</p>
-            }
-        </div>
-        <div class="form-group">
-            <label asp-for="DeadLine" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="DeadLine" class="form-control" />
-                <span asp-validation-for="DeadLine" class="text-danger" />
+<div id="wrapper-submit-announce">
+    <div id="submit-announce">
+        <form asp-action="CreateDescriptionAnnounce" class="form-horizontal form-submit-announce">
+            <div class="form-horizontal">
+                <h4>Descrizione dell'articolo</h4>
+                <hr />
+                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Title" class="col-md-2 control-label">Titolo</label>
+                    <div class="col-md-10">
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="col-md-2 control-label">Descrizione</label>
+                    <div class="col-md-10">
+                        <textarea maxlength="255" sp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Solo ritiro</label>
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="checkbox-button" onclick="hideAndSetRangeToZero()"></label>
+                    </div>
+                </div>
+                <div class="form-group" id="checkbox-range">
+                    <label asp-for="Range" class="col-md-2 control-label">Range</label>
+                    <div class="col-md-10">
+                        <input id="range-input" asp-for="Range" class="form-control" value="1" />
+                        <span asp-validation-for="Range" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="PublishDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Range" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Range" class="form-control" />
-                <span asp-validation-for="Range" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Title" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+        </form>
     </div>
-</form>
-
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}
+
+
+<script>
+    function hideAndSetRangeToZero() {
+        var rangeFormGroup = document.getElementById("checkbox-range");
+        var rangeInput = document.getElementById("range-input");
+        var checkbox = document.getElementById("checkbox-button");
+        if (checkbox.checked) {
+            rangeFormGroup.style.display = "none";
+            rangeInput.value = 0;
+        }
+        else
+            rangeFormGroup.style.display = "block";
+
+    }
+</script>

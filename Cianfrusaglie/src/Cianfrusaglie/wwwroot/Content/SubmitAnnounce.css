@@ -1,11 +1,8 @@
-﻿#wrapper-register{
+﻿#wrapper-submit-announce{
     bottom:0;
-    top: 0;
-    left: 0;
-    right: 0;
+    height: 100%;
     margin: 0;
-    min-height: 100%;
-    position: absolute;
+
     /*Leggero gradiente*/
     background-color: #EAEAEA;
     background-position: center center;
@@ -20,63 +17,54 @@
     background: -ms-radial-gradient(circle, #fff, #EAEAEA);
 }
 
-#register{
-    padding-top:2em;
-    width: 28em;
+#submit-announce{
+    padding-top:4em;
+    width: 50%;
     margin: auto;
 }
 
-#tabellaForm {
-    margin-top: 10px;
-}
-#register i {
-    color: #d4d4d4;
-}
-.form-register{
+.form-submit-announce {
     padding-top:4em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-size:1em;
     padding:1.5em;
-    padding-left: 4em; 
-    padding-right: 4em; 
     border: 1px solid #b8b8b8;
     background:#fff;
+    /*-ms-border-radius: 10px;*/
     border-radius: 10px;
 }
-.form-register h2{
+
+.form-submit-announce h2{
     font-weight:100;
 }
-#register h1{
+#submit-announce h1{
     text-align:center;
     font-size:2.5em;
 }
-#register h5{
-    color:#FFC107;
-    text-align:center;
-}
-#register h1 a{
+#submit-announce h1 a{
     color:#FFC107;
     text-decoration: none;
 }
-.form-register input{
+.form-submit-announce input{
     width:100%;
+    margin-bottom:1.2em;
     height:2.2em;
-    padding:.2em;
+    padding:.2em;  
     font-weight:100;
 }
-#sottoForm h5{
-    text-align:right;
+.form-submit-announce h4{
+    text-align:left;
     margin:0;
     padding:0;
 }
-
-#sottoForm h5 a{
+.form-submit-announce h4 a{
     color:#FFC107;
+    font-size:1em;
     font-weight:100;
 }
-.form-register button[type="submit"]{
+.form-submit-announce button[type="submit"]{
     width:100%;
-    margin-bottom:0;
+    margin-bottom:1.2em;
     height:2.8em;
     cursor:pointer;
     padding:0;
@@ -91,23 +79,7 @@
     border-radius: 5px;
 }
 
-/* enable absolute positioning */
-.inner-addon {
-  position: relative;
+#checkbox {
+
 }
-
-/* style glyph */
-.inner-addon .glyphicon {
-  position: absolute;
-  padding: 10px;
-  pointer-events: none;
-}
-
-/* align glyph */
-.left-addon .glyphicon  { left:  0px;}
-.right-addon .glyphicon { right: 0px;}
-
-/* add padding  */
-.left-addon input  { padding-left:  30px; }
-.right-addon input { padding-right: 30px; }
-
+    
