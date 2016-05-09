@@ -13,13 +13,9 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public virtual DateTime DateTime { get; set; }
 
-      [ForeignKey("Sender")]
-      public int SenderId { get; set; }
       [Required]
       public virtual User Sender { get; set; }
 
-      [ForeignKey( "Receiver" )]
-      public int ReceiverId { get; set; }
       [Required]
       public virtual User Receiver { get; set; }
    }
