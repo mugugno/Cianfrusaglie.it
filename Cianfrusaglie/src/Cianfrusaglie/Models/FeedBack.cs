@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cianfrusaglie.Models {
    public class FeedBack {
+      public int Id { get; set; }
+
       [Range( 0, 5 )]
       public virtual int Vote { get; set; }
 
@@ -13,14 +15,8 @@ namespace Cianfrusaglie.Models {
       [MaxLength( 99 )]
       public virtual string Text { get; set; }
 
-      [ForeignKey( "Sender" )]
-      public virtual int SenderId { get; set; }
-
       [Required]
-      public virtual User Sender { get; set; }
-
-      [ForeignKey( "Receiver" )]
-      public virtual int ReceiverId { get; set; }
+      public virtual User Author { get; set; }
 
       [Required]
       public virtual User Receiver { get; set; }

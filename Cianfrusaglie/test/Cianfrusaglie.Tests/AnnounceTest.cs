@@ -1,43 +1,29 @@
 ﻿using System.Linq;
-using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
-using Cianfrusaglie.Services;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
 using Xunit;
-
 
 namespace Cianfrusaglie.Tests
 {
     public class AnnounceTest : BaseTestSetup
     {
-        public AnnounceTest()
-        {
-
-        }
-
         [Fact]
         public async void UserTriesToDeleteAnnounceOfOthers()
         {
-            var announce = new Announce();
-            var usr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
-            announce.Author = usr;
-            announce.Title = "Un annuncio bello bello";
-            announce.Description = "Sono bello";
-            announce.GeoCoordinate = new GeoCoordinateEntity();
-            Context.Announces.Add(announce);
-            Context.SaveChanges();
-            var idAnnounce = Context.Announces.Single(a => a.Author.Equals(usr) && a.Title.Equals(announce.Title) &&a.GeoCoordinate.Equals(announce.GeoCoordinate)).Id;
-
-            var loginViewModel = new LoginViewModel() { Password = CommonUserPassword, RememberMe = true, UserName = "pippopippo1" };
+            var announce = Context.Announces.Single(a => a.Author.UserName.Equals(SecondUserName));
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
             var id = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName)).Id;
             var accountController = CreateAccountController();
             await accountController.Login(loginViewModel);
-
             var announceController = CreateAnnounceController(id, loginViewModel.UserName);
-            var res = announceController.Delete(idAnnounce);
+            announce.Description = "Ho cambiato qualcosa";
+            var res = announceController.DeleteConfirmed(announce.Id);
             Assert.IsType<BadRequestResult>(res);
         }
 
@@ -45,7 +31,12 @@ namespace Cianfrusaglie.Tests
         public async void UserTriesToEditAnnounceOfOthers()
         {
             var announce = Context.Announces.Single(a => a.Author.UserName.Equals(SecondUserName));
-            var loginViewModel = new LoginViewModel() { Password = CommonUserPassword, RememberMe = true, UserName = FirstUserName };
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
             var id = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName)).Id;
             var accountController = CreateAccountController();
             await accountController.Login(loginViewModel);
@@ -56,21 +47,178 @@ namespace Cianfrusaglie.Tests
         }
 
         [Fact]
-        public async void CorrectInsertionIsOk()
+        public async void UserDeletesHisAnnounces()
         {
-            var loginViewModel = new LoginViewModel() { Password = CommonUserPassword, RememberMe = true, UserName = FirstUserName };
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
             var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
             var accountController = CreateAccountController();
             await accountController.Login(loginViewModel);
-            var announce = new Announce();
-            
-            announce.Author = usr;
-            announce.Title = "Un annuncio bello bello";
-            announce.Description = "Sono bello";
-            announce.GeoCoordinate = new GeoCoordinateEntity();
-            Context.Announces.Add(announce);
-            Context.SaveChanges();
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var announce = Context.Announces.Single(a => a.Author.Equals(usr));
+            var res = announceController.DeleteConfirmed(announce.Id);
+            Assert.DoesNotContain(announce, Context.Announces);
+            Assert.IsNotType<BadRequestResult>(res);
+        }
 
+        [Fact]
+        public async void CorrectInsertionIsOk()
+        {
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+
+            var announce = new Announce
+            {
+                Author = usr,
+                Title = "Un annuncio bello bello",
+                Description = "Sono bello",
+                GeoCoordinate = new GeoCoordinateEntity()
+            };
+            var res = announceController.Create(announce);
+
+
+            Assert.Contains(announce, Context.Announces);
+            Assert.IsNotType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public async void UserEditsHisAnnounce()
+        {
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var announce = Context.Announces.Single(a => a.Author.Equals(usr));
+            var old = announce.Description;
+            announce.Description += "Ho cambiato la descriozne ahahah";
+            announceController.Edit(announce);
+
+            var updatedAnnounce = Context.Announces.Single(a => a.Id.Equals(announce.Id));
+            Assert.NotEqual(updatedAnnounce.Description, old);
+        }
+
+        [Fact]
+        public void VisitorTriesToCreateAnnounceAndFail()
+        {
+            var announceController = CreateAnnounceController(null, null);
+            var announce = new Announce
+            {
+                Title = "Un annuncio bello bello",
+                Description = "Sono bello",
+                GeoCoordinate = new GeoCoordinateEntity()
+            };
+            var res = announceController.Create(announce);
+            Assert.IsType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public void VisitorTriesToEditAnnounceAndFail()
+        {
+            var announceController = CreateAnnounceController(null, null);
+            var announce = Context.Announces.Single(a => a.Author.UserName.Equals(FirstUserName));
+            var res = announceController.Edit(announce);
+            Assert.IsType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public void VisitorTriesToDeleteAnnounceAndFail()
+        {
+            var announceController = CreateAnnounceController(null, null);
+            var announce = Context.Announces.Single(a => a.Author.UserName.Equals(FirstUserName));
+            var res = announceController.DeleteConfirmed(announce.Id);
+            Assert.IsType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public async void UserTriesToDeleteAlreadyDeletedAnnounce()
+        {
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var announce = Context.Announces.Single(a => a.Author.Equals(usr));
+            announceController.DeleteConfirmed(announce.Id);
+
+            var res = announceController.DeleteConfirmed(announce.Id);
+            Assert.IsType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public async void RequestingExistingAnnounceIsCorrectlyVisualized()
+        {
+            var announce = Context.Announces.First();
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var res = announceController.Details(announce.Id);
+            Assert.IsNotType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public async void RequestingExistingAnnounceIsCorrectlyVisualizedForEdit()
+        {
+            var announce = Context.Announces.First();
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var res = announceController.Edit(announce.Id);
+            Assert.IsNotType<BadRequestResult>(res);
+        }
+
+        [Fact]
+        public async void RequestingExistingAnnounceIsCorrectlyVisualizedForDelete()
+        {
+            var announce = Context.Announces.First();
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var res = announceController.Delete(announce.Id);
+            Assert.IsNotType<BadRequestResult>(res);
         }
     }
 }

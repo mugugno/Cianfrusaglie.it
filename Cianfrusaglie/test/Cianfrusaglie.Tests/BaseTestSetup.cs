@@ -93,6 +93,7 @@ namespace Cianfrusaglie.Tests
 
         protected AnnouncesController CreateAnnounceController(string id, string userName)
         {
+            if(id == null || userName==null) return new AnnouncesController(Context);
             var validPrincipal = new ClaimsPrincipal(
                new[]
                {
