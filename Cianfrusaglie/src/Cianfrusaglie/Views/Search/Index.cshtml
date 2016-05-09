@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Announce>
+
+@{
+   ViewData[ "Title" ] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor( model => model.Title )
+        </th>
+    </tr>
+
+    @foreach( var item in Model ) {
+    <tr>
+        <td>
+            @Html.DisplayFor( modelItem => item.Title )
+        </td>
+    </tr>
+    }
+</table>

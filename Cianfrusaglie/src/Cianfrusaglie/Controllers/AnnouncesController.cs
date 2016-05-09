@@ -22,6 +22,8 @@ namespace Cianfrusaglie.Controllers
         {
             ViewData["listAnnounces"] = _context.Announces.ToList();
             ViewData["numberOfAnnounces"] = _context.Announces.ToList().Count;
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             return View();
         }
 

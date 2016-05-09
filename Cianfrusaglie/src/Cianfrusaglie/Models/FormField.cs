@@ -9,7 +9,7 @@ namespace Cianfrusaglie.Models {
       public virtual string Name { get; set; }
 
       [Required]
-      public virtual string Type { get; set; }
+      public virtual FormFieldType Type { get; set; }
 
       //Da decidere se fare enum, vale S,D,IM,I(Stringa,Double,Immagine,Integer)
 

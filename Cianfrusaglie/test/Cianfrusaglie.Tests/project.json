@@ -15,8 +15,7 @@
     "EntityFramework.Relational": "7.0.0-rc1-final",
     "xunit": "2.2.0-beta1-build3239",
     "Cianfrusaglie": "1.0.0-*",
-    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
-    "Microsoft.AspNet.TestHost": "1.0.0-rc1-final"
+    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final"
   },
   "commands": {
     "test": "xunit.runner.dnx"

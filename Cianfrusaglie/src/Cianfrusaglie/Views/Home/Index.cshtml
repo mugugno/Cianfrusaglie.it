@@ -1,7 +1,7 @@
 ﻿
 @functions
 {
-    private IEnumerable<String> GetCategories()
+    public IEnumerable<String> GetCategories()
     {
         for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
         {
@@ -11,7 +11,7 @@
         }
     }
 
-    private IEnumerable<String> GetSubCategories(String macro)
+    public IEnumerable<String> GetSubCategories(String macro)
     {
         for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
         {
@@ -21,7 +21,7 @@
         }
     }
 
-    private IEnumerable<Announce> GetAnnounces()
+    public IEnumerable<Announce> GetAnnounces()
     {
         for (var j = 0; j < (ViewData["numberOfAnnounces"] as int? ?? 0); j++)
         {
@@ -45,6 +45,7 @@
 }
 
 <div id="wrap">
+
     <nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100">
         <div class="navbar-header">
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
@@ -66,42 +67,23 @@
                         {
                             <li>
                                 <a href="#">@macro</a>
-                                <ul class="dropdown-menu sub-menu">
-                                    <li class="dropdown-header">@macro</li>
-                                    <li class="divider"></li>
-                                    <!-- TODO spostare i menu all'altezza giusta ed eliminare submenu in mistery box-->
-                                    @foreach (var sub in GetSubCategories(@macro))
-                                    {
-                                        <li><a href="#">@sub</a></li>
-                                    }
-                                </ul>
+                                @if (GetSubCategories(@macro).ToList().Count > 0)
+                                {
+                                    <ul class="dropdown-menu sub-menu">
+                                        <li class="dropdown-header">@macro</li>
+                                        <li class="divider"></li>
+                                        @foreach (var sub in GetSubCategories(@macro))
+                                        {
+                                            <li><a href="#">@sub</a></li>
+                                        }
+                                    </ul>
+                                }
                             </li>
                         }
                     </ul>
                 </li>
                 <li class="dropdown dropdown-large">
-                    <a href="#">Cerca nei tuoi dintorni</a>
-                    <!--TODO da implementare-->
-                </li>
-                <li class="dropdown dropdown-large">
                     <a href="#" data-toggle="modal" data-target="#myWindow">Sto Cercando</a>
-                    <div class="modal" id="myWindow" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Non sei registrato</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Registati o effettua login per consultare la lista degli annunci.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                 </li>
                 <li class="dropdown dropdown-large">
                     <a href="#">Come funziona <strong>nonhounnome.it</strong></a>
@@ -118,6 +100,24 @@
             </ul>
         </div>
     </nav>
+
+    <div class="modal fade" id="myWindow" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Non sei registrato</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Registati o effettua login per consultare la lista degli annunci.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <div class="container-fluid" id="containerPrincipale">
         <div id="homeCarousel" class="carousel slide" data-ride="carousel">
@@ -172,48 +172,112 @@
             </form>
         </div>
 
-        <div id="vetrinaAnnunci" class="row">
-            <div class="col-sm-4">
-                <h3>annuncio titolo 1</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 2</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 3</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-        </div>
-        <div id="vetrinaAnnunci" class="row">
-            <div class="col-sm-4">
-                <h3>annuncio titolo 1</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 2</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 3</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-        </div>
 
-    </div>
+        <hr/>
+
+        <div class="container">
+            <div id="vetrinaAnnunci" class="row ">
+                <div class="panel-group col-sm-2" id="panelAnnunci">
+                    <div class="panel panel-default">
+                        <div class="panel-heading thumbnail">
+                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
+                        </div>
+                        <div class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
+                                <h5>VENDITA</h5>
+                                <h3>prezzo millemila euri</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group col-sm-2" id="panelAnnunci">
+                    <div class="panel panel-default">
+                        <div class="panel-heading thumbnail">
+                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
+                        </div>
+                        <div class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
+                                <h5>VENDITA</h5>
+                                <h3>prezzo millemila euri</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group col-sm-2" id="panelAnnunci">
+                    <div class="panel panel-default">
+                        <div class="panel-heading thumbnail">
+                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
+                        </div>
+                        <div class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
+                                <h5>VENDITA</h5>
+                                <h3>prezzo millemila euri</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group col-sm-2" id="panelAnnunci">
+                    <div class="panel panel-default">
+                        <div class="panel-heading thumbnail">
+                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
+                        </div>
+                        <div class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
+                                <h5>VENDITA</h5>
+                                <h3>prezzo millemila euri</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+      <!--<div id="vetrinaAnnunci" class="row">
+            <div class="col-sm-4">
+                <h3>annuncio titolo 1</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 2</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 3</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+        </div>
+        <div id="vetrinaAnnunci" class="row">
+            <div class="col-sm-4">
+                <h3>annuncio titolo 1</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 2</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+            <div class="col-sm-4">
+                <h3>annuncio titolo 3</h3>
+                <br/>tipo di annuncio
+                <br/><span class="glyphicon glyphicon-gift"></span>
+                <br/>prezzo se in vendita
+            </div>
+        </div>-->
+
+        </div>
 </div>
 
 
