@@ -31,18 +31,29 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Description")
                         .HasAnnotation("MaxLength", 255);
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<int?>("GeoCoordinateId")
                         .IsRequired();
 
-                    b.Property<DateTime>("PublishDate");
+                    b.Property<int>("MeterRange");
 
-                    b.Property<int>("Range");
+                    b.Property<int>("Price");
+
+                    b.Property<int>("PriceRange");
+
+                    b.Property<DateTime>("PublishDate");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
+
+                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Announce");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -100,20 +111,25 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.FeedBack", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("AnnounceId");
 
-                    b.Property<int>("SenderId");
-
-                    b.Property<int>("ReceiverId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("ReceiverId")
+                        .IsRequired();
 
                     b.Property<string>("Text")
                         .HasAnnotation("MaxLength", 99);
 
                     b.Property<int>("Vote");
 
-                    b.HasKey("AnnounceId", "SenderId", "ReceiverId");
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.FieldDefaultValue", b =>
@@ -195,7 +211,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -208,9 +226,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<int>("ReceiverId");
+                    b.Property<string>("ReceiverId")
+                        .IsRequired();
 
-                    b.Property<int>("SenderId");
+                    b.Property<string>("SenderId")
+                        .IsRequired();
 
                     b.Property<string>("Text")
                         .IsRequired();
@@ -252,17 +272,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("ReceiverId");
-
-                    b.Property<int>("ReceiverId1");
-
                     b.Property<bool>("RememberMe");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("SenderId");
-
-                    b.Property<int>("SenderId1");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -364,6 +376,15 @@ namespace Cianfrusaglie.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
+                    b.HasBaseType("Cianfrusaglie.Models.Announce");
+
+                    b.Property<string>("ObjectText");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "AnnounceExchange");
+                });
+
             modelBuilder.Entity("Cianfrusaglie.Models.Announce", b =>
                 {
                     b.HasOne("Cianfrusaglie.Models.User")
@@ -434,13 +455,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId1");
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId1");
+                        .HasForeignKey("ReceiverId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.FieldDefaultValue", b =>
@@ -465,20 +484,18 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
                 {
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId");
+                        .HasForeignKey("ReceiverId");
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId");
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>
@@ -522,6 +539,10 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
                 });
         }
     }

@@ -9,6 +9,7 @@ namespace Cianfrusaglie.Models {
       public DbSet< Category > Categories { get; set; }
       public DbSet< Message > Messages { get; set; }
       public DbSet< Announce > Announces { get; set; }
+      public DbSet< AnnounceExchange > AnnounceExchange { get; set; }
       public DbSet< AnnounceCategory > AnnounceCategories { get; set; }
       public DbSet< CategoryFormField > CategoryFormFields { get; set; }
       public DbSet< FormField > FormFields { get; set; }
@@ -43,10 +44,8 @@ namespace Cianfrusaglie.Models {
          builder.Entity< AnnounceCategory >().HasOne( pc => pc.Category ).WithMany( c => c.CategoryAnnounces )
             .HasForeignKey( pc => pc.CategoryId );
 
-         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).HasForeignKey(
-            m => m.SenderId ).OnDelete( DeleteBehavior.Restrict );
-         builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).HasForeignKey(
-            m => m.ReceiverId ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< Message >().HasOne( m => m.Sender ).WithMany( u => u.SentMessages ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< Message >().HasOne( m => m.Receiver ).WithMany( u => u.ReceivedMessages ).OnDelete( DeleteBehavior.Restrict );
 
          //---
          builder.Entity< CategoryFormField >().HasKey( x => new {x.FormFieldId, x.CategoryId} );
@@ -76,14 +75,11 @@ namespace Cianfrusaglie.Models {
             pc => pc.GatId );
 
 
-         builder.Entity< FeedBack >().HasKey( f => new {f.AnnounceId, f.SenderId, f.ReceiverId} );
-         builder.Entity< FeedBack >().HasOne( u => u.Sender ).WithMany( u => u.SentFeedBacks ).HasForeignKey(
-            f => f.SenderId ).OnDelete( DeleteBehavior.Restrict );
+         //builder.Entity< FeedBack >().HasKey( f => new {f.AnnounceId, SenderId = f.AuthorId, f.ReceiverId} );
+         builder.Entity< FeedBack >().HasOne( u => u.Author ).WithMany( u => u.SentFeedBacks ).OnDelete( DeleteBehavior.Restrict );
 
-         builder.Entity< FeedBack >().HasOne( u => u.Receiver ).WithMany( u => u.ReceivedFeedBacks ).HasForeignKey(
-            f => f.ReceiverId ).OnDelete( DeleteBehavior.Restrict );
-         builder.Entity< FeedBack >().HasOne( u => u.Announce ).WithMany( u => u.FeedBacks ).HasForeignKey(
-            f => f.AnnounceId ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< FeedBack >().HasOne( u => u.Receiver ).WithMany( u => u.ReceivedFeedBacks ).OnDelete( DeleteBehavior.Restrict );
+         builder.Entity< FeedBack >().HasOne( u => u.Announce ).WithMany( u => u.FeedBacks ).HasForeignKey( u => u.AnnounceId ).OnDelete( DeleteBehavior.Restrict );
 
 
          builder.Entity< Interested >().HasOne( u => u.Announce ).WithMany( u => u.Interested ).OnDelete(

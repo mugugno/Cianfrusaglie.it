@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace Cianfrusaglie.Migrations
 {
-    public partial class Initial_Redo : Migration
+    public partial class Initial_Redo4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -131,7 +131,7 @@ namespace Cianfrusaglie.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    GeoCoordinateId = table.Column<int>(nullable: false),
+                    GeoCoordinateId = table.Column<int>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(nullable: true),
@@ -139,10 +139,8 @@ namespace Cianfrusaglie.Migrations
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    ReceiverId = table.Column<int>(nullable: false),
                     RememberMe = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
-                    SenderId = table.Column<int>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     UserName = table.Column<string>(nullable: true)
@@ -150,14 +148,12 @@ namespace Cianfrusaglie.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                    table.UniqueConstraint("AK_User_ReceiverId", x => x.ReceiverId);
-                    table.UniqueConstraint("AK_User_SenderId", x => x.SenderId);
                     table.ForeignKey(
                         name: "FK_User_GeoCoordinateEntity_GeoCoordinateId",
                         column: x => x.GeoCoordinateId,
                         principalTable: "GeoCoordinateEntity",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_User_User_UserId",
                         column: x => x.UserId,
@@ -194,11 +190,15 @@ namespace Cianfrusaglie.Migrations
                     AuthorId = table.Column<string>(nullable: false),
                     Closed = table.Column<bool>(nullable: false),
                     DeadLine = table.Column<DateTime>(nullable: true),
-                    Description = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
                     GeoCoordinateId = table.Column<int>(nullable: false),
+                    MeterRange = table.Column<int>(nullable: false),
+                    Price = table.Column<int>(nullable: false),
+                    PriceRange = table.Column<int>(nullable: false),
                     PublishDate = table.Column<DateTime>(nullable: false),
-                    Range = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
+                    Title = table.Column<string>(nullable: false),
+                    ObjectText = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -379,16 +379,18 @@ namespace Cianfrusaglie.Migrations
                 name: "FeedBack",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AnnounceId = table.Column<int>(nullable: false),
-                    SenderId = table.Column<int>(nullable: false),
-                    ReceiverId = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<string>(nullable: false),
                     DateTime = table.Column<DateTime>(nullable: false),
+                    ReceiverId = table.Column<string>(nullable: false),
                     Text = table.Column<string>(nullable: true),
                     Vote = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FeedBack", x => new { x.AnnounceId, x.SenderId, x.ReceiverId });
+                    table.PrimaryKey("PK_FeedBack", x => x.Id);
                     table.ForeignKey(
                         name: "FK_FeedBack_Announce_AnnounceId",
                         column: x => x.AnnounceId,
@@ -396,16 +398,16 @@ namespace Cianfrusaglie.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_FeedBack_User_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_FeedBack_User_ReceiverId",
                         column: x => x.ReceiverId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "ReceiverId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FeedBack_User_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "SenderId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
@@ -436,7 +438,8 @@ namespace Cianfrusaglie.Migrations
                     AnnounceId = table.Column<int>(nullable: false),
                     ChooseDate = table.Column<DateTime>(nullable: true),
                     DateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -448,8 +451,8 @@ namespace Cianfrusaglie.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Interested_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Interested_User_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);

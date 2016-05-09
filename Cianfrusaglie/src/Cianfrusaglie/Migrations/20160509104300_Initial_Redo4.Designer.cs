@@ -8,8 +8,8 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160506100203_Initial_Redo")]
-    partial class Initial_Redo
+    [Migration("20160509104300_Initial_Redo4")]
+    partial class Initial_Redo4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,21 +30,31 @@ namespace Cianfrusaglie.Migrations
                     b.Property<DateTime?>("DeadLine");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasAnnotation("MaxLength", 255);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<int?>("GeoCoordinateId")
                         .IsRequired();
 
-                    b.Property<DateTime>("PublishDate");
+                    b.Property<int>("MeterRange");
 
-                    b.Property<int>("Range");
+                    b.Property<int>("Price");
+
+                    b.Property<int>("PriceRange");
+
+                    b.Property<DateTime>("PublishDate");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
+
+                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Announce");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -102,20 +112,25 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.FeedBack", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("AnnounceId");
 
-                    b.Property<int>("SenderId");
-
-                    b.Property<int>("ReceiverId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("ReceiverId")
+                        .IsRequired();
 
                     b.Property<string>("Text")
                         .HasAnnotation("MaxLength", 99);
 
                     b.Property<int>("Vote");
 
-                    b.HasKey("AnnounceId", "SenderId", "ReceiverId");
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.FieldDefaultValue", b =>
@@ -197,7 +212,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -238,8 +255,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int?>("GeoCoordinateId")
-                        .IsRequired();
+                    b.Property<int?>("GeoCoordinateId");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -257,13 +273,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("ReceiverId");
-
                     b.Property<bool>("RememberMe");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("SenderId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -365,6 +377,15 @@ namespace Cianfrusaglie.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
+                    b.HasBaseType("Cianfrusaglie.Models.Announce");
+
+                    b.Property<string>("ObjectText");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "AnnounceExchange");
+                });
+
             modelBuilder.Entity("Cianfrusaglie.Models.Announce", b =>
                 {
                     b.HasOne("Cianfrusaglie.Models.User")
@@ -435,13 +456,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .HasPrincipalKey("ReceiverId");
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .HasPrincipalKey("SenderId");
+                        .HasForeignKey("ReceiverId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.FieldDefaultValue", b =>
@@ -466,7 +485,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
@@ -521,6 +540,10 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
                 });
         }
     }
