@@ -16,7 +16,7 @@
                 yield return categories[i];
         }
     }
-    
+
 
     private IEnumerable<Category> GetCategories(Category macro)
     {
@@ -29,61 +29,123 @@
     }
 
 }
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel-group" id="panel-423221">
+                    @foreach (var macroCategory in GetMacroCategories())
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#@macroCategory.Id">@macroCategory.Name</a>
+                            </div>
+                            <div id="@macroCategory.Id" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="form-group">
 
-
-<div id="wrap">
-
-    <div class="panel-group col-md-3" id="panelCategorie">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <a class="panel-title" data-toggle="collapse" data-parent="#panelCategorie">Seleziona le categorie </a>
-            </div>
-            <div class="panel-collapse collapse in">
-                <div class="panel-body">
-                    <div class="form-group">
-                        @foreach (Category macrocat in GetMacroCategories())
-                        {
-
-                            <div class="checkbox">
-                                <label><input id="@(macrocat.Name)+'Check'" type="checkbox" value="">@macrocat.Name</label></div>
-                                @foreach (Category cat in GetCategories(macrocat))
-                                {
-                                   
-                                    <div class="checkbox">
-                                        <label><input id="@(cat.Name)+'Check'" type="checkbox" value="">@cat.Name</label>
+                                        <div class="col-md-4">
+                                            @foreach (var category in GetCategories(macroCategory))
+                                            {
+                                                <div class="checkbox">
+                                                    <label for="@category.Id">
+                                                        <input type="checkbox" name="category" id="@category.Id" value="@category.Id" onselect="addFieldForTheCategory(@category.Id)">
+                                                        @category.Name
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                }
-                           <!-- </div> -->
-                        }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="formField1">
+                                    Form field #1
+                                </label>
+                                <input type="text" class="form-control" id="formField1">
+                            </div>
+                            <div class="form-group">
+                                <label for="formField2">
+                                    Form field #2
+                                </label>
+                                <input type="password" class="form-control" id="formField2">
+                            </div>
+                            <button type="submit" class="btn btn-default">
+                                Submit
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container-fluid" id="insTag">
-        <div class="col-md-6">
-            <div class="panel-group" id="panel-423221">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a class="panel-title" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-487057">Categoria #3</a>
+
+@*<div id="wrap">
+
+        <div class="panel-group col-md-3" id="panelCategorie">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a class="panel-title" data-toggle="collapse" data-parent="#panelCategorie">Seleziona le categorie </a>
+                </div>
+                <div class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            @foreach (Category macrocat in GetMacroCategories())
+                            {
+
+                                <div class="checkbox">
+                                    <label><input id="@(macrocat.Name)+'Check'" type="checkbox" value="">@macrocat.Name</label></div>
+                                    @foreach (Category cat in GetCategories(macrocat))
+                                    {
+
+                                        <div class="checkbox">
+                                            <label><input id="@(cat.Name)+'Check'" type="checkbox" value="">@cat.Name</label>
+                                        </div>
+                                    }
+                               <!-- </div> -->
+                            }
+                        </div>
                     </div>
-                    <div id="panel-element-487057" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label for="checkboxes-0">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
-                                            Sottocategoria #1
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label for="checkboxes-1">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
-                                            Sottocategoria #2
-                                        </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" id="insTag">
+            <div class="col-md-6">
+                <div class="panel-group" id="panel-423221">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="panel-title" data-toggle="collapse" data-parent="#panel-423221" href="#panel-element-487057">Categoria #3</a>
+                        </div>
+                        <div id="panel-element-487057" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="checkboxes">Sottocategorie:</label>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label for="checkboxes-0">
+                                                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+                                                Sottocategoria #1
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label for="checkboxes-1">
+                                                <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
+                                                Sottocategoria #2
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -91,45 +153,44 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container-fluid" id="infoObbligatorie">
-            <form role="form">
-                <div class="form-group">
-                    <label for="exampleInputEmail1">
-                        Email address
-                    </label>
-                    <input type="email" class="form-control" id="exampleInputEmail1">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">
-                        Password
-                    </label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputFile">
-                        File input
-                    </label>
-                    <input type="file" id="exampleInputFile">
-                    <p class="help-block">
-                        Example block-level help text here.
-                    </p>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Check me out
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-default">
-                    Submit
-                </button>
-            </form>
-        </div>
+            <div class="container-fluid" id="infoObbligatorie">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">
+                            Email address
+                        </label>
+                        <input type="email" class="form-control" id="exampleInputEmail1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">
+                            Password
+                        </label>
+                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputFile">
+                            File input
+                        </label>
+                        <input type="file" id="exampleInputFile">
+                        <p class="help-block">
+                            Example block-level help text here.
+                        </p>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Check me out
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-default">
+                        Submit
+                    </button>
+                </form>
+            </div>
 
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
 
-    </div>
-</div>
+        </div>
+    </div>*@
