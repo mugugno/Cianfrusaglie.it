@@ -138,7 +138,7 @@ private void CreateUsers()
             var announce = new Announce();
             var usr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
             announce.Author = usr;
-            announce.Title = "Libro di OST i Videogiochi";
+            announce.Title = "Libro di OST di Videogiochi";
             announce.Description = "Tutti i compositori da Uematsu in giù";
             announce.GeoCoordinate = new GeoCoordinateEntity();
             Context.Announces.Add(announce);
