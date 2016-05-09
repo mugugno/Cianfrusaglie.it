@@ -88,7 +88,7 @@ namespace Cianfrusaglie.Models {
 
          builder.Entity< Interested >().HasOne( u => u.Announce ).WithMany( u => u.Interested ).OnDelete(
             DeleteBehavior.Restrict );
-         builder.Entity< Interested >().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).OnDelete(
+         builder.Entity< Interested >().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).HasForeignKey( u => u.UserId ).OnDelete(
             DeleteBehavior.Restrict );
 
 
