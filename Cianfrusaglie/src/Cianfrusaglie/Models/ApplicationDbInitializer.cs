@@ -201,62 +201,62 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
             //FormField
-            //var titolo = new FormField() { Name = "Titolo", Type = "s" };
-            //ctx.FormFields.Add( titolo );
-            //ctx.SaveChanges();
+            var titolo = new FormField() { Name = "Titolo", Type = FormFieldType.Text };
+            ctx.FormFields.Add( titolo );
+            ctx.SaveChanges();
 
-            //ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfFilm.Id, FormFieldId = titolo.Id } );
-            //ctx.SaveChanges();
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfFilm.Id, FormFieldId = titolo.Id } );
+            ctx.SaveChanges();
 
-            //ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfMusica.Id, FormFieldId = titolo.Id } );
-            //ctx.SaveChanges();
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfMusica.Id, FormFieldId = titolo.Id } );
+            ctx.SaveChanges();
 
-            //ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfLibri.Id, FormFieldId = titolo.Id } );
-            //ctx.SaveChanges();
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfLibri.Id, FormFieldId = titolo.Id } );
+            ctx.SaveChanges();
 
-            //ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = vcVideogiochi.Id, FormFieldId = titolo.Id } );
-            //ctx.SaveChanges();
-
-
-            //var genereLibri = new FormField() { Name = "genere", Type = "s" };
-            //ctx.FormFields.Add( genereLibri );
-            //ctx.SaveChanges();
-
-            //ctx.FieldDefaultValues.AddRange(
-            //   new FieldDefaultValue() { Value = "arte, cinema, musica e spettacolo", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "attualità e reportage", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "benessere", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "biografia", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "classici", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "cucina", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "fantasy", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "gialli e thriller", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "grafic novel e fumetti", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "hobby e tempo libero", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "moda", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "narrativa", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "poesia", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "politica", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "psicologia e sociologia", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "religione", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "romanzi", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "scienze", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "sport", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "storia", FormField = genereLibri },
-            //   new FieldDefaultValue() { Value = "viaggi", FormField = genereLibri }
-            //);
-            //ctx.SaveChanges();
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = vcVideogiochi.Id, FormFieldId = titolo.Id } );
+            ctx.SaveChanges();
 
 
-            //  var autore = new FormField() { Name = "Autore", Type = "s" };
-            //  ctx.FormFields.Add( autore );
-            //  ctx.SaveChanges();
+            var genereLibri = new FormField() { Name = "genere", Type = FormFieldType.Text };
+            ctx.FormFields.Add( genereLibri );
+            ctx.SaveChanges();
 
-            //  ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfMusica.Id, FormFieldId = autore.Id } );
-            //  ctx.SaveChanges();
+            ctx.FieldDefaultValues.AddRange(
+               new FieldDefaultValue() { Value = "arte, cinema, musica e spettacolo", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "attualità e reportage", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "benessere", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "biografia", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "classici", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "cucina", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "fantasy", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "gialli e thriller", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "grafic novel e fumetti", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "hobby e tempo libero", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "moda", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "narrativa", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "poesia", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "politica", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "psicologia e sociologia", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "religione", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "romanzi", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "scienze", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "sport", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "storia", FormField = genereLibri },
+               new FieldDefaultValue() { Value = "viaggi", FormField = genereLibri }
+            );
+            ctx.SaveChanges();
 
-            //  ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfLibri.Id, FormFieldId = autore.Id } );
-            //  ctx.SaveChanges();
+
+            var autore = new FormField() { Name = "Autore", Type = FormFieldType.Text };
+            ctx.FormFields.Add( autore );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfMusica.Id, FormFieldId = autore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfLibri.Id, FormFieldId = autore.Id } );
+            ctx.SaveChanges();
 
 
             //  var editore = new FormField() { Name = "Editore", Type = "s" };
