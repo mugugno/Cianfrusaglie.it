@@ -79,6 +79,7 @@ namespace Cianfrusaglie.Tests
                  .Returns(Task.FromResult<SignInResult>(SignInResult.Success));
 
             CreateUsers();
+            CreateCategories();
             CreateAnnounces();
 
         }
@@ -130,23 +131,55 @@ private void CreateUsers()
             //Context.Users.Add(new User() { UserName = "pippopaolo4", Email = "pippopaolo4@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
         }
 
+        private void CreateCategories()
+        {
+            Context.EnsureSeedData();
+        }
+
         private void CreateAnnounces()
         {
             var announce = new Announce();
             var usr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
             announce.Author = usr;
-            announce.Title = "Un annuncio bello";
-            announce.Description = "Sono bello";
+            announce.Title = "Libro di OST i Videogiochi";
+            announce.Description = "Tutti i compositori da Uematsu in giù";
             announce.GeoCoordinate = new GeoCoordinateEntity();
             Context.Announces.Add(announce);
+
+            var announceCategory1 = new AnnounceCategory()
+            {
+                Announce = announce,
+                Category = Context.Categories.Single(a => a.Name.Equals("Libri"))
+            };
+            var announceCategory11 = new AnnounceCategory()
+            {
+                Announce = announce,
+                Category = Context.Categories.Single(a => a.Name.Equals("Musica"))
+            };
+            var announceCategory12 = new AnnounceCategory()
+            {
+                Announce = announce,
+                Category = Context.Categories.Single(a => a.Name.Equals("Videogiochi"))
+            };
+            Context.AnnounceCategories.Add(announceCategory1);
+            Context.AnnounceCategories.Add(announceCategory11);
+            Context.AnnounceCategories.Add(announceCategory12);
+            Context.SaveChanges();
 
             var announce2 = new Announce();
             var usr2 = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
             announce2.Author = usr2;
-            announce2.Title = "Un annuncio molto bello bello";
-            announce2.Description = "Sono bello";
+            announce2.Title = "Halo 5 Usato";
+            announce2.Description = "Guardiani ovunque";
             announce2.GeoCoordinate = new GeoCoordinateEntity();
             Context.Announces.Add(announce2);
+
+            var announceCategory2 = new AnnounceCategory()
+            {
+                Announce = announce2,
+                Category = Context.Categories.Single(a => a.Name.Equals("Videogiochi"))
+            };
+            Context.AnnounceCategories.Add(announceCategory2);
             Context.SaveChanges();
         }
       
