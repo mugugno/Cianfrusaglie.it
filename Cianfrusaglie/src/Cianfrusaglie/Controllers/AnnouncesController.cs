@@ -46,8 +46,8 @@ namespace Cianfrusaglie.Controllers
         {
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["formMacroCategories"] = _context.Categories.ToList();
+            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
             return View();
         }
 
