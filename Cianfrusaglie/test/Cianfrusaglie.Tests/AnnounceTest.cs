@@ -220,5 +220,47 @@ namespace Cianfrusaglie.Tests
             var res = announceController.Delete(announce.Id);
             Assert.IsNotType<BadRequestResult>(res);
         }
+
+        [Fact]
+        public void RequestNotExistingAnnounceForView()
+        {
+            var announceController = CreateAnnounceController(null, null);
+            var res = announceController.Details(20);
+            Assert.IsType<HttpNotFoundResult>(res);
+        }
+
+        [Fact]
+        public async void RequestNotExistingAnnounceForEdit()
+        {
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var res = announceController.Edit(20);
+            Assert.IsType<HttpNotFoundResult>(res);
+        }
+
+        [Fact]
+        public async void RequestNotExistingAnnounceForDelete()
+        {
+            var loginViewModel = new LoginViewModel
+            {
+                Password = CommonUserPassword,
+                RememberMe = true,
+                UserName = FirstUserName
+            };
+            var usr = Context.Users.Single(u => u.UserName.Equals(loginViewModel.UserName));
+            var accountController = CreateAccountController();
+            await accountController.Login(loginViewModel);
+            var announceController = CreateAnnounceController(usr.Id, loginViewModel.UserName);
+            var res = announceController.Delete(20);
+            Assert.IsType<HttpNotFoundResult>(res);
+        }
     }
 }

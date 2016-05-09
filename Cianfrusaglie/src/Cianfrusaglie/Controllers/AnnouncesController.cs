@@ -32,7 +32,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
@@ -78,7 +78,7 @@ namespace Cianfrusaglie.Controllers
             {
                 return HttpNotFound();
             }
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
@@ -116,7 +116,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
