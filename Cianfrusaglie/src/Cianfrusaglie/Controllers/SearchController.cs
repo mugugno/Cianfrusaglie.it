@@ -60,7 +60,7 @@ namespace Cianfrusaglie.Controllers
             var first = firstString.ToLower().Split(' ');
             var second = secondString.ToLower().Split(' ');
             var common = first.Where(s => second.Contains(s));
-            return common.Count() >= first.Length/2;
+            return common.Any();
         }
 
         protected override void Dispose(bool disposing)
