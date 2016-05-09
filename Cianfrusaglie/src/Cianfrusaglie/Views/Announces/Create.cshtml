@@ -7,23 +7,24 @@
 
 @functions
 {
-    private IEnumerable<String> GetCategories()
+    private IEnumerable<Category> GetMacroCategories()
     {
-        for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
+        for (var i = 0; i < (ViewData["numberOfMacroCategories"] as int? ?? 0); i++)
         {
-            var categories = ViewData["formCategories"] as List<Category>;
+            var categories = ViewData["formMacroCategories"] as List<Category>;
             if (categories != null && categories[i].OverCategory == null)
-                yield return categories[i].Name;
+                yield return categories[i];
         }
     }
+    
 
-    private IEnumerable<String> GetSubCategories(String macro)
+    private IEnumerable<Category> GetCategories(Category macro)
     {
-        for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
+        for (var j = 0; j < (ViewData["numberOfMacroCategories"] as int? ?? 0); j++)
         {
-            var subCat = ViewData["formCategories"] as List<Category>;
-            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
-                yield return subCat[j].Name;
+            var subCat = ViewData["formMacroCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro.Name)
+                yield return subCat[j];
         }
     }
 
@@ -40,11 +41,19 @@
             <div class="panel-collapse collapse in">
                 <div class="panel-body">
                     <div class="form-group">
-                        @foreach (var cat in GetCategories())
+                        @foreach (Category macrocat in GetMacroCategories())
                         {
+
                             <div class="checkbox">
-                                <label><input id="@(cat)+'Check'" type="checkbox" value="">@cat</label>
-                            </div>
+                                <label><input id="@(macrocat.Name)+'Check'" type="checkbox" value="">@macrocat.Name</label></div>
+                                @foreach (Category cat in GetCategories(macrocat))
+                                {
+                                   
+                                    <div class="checkbox">
+                                        <label><input id="@(cat.Name)+'Check'" type="checkbox" value="">@cat.Name</label>
+                                    </div>
+                                }
+                           <!-- </div> -->
                         }
                     </div>
                 </div>
