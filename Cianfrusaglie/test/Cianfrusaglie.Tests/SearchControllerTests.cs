@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Controllers;
+using Cianfrusaglie.Models;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Moq;
@@ -50,6 +52,33 @@ namespace Cianfrusaglie.Tests {
          var categories = Context.Categories.Where( c => categoriesString.Contains( c.Name ) );
 
          var result = researchController.SearchAnnounces( title, categories );
+         Assert.Contains( result, p => p.Title == "Halo 5 Usato" );
+      }
+
+      [Fact]
+      public void PerformSearchWithEmptyTitleAndEmptyCategoriesReturnEmptyResult() {
+         var researchController = CreateResearchController( null, null );
+         var result = researchController.SearchAnnounces( "", new List< Category >() );
+         Assert.Empty( result );
+      }
+
+      [Fact]
+      public void SearchOnlyForCategory() {
+         var researchController = CreateResearchController( null, null );
+         var category = Context.Categories.Single( c => c.Name.Equals( "Videogiochi" ) );
+         var allVideogamesAnnounces = Context.AnnounceCategories.Where( ac => ac.CategoryId.Equals( category.Id ) );
+         var announces = allVideogamesAnnounces.Select( ac => ac.Announce ).Distinct(); //tutti gli annunnci delle categorie category
+
+         var result = researchController.SearchAnnounces( "", new[] { category } );
+         Assert.Empty( result.Except( announces ) );
+         Assert.Empty( announces.ToList().Except( result ) );
+      }
+
+      [Fact]
+      public void SearchOnlyForTitle() {
+         var researchController = CreateResearchController( null, null );
+         var title = "Usato";
+         var result = researchController.SearchAnnounces( title, new List< Category >() );
          Assert.Contains( result, p => p.Title == "Halo 5 Usato" );
       }
    }
