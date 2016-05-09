@@ -27,8 +27,8 @@ namespace Cianfrusaglie.Controllers {
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger< AccountController >();
-        }
+            _logger = loggerFactory.CreateLogger<AnnouncesController>();
+            }
 
         //
         // GET: /Account/Login

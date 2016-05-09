@@ -34,7 +34,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
@@ -48,8 +48,8 @@ namespace Cianfrusaglie.Controllers
         {
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["formMacroCategories"] = _context.Categories.ToList();
+            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
             return View();
         }
 
@@ -58,6 +58,9 @@ namespace Cianfrusaglie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Announce announce)
         {
+            //TODO: Aggiungere i campi della risposta di errore.
+            if (User == null)
+                return HttpBadRequest();
             var idlogged = User.GetUserId();
             announce.Author = _context.Users.First(u => u.Id.Equals(idlogged));
             if (ModelState.IsValid)
@@ -77,7 +80,7 @@ namespace Cianfrusaglie.Controllers
             {
                 return HttpNotFound();
             }
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
@@ -90,6 +93,9 @@ namespace Cianfrusaglie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Announce announce)
         {
+            //TODO: Aggiungere i campi della risposta di errore.
+            if (User == null)
+                return HttpBadRequest();
             if (!User.GetUserId().Equals(announce.Author.Id))
             {
                 return HttpBadRequest();
@@ -112,7 +118,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
@@ -126,7 +132,14 @@ namespace Cianfrusaglie.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Announce announce = _context.Announces.Single(m => m.Id == id);
+            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
+            if(announce == null)
+                return HttpBadRequest();
+            //TODO: Aggiungere i campi della risposta di errore.
+            if (User == null)
+                return HttpBadRequest();
+            if (!User.GetUserId().Equals(announce.Author.Id))
+                return HttpBadRequest();
             _context.Announces.Remove(announce);
             _context.SaveChanges();
             return RedirectToAction("Index");

@@ -8,19 +8,15 @@ namespace Cianfrusaglie.Models {
       public int Id { get; set; }
 
       [Required]
-      public string Text { get; set; }
+      public virtual string Text { get; set; }
 
       [DataType( DataType.DateTime )]
-      public DateTime DateTime { get; set; }
+      public virtual DateTime DateTime { get; set; }
 
-      [ForeignKey("Sender")]
-      public int SenderId { get; set; }
       [Required]
-      public User Sender { get; set; }
+      public virtual User Sender { get; set; }
 
-      [ForeignKey( "Receiver" )]
-      public int ReceiverId { get; set; }
       [Required]
-      public User Receiver { get; set; }
+      public virtual User Receiver { get; set; }
    }
 }
