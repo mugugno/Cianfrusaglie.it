@@ -8,8 +8,8 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160509095750_Initial_Redo3")]
-    partial class Initial_Redo3
+    [Migration("20160509104300_Initial_Redo4")]
+    partial class Initial_Redo4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,18 +32,29 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Description")
                         .HasAnnotation("MaxLength", 255);
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<int?>("GeoCoordinateId")
                         .IsRequired();
 
-                    b.Property<DateTime>("PublishDate");
+                    b.Property<int>("MeterRange");
 
-                    b.Property<int>("Range");
+                    b.Property<int>("Price");
+
+                    b.Property<int>("PriceRange");
+
+                    b.Property<DateTime>("PublishDate");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
+
+                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Announce");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -244,8 +255,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int?>("GeoCoordinateId")
-                        .IsRequired();
+                    b.Property<int?>("GeoCoordinateId");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -365,6 +375,15 @@ namespace Cianfrusaglie.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
+                    b.HasBaseType("Cianfrusaglie.Models.Announce");
+
+                    b.Property<string>("ObjectText");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "AnnounceExchange");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Announce", b =>
@@ -521,6 +540,10 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
                 });
         }
     }

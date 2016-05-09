@@ -31,18 +31,29 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Description")
                         .HasAnnotation("MaxLength", 255);
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<int?>("GeoCoordinateId")
                         .IsRequired();
 
-                    b.Property<DateTime>("PublishDate");
+                    b.Property<int>("MeterRange");
 
-                    b.Property<int>("Range");
+                    b.Property<int>("Price");
+
+                    b.Property<int>("PriceRange");
+
+                    b.Property<DateTime>("PublishDate");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("Id");
+
+                    b.HasAnnotation("Relational:DiscriminatorProperty", "Discriminator");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "Announce");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -365,6 +376,15 @@ namespace Cianfrusaglie.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
+                    b.HasBaseType("Cianfrusaglie.Models.Announce");
+
+                    b.Property<string>("ObjectText");
+
+                    b.HasAnnotation("Relational:DiscriminatorValue", "AnnounceExchange");
+                });
+
             modelBuilder.Entity("Cianfrusaglie.Models.Announce", b =>
                 {
                     b.HasOne("Cianfrusaglie.Models.User")
@@ -519,6 +539,10 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.AnnounceExchange", b =>
+                {
                 });
         }
     }

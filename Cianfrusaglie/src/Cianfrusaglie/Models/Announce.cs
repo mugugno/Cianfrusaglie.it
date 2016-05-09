@@ -28,7 +28,15 @@ namespace Cianfrusaglie.Models {
       public virtual GeoCoordinateEntity GeoCoordinate { get; set; }
 
       [Range( 0, int.MaxValue )]
-      public virtual int Range { get; set; } //TODO in metri?!
+      public virtual int MeterRange { get; set; } //TODO in metri?!
+
+      /// <summary>
+      /// se = 0 è una donazione o un baratto
+      /// </summary>
+      [Range(0,int.MaxValue)]
+      public virtual int Price { get; set; }
+
+      public virtual int PriceRange { get; set; }
 
       public virtual ICollection< AnnounceCategory > AnnounceCategories { get; set; }
 

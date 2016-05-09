@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace Cianfrusaglie.Migrations
 {
-    public partial class Initial_Redo3 : Migration
+    public partial class Initial_Redo4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -131,7 +131,7 @@ namespace Cianfrusaglie.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    GeoCoordinateId = table.Column<int>(nullable: false),
+                    GeoCoordinateId = table.Column<int>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(nullable: true),
@@ -153,7 +153,7 @@ namespace Cianfrusaglie.Migrations
                         column: x => x.GeoCoordinateId,
                         principalTable: "GeoCoordinateEntity",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_User_User_UserId",
                         column: x => x.UserId,
@@ -191,10 +191,14 @@ namespace Cianfrusaglie.Migrations
                     Closed = table.Column<bool>(nullable: false),
                     DeadLine = table.Column<DateTime>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
                     GeoCoordinateId = table.Column<int>(nullable: false),
+                    MeterRange = table.Column<int>(nullable: false),
+                    Price = table.Column<int>(nullable: false),
+                    PriceRange = table.Column<int>(nullable: false),
                     PublishDate = table.Column<DateTime>(nullable: false),
-                    Range = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
+                    Title = table.Column<string>(nullable: false),
+                    ObjectText = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

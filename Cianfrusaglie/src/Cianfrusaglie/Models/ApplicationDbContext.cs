@@ -9,6 +9,7 @@ namespace Cianfrusaglie.Models {
       public DbSet< Category > Categories { get; set; }
       public DbSet< Message > Messages { get; set; }
       public DbSet< Announce > Announces { get; set; }
+      public DbSet< AnnounceExchange > AnnounceExchange { get; set; }
       public DbSet< AnnounceCategory > AnnounceCategories { get; set; }
       public DbSet< CategoryFormField > CategoryFormFields { get; set; }
       public DbSet< FormField > FormFields { get; set; }
