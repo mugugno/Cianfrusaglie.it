@@ -12,7 +12,7 @@ namespace Cianfrusaglie.Controllers {
 
       public MessagesController( ApplicationDbContext context ) { _context = context; }
 
-      protected IEnumerable< Message > ShowLoggedUsersMessagesWithUser( string id ) {
+      protected IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
          if( id == null )
             throw new ArgumentNullException();
 
@@ -25,7 +25,7 @@ namespace Cianfrusaglie.Controllers {
          return messages;
       }
 
-      protected IEnumerable< User > ShowLoggedUsersConversationsUsers() {
+      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
          var userWitchIHaveMessaged = usr.SentMessages?.Select( m => m.Receiver ) ?? new List<User>();
          var userThatSendedMeMessage = usr.ReceivedMessages?.Select( m => m.Sender ) ?? new List<User>();
@@ -40,50 +40,38 @@ namespace Cianfrusaglie.Controllers {
          if(!LoginChecker.HasLoggedUser(this))
             return HttpBadRequest();
 
-         return View( ShowLoggedUsersConversationsUsers().ToList() );
+         return View( GetLoggedUsersConversationsUsers().ToList() );
       }
 
       // GET: Messages/Details/5
       public IActionResult Details( string id ) {
-         if( User == null )
+         if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
 
          if( id == null )
             return HttpNotFound();
 
-         return View( ShowLoggedUsersMessagesWithUser( id ).ToList() );
+         return View( GetLoggedUsersMessagesWithUser( id ).ToList() );
       }
 
+      // inviare un messaggio all'utente con id = id
       // GET: Messages/Create
-      public IActionResult Create() { return View(); }
+      public IActionResult Create( string id ) {
+         if( !LoginChecker.HasLoggedUser( this ) )
+            return HttpBadRequest();
+
+         if( id == null )
+            return HttpNotFound();
+
+         ViewData[ "receiverId" ] = id;
+         return View();
+      }
 
       // POST: Messages/Create
       [HttpPost, ValidateAntiForgeryToken]
       public IActionResult Create( Message message ) {
          if( ModelState.IsValid ) {
             _context.Messages.Add( message );
-            _context.SaveChanges();
-            return RedirectToAction( "Index" );
-         }
-         return View( message );
-      }
-
-      // GET: Messages/Edit/5
-      public IActionResult Edit( int? id ) {
-         if( id == null )
-            return HttpNotFound();
-
-         var message = _context.Messages.Single( m => m.Id == id );
-         if( message == null )
-            return HttpNotFound();
-         return View( message );
-      }
-
-      // POST: Messages/Edit/5
-      [HttpPost, ValidateAntiForgeryToken]
-      public IActionResult Edit( Message message ) {
-         if( ModelState.IsValid ) {
-            _context.Update( message );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
          }
