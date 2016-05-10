@@ -70,6 +70,7 @@ namespace Cianfrusaglie.Tests
             //var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
 
             //create the messageController
+            //TODO DA CAMBIARE I PARAMETRI
             var messageController = CreateMessageController(null, null);
 
             //dato l'utente, visualizzo tutti i suoi messaggi
@@ -80,7 +81,7 @@ namespace Cianfrusaglie.Tests
         }
 
         //TODO DETAILS, visualizzazione della conversazione tra due user
-        //la view è andata a buon fine
+        //estraggo dal database i messaggi corretti dei due utenti
         [Fact]
         public void CorrectViewOfConversationBetweenTwoUsers()
         {
@@ -93,17 +94,16 @@ namespace Cianfrusaglie.Tests
             //create the messageController
             var messageController = CreateMessageController( usr.Id, usr.UserName );
 
-            //dato l'utente, visualizzo tutti i suoi messaggi
-            var result = messageController.Details(usr.Id);
+            //dato l'utente, estraggo tutti i loro messaggi
+            var result = messageController.Details(secondUsr.Id);
 
             //test 
             Assert.IsType<ViewResult>(result);
-            //Assert.IsNotType<BadRequestResult>(result);
 
         }
 
 
-        //la view non è andata a buon fine
+        //i messaggi estratti non sono vuoti
         [Fact]
         public void NotCorrectViewOfConversationBetweenTwoUsers()
         {
@@ -117,14 +117,32 @@ namespace Cianfrusaglie.Tests
             var messageController = CreateMessageController(usr.Id, usr.UserName);
 
             //dato l'utente, visualizzo tutti i suoi messaggi
-            var result = messageController.Details(usr.Id);
+            var result = messageController.Details(secondUsr.Id);
 
             //test 
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<>(result);
         }
 
         //TODO INVIO MESSAGGIO(creazione)
         //io lo invio A un utente che non esiste
+        public void SendMessageToUserThatNotExist()
+        {
+
+            //tiro su l'utente dal database cone quello username
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+
+            //query per prendere id del secondo utente
+            var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+
+            //create the messageController
+            var messageController = CreateMessageController(usr.Id, usr.UserName);
+
+            //dato l'utente, invio il suo messaggio a un utente che non esiste
+            var result = messageController.Create();
+
+            //controllo che 
+            Assert.IsType<BadRequestResult>(result);
+        }
 
         //io lo invio all'utente giusto
         //TODO DELETE MESSAGGIO
