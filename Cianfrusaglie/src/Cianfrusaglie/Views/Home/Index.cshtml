@@ -1,23 +1,23 @@
 ﻿
 @functions
 {
-    public IEnumerable<String> GetCategories()
+    public IEnumerable<Category> GetCategories()
     {
         for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
         {
             var categories = ViewData["formCategories"] as List<Category>;
             if (categories != null && categories[i].OverCategory == null)
-                yield return categories[i].Name;
+                yield return categories[i];
         }
     }
 
-    public IEnumerable<String> GetSubCategories(String macro)
+    public IEnumerable<Category> GetSubCategories(String macro)
     {
         for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
         {
             var subCat = ViewData["formCategories"] as List<Category>;
             if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
-                yield return subCat[j].Name;
+                yield return subCat[j];
         }
     }
 
@@ -66,15 +66,15 @@
                         @foreach (var macro in GetCategories())
                         {
                             <li>
-                                <a href="#">@macro</a>
-                                @if (GetSubCategories(@macro).ToList().Count > 0)
+                                <a href="#">@macro.Name</a>
+                                @if (GetSubCategories(@macro.Name).ToList().Count > 0)
                                 {
                                     <ul class="dropdown-menu sub-menu">
-                                        <li class="dropdown-header">@macro</li>
+                                        <li class="dropdown-header">@macro.Name</li>
                                         <li class="divider"></li>
-                                        @foreach (var sub in GetSubCategories(@macro))
+                                        @foreach (var sub in GetSubCategories(@macro.Name))
                                         {
-                                            <li><a href="#">@sub</a></li>
+                                            <li><a href="#">@sub.Name</a></li>
                                         }
                                     </ul>
                                 }
