@@ -11,7 +11,10 @@ namespace Cianfrusaglie.Controllers {
 
       //tutti gli utenti con cui l'utente loggato ha messaggiato
       // GET: Messages
-      public IActionResult Index() { 
+      public IActionResult Index() {
+         if( User == null )
+            return HttpBadRequest();
+
          var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
          var userWitchIHaveMessaged = usr.SentMessages.Select( m => m.Receiver );
          var userThatSendedMeMessage = usr.ReceivedMessages.Select( m => m.Sender );
