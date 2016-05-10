@@ -1,6 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Announce>
+
 @{
-    // ViewBag.Title = "Home Page";
+   ViewData[ "Title" ] = "Index";
 }
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor( model => model.Title )
+        </th>
+    </tr>
+
+    @foreach( var item in Model ) {
+    <tr>
+        <td>
+            @Html.DisplayFor( modelItem => item.Title )
+        </td>
+    </tr>
+    }
+</table>

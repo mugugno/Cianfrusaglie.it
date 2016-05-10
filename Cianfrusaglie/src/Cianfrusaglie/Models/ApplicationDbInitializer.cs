@@ -201,7 +201,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
             //FormField
-            var titolo = new FormField() {Name = "Titolo", Type = "s"};
+            var titolo = new FormField() { Name = "Titolo", Type = FormFieldType.Text };
             ctx.FormFields.Add( titolo );
             ctx.SaveChanges();
 
@@ -218,7 +218,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var genereLibri = new FormField() {Name = "genere", Type = "s"};
+            var genereLibri = new FormField() { Name = "genere", Type = FormFieldType.Text };
             ctx.FormFields.Add( genereLibri );
             ctx.SaveChanges();
 
@@ -248,7 +248,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var autore = new FormField() { Name = "Autore", Type = "s" };
+            var autore = new FormField() { Name = "Autore", Type = FormFieldType.Text };
             ctx.FormFields.Add( autore );
             ctx.SaveChanges();
 
@@ -259,7 +259,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var editore = new FormField() { Name = "Editore", Type = "s" };
+            var editore = new FormField() { Name = "Editore", Type = FormFieldType.Text };
             ctx.FormFields.Add( editore );
             ctx.SaveChanges();
 
@@ -267,7 +267,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var numero = new FormField() { Name = "Numero", Type = "i" };
+            var numero = new FormField() { Name = "Numero", Type = FormFieldType.Number };
             ctx.FormFields.Add( numero );
             ctx.SaveChanges();
 
@@ -275,7 +275,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var stato = new FormField() { Name = "Stato", Type = "s" };
+            var stato = new FormField() { Name = "Stato", Type = FormFieldType.Text };
             ctx.FormFields.Add( stato );
             ctx.SaveChanges();
 
@@ -356,7 +356,7 @@ namespace Cianfrusaglie.Models {
             );
             ctx.SaveChanges();
 
-            var lingua = new FormField() { Name = "Lingua", Type = "s" };
+            var lingua = new FormField() { Name = "Lingua", Type = FormFieldType.Text };
             ctx.FormFields.Add( lingua );
             ctx.SaveChanges();
 
@@ -375,7 +375,7 @@ namespace Cianfrusaglie.Models {
             );
             ctx.SaveChanges();
 
-            var anno= new FormField() { Name = "Anno", Type = "i" };
+            var anno = new FormField() { Name = "Anno", Type = FormFieldType.Number };
             ctx.FormFields.Add( anno );
             ctx.SaveChanges();
 
@@ -392,7 +392,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var copertina = new FormField() { Name = "Copertina", Type = "s" };
+            var copertina = new FormField() { Name = "Copertina", Type = FormFieldType.Text };
             ctx.FormFields.Add( copertina );
             ctx.SaveChanges();
 
@@ -406,8 +406,8 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var genereMusica = new FormField() { Name = "Genere Musica", Type = "s" };
-            ctx.FormFields.Add( copertina );
+            var genereMusica = new FormField() { Name = "Genere Musica", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( genereMusica );
             ctx.SaveChanges();
 
             ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfMusica.Id, FormFieldId = genereMusica.Id } );
@@ -433,14 +433,14 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var casaDiscografica = new FormField() { Name = "Casa Discografica", Type = "s" };
+            var casaDiscografica = new FormField() { Name = "Casa Discografica", Type = FormFieldType.Text };
             ctx.FormFields.Add( casaDiscografica );
             ctx.SaveChanges();
 
             ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfMusica.Id, FormFieldId = casaDiscografica.Id } );
             ctx.SaveChanges();
 
-            var supportoMusica = new FormField() { Name = "Supporto Musica", Type = "s" };
+            var supportoMusica = new FormField() { Name = "Supporto Musica", Type = FormFieldType.Text };
             ctx.FormFields.Add( supportoMusica );
             ctx.SaveChanges();
 
@@ -448,7 +448,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
             ctx.FieldDefaultValues.AddRange(
-             new FieldDefaultValue() { Value = "Cd", FormField = supportoMusica},
+             new FieldDefaultValue() { Value = "Cd", FormField = supportoMusica },
              new FieldDefaultValue() { Value = "Vinile", FormField = supportoMusica },
              new FieldDefaultValue() { Value = "Musicassetta", FormField = supportoMusica },
              new FieldDefaultValue() { Value = "Dvd", FormField = supportoMusica },
@@ -457,7 +457,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var regista = new FormField() { Name = "Regista", Type = "s" };
+            var regista = new FormField() { Name = "Regista", Type = FormFieldType.Text };
             ctx.FormFields.Add( regista );
             ctx.SaveChanges();
 
@@ -465,7 +465,7 @@ namespace Cianfrusaglie.Models {
             ctx.SaveChanges();
 
 
-            var genereFilm = new FormField() { Name = "Genere Film", Type = "s" };
+            var genereFilm = new FormField() { Name = "Genere Film", Type = FormFieldType.Bool };
             ctx.FormFields.Add( genereFilm );
             ctx.SaveChanges();
 
@@ -493,14 +493,14 @@ namespace Cianfrusaglie.Models {
           );
             ctx.SaveChanges();
 
-            var casaProduttrice = new FormField() { Name = "Casa Produttrice", Type = "s" };
+            var casaProduttrice = new FormField() { Name = "Casa Produttrice", Type = FormFieldType.Text };
             ctx.FormFields.Add( casaProduttrice );
             ctx.SaveChanges();
 
             ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfFilm.Id, FormFieldId = casaProduttrice.Id } );
             ctx.SaveChanges();
 
-            var supportoFilm= new FormField() { Name = "Supporto Film", Type = "s" };
+            var supportoFilm = new FormField() { Name = "Supporto Film", Type = FormFieldType.Text };
             ctx.FormFields.Add( supportoFilm );
             ctx.SaveChanges();
 
@@ -516,14 +516,14 @@ namespace Cianfrusaglie.Models {
           );
             ctx.SaveChanges();
 
-            var attori = new FormField() { Name = "Attori", Type = "s" };
+            var attori = new FormField() { Name = "Attori", Type = FormFieldType.Text };
             ctx.FormFields.Add( attori );
             ctx.SaveChanges();
 
             ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = lmfFilm.Id, FormFieldId = attori.Id } );
             ctx.SaveChanges();
 
-            var genereVideogioco = new FormField() { Name = "Genere Videogioco", Type = "s" };
+            var genereVideogioco = new FormField() { Name = "Genere Videogioco", Type = FormFieldType.Bool };
             ctx.FormFields.Add( genereVideogioco );
             ctx.SaveChanges();
 
@@ -543,7 +543,7 @@ namespace Cianfrusaglie.Models {
           );
             ctx.SaveChanges();
 
-            var piattaforma = new FormField() { Name = "Piattaforma", Type = "s" };
+            var piattaforma = new FormField() { Name = "Piattaforma", Type = FormFieldType.Text };
             ctx.FormFields.Add( piattaforma );
             ctx.SaveChanges();
 
@@ -560,11 +560,1254 @@ namespace Cianfrusaglie.Models {
           );
             ctx.SaveChanges();
 
-            var produttoreVideogioco = new FormField() { Name = "Produttore Videogioco", Type = "s" };
+            var produttoreVideogioco = new FormField() { Name = "Produttore Videogioco", Type = FormFieldType.Text };
             ctx.FormFields.Add( produttoreVideogioco );
             ctx.SaveChanges();
 
             ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = vcVideogiochi.Id, FormFieldId = produttoreVideogioco.Id } );
+            ctx.SaveChanges();
+
+
+
+            //Da qui Claudio
+
+
+            var modello = new FormField() { Name = "Modello", Type = FormFieldType.Text };
+            ctx.FormFields.Add( modello );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = vcConsole.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oModCol.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAccessori.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eCellulari.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAccessori.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = ePeriferiche.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = modello.Id } );
+            ctx.SaveChanges();
+
+
+
+
+            var numeroJoypad = new FormField() { Name = "Numero Joypad", Type = FormFieldType.Text };
+            ctx.FormFields.Add( numeroJoypad );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = vcConsole.Id, FormFieldId = numeroJoypad.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+                new FieldDefaultValue() { Value = "0", FormField = numeroJoypad },
+                new FieldDefaultValue() { Value = "1", FormField = numeroJoypad },
+                new FieldDefaultValue() { Value = "2", FormField = numeroJoypad },
+                new FieldDefaultValue() { Value = "3", FormField = numeroJoypad },
+                new FieldDefaultValue() { Value = "Oltre", FormField = numeroJoypad }
+            );
+            ctx.SaveChanges();
+
+
+
+
+
+            var altezza = new FormField() { Name = "Altezza", Type = FormFieldType.Number };
+            ctx.FormFields.Add( altezza );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacIlluminazione.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oModCol.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = altezza.Id } );
+            ctx.SaveChanges();
+
+
+
+
+            var profondita = new FormField() { Name = "Profondita", Type = FormFieldType.Number };
+            ctx.FormFields.Add( profondita );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacIlluminazione.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oModCol.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = profondita.Id } );
+            ctx.SaveChanges();
+
+
+
+            var larghezza = new FormField() { Name = "Larghezza", Type = FormFieldType.Number };
+            ctx.FormFields.Add( larghezza );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacIlluminazione.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oModCol.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = larghezza.Id } );
+            ctx.SaveChanges();
+
+
+
+            var tipoMobili = new FormField() { Name = "Tipo Mobili", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoMobili );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = tipoMobili.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Mobile per Bagno", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Scrivania", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Letto", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Sedia", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Poltrona", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Sgabello", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Panca", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Armadio", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Scarpiera", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Attaccapanni", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Comodino", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Libreria", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Tavolo", FormField = tipoMobili },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoMobili }
+        );
+            ctx.SaveChanges();
+
+            var materiale = new FormField() { Name = "Materiale", Type = FormFieldType.Text };
+            ctx.FormFields.Add( materiale );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacCucina.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAbbigliamento.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAccessori.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAbbigliamento.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = materiale.Id } );
+            ctx.SaveChanges();
+
+            var marca = new FormField() { Name = "Marca", Type = FormFieldType.Text };
+            ctx.FormFields.Add( marca );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacIlluminazione.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacCucina.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oModCol.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAbbigliamento.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAccessori.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eCellulari.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = ePeriferiche.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAbbigliamento.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = marca.Id } );
+            ctx.SaveChanges();
+
+
+
+            var colore = new FormField() { Name = "Colore", Type = FormFieldType.Text };
+            ctx.FormFields.Add( colore );
+            ctx.SaveChanges();
+
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacMobili.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacCucina.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAbbigliamento.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAccessori.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAccessori.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAbbigliamento.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAnimali.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = colore.Id } );
+            ctx.SaveChanges();
+
+
+            var tipoElettrodomestici = new FormField() { Name = "Tipo Elettrodomestici", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoElettrodomestici );
+            ctx.SaveChanges();
+
+
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacElettrodomestici.Id, FormFieldId = tipoElettrodomestici.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Lavatrice", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Lavasciuga", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Asciugatrice", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Frigorifero", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Congelatore", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Lavastoviglie", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Macchina caffe'", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Forno a Microonde", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Robot da Cucina", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Cottura", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Frullatore", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Tostapane", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Spremi Agrumi", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Aspirapolvere", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Ferro da Stiro", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Asciuga Capelli", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Piastra per capelli", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Bilancia", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Ventilatore", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Condizionatore", FormField = tipoElettrodomestici },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoElettrodomestici }
+            );
+            ctx.SaveChanges();
+
+
+            var tipoIlluminazione = new FormField() { Name = "Tipo Illuminazione", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoIlluminazione );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacIlluminazione.Id, FormFieldId = tipoIlluminazione.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Lampada da soffitto", FormField = tipoIlluminazione },
+            new FieldDefaultValue() { Value = "Lampada da tavolo", FormField = tipoIlluminazione },
+            new FieldDefaultValue() { Value = "Lampada da terra", FormField = tipoIlluminazione },
+            new FieldDefaultValue() { Value = "Lampada da parete", FormField = tipoIlluminazione },
+            new FieldDefaultValue() { Value = "Lampada da esterno", FormField = tipoIlluminazione },
+            new FieldDefaultValue() { Value = "Faretti", FormField = tipoIlluminazione },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoIlluminazione }
+            );
+            ctx.SaveChanges();
+
+
+
+            var potenza = new FormField() { Name = "Potenza", Type = FormFieldType.Number };
+            ctx.FormFields.Add( potenza );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacIlluminazione.Id, FormFieldId = potenza.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = potenza.Id } );
+            ctx.SaveChanges();
+
+
+            var tipoCucina = new FormField() { Name = "Tipo Cucina", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( tipoCucina );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacCucina.Id, FormFieldId = tipoCucina.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Pentola/Padella", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Contenitore per alimenti", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Utensile da cucina", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Set coltelli", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Tagliere", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Teglia", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Utensile per la misurazione", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Utensile da cucina", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Accessorio per lavare i piatti", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Servizio piatti", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Servizio bicchieri", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Servizio posate", FormField = tipoCucina },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoCucina }
+            );
+            ctx.SaveChanges();
+
+
+            var tipoArredamento = new FormField() { Name = "Tipo Arredamento", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoArredamento );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacArredamento.Id, FormFieldId = tipoArredamento.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Tappeto", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Specchio", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Quadro", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Cornice", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Candela/Candeliere", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Vaso", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Orologio", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Arredamento decorativo", FormField = tipoArredamento },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoArredamento }
+            );
+            ctx.SaveChanges();
+
+
+            var tipoAccessorioCasa = new FormField() { Name = "Tipo Accessorio per la Casa", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoAccessorioCasa );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aacAcplc.Id, FormFieldId = tipoAccessorioCasa.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Scopa/Paletta", FormField = tipoAccessorioCasa },
+            new FieldDefaultValue() { Value = "Mensola/Ripiano", FormField = tipoAccessorioCasa },
+            new FieldDefaultValue() { Value = "Contenitore/Cesta", FormField = tipoAccessorioCasa },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoAccessorioCasa }
+            );
+            ctx.SaveChanges();
+
+
+
+            var tipoGiocattolo = new FormField() { Name = "Tipo Giocattolo", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( tipoGiocattolo );
+            ctx.SaveChanges();
+
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = tipoGiocattolo.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Accessorio/Kit", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Gioco Creativo", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Gioco da Tavola", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Puzzle", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Peluche", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Gioco Elettronico", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Gioco Interattivo", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Gioco di Costruzione", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Bambola", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Veicolo", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Piste", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Gioco Educativo", FormField = tipoGiocattolo },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoGiocattolo }
+            );
+            ctx.SaveChanges();
+
+            var etaMinima = new FormField() { Name = "Eta Minima", Type = FormFieldType.Number };
+            ctx.FormFields.Add( etaMinima );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oGiocattoli.Id, FormFieldId = etaMinima.Id } );
+            ctx.SaveChanges();
+
+            var tipoModCol = new FormField() { Name = "Tipo Modellino/Collezionismo", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoModCol );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oModCol.Id, FormFieldId = tipoModCol.Id } );
+            ctx.SaveChanges();
+
+            var tipoCianfrusaglia = new FormField() { Name = "Tipo Cianfrusaglia", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoCianfrusaglia );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oCianfrusaglie.Id, FormFieldId = tipoCianfrusaglia.Id } );
+            ctx.SaveChanges();
+
+
+
+
+            var livInutilita = new FormField() { Name = "Livello di Inutilità", Type = FormFieldType.Text };
+            ctx.FormFields.Add( livInutilita );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = oCianfrusaglie.Id, FormFieldId = livInutilita.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Decisamente Inutile", FormField = livInutilita },
+            new FieldDefaultValue() { Value = "Inutile", FormField = livInutilita },
+            new FieldDefaultValue() { Value = "Utile", FormField = livInutilita },
+            new FieldDefaultValue() { Value = "Decisamente Utile", FormField = livInutilita }
+            );
+            ctx.SaveChanges();
+
+
+
+            var tipoSport = new FormField() { Name = "Tipo Sport", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoSport );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = tipoSport.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Ciclismo", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Nuoto", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Atletica", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Sport Acquatici", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Equitazione", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Ciclismo", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Danza", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Calcio", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Tennis", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Combattimento", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Sci", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Basket", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Pallavolo", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Rugby", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Baseball", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Golf", FormField = tipoSport },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoSport }
+            );
+            ctx.SaveChanges();
+
+            var tipoOggettoSTlFt = new FormField() { Name = "Tipo Oggetto Sport,Tempo Libero, Fai da Te", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoOggettoSTlFt );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfSport.Id, FormFieldId = tipoOggettoSTlFt.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfFaiDaTe.Id, FormFieldId = tipoOggettoSTlFt.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = stlfTempoLibero.Id, FormFieldId = tipoOggettoSTlFt.Id } );
+            ctx.SaveChanges();
+
+
+
+            var tipoAbbigliamento = new FormField() { Name = "Tipo Abbigliamento", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( tipoAbbigliamento );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAbbigliamento.Id, FormFieldId = tipoAbbigliamento.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAbbigliamento.Id, FormFieldId = tipoAbbigliamento.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Vestito", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "T- shirt", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Top", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Pantalone", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Camicia", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Felpa", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Jeans", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Cardigan/Pullover", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Shorts", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Giacca", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Cappotto", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Gonna", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Intimo", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Accappatoio", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Vestaglia", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Mare", FormField = tipoAbbigliamento },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoAbbigliamento }
+            );
+            ctx.SaveChanges();
+
+            var tagliaAbbigliamento = new FormField() { Name = "Taglia Abbigliamento", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tagliaAbbigliamento );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAbbigliamento.Id, FormFieldId = tagliaAbbigliamento.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "XS", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "S", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "M", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "L", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "XL", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "XXL", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "XXXL", FormField = tagliaAbbigliamento },
+            new FieldDefaultValue() { Value = "Altro", FormField = tagliaAbbigliamento }
+            );
+            ctx.SaveChanges();
+
+            var sessoUDB = new FormField() { Name = "Sesso Uomo Donna Bambino", Type = FormFieldType.Text };
+            ctx.FormFields.Add( sessoUDB );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAbbigliamento.Id, FormFieldId = sessoUDB.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAccessori.Id, FormFieldId = sessoUDB.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = sessoUDB.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Uomo", FormField = sessoUDB },
+            new FieldDefaultValue() { Value = "Donna", FormField = sessoUDB },
+            new FieldDefaultValue() { Value = "Bambino", FormField = sessoUDB },
+            new FieldDefaultValue() { Value = "Bambina", FormField = sessoUDB }
+            );
+            ctx.SaveChanges();
+
+            var tipoAbbAccessori = new FormField() { Name = "Tipo Accessori Abbigliamento", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoAbbAccessori );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aAccessori.Id, FormFieldId = tipoAbbAccessori.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Borsa", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Valigia", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Collana", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Bracciale", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Anello", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Orecchini", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Occhiali", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Foulard/Sciarpa", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Portafoglio", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Cintura", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Copricapo", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Orologio", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Ombrello", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Guanti", FormField = tipoAbbAccessori },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoAbbAccessori }
+            );
+            ctx.SaveChanges();
+
+
+            var tipoScarpe = new FormField() { Name = "Tipo Scarpa", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoScarpe );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = tipoScarpe.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Sneakers", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Sandali", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Scarpe col Tacco", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Ballerine", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Scarpe Basse", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Stivaletti", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Stivali", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Ciabatte/Pantofole", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Zoccoli", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Sportive", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Trekking", FormField = tipoScarpe },
+            new FieldDefaultValue() { Value = "Mare", FormField = tipoScarpe }
+            );
+            ctx.SaveChanges();
+
+
+            var tagliaScarpe = new FormField() { Name = "Taglia Scarpa", Type = FormFieldType.Number };
+            ctx.FormFields.Add( tagliaScarpe );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = aScarpe.Id, FormFieldId = tagliaScarpe.Id } );
+            ctx.SaveChanges();
+
+
+            var autoMoto = new FormField() { Name = "Auto Moto", Type = FormFieldType.Text };
+            ctx.FormFields.Add( autoMoto );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = autoMoto.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAccessori.Id, FormFieldId = autoMoto.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Auto", FormField = autoMoto },
+            new FieldDefaultValue() { Value = "Moto", FormField = autoMoto },
+            new FieldDefaultValue() { Value = "Quad", FormField = autoMoto },
+            new FieldDefaultValue() { Value = "Furgone", FormField = autoMoto }
+            );
+            ctx.SaveChanges();
+
+
+            var tipoAutoMoto = new FormField() { Name = "Tipo Auto Moto", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoAutoMoto );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = tipoAutoMoto.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAccessori.Id, FormFieldId = tipoAutoMoto.Id } );
+            ctx.SaveChanges();
+
+
+            var cavalli = new FormField() { Name = "Cavalli", Type = FormFieldType.Number };
+            ctx.FormFields.Add( cavalli );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = cavalli.Id } );
+            ctx.SaveChanges();
+
+
+            var cilindrata = new FormField() { Name = "Cilindrata", Type = FormFieldType.Number };
+            ctx.FormFields.Add( cilindrata );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAutoMoto.Id, FormFieldId = cilindrata.Id } );
+            ctx.SaveChanges();
+
+
+            var compCon = new FormField() { Name = "Compatibile Con", Type = FormFieldType.Text };
+            ctx.FormFields.Add( compCon );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = amAccessori.Id, FormFieldId = compCon.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = ePeriferiche.Id, FormFieldId = compCon.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAccessori.Id, FormFieldId = compCon.Id } );
+            ctx.SaveChanges();
+
+
+
+            var tipoComputer = new FormField() { Name = "Tipo Computer", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoComputer );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = tipoComputer.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Fisso", FormField = tipoComputer },
+            new FieldDefaultValue() { Value = "Portatile", FormField = tipoComputer },
+            new FieldDefaultValue() { Value = "Tablet", FormField = tipoComputer },
+            new FieldDefaultValue() { Value = "NoteBook", FormField = tipoComputer },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoComputer }
+            );
+            ctx.SaveChanges();
+
+            var ram = new FormField() { Name = "Ram", Type = FormFieldType.Number };
+            ctx.FormFields.Add( ram );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = ram.Id } );
+            ctx.SaveChanges();
+
+            var processore = new FormField() { Name = "Processore", Type = FormFieldType.Text };
+            ctx.FormFields.Add( processore );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = processore.Id } );
+            ctx.SaveChanges();
+
+            var hardDisk = new FormField() { Name = "Hard Disk", Type = FormFieldType.Number };
+            ctx.FormFields.Add( hardDisk );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = hardDisk.Id } );
+            ctx.SaveChanges();
+
+            var pollici = new FormField() { Name = "Pollici", Type = FormFieldType.Number };
+            ctx.FormFields.Add( pollici );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eComputer.Id, FormFieldId = pollici.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = pollici.Id } );
+            ctx.SaveChanges();
+
+
+
+            var tipoFotoVideo = new FormField() { Name = "Tipo Fotocamera Videocamera", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoFotoVideo );
+            ctx.SaveChanges();
+
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = pollici.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Fotocamera", FormField = tipoFotoVideo },
+            new FieldDefaultValue() { Value = "Fotocamera Reflex", FormField = tipoFotoVideo },
+            new FieldDefaultValue() { Value = "Videocamera", FormField = tipoFotoVideo },
+            new FieldDefaultValue() { Value = "Obbiettivo Fotocamera", FormField = tipoFotoVideo },
+            new FieldDefaultValue() { Value = "SportCam", FormField = tipoFotoVideo },
+            new FieldDefaultValue() { Value = "Accessori", FormField = tipoFotoVideo }
+            );
+            ctx.SaveChanges();
+
+            var risoluzione = new FormField() { Name = "Risoluzione", Type = FormFieldType.Text };
+            ctx.FormFields.Add( risoluzione );
+            ctx.SaveChanges();
+
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = risoluzione.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = risoluzione.Id } );
+            ctx.SaveChanges();
+
+            var memoria = new FormField() { Name = "Memoria", Type = FormFieldType.Number };
+            ctx.FormFields.Add( memoria );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = memoria.Id } );
+            ctx.SaveChanges();
+
+
+
+            var memoriaExp = new FormField() { Name = "Memoria Espandibile", Type = FormFieldType.Number };
+            ctx.FormFields.Add( memoriaExp );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = memoriaExp.Id } );
+            ctx.SaveChanges();
+
+
+            var sintTv = new FormField() { Name = "Sintonizzatore Tv", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( sintTv );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = sintTv.Id } );
+            ctx.SaveChanges();
+
+
+            var smartTv = new FormField() { Name = "Smart Tv", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( smartTv );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = smartTv.Id } );
+            ctx.SaveChanges();
+
+            var wifiTv = new FormField() { Name = "Wifi Tv", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( wifiTv );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = wifiTv.Id } );
+            ctx.SaveChanges();
+
+
+            var portaUsb = new FormField() { Name = "Porta Usb", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( portaUsb );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = portaUsb.Id } );
+            ctx.SaveChanges();
+
+
+            var portaVga = new FormField() { Name = "Porta Vga", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( portaVga );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = portaVga.Id } );
+            ctx.SaveChanges();
+
+            var portaHdmi = new FormField() { Name = "Porta Hdmi", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( portaHdmi );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = portaHdmi.Id } );
+            ctx.SaveChanges();
+
+            var portaDvi = new FormField() { Name = "Porta Dvi", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( portaDvi );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = portaDvi.Id } );
+            ctx.SaveChanges();
+
+            var portaEthernet = new FormField() { Name = "Porta Ethernet", Type = FormFieldType.Bool };
+            ctx.FormFields.Add( portaEthernet );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eTvSchermi.Id, FormFieldId = portaEthernet.Id } );
+            ctx.SaveChanges();
+
+
+
+
+            var tipoAudio = new FormField() { Name = "Tipo Audio ", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoAudio );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAudio.Id, FormFieldId = tipoAudio.Id } );
+            ctx.SaveChanges();
+
+
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Ipod", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Lettore Mp3", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Casse", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Karaoke", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Microfono", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Testo", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Subwoofer", FormField = tipoAudio },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoAudio }
+            );
+            ctx.SaveChanges();
+
+            var tipo = new FormField() { Name = "Tipo", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipo );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = ePeriferiche.Id, FormFieldId = tipo.Id } );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eAccessori.Id, FormFieldId = tipo.Id } );
+            ctx.SaveChanges();
+
+
+            var sessoB = new FormField() { Name = "Sesso Bambino", Type = FormFieldType.Text };
+            ctx.FormFields.Add( sessoB );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAbbigliamento.Id, FormFieldId = sessoB.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Maschio", FormField = sessoB },
+            new FieldDefaultValue() { Value = "Femmina", FormField = sessoB }
+            );
+            ctx.SaveChanges();
+
+
+
+            var tagliaB = new FormField() { Name = "Taglia Bambino", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tagliaB );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAbbigliamento.Id, FormFieldId = tagliaB.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "1 Mese", FormField = tagliaB },
+            new FieldDefaultValue() { Value = "3 Mesi", FormField = tagliaB },
+            new FieldDefaultValue() { Value = "6 Mesi", FormField = tagliaB },
+            new FieldDefaultValue() { Value = "12 Mesi", FormField = tagliaB },
+            new FieldDefaultValue() { Value = "18 Mesi", FormField = tagliaB },
+            new FieldDefaultValue() { Value = "24 Mesi", FormField = tagliaB },
+            new FieldDefaultValue() { Value = "36 Mesi", FormField = tagliaB }
+            );
+            ctx.SaveChanges();
+
+
+            var tipoMobilioB = new FormField() { Name = "Tipo Mobilio Bambino", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoMobilioB );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bMobilio.Id, FormFieldId = tipoMobilioB.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Sdraietta/Altalena/Poltroncina", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Box", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Culla", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Lettino", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Cuscino", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Seggiolone", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Fasciaotio", FormField = tipoMobilioB },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoMobilioB }
+            );
+
+            ctx.SaveChanges();
+
+            var tipoAccessoriB = new FormField() { Name = "Tipo Accessori Bambino", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoAccessoriB );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = bAccessori.Id, FormFieldId = tipoAccessoriB.Id } );
+            ctx.SaveChanges();
+
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Tiralatte", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Biberon", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "ScaldaBiberon", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Sterilizzatore", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Cuoci Pappa", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Aereosol", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Umidificatore", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Termometro", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Ciuccio", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Baby Monitor", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Passeggino", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Seggiolino Automobile", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Accessori Bagno", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Accessori Auto", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Posate", FormField = tipoAccessoriB },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoAccessoriB }
+            );
+
+            ctx.SaveChanges();
+
+            var specieAnimale = new FormField() { Name = "Specie Animale", Type = FormFieldType.Text };
+            ctx.FormFields.Add( specieAnimale );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAnimali.Id, FormFieldId = specieAnimale.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Cane", FormField = specieAnimale },
+            new FieldDefaultValue() { Value = "Gatto", FormField = specieAnimale },
+            new FieldDefaultValue() { Value = "Pesci", FormField = specieAnimale },
+            new FieldDefaultValue() { Value = "Uccello", FormField = specieAnimale },
+            new FieldDefaultValue() { Value = "Roditore", FormField = specieAnimale },
+            new FieldDefaultValue() { Value = "Rettile", FormField = specieAnimale }
+            );
+
+            ctx.SaveChanges();
+
+
+            var razzaAnimale = new FormField() { Name = "Razza Animale", Type = FormFieldType.Text };
+            ctx.FormFields.Add( razzaAnimale );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAnimali.Id, FormFieldId = razzaAnimale.Id } );
+            ctx.SaveChanges();
+
+            var etaAnimale = new FormField() { Name = "Eta' Animale", Type = FormFieldType.Number };
+            ctx.FormFields.Add( etaAnimale );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAnimali.Id, FormFieldId = etaAnimale.Id } );
+            ctx.SaveChanges();
+
+            var tagliaAnimale = new FormField() { Name = "Taglia Animale", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tagliaAnimale );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAnimali.Id, FormFieldId = tagliaAnimale.Id } );
+            ctx.SaveChanges();
+
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Mini", FormField = tagliaAnimale },
+            new FieldDefaultValue() { Value = "Piccola", FormField = tagliaAnimale },
+            new FieldDefaultValue() { Value = "Media", FormField = tagliaAnimale },
+            new FieldDefaultValue() { Value = "Grande", FormField = tagliaAnimale },
+            new FieldDefaultValue() { Value = "Gigante", FormField = tagliaAnimale }
+            );
+
+            ctx.SaveChanges();
+
+
+            var lunghezzaPelo = new FormField() { Name = "Lunghezza Pelo Animale", Type = FormFieldType.Text };
+            ctx.FormFields.Add( lunghezzaPelo );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAnimali.Id, FormFieldId = lunghezzaPelo.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Assente", FormField = lunghezzaPelo },
+            new FieldDefaultValue() { Value = "Corto", FormField = lunghezzaPelo },
+            new FieldDefaultValue() { Value = "Medio", FormField = lunghezzaPelo },
+            new FieldDefaultValue() { Value = "Lungo", FormField = lunghezzaPelo }
+            );
+
+            ctx.SaveChanges();
+
+
+            var tipoAccessoriAnimale = new FormField() { Name = "Tipo Accessori Animale", Type = FormFieldType.Text };
+            ctx.FormFields.Add( tipoAccessoriAnimale );
+            ctx.SaveChanges();
+
+            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = anAccessori.Id, FormFieldId = tipoAccessoriAnimale.Id } );
+            ctx.SaveChanges();
+
+            ctx.FieldDefaultValues.AddRange(
+            new FieldDefaultValue() { Value = "Abbigliamento", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Collare", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Pettorina", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Giochi", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Cuccia", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Cuscino", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Trasportino", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Acquario", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Gabbia", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Terrario", FormField = tipoAccessoriAnimale },
+            new FieldDefaultValue() { Value = "Altro", FormField = tipoAccessoriAnimale }
+            );
+
             ctx.SaveChanges();
 
 
