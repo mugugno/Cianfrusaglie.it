@@ -14,7 +14,6 @@ using Microsoft.AspNet.Http.Internal;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.TestHost;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,6 @@ namespace Cianfrusaglie.Tests
         protected readonly UserManager<User> UserManager;
         protected SignInManager<User> SignInManager;
 
-        protected TestServer Server;
         protected HttpClient Client;
         private readonly Mock<SignInManager<User>> _mockSignInManager;
         private readonly IEmailSender _emailSender;
