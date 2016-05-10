@@ -21,8 +21,7 @@ namespace Cianfrusaglie.Models {
       public DbSet< FieldDefaultValue > FieldDefaultValues { get; set; }
       public DbSet< ImageUrl > ImageUrls { get; set; }
 
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        {
+        public ApplicationDbContext(DbContextOptions options) : base(options) {
            
         }
 

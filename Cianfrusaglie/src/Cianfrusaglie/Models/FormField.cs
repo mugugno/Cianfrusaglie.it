@@ -11,8 +11,6 @@ namespace Cianfrusaglie.Models {
       [Required]
       public virtual FormFieldType Type { get; set; }
 
-      //Da decidere se fare enum, vale S,D,IM,I(Stringa,Double,Immagine,Integer)
-
       public virtual ICollection< FieldDefaultValue > DefaultValues { get; set; }
       public virtual ICollection< CategoryFormField > CategoriesFormFields { get; set; }
       public virtual ICollection< AnnounceFormFieldsValues > AnnouncesFormFields { get; set; }
