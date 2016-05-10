@@ -119,7 +119,6 @@ namespace Cianfrusaglie.Tests {
          announce.Author = usr;
          announce.Title = "Libro di OST di Videogiochi";
          announce.Description = "Tutti i compositori da Uematsu in giù";
-         announce.GeoCoordinate = new GeoCoordinateEntity();
          Context.Announces.Add( announce );
 
          var announceCategory1 = new AnnounceCategory {
@@ -144,7 +143,6 @@ namespace Cianfrusaglie.Tests {
          announce2.Author = usr2;
          announce2.Title = "Halo 5 Usato";
          announce2.Description = "Guardiani ovunque";
-         announce2.GeoCoordinate = new GeoCoordinateEntity();
          Context.Announces.Add( announce2 );
 
          var announceCategory2 = new AnnounceCategory {

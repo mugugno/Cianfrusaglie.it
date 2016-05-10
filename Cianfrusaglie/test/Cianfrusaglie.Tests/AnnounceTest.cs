@@ -72,8 +72,7 @@ namespace Cianfrusaglie.Tests {
          var announce = new Announce {
             Author = usr,
             Title = "Un annuncio bello bello",
-            Description = "Sono bello",
-            GeoCoordinate = new GeoCoordinateEntity()
+            Description = "Sono bello"
          };
          var res = announceController.Create( announce );
 
@@ -107,8 +106,7 @@ namespace Cianfrusaglie.Tests {
          var announceController = CreateAnnounceController( null, null );
          var announce = new Announce {
             Title = "Un annuncio bello bello",
-            Description = "Sono bello",
-            GeoCoordinate = new GeoCoordinateEntity()
+            Description = "Sono bello"
          };
          var res = announceController.Create( announce );
          Assert.IsType< BadRequestResult >( res );
