@@ -1,21 +1,22 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cianfrusaglie.Models {
-   [ComplexType]
-   public class GeoCoordinateEntity {
-      public int Id { get; set; }
-      public double Latitude { get; set; }
-      public double Longitude { get; set; }
+namespace Cianfrusaglie {
+   public class GeoCoordinate {
+      public GeoCoordinate() { }
 
-      public GeoCoordinateEntity() { }
-
-      public GeoCoordinateEntity( double latitude, double longitude ) {
+      public GeoCoordinate( double latitude, double longitude ) {
          Latitude = latitude;
          Longitude = longitude;
       }
 
-      public double Distance( GeoCoordinateEntity gc ) {
+      public double Latitude { get; set; }
+      public double Longitude { get; set; }
+
+      public static double Distance( double Lat1, double Long1, double Lat2, double Long2 ) {
+         return new GeoCoordinate( Lat1, Lat2 ).Distance( new GeoCoordinate( Lat2, Long2 ) );
+      }
+
+      public double Distance( GeoCoordinate gc ) {
          if( gc == null )
             throw new ArgumentNullException();
 
