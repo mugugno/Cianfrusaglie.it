@@ -38,7 +38,7 @@ namespace Cianfrusaglie.Tests
         */
 
         [Fact]
-        public async void UserLoggedTryToVisualizeHisMessage()
+        public void UserLoggedTryToVisualizeHisMessage()
         {
 
             //tiro su l'utente dal database cone quello username
@@ -48,7 +48,7 @@ namespace Cianfrusaglie.Tests
             var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
 
             //create the messageController
-            var messageController = new MessagesController(Context);
+            var messageController = CreateMessageController(usr.Id, usr.UserName);
 
             //dato l'utente, visualizzo tutti i suoi messaggi
             var result = messageController.Index();
