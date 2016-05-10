@@ -1,6 +1,8 @@
 ﻿
+
 @functions
 {
+
     public IEnumerable<Category> GetCategories()
     {
         for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
@@ -21,26 +23,13 @@
         }
     }
 
-    public IEnumerable<Announce> GetAnnounces()
+    public IEnumerable<Announce> GetAnnounce()
     {
-        for (var j = 0; j < (ViewData["numberOfAnnounces"] as int? ?? 0); j++)
+        foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
         {
-            var announce = ViewData["listAnnounces"] as List<Announce>;
-            yield return announce[j];
+            yield return announce;
         }
     }
-
-    //Estrae un annuncio random da mettere in homepage
-    /*private Announce getRandomAnnounce()
-    {
-        Random random = new Random();
-        int idRandom = random.Next(1, ViewData["numberOfAnnounces"] as int? ?? 0);
-        foreach (var announce in GetAnnounces())
-        {
-            if (announce.Id == idRandom)
-                return announce;
-        }
-    }*/
 
 }
 
@@ -58,7 +47,7 @@
         <div class="collapse navbar-collapse js-navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown dropdown-large">
-                    <a href="~/">Home</a>
+                    <a href="~/"><span class="glyphicon glyphicon-home"></span> Home</a>
                 </li>
                 <li class="dropdown dropdown-large">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cerca per categoria <b class="caret"></b></a>
@@ -66,7 +55,7 @@
                         @foreach (var macro in GetCategories())
                         {
                             <li>
-                                <a href="#">@macro.Name</a>
+                                <a href="~/Search/CategoryBasedSearch/@macro">@macro.Name</a>
                                 @if (GetSubCategories(@macro.Name).ToList().Count > 0)
                                 {
                                     <ul class="dropdown-menu sub-menu">
@@ -83,7 +72,14 @@
                     </ul>
                 </li>
                 <li class="dropdown dropdown-large">
-                    <a href="#" data-toggle="modal" data-target="#myWindow">Sto Cercando</a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" data-toggle="modal" data-target="#myWindow">Sto Cercando</a>
+                    }
+                    else
+                    {
+                        <a href="#">Sto Cercando</a>
+                    }
                 </li>
                 <li class="dropdown dropdown-large">
                     <a href="#">Come funziona <strong>nonhounnome.it</strong></a>
@@ -92,10 +88,24 @@
 
             <ul class="nav navbar-nav" id="menuRight">
                 <li>
-                    <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                    }
+                    else
+                    {
+                        <a href="#"><span class="glyphicon glyphicon-user"></span> Profilo</a>
+                    }
                 </li>
                 <li>
-                    <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"> Login</span></a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    }
+                    else
+                    {
+                        <a href="~/Account/LogOff"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    }
                 </li>
             </ul>
         </div>
@@ -176,108 +186,34 @@
         <hr/>
 
         <div class="container">
-            <div id="vetrinaAnnunci" class="row ">
-                <div class="panel-group col-sm-2" id="panelAnnunci">
-                    <div class="panel panel-default">
-                        <div class="panel-heading thumbnail">
-                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
-                        </div>
-                        <div class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
-                                <h5>VENDITA</h5>
-                                <h3>prezzo millemila euri</h3>
+            <div id="vetrinaAnnunci" class="row">
+                @foreach (var annuncio in GetAnnounce())
+                {
+                    <div class="panel-group col-sm-2" id="panelAnnunci">
+                        <div class="panel panel-default">
+                            <div class="panel-heading thumbnail">
+                                <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail" /></a>
+                            </div>
+                            <div class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <h3><a href="#" data-toggle="modal" data-target="#myWindow">@annuncio.Title</a></h3>
+                                    @if (@annuncio.Price == 0)
+                                    {
+                                        <h5>IN REGALO</h5>
+                                    }
+                                    else
+                                    {
+                                        <h5>Prezzo: @annuncio.Price</h5>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-group col-sm-2" id="panelAnnunci">
-                    <div class="panel panel-default">
-                        <div class="panel-heading thumbnail">
-                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
-                        </div>
-                        <div class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
-                                <h5>VENDITA</h5>
-                                <h3>prezzo millemila euri</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-group col-sm-2" id="panelAnnunci">
-                    <div class="panel panel-default">
-                        <div class="panel-heading thumbnail">
-                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
-                        </div>
-                        <div class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
-                                <h5>VENDITA</h5>
-                                <h3>prezzo millemila euri</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-group col-sm-2" id="panelAnnunci">
-                    <div class="panel panel-default">
-                        <div class="panel-heading thumbnail">
-                            <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail"/></a>
-                        </div>
-                        <div class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <a href="#">Kindle E-reader, 6" Glare-Free Touchscreen Display, Wi-Fi - Includes Special Offers</a>
-                                <h5>VENDITA</h5>
-                                <h3>prezzo millemila euri</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
             </div>
 
-      <!--<div id="vetrinaAnnunci" class="row">
-            <div class="col-sm-4">
-                <h3>annuncio titolo 1</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 2</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 3</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-        </div>
-        <div id="vetrinaAnnunci" class="row">
-            <div class="col-sm-4">
-                <h3>annuncio titolo 1</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 2</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-            <div class="col-sm-4">
-                <h3>annuncio titolo 3</h3>
-                <br/>tipo di annuncio
-                <br/><span class="glyphicon glyphicon-gift"></span>
-                <br/>prezzo se in vendita
-            </div>
-        </div>-->
-
-        </div>
+      </div>
 </div>
 
 

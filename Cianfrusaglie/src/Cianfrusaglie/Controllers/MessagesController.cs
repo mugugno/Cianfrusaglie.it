@@ -5,6 +5,8 @@ using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.ViewModels;
+using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Controllers {
    public class MessagesController : Controller {
@@ -25,13 +27,21 @@ namespace Cianfrusaglie.Controllers {
          return messages;
       }
 
-      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
+<<<<<<< HEAD
+      public IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
          var userWitchIHaveMessaged = usr.SentMessages?.Select( m => m.Receiver ) ?? new List<User>();
          var userThatSendedMeMessage = usr.ReceivedMessages?.Select( m => m.Sender ) ?? new List<User>();
+=======
+      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
+         var userThatSendedMeAMessage =
+            _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
+         var userThatISentAMessage =
+            _context.Messages.Where( u => u.Receiver.Id.Equals( User.GetUserId() ) ).Select( u => u.Receiver ).ToList();
+>>>>>>> 47f8653b06c2546c64e1b3e132446a072069efce
 
-         var users = userWitchIHaveMessaged.Union( userThatSendedMeMessage ).Distinct();
-         return users;
+         userThatSendedMeAMessage.AddRange( userThatISentAMessage );
+         return userThatSendedMeAMessage.Distinct();
       }
 
       //tutti gli utenti con cui l'utente loggato ha messaggiato
@@ -40,7 +50,8 @@ namespace Cianfrusaglie.Controllers {
          if(!LoginChecker.HasLoggedUser(this))
             return HttpBadRequest();
 
-         return View( GetLoggedUsersConversationsUsers().ToList() );
+         var users = GetLoggedUsersConversationsUsers().ToList();
+         return View( users );
       }
 
       // GET: Messages/Details/5
@@ -49,6 +60,9 @@ namespace Cianfrusaglie.Controllers {
             return HttpBadRequest();
 
          if( id == null )
+            return HttpNotFound();
+
+         if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
             return HttpNotFound();
 
          return View( GetLoggedUsersMessagesWithUser( id ).ToList() );
@@ -69,9 +83,21 @@ namespace Cianfrusaglie.Controllers {
 
       // POST: Messages/Create
       [HttpPost, ValidateAntiForgeryToken]
-      public IActionResult Create( Message message ) {
+      public IActionResult Create( MessageViewModel message ) {
+         if( !LoginChecker.HasLoggedUser( this ) )
+            return HttpBadRequest();
+
+         if( message == null )
+            return HttpBadRequest();
+
          if( ModelState.IsValid ) {
-            _context.Messages.Add( message );
+            var loggedUsr = _context.Users.Single( u => u.Id == User.GetUserId() );
+            var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == message.ReceiverId );
+
+            if( receiverUsr == null )
+               return HttpBadRequest(); //id utente non valido
+
+            _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = message.Text, DateTime = DateTime.Now} );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
          }
