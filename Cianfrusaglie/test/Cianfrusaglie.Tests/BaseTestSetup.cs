@@ -89,7 +89,10 @@ namespace Cianfrusaglie.Tests {
          };
       }
 
-      private void CreateUsers() {
+      
+
+
+       private void CreateUsers() {
          var registerViewModel = new RegisterViewModel {
             ConfirmPassword = CommonUserPassword,
             Password = CommonUserPassword,
