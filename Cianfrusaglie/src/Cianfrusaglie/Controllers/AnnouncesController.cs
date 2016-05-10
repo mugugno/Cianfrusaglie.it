@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
@@ -50,6 +51,13 @@ namespace Cianfrusaglie.Controllers
             ViewData["formFields"] = _context.FormFields.ToList();
             ViewData["formMacroCategories"] = _context.Categories.ToList();
             ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
+            foreach( var formField in _context.FormFields.ToList() ) {
+                var categories = _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select( o => o.Category ).ToList();
+                formField2CategoriesDictionary.Add( formField.Id, categories );
+                
+            }
+            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
             return View();
         }
 
