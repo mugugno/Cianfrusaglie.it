@@ -22,7 +22,7 @@
       padding-top: 60px;
 }
 
-#wrap h1{
+#title h1{
     font-family: 'Lato', sans-serif;
     color:#FFC107;
     margin-bottom:0;
@@ -31,7 +31,7 @@
     text-align: center;
 }
 
-#wrap h5{
+#title h5{
     font-family: 'Lato', sans-serif;
     color:#FFC107;
     margin-top:0;
@@ -186,10 +186,16 @@
 #vetrinaAnnunci {
     display: flex;
     justify-content: center;
+
 }
 
 #panelAnnunci {
     align-self: center;
+    width: 260px;
+}
+.panel-body {
+  height: 200px;
+    text-align: center;
 }
 
 hr {
