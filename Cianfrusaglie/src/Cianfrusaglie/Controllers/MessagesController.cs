@@ -2,6 +2,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
 using Cianfrusaglie.Models;
+using Cianfrusaglie.Statics;
 
 namespace Cianfrusaglie.Controllers {
    public class MessagesController : Controller {
@@ -12,7 +13,7 @@ namespace Cianfrusaglie.Controllers {
       //tutti gli utenti con cui l'utente loggato ha messaggiato
       // GET: Messages
       public IActionResult Index() {
-         if( User == null )
+         if(!LoginChecker.HasLoggedUser(this))
             return HttpBadRequest();
 
          var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
