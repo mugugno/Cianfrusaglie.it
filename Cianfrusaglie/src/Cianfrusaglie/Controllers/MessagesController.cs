@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.ViewModels;
 
 namespace Cianfrusaglie.Controllers {
    public class MessagesController : Controller {
@@ -69,9 +70,21 @@ namespace Cianfrusaglie.Controllers {
 
       // POST: Messages/Create
       [HttpPost, ValidateAntiForgeryToken]
-      public IActionResult Create( Message message ) {
+      public IActionResult Create( MessageViewModel message ) {
+         if( !LoginChecker.HasLoggedUser( this ) )
+            return HttpBadRequest();
+
+         if( message == null )
+            return HttpBadRequest();
+
          if( ModelState.IsValid ) {
-            _context.Messages.Add( message );
+            var loggedUsr = _context.Users.Single( u => u.Id == User.GetUserId() );
+            var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == message.ReceiverId );
+
+            if( receiverUsr == null )
+               return HttpBadRequest(); //id utente non valido
+
+            _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = message.Text, DateTime = DateTime.Now} );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
          }
