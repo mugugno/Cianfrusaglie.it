@@ -8,8 +8,8 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160510094757_Initial_Redo5")]
-    partial class Initial_Redo5
+    [Migration("20160510102457_Initial_Redo6")]
+    partial class Initial_Redo6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,8 +35,9 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<int?>("GeoCoordinateId")
-                        .IsRequired();
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<int>("MeterRange");
 
@@ -172,18 +173,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Cianfrusaglie.Models.GeoCoordinateEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("Cianfrusaglie.Models.ImageUrl", b =>
                 {
                     b.Property<int>("Id")
@@ -254,11 +243,13 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int?>("GeoCoordinateId");
+                    b.Property<double>("Latitude");
 
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<string>("NormalizedEmail")
                         .HasAnnotation("MaxLength", 256);
@@ -285,11 +276,17 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
                         .HasAnnotation("Relational:Name", "EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .HasAnnotation("Relational:Name", "UserNameIndex");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
@@ -390,10 +387,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("AuthorId");
-
-                    b.HasOne("Cianfrusaglie.Models.GeoCoordinateEntity")
-                        .WithMany()
-                        .HasForeignKey("GeoCoordinateId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -500,10 +493,6 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>
                 {
-                    b.HasOne("Cianfrusaglie.Models.GeoCoordinateEntity")
-                        .WithMany()
-                        .HasForeignKey("GeoCoordinateId");
-
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
