@@ -6,7 +6,7 @@ namespace Cianfrusaglie.Models {
    public class Category {
       public int Id { get; set; }
 
-      [Required, Column(TypeName = "varchar(99)")]
+      [Required]
       public string Name { get; set; }
 
       public virtual Category OverCategory { get; set; }

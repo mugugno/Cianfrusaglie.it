@@ -13,7 +13,7 @@ namespace Cianfrusaglie.Models {
 
       public virtual FormField FormField { get; set; }
 
-      [Required]
+      [Required, MaxLength( 99 )]
       public string Value { get; set; }
    }
 }

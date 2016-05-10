@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace Cianfrusaglie.Migrations
 {
-    public partial class Initial_Redo4 : Migration
+    public partial class Initial_Redo5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace Cianfrusaglie.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(99)", nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     OverCategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -35,7 +35,7 @@ namespace Cianfrusaglie.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
-                    Type = table.Column<string>(nullable: false)
+                    Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

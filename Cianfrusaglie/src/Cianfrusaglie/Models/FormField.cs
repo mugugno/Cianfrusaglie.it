@@ -5,7 +5,7 @@ namespace Cianfrusaglie.Models {
    public class FormField {
       public int Id { get; set; }
 
-      [Required, MinLength( 3 ), MaxLength( 30 )]
+      [Required]
       public virtual string Name { get; set; }
 
       [Required]

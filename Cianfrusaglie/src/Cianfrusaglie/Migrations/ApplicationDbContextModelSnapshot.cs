@@ -47,7 +47,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
+                        .HasAnnotation("MaxLength", 80);
 
                     b.HasKey("Id");
 
@@ -72,7 +72,8 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int>("AnnounceId");
 
                     b.Property<string>("Value")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 99);
 
                     b.HasKey("FormFieldId", "AnnounceId");
                 });
@@ -92,8 +93,7 @@ namespace Cianfrusaglie.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasAnnotation("Relational:ColumnType", "varchar(99)");
+                        .IsRequired();
 
                     b.Property<int?>("OverCategoryId");
 
@@ -152,8 +152,7 @@ namespace Cianfrusaglie.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 30);
+                        .IsRequired();
 
                     b.Property<int>("Type");
 
@@ -167,7 +166,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 25);
+                        .HasAnnotation("MaxLength", 30);
 
                     b.HasKey("Id");
                 });
@@ -193,7 +192,8 @@ namespace Cianfrusaglie.Migrations
                         .IsRequired();
 
                     b.Property<string>("Url")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 2083);
 
                     b.HasKey("Id");
                 });
