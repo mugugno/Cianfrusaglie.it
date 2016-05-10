@@ -22,7 +22,7 @@ namespace Cianfrusaglie.Controllers
         }
 
         // GET: Messages/Details/5
-        public IActionResult Details(int? id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
