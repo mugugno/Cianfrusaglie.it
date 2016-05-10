@@ -1515,8 +1515,8 @@ namespace Cianfrusaglie.Models {
             ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = risoluzione.Id } );
             ctx.SaveChanges();
 
-            ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = risoluzione.Id } );
-            ctx.SaveChanges();
+            //ctx.CategoryFormFields.Add( new CategoryFormField() { CategoryId = eFV.Id, FormFieldId = risoluzione.Id } );
+            //ctx.SaveChanges();
 
             var memoria = new FormField() { Name = "Memoria", Type = FormFieldType.Number };
             ctx.FormFields.Add( memoria );

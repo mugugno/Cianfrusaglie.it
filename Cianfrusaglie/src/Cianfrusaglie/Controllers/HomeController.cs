@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Mvc;
 using System.Linq;
 
+
 namespace Cianfrusaglie.Controllers
 {
     public class HomeController : Controller
@@ -16,6 +17,7 @@ namespace Cianfrusaglie.Controllers
         {
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+
             return View();
         }
 

@@ -9,8 +9,8 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public DateTime BirthDate { get; set; }
 
-      //[Required]
-      public virtual GeoCoordinateEntity GeoCoordinate { get; set; }
+      public virtual double Latitude { get; set; }
+      public virtual double Longitude { get; set; }
 
       public bool RememberMe { get; set; }
 

@@ -1,13 +1,4 @@
-﻿#wrap {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -40px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px;
-}
-
-#container-fluid {
+﻿#container-fluid {
     padding-right: 0px;
     padding-left: 0px;
 }
@@ -47,34 +38,19 @@
     text-align: center;
 }
 
-#pageHeader {
-    width:100%;
-    height:100px;
-    position: relative;
-    border-bottom: 1px solid;
-    border-bottom-color: #FFC107;
-    border-top: 1px solid;
-    border-top-color: #FFC107;
-    background-color: white;
-    display: inline-block;
-    padding-right: 0;
-    padding-left: 0;
-}
 
-
-#barraRicerca {
-    position: absolute;
-    float: left;
-    top: 60%;
-    transform: translateY(-60%);
-}
 
 #linkHome {
     padding-top: 20px;
     padding-bottom: 20px;
     padding-left:0;
     padding-right:0;
-    text-align: center;
+    text-align: center
+}
+
+#linkHome span {
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #linkRegala, #LinkVendi, #linkBaratta {
@@ -104,15 +80,6 @@
 
 #menuRight {
    float: right;
-}
-
-#footer {
-    height: 40px;
-    bottom:0;
-    text-align: center;
-    font-weight: bold;
-    border-top: 1px solid;
-    border-top-color: #FFC107;
 }
 
 .dropdown-menu-large {

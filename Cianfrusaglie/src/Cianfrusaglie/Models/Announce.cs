@@ -14,7 +14,7 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public virtual Nullable<DateTime> DeadLine { get; set; }
 
-      [Required, MinLength( 3 ), MaxLength( 50 )]
+      [Required, MinLength( 3 ), MaxLength( 80 )]
       public virtual string Title { get; set; }
 
       [MaxLength( 255 )]
@@ -24,8 +24,8 @@ namespace Cianfrusaglie.Models {
 
       public virtual bool Closed { get; set; }
 
-      [Required]
-      public virtual GeoCoordinateEntity GeoCoordinate { get; set; }
+      public virtual double Latitude { get; set; }
+      public virtual double Longitude { get; set; }
 
       [Range( 0, int.MaxValue )]
       public virtual int MeterRange { get; set; } //TODO in metri?!

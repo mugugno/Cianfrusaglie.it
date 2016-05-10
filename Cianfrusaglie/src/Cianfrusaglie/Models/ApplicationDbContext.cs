@@ -93,6 +93,10 @@ namespace Cianfrusaglie.Models {
 
          builder.Entity< ImageUrl >().HasOne( i => i.Announce ).WithMany( a => a.Images ).OnDelete(
             DeleteBehavior.Restrict );
-      }
+
+
+           builder.Entity< User >().HasIndex( u => u.UserName ).IsUnique( true );
+           builder.Entity< User >().HasIndex( u => u.Email ).IsUnique( true );
+        }
    }
 }

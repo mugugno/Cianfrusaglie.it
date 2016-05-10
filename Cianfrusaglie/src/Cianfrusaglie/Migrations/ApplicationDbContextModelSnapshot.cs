@@ -34,8 +34,9 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<int?>("GeoCoordinateId")
-                        .IsRequired();
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<int>("MeterRange");
 
@@ -47,7 +48,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
+                        .HasAnnotation("MaxLength", 80);
 
                     b.HasKey("Id");
 
@@ -72,7 +73,8 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int>("AnnounceId");
 
                     b.Property<string>("Value")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 99);
 
                     b.HasKey("FormFieldId", "AnnounceId");
                 });
@@ -92,8 +94,7 @@ namespace Cianfrusaglie.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasAnnotation("Relational:ColumnType", "varchar(99)");
+                        .IsRequired();
 
                     b.Property<int?>("OverCategoryId");
 
@@ -152,8 +153,7 @@ namespace Cianfrusaglie.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 30);
+                        .IsRequired();
 
                     b.Property<int>("Type");
 
@@ -167,19 +167,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 25);
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.GeoCoordinateEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
+                        .HasAnnotation("MaxLength", 30);
 
                     b.HasKey("Id");
                 });
@@ -193,7 +181,8 @@ namespace Cianfrusaglie.Migrations
                         .IsRequired();
 
                     b.Property<string>("Url")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 2083);
 
                     b.HasKey("Id");
                 });
@@ -253,11 +242,13 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int?>("GeoCoordinateId");
+                    b.Property<double>("Latitude");
 
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<string>("NormalizedEmail")
                         .HasAnnotation("MaxLength", 256);
@@ -284,11 +275,17 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
                         .HasAnnotation("Relational:Name", "EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .HasAnnotation("Relational:Name", "UserNameIndex");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
@@ -389,10 +386,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("AuthorId");
-
-                    b.HasOne("Cianfrusaglie.Models.GeoCoordinateEntity")
-                        .WithMany()
-                        .HasForeignKey("GeoCoordinateId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.AnnounceCategory", b =>
@@ -499,10 +492,6 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>
                 {
-                    b.HasOne("Cianfrusaglie.Models.GeoCoordinateEntity")
-                        .WithMany()
-                        .HasForeignKey("GeoCoordinateId");
-
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
