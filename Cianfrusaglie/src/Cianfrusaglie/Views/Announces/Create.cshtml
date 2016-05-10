@@ -44,9 +44,20 @@
     }
 
 }
+<nav class="navbar navbar-default" data-spy="affix" data-offset-top="60" id="announce-navbar" style="z-index: 15">
+    <div class="panel panel-default" style ="margin-left: -15px ">
+        <div class="col-md-3" >
+        </div>
+        <div class="col-md-6" >
+            <button type="button" class="btn btn-default navbar-btn navbar-left" onclick="clickBackButton()" style="display: none" id="back-button">Indietro</button>
+            <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="clickForwardButton()" id="forward-button">Avanti</button>
+        </div>
+    </div>
+        
+</nav>
 <div class="panel panel-default" >
     <div class="panel-body" >
-        <div class="row" >
+        <div class="row" id="page1" >
             <div class="col-md-6" >
                 <div class="panel-group" id="panel-423221" >
                     @foreach( Category macroCategory in GetMacroCategories() ) {
@@ -77,24 +88,78 @@
 
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Informazioni aggiuntive</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form role="form">
+                                @foreach (FormField field in GetFormFields())
+                                {
+                                    <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" id="field-form-group-@field.Id" style="display: none">
+                                        <label for="field-@field.Id">
+                                            @field.Name
+                                        </label>
+
+                                        <input type="text" class="form-control" id="field-@field.Id"> @* TODO  type=@field.Type *@
+                                    </div>
+                                }
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="page2" style="display: none" >
+            <div class="col-md-3" >
+            </div>
             <div class="col-md-6" >
                 <div class="panel panel-default" >
                     <div class="panel-body" >
-                        <form role="form" >
-                            @foreach( FormField field in GetFormFields() ) {
-                                <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" id="field-form-group-@field.Id" style="display:none" >
-                                    <label for="field-@field.Id" >
-                                        @field.Name
-                                    </label>
+                        <form class="form-horizontal" >
+                            <fieldset>
 
-                                    <input type="text" class="form-control" id="field-@field.Id" > @* TODO  type=@field.Type *@
+                                <!-- Text input-->
+                                <div class="form-group" >
+                                    <label class="col-md-4 control-label" for="title" >Titolo</label>
+                                    <div class="col-md-7" >
+                                        <input id="title" name="title" type="text" placeholder="inserisci il titolo dell'annuncio" class="form-control" required="" style="padding-left: 12px" >
+                                        <span class="help-block">errore</span>
+                                    </div>
                                 </div>
-                            }
 
+                                <!-- Textarea -->
+                                <div class="form-group" >
+                                    <label class="col-md-4 control-label" for="description" >Descrizione</label>
+                                    <div class="col-md-7" >
+                                        <textarea class="form-control" id="description" name="description" ></textarea>
+                                    </div>
+                                </div>
 
-                            <button class="btn btn-default" type="submit" >
-                                Submit
-                            </button>
+                                <!-- Prepended checkbox -->
+                                <div class="form-group" >
+                                    <label class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
+                                    <div class="col-md-7" >
+                                        <div class="input-group" >
+                                            <span class="input-group-addon">
+                                                <input type="checkbox" id="range-checkbox" onchange="clickRangeButton()">
+                                            </span>
+                                            <input id="range-input" name="range-input" class="form-control" type="number" placeholder="di quanti km?" required="">
+                                        </div>
+                                        <p class="help-block" >errore</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" >
+                                    <label class="col-md-4 control-label" for="photo" >Immagini</label>
+                                    <div class="col-md-6" >
+                                        <input id="photo" name="photo" class="input-file" type="file" style="margin-top: 6px" >
+                                    </div>
+                                </div>
+
+                            </fieldset>
                         </form>
                     </div>
                 </div>
@@ -103,7 +168,14 @@
     </div>
 </div>
 
+
+
 <script>
+    // TODO spostare tutto in un file js
+    document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    document.getElementById("range-checkbox").checked = true;
+    document.getElementById("range-input").value = 1;
+
     function setFieldsVisibility() {
         var checkboxesArray = document.getElementsByClassName("category-checkboxes");
         var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
@@ -116,6 +188,33 @@
                 for( var j = 0; j < categoryFormFieldsArray.length; j++ )
                     categoryFormFieldsArray[ j ].style.display = "block";
             }
+        }
+    }
+
+    // 500 sono i millisecondi di durata della transizione
+    var transitionTime = 350;
+    function clickForwardButton() {
+        $('#page1').hide(transitionTime);
+        $('#page2').show(transitionTime);
+        $('#back-button').show(0);
+        document.getElementById("forward-button").innerHTML = "Pubblica";
+    }
+    function clickBackButton() {
+        $('#page1').show(transitionTime);
+        $('#page2').hide(transitionTime);
+        $('#back-button').hide(0);
+        document.getElementById("forward-button").innerHTML = "Avanti";
+    }
+    function clickRangeButton() {
+        var checkbox = document.getElementById("range-checkbox");
+        var rangeInput = document.getElementById("range-input");
+        if(checkbox.checked){
+            rangeInput.removeAttribute("disabled");
+            rangeInput.value = 1;
+        }
+        else {
+            rangeInput.setAttribute("disabled", "");
+            rangeInput.value = 0;
         }
     }
 </script>
