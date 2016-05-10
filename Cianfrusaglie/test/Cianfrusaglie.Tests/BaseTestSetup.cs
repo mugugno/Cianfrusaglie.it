@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
@@ -18,141 +17,120 @@ using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Cianfrusaglie.Tests {
-   public class BaseTestSetup {
-      protected const string CommonUserPassword = "Cane1!";
-      protected const string FirstUserName = "pippo1";
-      protected const string SecondUserName = "pippo2";
-      private readonly IEmailSender _emailSender;
-      private readonly Mock< HttpContext > _mockHttpContext;
+    public class BaseTestSetup {
+        protected const string CommonUserPassword = "Cane1!";
+        protected const string FirstUserName = "pippo1";
+        protected const string SecondUserName = "pippo2";
+        private readonly IEmailSender _emailSender;
 
-      private readonly Mock< SignInManager< User > > _mockSignInManager;
-      private readonly ISmsSender _smsSender;
-      protected readonly ApplicationDbContext Context;
-      protected readonly UserManager< User > UserManager;
-      protected SignInManager< User > SignInManager;
+        private readonly Mock< SignInManager< User > > _mockSignInManager;
+        private readonly ISmsSender _smsSender;
+        protected readonly ApplicationDbContext Context;
+        protected readonly UserManager< User > UserManager;
+        protected SignInManager< User > SignInManager;
 
-      protected BaseTestSetup() {
-         var services = new ServiceCollection();
-         services.AddEntityFramework().AddInMemoryDatabase().AddDbContext< ApplicationDbContext >(
-            o => o.UseInMemoryDatabase() );
+        protected BaseTestSetup() {
+            var services = new ServiceCollection();
+            services.AddEntityFramework().AddInMemoryDatabase().AddDbContext< ApplicationDbContext >(
+                o => o.UseInMemoryDatabase() );
 
-         services.AddIdentity< User, IdentityRole >().AddEntityFrameworkStores< ApplicationDbContext >()
-            .AddDefaultTokenProviders();
+            services.AddIdentity< User, IdentityRole >().AddEntityFrameworkStores< ApplicationDbContext >()
+                .AddDefaultTokenProviders();
 
-         var defaultHttpContext = new DefaultHttpContext();
-         defaultHttpContext.Features.Set( new HttpAuthenticationFeature() );
-         services.AddSingleton< IHttpContextAccessor >( h => new HttpContextAccessor {HttpContext = defaultHttpContext} );
-         var serviceProvider = services.BuildServiceProvider();
-         Context = serviceProvider.GetRequiredService< ApplicationDbContext >();
-         UserManager = serviceProvider.GetRequiredService< UserManager< User > >();
+            var defaultHttpContext = new DefaultHttpContext();
+            defaultHttpContext.Features.Set( new HttpAuthenticationFeature() );
+            services.AddSingleton< IHttpContextAccessor >(
+                h => new HttpContextAccessor {HttpContext = defaultHttpContext} );
+            var serviceProvider = services.BuildServiceProvider();
+            Context = serviceProvider.GetRequiredService< ApplicationDbContext >();
+            UserManager = serviceProvider.GetRequiredService< UserManager< User > >();
 
-         SignInManager = serviceProvider.GetRequiredService< SignInManager< User > >();
-         _mockSignInManager = MockSignInManager< User >( UserManager );
-         _emailSender = new Mock< IEmailSender >().Object;
-         _smsSender = new Mock< ISmsSender >().Object;
+            SignInManager = serviceProvider.GetRequiredService< SignInManager< User > >();
+            _mockSignInManager = MockSignInManager< User >( UserManager );
+            _emailSender = new Mock< IEmailSender >().Object;
+            _smsSender = new Mock< ISmsSender >().Object;
 
-         _mockHttpContext = new Mock< HttpContext >();
-         _mockHttpContext.SetupAllProperties();
-
-
-         _mockSignInManager.Setup(
-            s =>
-               s.PasswordSignInAsync( It.IsAny< string >(), It.IsAny< string >(), It.IsAny< bool >(), It.IsAny< bool >() ) )
-            .Returns( Task.FromResult( SignInResult.Success ) );
-
-         CreateUsers();
-         CreateCategories();
-         CreateAnnounces();
-      }
-
-      private Mock< SignInManager< TUser > > MockSignInManager< TUser >( UserManager< User > userManager )
-         where TUser: class {
-         var context = new Mock< HttpContext >();
-         return new Mock< SignInManager< TUser > >( userManager, new HttpContextAccessor {HttpContext = context.Object},
-            new Mock< IUserClaimsPrincipalFactory< TUser > >().Object, null, null ) {CallBase = true};
-      }
-
-      protected AccountController CreateAccountController() {
-         return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
-            new LoggerFactory() ) {Url = new Mock< IUrlHelper >().Object};
-      }
-
-      protected AnnouncesController CreateAnnounceController( string id, string userName ) {
-         if( id == null || userName == null )
-            return new AnnouncesController( Context );
-         var validPrincipal =
-            new ClaimsPrincipal( new[] {new ClaimsIdentity( new[] {new Claim( ClaimTypes.NameIdentifier, id )} )} );
-         _mockHttpContext.Setup( h => h.User ).Returns( validPrincipal );
-         return new AnnouncesController( Context ) {
-            ActionContext = new ActionContext {HttpContext = _mockHttpContext.Object},
-            Url = new Mock< IUrlHelper >().Object
-         };
-      }
-
-      
+            var mockHttpContext = new Mock< HttpContext >();
+            mockHttpContext.SetupAllProperties();
 
 
-       private void CreateUsers() {
-         var registerViewModel = new RegisterViewModel {
-            ConfirmPassword = CommonUserPassword,
-            Password = CommonUserPassword,
-            Email = "pippo1@gmail.com",
-            UserName = FirstUserName
-         };
-         var user = new User {UserName = registerViewModel.UserName, Email = registerViewModel.Email};
-         var identityResult = UserManager.CreateAsync( user, registerViewModel.Password ).Result;
-         var result =
-            UserManager.CreateAsync( new User {UserName = SecondUserName, Email = "pippo2@gmail.com"},
-               registerViewModel.Password ).Result;
+            _mockSignInManager.Setup(
+                s =>
+                    s.PasswordSignInAsync( It.IsAny< string >(), It.IsAny< string >(), It.IsAny< bool >(),
+                        It.IsAny< bool >() ) ).Returns( Task.FromResult( SignInResult.Success ) );
 
-         //Context.Users.Add(new User() { UserName = "pippopaolo", Email = "pippopaolo@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
-         //Context.Users.Add(new User() { UserName = "pippopaolo2", Email = "pippopaolo2@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
-         //Context.Users.Add(new User() { UserName = "pippopaolo3", Email = "pippopaolo3@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
-         //Context.Users.Add(new User() { UserName = "pippopaolo4", Email = "pippopaolo4@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
-      }
+            CreateUsers();
+            CreateCategories();
+            CreateAnnounces();
+        }
 
-      private void CreateCategories() { Context.EnsureSeedData(); }
+        private Mock< SignInManager< TUser > > MockSignInManager< TUser >( UserManager< User > userManager )
+            where TUser: class {
+            var context = new Mock< HttpContext >();
+            return new Mock< SignInManager< TUser > >( userManager,
+                new HttpContextAccessor {HttpContext = context.Object},
+                new Mock< IUserClaimsPrincipalFactory< TUser > >().Object, null, null ) {CallBase = true};
+        }
 
-      private void CreateAnnounces() {
-         var announce = new Announce();
-         var usr = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
-         announce.Author = usr;
-         announce.Title = "Libro di OST di Videogiochi";
-         announce.Description = "Tutti i compositori da Uematsu in giù";
-         announce.GeoCoordinate = new GeoCoordinateEntity();
-         Context.Announces.Add( announce );
+        protected AccountController CreateAccountController() {
+            return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
+                new LoggerFactory() ) {Url = new Mock< IUrlHelper >().Object};
+        }
 
-         var announceCategory1 = new AnnounceCategory {
-            Announce = announce,
-            Category = Context.Categories.Single( a => a.Name.Equals( "Libri" ) )
-         };
-         var announceCategory11 = new AnnounceCategory {
-            Announce = announce,
-            Category = Context.Categories.Single( a => a.Name.Equals( "Musica" ) )
-         };
-         var announceCategory12 = new AnnounceCategory {
-            Announce = announce,
-            Category = Context.Categories.Single( a => a.Name.Equals( "Videogiochi" ) )
-         };
-         Context.AnnounceCategories.Add( announceCategory1 );
-         Context.AnnounceCategories.Add( announceCategory11 );
-         Context.AnnounceCategories.Add( announceCategory12 );
-         Context.SaveChanges();
+        private void CreateUsers() {
+            var registerViewModel = new RegisterViewModel {
+                ConfirmPassword = CommonUserPassword,
+                Password = CommonUserPassword,
+                Email = "pippo1@gmail.com",
+                UserName = FirstUserName
+            };
+            var user = new User {UserName = registerViewModel.UserName, Email = registerViewModel.Email};
+            var identityResult = UserManager.CreateAsync( user, registerViewModel.Password ).Result;
+            var result =
+                UserManager.CreateAsync( new User {UserName = SecondUserName, Email = "pippo2@gmail.com"},
+                    registerViewModel.Password ).Result;
+        }
 
-         var announce2 = new Announce();
-         var usr2 = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-         announce2.Author = usr2;
-         announce2.Title = "Halo 5 Usato";
-         announce2.Description = "Guardiani ovunque";
-         announce2.GeoCoordinate = new GeoCoordinateEntity();
-         Context.Announces.Add( announce2 );
+        private void CreateCategories() { Context.EnsureSeedData(); }
 
-         var announceCategory2 = new AnnounceCategory {
-            Announce = announce2,
-            Category = Context.Categories.Single( a => a.Name.Equals( "Videogiochi" ) )
-         };
-         Context.AnnounceCategories.Add( announceCategory2 );
-         Context.SaveChanges();
-      }
-   }
+        private void CreateAnnounces() {
+            var announce = new Announce();
+            var usr = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
+            announce.Author = usr;
+            announce.Title = "Libro di OST di Videogiochi";
+            announce.Description = "Tutti i compositori da Uematsu in giù";
+            Context.Announces.Add( announce );
+
+            var announceCategory1 = new AnnounceCategory {
+                Announce = announce,
+                Category = Context.Categories.Single( a => a.Name.Equals( "Libri" ) )
+            };
+            var announceCategory11 = new AnnounceCategory {
+                Announce = announce,
+                Category = Context.Categories.Single( a => a.Name.Equals( "Musica" ) )
+            };
+            var announceCategory12 = new AnnounceCategory {
+                Announce = announce,
+                Category = Context.Categories.Single( a => a.Name.Equals( "Videogiochi" ) )
+            };
+            Context.AnnounceCategories.Add( announceCategory1 );
+            Context.AnnounceCategories.Add( announceCategory11 );
+            Context.AnnounceCategories.Add( announceCategory12 );
+            Context.SaveChanges();
+
+            var announce2 = new Announce();
+            var usr2 = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+            announce2.Author = usr2;
+            announce2.Title = "Halo 5 Usato";
+            announce2.Description = "Guardiani ovunque";
+            Context.Announces.Add( announce2 );
+
+            var announceCategory2 = new AnnounceCategory {
+                Announce = announce2,
+                Category = Context.Categories.Single( a => a.Name.Equals( "Videogiochi" ) )
+            };
+            Context.AnnounceCategories.Add( announceCategory2 );
+            Context.SaveChanges();
+        }
+    }
 }

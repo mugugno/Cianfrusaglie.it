@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
@@ -16,9 +17,8 @@ namespace Cianfrusaglie.Controllers
         }
 
         // GET: Messages
-        public IActionResult Index()
-        {
-            return View(_context.Messages.ToList());
+        public IActionResult Index(){
+            return View( _context.Messages.Where( u => u.Receiver.Id == User.GetUserId() ).ToList() );
         }
 
         // GET: Messages/Details/5
