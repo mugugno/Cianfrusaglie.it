@@ -26,7 +26,7 @@ namespace Cianfrusaglie.Controllers {
          return messages;
       }
 
-      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
+      public IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
          var userWitchIHaveMessaged = usr.SentMessages?.Select( m => m.Receiver ) ?? new List<User>();
          var userThatSendedMeMessage = usr.ReceivedMessages?.Select( m => m.Sender ) ?? new List<User>();

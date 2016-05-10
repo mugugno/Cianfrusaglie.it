@@ -29,6 +29,8 @@ namespace Cianfrusaglie.Tests {
         protected readonly UserManager< User > UserManager;
         protected SignInManager< User > SignInManager;
 
+        public string ThirdUserName { get; private set; }
+
         protected BaseTestSetup() {
             var services = new ServiceCollection();
             services.AddEntityFramework().AddInMemoryDatabase().AddDbContext< ApplicationDbContext >(
@@ -89,6 +91,10 @@ namespace Cianfrusaglie.Tests {
             var result =
                 UserManager.CreateAsync( new User {UserName = SecondUserName, Email = "pippo2@gmail.com"},
                     registerViewModel.Password ).Result;
+            var result2ForTest = 
+                UserManager.CreateAsync(new User { UserName = ThirdUserName, Email = "pippo3@gmail.com" },
+                    registerViewModel.Password).Result;
+
         }
 
         private void CreateCategories() { Context.EnsureSeedData(); }
