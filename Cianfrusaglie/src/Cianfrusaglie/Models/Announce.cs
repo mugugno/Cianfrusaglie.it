@@ -14,7 +14,7 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public virtual Nullable<DateTime> DeadLine { get; set; }
 
-      [Required, MinLength( 3 ), MaxLength( 50 )]
+      [Required, MinLength( 3 ), MaxLength( 80 )]
       public virtual string Title { get; set; }
 
       [MaxLength( 255 )]
