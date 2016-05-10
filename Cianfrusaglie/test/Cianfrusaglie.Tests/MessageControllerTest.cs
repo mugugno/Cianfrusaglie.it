@@ -81,6 +81,7 @@ namespace Cianfrusaglie.Tests
 
         //TODO DETAILS, visualizzazione della conversazione tra due user
         //la view è andata a buon fine
+        [Fact]
         public void CorrectViewOfConversationBetweenTwoUsers()
         {
             //tiro su l'utente dal database cone quello username
@@ -96,11 +97,14 @@ namespace Cianfrusaglie.Tests
             var result = messageController.Details(usr.Id);
 
             //test 
-            Assert.IsType<RedirectToActionResult>(result);
+            Assert.IsType<ViewResult>(result);
             //Assert.IsNotType<BadRequestResult>(result);
 
         }
+
+
         //la view non è andata a buon fine
+        [Fact]
         public void NotCorrectViewOfConversationBetweenTwoUsers()
         {
             //tiro su l'utente dal database cone quello username
