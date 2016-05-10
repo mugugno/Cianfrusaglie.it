@@ -10,6 +10,7 @@ using Xunit;
 
 namespace Cianfrusaglie.Tests {
    public class SearchControllerTests : BaseTestSetup {
+
       protected SearchController CreateResearchController( string id, string userName ) {
          var mockHttpContext = new Mock< HttpContext >();
          mockHttpContext.SetupAllProperties();

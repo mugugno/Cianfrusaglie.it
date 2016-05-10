@@ -1,56 +1,55 @@
 ﻿using System.Linq;
+using System.Security.Claims;
+using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels.Account;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Moq;
 using Xunit;
 
 namespace Cianfrusaglie.Tests {
    public class AnnounceTest : BaseTestSetup {
-      [Fact]
-      public async void UserTriesToDeleteAnnounceOfOthers() {
+
+        protected AnnouncesController CreateAnnounceController(string id, string userName)
+        {
+            var mockHttpContext = new Mock<HttpContext>();
+            if (id == null || userName == null)
+                return new AnnouncesController(Context);
+            var validPrincipal =
+               new ClaimsPrincipal(new[] { new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, id) }) });
+            mockHttpContext.Setup(h => h.User).Returns(validPrincipal);
+            return new AnnouncesController(Context)
+            {
+                ActionContext = new ActionContext { HttpContext = mockHttpContext.Object },
+                Url = new Mock<IUrlHelper>().Object
+            };
+        }
+
+        [Fact]
+      public void UserTriesToDeleteAnnounceOfOthers() {
          var announce = Context.Announces.Single( a => a.Author.UserName.Equals( SecondUserName ) );
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         string id = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) ).Id;
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( id, loginViewModel.UserName );
+         string id = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) ).Id;
+         var announceController = CreateAnnounceController( id, FirstUserName );
          announce.Description = "Ho cambiato qualcosa";
          var res = announceController.DeleteConfirmed( announce.Id );
          Assert.IsType< BadRequestResult >( res );
       }
 
       [Fact]
-      public async void UserTriesToEditAnnounceOfOthers() {
+      public void UserTriesToEditAnnounceOfOthers() {
          var announce = Context.Announces.Single( a => a.Author.UserName.Equals( SecondUserName ) );
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         string id = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) ).Id;
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( id, loginViewModel.UserName );
+         string id = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) ).Id;
+         var announceController = CreateAnnounceController( id, FirstUserName);
          announce.Description = "Ho cambiato qualcosa";
          var res = announceController.Edit( announce );
          Assert.IsType< BadRequestResult >( res );
       }
 
       [Fact]
-      public async void UserDeletesHisAnnounces() {
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+      public void UserDeletesHisAnnounces() {
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName);
          var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
          var res = announceController.DeleteConfirmed( announce.Id );
          Assert.DoesNotContain( announce, Context.Announces );
@@ -58,40 +57,23 @@ namespace Cianfrusaglie.Tests {
       }
 
       [Fact]
-      public async void CorrectInsertionIsOk() {
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
-
+      public void CorrectInsertionIsOk() {
+         var usr = Context.Users.Single( u => u.UserName.Equals(FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName);
          var announce = new Announce {
             Author = usr,
             Title = "Un annuncio bello bello",
             Description = "Sono bello"
          };
          var res = announceController.Create( announce );
-
-
          Assert.Contains( announce, Context.Announces );
          Assert.IsNotType< BadRequestResult >( res );
       }
 
       [Fact]
-      public async void UserEditsHisAnnounce() {
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+      public void UserEditsHisAnnounce() {
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName);
          var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
          string old = announce.Description;
          announce.Description += "Ho cambiato la descriozne ahahah";
@@ -129,16 +111,9 @@ namespace Cianfrusaglie.Tests {
       }
 
       [Fact]
-      public async void UserTriesToDeleteAlreadyDeletedAnnounce() {
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+      public void UserTriesToDeleteAlreadyDeletedAnnounce() {
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName );
          var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
          announceController.DeleteConfirmed( announce.Id );
 
@@ -147,49 +122,28 @@ namespace Cianfrusaglie.Tests {
       }
 
       [Fact]
-      public async void RequestingExistingAnnounceIsCorrectlyVisualized() {
+      public void RequestingExistingAnnounceIsCorrectlyVisualized() {
          var announce = Context.Announces.First();
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName );
          var res = announceController.Details( announce.Id );
          Assert.IsNotType< BadRequestResult >( res );
       }
 
       [Fact]
-      public async void RequestingExistingAnnounceIsCorrectlyVisualizedForEdit() {
+      public void RequestingExistingAnnounceIsCorrectlyVisualizedForEdit() {
          var announce = Context.Announces.First();
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName );
          var res = announceController.Edit( announce.Id );
          Assert.IsNotType< BadRequestResult >( res );
       }
 
       [Fact]
-      public async void RequestingExistingAnnounceIsCorrectlyVisualizedForDelete() {
+      public void RequestingExistingAnnounceIsCorrectlyVisualizedForDelete() {
          var announce = Context.Announces.First();
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName );
          var res = announceController.Delete( announce.Id );
          Assert.IsNotType< BadRequestResult >( res );
       }
@@ -202,31 +156,17 @@ namespace Cianfrusaglie.Tests {
       }
 
       [Fact]
-      public async void RequestNotExistingAnnounceForEdit() {
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+      public void RequestNotExistingAnnounceForEdit() {
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName);
          var res = announceController.Edit( 20 );
          Assert.IsType< HttpNotFoundResult >( res );
       }
 
       [Fact]
-      public async void RequestNotExistingAnnounceForDelete() {
-         var loginViewModel = new LoginViewModel {
-            Password = CommonUserPassword,
-            RememberMe = true,
-            UserName = FirstUserName
-         };
-         var usr = Context.Users.Single( u => u.UserName.Equals( loginViewModel.UserName ) );
-         var accountController = CreateAccountController();
-         await accountController.Login( loginViewModel );
-         var announceController = CreateAnnounceController( usr.Id, loginViewModel.UserName );
+      public void RequestNotExistingAnnounceForDelete() {
+         var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var announceController = CreateAnnounceController( usr.Id, FirstUserName );
          var res = announceController.Delete( 20 );
          Assert.IsType< HttpNotFoundResult >( res );
       }

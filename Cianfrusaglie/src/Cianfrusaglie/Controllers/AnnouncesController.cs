@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Data.Entity;
 using Cianfrusaglie.Models;
-using Microsoft.AspNet.Identity;
 using System.Security.Claims;
+using Cianfrusaglie.Statics;
+
 namespace Cianfrusaglie.Controllers
 {
     public class AnnouncesController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public AnnouncesController(ApplicationDbContext context)
         {
@@ -34,7 +33,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.SingleOrDefault(m => m.Id == id);
+            var announce = _context.Announces.SingleOrDefault(m => m.Id == id);
             if (announce == null)
             {
                 return HttpNotFound();
@@ -66,7 +65,7 @@ namespace Cianfrusaglie.Controllers
         public IActionResult Create(Announce announce)
         {
             //TODO: Aggiungere i campi della risposta di errore.
-            if (User == null)
+            if (!LoginChecker.HasLoggedUser( this ))
                 return HttpBadRequest();
             var idlogged = User.GetUserId();
             announce.Author = _context.Users.First(u => u.Id.Equals(idlogged));
@@ -101,7 +100,7 @@ namespace Cianfrusaglie.Controllers
         public IActionResult Edit(Announce announce)
         {
             //TODO: Aggiungere i campi della risposta di errore.
-            if (User == null)
+            if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
             if (!User.GetUserId().Equals(announce.Author.Id))
             {
@@ -143,7 +142,7 @@ namespace Cianfrusaglie.Controllers
             if(announce == null)
                 return HttpBadRequest();
             //TODO: Aggiungere i campi della risposta di errore.
-            if (User == null)
+            if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
             if (!User.GetUserId().Equals(announce.Author.Id))
                 return HttpBadRequest();
