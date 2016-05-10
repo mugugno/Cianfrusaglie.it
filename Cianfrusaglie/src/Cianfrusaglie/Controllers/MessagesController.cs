@@ -26,6 +26,9 @@ namespace Cianfrusaglie.Controllers {
 
       // GET: Messages/Details/5
       public IActionResult Details( string id ) {
+         if( User == null )
+            return HttpBadRequest();
+
          if( id == null )
             return HttpNotFound();
 
