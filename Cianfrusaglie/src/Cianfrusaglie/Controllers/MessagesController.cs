@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNet.Mvc;
@@ -9,19 +11,35 @@ namespace Cianfrusaglie.Controllers {
 
       public MessagesController( ApplicationDbContext context ) { _context = context; }
 
+      protected IEnumerable< Message > ShowLoggedUsersMessagesWithUser( string id ) {
+         if( id == null )
+            throw new ArgumentNullException();
+
+         var messages =
+            _context.Messages.Where(
+               m =>
+                  ( m.Sender.Id == User.GetUserId() && m.Receiver.Id == id ) ||
+                  ( m.Receiver.Id == User.GetUserId() && m.Sender.Id == id ) );
+
+         return messages;
+      }
+
+      protected IEnumerable< User > ShowLoggedUsersConversationsUsers() {
+         var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
+         var userWitchIHaveMessaged = usr.SentMessages?.Select( m => m.Receiver ) ?? new List<User>();
+         var userThatSendedMeMessage = usr.ReceivedMessages?.Select( m => m.Sender ) ?? new List<User>();
+
+         var users = userWitchIHaveMessaged.Union( userThatSendedMeMessage ).Distinct();
+         return users;
+      }
+
       //tutti gli utenti con cui l'utente loggato ha messaggiato
       // GET: Messages
       public IActionResult Index() {
          if( User == null )
             return HttpBadRequest();
 
-         var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
-         var userWitchIHaveMessaged = usr.SentMessages.Select( m => m.Receiver );
-         var userThatSendedMeMessage = usr.ReceivedMessages.Select( m => m.Sender );
-
-         var users = userWitchIHaveMessaged.Union( userThatSendedMeMessage ).Distinct();
-
-         return View( users.ToList() );
+         return View( ShowLoggedUsersConversationsUsers().ToList() );
       }
 
       // GET: Messages/Details/5
@@ -32,13 +50,7 @@ namespace Cianfrusaglie.Controllers {
          if( id == null )
             return HttpNotFound();
 
-         var messages =
-            _context.Messages.Where(
-               m =>
-                  ( m.Sender.Id == User.GetUserId() && m.Receiver.Id == id ) ||
-                  ( m.Receiver.Id == User.GetUserId() && m.Sender.Id == id ) );
-
-         return View( messages.ToList() );
+         return View( ShowLoggedUsersMessagesWithUser( id ).ToList() );
       }
 
       // GET: Messages/Create
