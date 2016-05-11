@@ -55,8 +55,11 @@ namespace Cianfrusaglie.Controllers {
          if( id == null )
             return HttpNotFound();
 
-         if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
+         var otherUser = _context.Users.SingleOrDefault( u => u.Id == id );
+         if( otherUser == null )
             return HttpNotFound();
+
+         ViewData[ "otherUser" ] = otherUser;
 
          return View( GetLoggedUsersMessagesWithUser( id ).ToList() );
       }
@@ -68,6 +71,9 @@ namespace Cianfrusaglie.Controllers {
             return HttpBadRequest();
 
          if( id == null )
+            return HttpNotFound();
+
+         if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
             return HttpNotFound();
 
          ViewData[ "receiverId" ] = id;

@@ -1,4 +1,7 @@
-@model Cianfrusaglie.Models.Message
+@using System.Collections.Generic
+@using System.Security.Claims
+@using System.Threading.Tasks
+@model System.Collections.Generic.IEnumerable<Cianfrusaglie.Models.Message>
 
 @{
     ViewData["Title"] = "Details";
@@ -9,22 +12,22 @@
 <div>
     <h4>Message</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.DateTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Text)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-    </dl>
+    @{
+        var otherUser = ViewData[ "otherUser" ] as User;
+        foreach( var m in Model ) {
+            <div> @if( m.Receiver.Id.Equals( User.GetUserId() ) ) {
+                      <span> <h3> Inviato da: @otherUser.UserName </h3> </span>
+                  } else {
+                      <span> <h3> Inviato da: Me </h3> </span>
+                  }
+            </div>
+            <div>
+                <h4> @m.Text </h4>
+            
+            </div>
+        }
+    }
 </div>
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </p>
