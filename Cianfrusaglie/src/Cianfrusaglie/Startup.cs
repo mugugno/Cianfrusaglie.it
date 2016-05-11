@@ -1,4 +1,5 @@
-﻿using Cianfrusaglie.Models;
+﻿using System;
+using Cianfrusaglie.Models;
 using Cianfrusaglie.Services;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -44,8 +45,14 @@ namespace Cianfrusaglie {
 
          services.AddMvc();
 
-         // Add application services.
-         services.AddTransient< IEmailSender, AuthMessageSender >();
+         services.AddCaching();
+         services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.CookieName = ".MyApplication";
+            });
+
+            // Add application services.
+            services.AddTransient< IEmailSender, AuthMessageSender >();
          services.AddTransient< ISmsSender, AuthMessageSender >();
       }
 
@@ -55,6 +62,7 @@ namespace Cianfrusaglie {
          loggerFactory.AddDebug();
 
          app.UseApplicationInsightsRequestTelemetry();
+         app.UseSession();
 
          if( env.IsDevelopment() ) {
             app.UseBrowserLink();
