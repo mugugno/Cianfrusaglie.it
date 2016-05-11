@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
+using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
@@ -96,7 +98,7 @@ namespace Cianfrusaglie.Tests
 
         //i messaggi estratti non sono vuoti
         [Fact]
-        public void NotCorrectViewOfConversationBetweenTwoUsers()
+        public void CorrectViewOfConversationBetweenTwoUsers()
         {
             //tiro su l'utente dal database cone quello username
             var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
@@ -114,6 +116,49 @@ namespace Cianfrusaglie.Tests
             Assert.IsType<ViewResult>(result);
         }
 
+
+        //Test dove si verifica che i dati estratti sono quelli corretti
+        [Fact]
+        public void TestGetConversationBetweenUser()
+        {
+            //creo delle conversazioni tra 2 utenti e controllo che ci siano
+            var userTest1 = Context.Users.Single(u => u.UserName == FirstUserName);
+            var userTest2 = Context.Users.Single(u => u.UserName == SecondUserName); 
+            var userTest3 = Context.Users.Single(u => u.UserName == ThirdUserName); ;
+
+            //creo messaggio tra user 1 e user 2
+            var messageTest1 = new Message
+            {
+                Receiver = userTest2,
+                Sender = userTest1   
+            };
+
+            //creo messaggio tra user 1 e user 2
+            var messageTest2 = new Message
+            {
+                Receiver = userTest3,
+                Sender = userTest1
+            };
+            // var result = Context.Messages.Where( m => m.Sender == userTest1);
+            //create the messageController
+            var messageController = CreateMessageController(userTest1.Id, userTest1.UserName);
+
+
+            //test 
+            //inserisco in un hash set una lista dei messaggi che ho creato
+            HashSet< Message > testResult = new HashSet<Message>
+            {
+                messageTest1,
+                messageTest2,
+            };
+            //funzione da testare
+            var userTest = messageController.GetLoggedUsersConversationsUsers();
+            Assert.();
+
+            Assert.IsType<ViewResult>(result);
+        }
+
+
         //TODO INVIO MESSAGGIO(creazione)
         //io lo invio A un utente che non esiste
         public void SendMessageToUserThatNotExist()
@@ -129,7 +174,7 @@ namespace Cianfrusaglie.Tests
             var messageController = CreateMessageController(usr.Id, usr.UserName);
 
             //dato l'utente, invio il suo messaggio a un utente che non esiste
-            var result = messageController.Create();
+            //var result = messageController.Create();
 
             //controllo che 
             Assert.IsType<BadRequestResult>(result);
