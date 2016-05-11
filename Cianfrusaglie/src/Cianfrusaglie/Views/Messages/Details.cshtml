@@ -1,4 +1,8 @@
-@model Cianfrusaglie.Models.Message
+@using System.Collections.Generic
+@using System.Security.Claims
+@using System.Threading.Tasks
+@using Microsoft.AspNet.Mvc
+@model Cianfrusaglie.ViewModels.MessageCreateViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -9,22 +13,43 @@
 <div>
     <h4>Message</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.DateTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Text)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-    </dl>
+    @{
+       var otherUser = ViewData[ "otherUser" ] as User;
+       foreach( var m in (IEnumerable<Message>) ViewData["messages"] ) {
+        <div>
+            <span> @m.DateTime <span style="font-size: 1.5em; font-weight: bold;">
+                    Inviato da:
+                    @if( m.Receiver.Id.Equals( User.GetUserId() ) ) {
+                        <span> @otherUser.UserName </span>
+                    } else {
+                    <span> Me </span>
+                    }
+                </span> </span>
+        </div>
+            <div>
+                <h4> @m.Text </h4>
+            </div>
+        }
+    }
+
+    <form asp-action="Create" asp-controller="Messages" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
+
+        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Text" class="control-label">Messaggio</label><br />
+            <input asp-for="Text" class="form-control" />
+            <span asp-validation-for="Text" class="text-danger"></span>
+
+            <input asp-for="ReceiverId" type="hidden" value="@ViewData[ "receiverId" ]" class="form-control" />
+
+            <button class="btn btn-default" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
 </div>
+
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </p>

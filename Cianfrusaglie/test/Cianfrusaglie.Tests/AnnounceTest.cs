@@ -64,7 +64,7 @@ namespace Cianfrusaglie.Tests
          };
          var announceViewModel = new CreateAnnounceViewModel() {Title = announce.Title, Description = announce.Description};
          var res = announceController.Create( announceViewModel );
-         Assert.Contains( announce, Context.Announces );
+         Assert.True(Context.Announces.Any(a => a.Author.Equals(usr) && a.Title.Equals( announce.Title ) && a.Description.Equals( announce.Description )) );
          Assert.IsNotType< BadRequestResult >( res );
       }
 
