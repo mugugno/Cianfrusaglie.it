@@ -62,8 +62,10 @@ namespace Cianfrusaglie.Controllers {
             return HttpNotFound();
 
          ViewData[ "otherUser" ] = otherUser;
+         ViewData[ "messages" ] = GetLoggedUsersMessagesWithUser( id ).ToList();
+         ViewData[ "receiverId" ] = id;
 
-         return View( GetLoggedUsersMessagesWithUser( id ).ToList() );
+         return View();
       }
 
       // inviare un messaggio all'utente con id = id
@@ -84,25 +86,25 @@ namespace Cianfrusaglie.Controllers {
 
       // POST: Messages/Create
       [HttpPost, ValidateAntiForgeryToken]
-      public IActionResult Create( MessageViewModel message ) {
+      public IActionResult Create( MessageCreateViewModel messageCreate ) {
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
 
-         if( message == null )
+         if( messageCreate == null )
             return HttpBadRequest();
 
          if( ModelState.IsValid ) {
             var loggedUsr = _context.Users.Single( u => u.Id == User.GetUserId() );
-            var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == message.ReceiverId );
+            var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == messageCreate.ReceiverId );
 
             if( receiverUsr == null )
                return HttpBadRequest(); //id utente non valido
 
-            _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = message.Text, DateTime = DateTime.Now} );
+            _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = messageCreate.Text, DateTime = DateTime.Now} );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
          }
-         return View( message );
+         return View( messageCreate );
       }
 
       // GET: Messages/Delete/5

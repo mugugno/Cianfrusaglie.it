@@ -2,7 +2,7 @@
 using Cianfrusaglie.Models;
 
 namespace Cianfrusaglie.ViewModels {
-   public class MessageViewModel {
+   public class MessageCreateViewModel {
        [Required]
        public string Text { get; set; }
 
