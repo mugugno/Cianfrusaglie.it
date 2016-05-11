@@ -6,15 +6,14 @@ using Microsoft.AspNet.Mvc;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
-using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Controllers {
-   public class MessagesController : Controller {
+   public partial class MessagesController : Controller {
       private readonly ApplicationDbContext _context;
 
       public MessagesController( ApplicationDbContext context ) { _context = context; }
 
-      protected IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
+      public IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
          if( id == null )
             throw new ArgumentNullException();
 
@@ -28,7 +27,7 @@ namespace Cianfrusaglie.Controllers {
       }
 
 
-      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
+      public IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var userThatSendedMeAMessage =
             _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
          var userThatISentAMessage =
@@ -64,6 +63,7 @@ namespace Cianfrusaglie.Controllers {
       }
 
       // inviare un messaggio all'utente con id = id
+      //ritorna la view del receiver
       // GET: Messages/Create
       public IActionResult Create( string id ) {
          if( !LoginChecker.HasLoggedUser( this ) )
@@ -92,7 +92,14 @@ namespace Cianfrusaglie.Controllers {
             if( receiverUsr == null )
                return HttpBadRequest(); //id utente non valido
 
-            _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = message.Text, DateTime = DateTime.Now} );
+            _context.Messages.Add( 
+                new Message()
+                {
+                    Sender = loggedUsr,
+                    Receiver = receiverUsr,
+                    Text = message.Text,
+                    DateTime = DateTime.Now
+                } );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
          }
