@@ -29,6 +29,17 @@ namespace Cianfrusaglie.Controllers {
             if( announce == null ) {
                 return HttpNotFound();
             }
+            var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where(af => af.AnnounceId == id).ToList();
+            List<FormField> formFields = new List<FormField>();
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            foreach (var f in announceFormFieldsvalues)
+            {
+                var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
+                dictionary.Add(f.Value,formField.Name);
+            }
+
+            ViewData["formFieldsValue"] = dictionary;
+
 
             return View( announce );
         }
