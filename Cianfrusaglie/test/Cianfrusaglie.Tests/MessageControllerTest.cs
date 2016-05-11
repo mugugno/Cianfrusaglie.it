@@ -152,7 +152,7 @@ namespace Cianfrusaglie.Tests
             //risultato
             var result = messageController.Delete(null);
             //test
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<HttpNotFoundResult>(result);
         }
     
         //Test dove elimino un utente e non va a buon fine perchè l'id è null
