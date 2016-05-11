@@ -28,7 +28,7 @@ namespace Cianfrusaglie.Models {
       public virtual double Longitude { get; set; }
 
       [Range( 0, int.MaxValue )]
-      public virtual int MeterRange { get; set; } //TODO in metri?!
+      public virtual int MeterRange { get; set; } // in kilometri
 
       /// <summary>
       /// se = 0 è una donazione o un baratto
