@@ -44,7 +44,7 @@
     }
 
 }
-<form asp-action="Create" asp-controller="Announces" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
+<form asp-action="Create" asp-controller="Announces" class="" method="post" role="form" id="tabellaForm">
     <nav class="navbar navbar-default" data-spy="affix" data-offset-top="60" id="announce-navbar" style="z-index: 15">
         <div class="panel panel-default" style="margin-left: -15px">
             <div class="col-md-3">
@@ -77,7 +77,7 @@
                                                 {
                                                     <div class="checkbox">
                                                         <label asp-for="CategoryDictionary [ category.Id ]"  for="@category.Id">
-                                                            <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" value="true" onchange="setFieldsVisibility();" />
+                                                            <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
                                                             @category.Name
                                                         </label>
                                                     </div>
@@ -122,7 +122,7 @@
                         <div class="panel-body">
                             <fieldset>
 
-                                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                                @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
                                 <!-- Text input-->
                                 <div class="form-group" >
@@ -138,7 +138,7 @@
                                     <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
                                     <div class="col-md-7" >
                                         <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
-                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                        @*<span asp-validation-for="Description" class="text-danger"></span>*@
                                     </div>
                                 </div>
 
@@ -152,7 +152,7 @@
                                             </span>
                                             <input asp-for="Range" id="range-input" name="range-input" class="form-control" type="number" placeholder="di quanti km?" >
                                         </div>
-                                        <span asp-validation-for="Range" class="text-danger"></span>
+                                        @*<span asp-validation-for="Range" class="text-danger"></span>*@
                                     </div>
                                 </div>
 
@@ -180,6 +180,7 @@
         document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
         document.getElementById("range-checkbox").checked = true;
         document.getElementById("range-input").value = 1;
+        setFieldsVisibility();
 
         function setFieldsVisibility() {
             var checkboxesArray = document.getElementsByClassName("category-checkboxes");
@@ -196,24 +197,25 @@
             }
         }
 
+        
+
         // 500 sono i millisecondi di durata della transizione
         var transitionTime = 350;
         function clickForwardButton() {
             if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
                 document.getElementById("forward-button").setAttribute("type","submit");
             }
+            else document.getElementById("forward-button").innerHTML = "Pubblica";
             $('#page1').hide(transitionTime);
             $('#page2').show(transitionTime);
-            $('#back-button').show(0);
-            document.getElementById("forward-button").innerHTML = "Pubblica";
-            
+            $('#back-button').show(0);    
         }
         function clickBackButton() {
             $('#page1').show(transitionTime);
             $('#page2').hide(transitionTime);
             $('#back-button').hide(0);
             document.getElementById("forward-button").innerHTML = "Avanti";
-            document.getElementById("forward-button").removeAttribute("type");
+            document.getElementById("forward-button").setAttribute("type", "button");
         }
         function clickRangeButton() {
             var checkbox = document.getElementById("range-checkbox");
