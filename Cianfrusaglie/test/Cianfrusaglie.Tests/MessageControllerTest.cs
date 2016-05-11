@@ -19,18 +19,9 @@ namespace Cianfrusaglie.Tests
         protected MessagesController CreateMessageController(string userId, string userName)
         {
             //create the mockObject
-            var mockHttpContext = new Mock<HttpContext>();
-            //invoce this function to setup this properties
-            mockHttpContext.SetupAllProperties();
-
-            if (userId == null || userName == null)
-                return new MessagesController(Context);
-            var validPrincipal =
-                new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, userId)})});
-            mockHttpContext.Setup(h => h.User).Returns(validPrincipal);
             return new MessagesController(Context)
             {
-                ActionContext = new ActionContext {HttpContext = mockHttpContext.Object},
+                ActionContext = MockActionContextForLogin(userId),
                 Url = new Mock<IUrlHelper>().Object
             };
         }
@@ -104,28 +95,6 @@ namespace Cianfrusaglie.Tests
 
         }
 
-
-        //i messaggi estratti non sono vuoti
-        [Fact]
-        public void CorrectViewOfConversationBetweenTwoUsers()
-        {
-            //tiro su l'utente dal database cone quello username
-            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
-
-            //query per prendere id del secondo utente
-            var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
-
-            //create the messageController
-            var messageController = CreateMessageController(usr.Id, usr.UserName);
-
-            //dato l'utente, visualizzo tutti i suoi messaggi
-            var result = messageController.Details(secondUsr.Id);
-
-            //test 
-            Assert.IsType<ViewResult>(result);
-        }
-
-
         //Test dove si verifica che i dati estratti sono quelli corretti
         [Fact]
         public void TestGetConversationBetweenUser()
@@ -153,7 +122,7 @@ namespace Cianfrusaglie.Tests
             var messageController = CreateMessageController(userTest1.Id, userTest1.UserName);
 
 
-            //test
+            //test 
             //inserisco in un hash set una lista dei messaggi che ho creato
             HashSet< Message > testResult = new HashSet<Message>
             {
@@ -161,9 +130,9 @@ namespace Cianfrusaglie.Tests
                 messageTest2,
             };
             //funzione da testare
-            var userTest = messageController.GetLoggedUsersConversationsUsers();
-            Assert.();
+            //var userTest = messageController.GetLoggedUsersConversationsUsers();
 
+            //Assert.IsType<ViewResult>(result);
         }
 
 
@@ -185,7 +154,7 @@ namespace Cianfrusaglie.Tests
             //var result = messageController.Create();
 
             //controllo che 
-            Assert.IsType<BadRequestResult>(result);
+            //Assert.IsType<BadRequestResult>(result);
         }
 
         //io lo invio all'utente giusto

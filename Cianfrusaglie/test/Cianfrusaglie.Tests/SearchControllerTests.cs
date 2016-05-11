@@ -12,16 +12,9 @@ namespace Cianfrusaglie.Tests {
    public class SearchControllerTests : BaseTestSetup {
 
       protected SearchController CreateResearchController( string id, string userName ) {
-         var mockHttpContext = new Mock< HttpContext >();
-         mockHttpContext.SetupAllProperties();
-         if( id == null || userName == null )
-            return new SearchController( Context );
-         var validPrincipal =
-            new ClaimsPrincipal( new[] {new ClaimsIdentity( new[] {new Claim( ClaimTypes.NameIdentifier, id )} )} );
-         mockHttpContext.Setup( h => h.User ).Returns( validPrincipal );
          return new SearchController( Context ) {
-            ActionContext = new ActionContext {HttpContext = mockHttpContext.Object},
-            Url = new Mock< IUrlHelper >().Object
+             ActionContext = MockActionContextForLogin(id),
+             Url = new Mock<IUrlHelper>().Object
          };
       }
 
