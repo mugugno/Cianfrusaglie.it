@@ -55,7 +55,7 @@
                         @foreach (var macro in GetCategories())
                         {
                             <li>
-                                <a href="~/Search/CategoryBasedSearch/@macro">@macro.Name</a>
+                                <a href="~/Search?categories=@macro.Id">@macro.Name</a>
                                 @if (GetSubCategories(@macro.Name).ToList().Count > 0)
                                 {
                                     <ul class="dropdown-menu sub-menu">
@@ -110,24 +110,6 @@
             </ul>
         </div>
     </nav>
-
-    <div class="modal fade" id="myWindow" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Non sei registrato</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Registati o effettua login per utilizzare il nostro sito.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
     <div class="container-fluid" id="containerPrincipale">
         <div id="homeCarousel" class="carousel slide" data-ride="carousel">
@@ -207,34 +189,76 @@
         <hr/>
 
         <div class="container">
-            <div id="vetrinaAnnunci" class="row">
+
+
+            <div class="row">
+
                 @foreach (var annuncio in GetAnnounce())
-                {
-                    <div class="panel-group col-sm-2" id="panelAnnunci">
-                        <div class="panel panel-default">
-                            <div class="panel-heading thumbnail">
-                                <a class="panel-title" data-toggle="collapse" data-parent="#panelAnnunci"><img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img thumbnail" /></a>
+            {
+                    <div class="col-sm-4 col-md-3">
+                        <div class="col-item">
+                            <div class="photo">
+                                <img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img-responsive" alt="a" />
                             </div>
-                            <div class="panel-collapse collapse in">
-                                <div class="panel-body">
-                                    <h3><a href="#" data-toggle="modal" data-target="#myWindow">@annuncio.Title</a></h3>
-                                    @if (@annuncio.Price == 0)
+                            <div class="info">
+                                <div class="row">
+                                    <div class="price col-md-6">
+                                        <h5>
+                                            @annuncio.Title
+                                        </h5>
+                                        @if (@annuncio.Price == 0)
+                                        {
+                                            <h5 class="price-text-color">IN REGALO</h5>
+                                        }
+                                        else
+                                        {
+                                            <h5 class="price-text-color">Prezzo: @annuncio.Price</h5>
+                                        }
+                                    </div>
+                                    @if (User.Identity.IsAuthenticated)
                                     {
-                                        <h5>IN REGALO</h5>
+                                        <div class="rating hidden-sm col-md-6">
+                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
+                                            </i><i class="fa fa-star"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="separator clear-left">
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i>
+                                            <a href="#" data-toggle="modal" data-target="#myWindow" class="">Dettagli</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
+                                        </p>
                                     }
                                     else
                                     {
-                                        <h5>Prezzo: @annuncio.Price</h5>
+                                        <p class="btn-add">
+                                            <i class="fa fa-shopping-cart"></i>
+                                            <a href="#" class="">Dettagli</a>
+                                        </p>
+                                        <p class="btn-details">
+                                            <i class="fa fa-list"></i><a href="#" class="">Contatta</a>
+                                        </p>
                                     }
                                 </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>
                 }
-            </div>
-            </div>
 
-      </div>
+            </div>
+        </div>
+
+        
+
+
+    </div>
 </div>
 
 

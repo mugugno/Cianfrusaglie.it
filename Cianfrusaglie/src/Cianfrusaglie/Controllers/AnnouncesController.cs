@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -79,6 +80,7 @@ namespace Cianfrusaglie.Controllers {
                 string idlogged = User.GetUserId();
                 User author = _context.Users.First( u => u.Id.Equals( idlogged ) );
                 var newAnnounce = new Announce {
+                    PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
                     MeterRange = model.Range,
