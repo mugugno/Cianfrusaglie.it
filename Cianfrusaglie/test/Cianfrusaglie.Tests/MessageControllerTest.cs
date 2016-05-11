@@ -152,7 +152,7 @@ namespace Cianfrusaglie.Tests
             //risultato
             var result = messageController.Delete(null);
             //test
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<HttpNotFoundResult>(result);
         }
     
         //Test dove elimino un utente e non va a buon fine perchè l'id è null
@@ -208,7 +208,7 @@ namespace Cianfrusaglie.Tests
 
             //funzione da testare
             var userTest = messageController.GetLoggedUsersMessagesWithUser(userTest2.Id).ToList();
-           
+
             Assert.Contains( messageTest1, userTest);
             Assert.DoesNotContain( messageTest2, userTest );
         }
@@ -229,7 +229,7 @@ namespace Cianfrusaglie.Tests
 
 
             //creo il ViewModel del messaggio
-            var MessageCreateViewModel = new MessageCreateViewModel()
+            var messageViewModel = new MessageCreateViewModel()
             {
                 ReceiverId = "5098",
                 Text = "IO TE LO STO INVIANDO MA INTANTO NON ESISTI"
@@ -240,7 +240,7 @@ namespace Cianfrusaglie.Tests
             var messageController = CreateMessageController( usr.Id, usr.UserName );
 
             //dato l'utente, invio il suo messaggio a un utente che non esiste
-            var result = messageController.Create(MessageCreateViewModel);
+            var result = messageController.Create(messageViewModel);
 
             //controllo che dia una badRequest 
             Assert.IsType<BadRequestResult>(result);
@@ -253,14 +253,14 @@ namespace Cianfrusaglie.Tests
             var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var receiver = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
             var messagesController = CreateMessageController( user.Id, user.UserName );
-            var MessageCreateViewModel = new MessageCreateViewModel() { ReceiverId = receiver.Id,Text = "Ah ciao sono Sio e ti regalo un drago."};
-            var result = messagesController.Create( MessageCreateViewModel );
+            var messageViewModel = new MessageCreateViewModel() { ReceiverId = receiver.Id,Text = "Ah ciao sono Sio e ti regalo un drago."};
+            var result = messagesController.Create( messageViewModel );
             Assert.IsNotType<BadRequestResult>( result );
             var messages = Context.Messages.Where( m => m.Receiver.Id.Equals( receiver.Id ) );
             Assert.Single( messages,
                 m =>
                     m.Sender.Id.Equals( user.Id ) && m.Receiver.Id.Equals( receiver.Id ) &&
-                    m.Text.Equals( MessageCreateViewModel.Text ) );
+                    m.Text.Equals( messageViewModel.Text ) );
         }
 
         [Fact]

@@ -30,9 +30,9 @@ namespace Cianfrusaglie.Controllers {
 
       protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var userThatSendedMeAMessage =
-            _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
+            _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Receiver ).ToList();
          var userThatISentAMessage =
-            _context.Messages.Where( u => u.Receiver.Id.Equals( User.GetUserId() ) ).Select( u => u.Receiver ).ToList();
+            _context.Messages.Where( u => u.Receiver.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
 
 
          userThatSendedMeAMessage.AddRange( userThatISentAMessage );
@@ -113,7 +113,7 @@ namespace Cianfrusaglie.Controllers {
          if( id == null )
             return HttpNotFound();
 
-         var message = _context.Messages.Single( m => m.Id == id );
+         var message = _context.Messages.SingleOrDefault( m => m.Id == id );
          if( message == null )
             return HttpNotFound();
 
