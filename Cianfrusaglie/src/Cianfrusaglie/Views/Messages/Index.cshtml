@@ -8,24 +8,14 @@
 
 <h2>Index</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <tr>
-        <th>
-            
-        </th>
-        <th></th>
-    </tr>
-    
+<table>    
 @foreach (var item in Model) {
     <tr>
         <td>
             <a asp-action="Details" asp-route-id="@item.Id"> @item.UserName </a>
         </td>
         <td>
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <a asp-action="Delete" style="margin-left: 100px" asp-route-id="@item.Id">Delete</a>
         </td>
     </tr>
 }
