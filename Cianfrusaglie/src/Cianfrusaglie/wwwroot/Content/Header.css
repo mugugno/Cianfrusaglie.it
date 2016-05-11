@@ -13,6 +13,7 @@
     text-decoration: none;
     text-align: center;
 }
+
 .affix {
       top: 0;
       width: 100%;
@@ -37,8 +38,6 @@
     margin-top:0;
     text-align: center;
 }
-
-
 
 #linkHome {
     padding-top: 20px;
@@ -195,7 +194,7 @@
 }
 .panel-body {
   height: 200px;
-    text-align: center;
+  text-align: center;
 }
 
 hr {

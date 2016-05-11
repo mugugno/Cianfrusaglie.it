@@ -1,3 +1,5 @@
+@using System.Collections.Generic
+@using System.Threading.Tasks
 @model IEnumerable<Cianfrusaglie.Models.User>
 
 @{
@@ -12,7 +14,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserName)
+            
         </th>
         <th></th>
     </tr>
@@ -20,10 +22,9 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.UserName)
+            <a asp-action="Details" asp-route-id="@item.Id"> @item.UserName </a>
         </td>
         <td>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
         </td>
     </tr>
