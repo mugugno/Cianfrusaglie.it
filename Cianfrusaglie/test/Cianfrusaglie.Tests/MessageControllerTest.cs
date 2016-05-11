@@ -11,9 +11,13 @@ using Cianfrusaglie.ViewModels;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.ModelBinding.Metadata;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Moq;
 using Xunit;
+
+
+
 
 namespace Cianfrusaglie.Tests
 {
@@ -51,15 +55,30 @@ namespace Cianfrusaglie.Tests
         }
 
 
+
+        //test voglio vedere conversazione di un utente che non esiste
+        [Fact]
+        public void UserLoggedTryToVisualizeMessageOfUserThatNotExist()
+        {
+            //tiro su l'utente dal database con quello username
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+
+            //create the messageController
+            var messageController = CreateMessageController(usr.Id, usr.UserName);
+            
+            //result
+            var result = messageController.Details("2222");
+
+            Assert.IsType<HttpNotFoundResult>(result);
+
+        }
+
+
+
         //utente non loggato cerca di vedere i messaggi di un altro
         [Fact]
         public void UserNotLoggedTryToVisualizeMessagesOfOther() {
-            //tiro su l'utente dal database cone quello username
-            var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-
-            //query per prendere id del secondo utente
-            //var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
-
+           
             //create the messageController
             //TODO DA CAMBIARE I PARAMETRI
             var messageController = CreateMessageController( null, null );
@@ -92,6 +111,50 @@ namespace Cianfrusaglie.Tests
 
         }
 
+
+        //utente non loggato cerca di mandare messaggio
+        [Fact]
+        public void UserNotLoggedTryToCreateMessage()
+        {
+            //tiro su l'utente dal database cone quello username
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+           
+            //nuovo messaggio
+            var message = new MessageViewModel()
+            {
+                ReceiverId   = usr.Id,
+                Text = "Io ci provo, ma intanto non sono loggato"
+            };
+            var messageController = CreateMessageController(null, null);
+
+            //dato l'utente, visualizzo tutti i suoi messaggi
+            var result = messageController.Create(message);
+            
+            //test 
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        //utente non loggato cerca di eliminare un messaggio
+        [Fact]
+        public void UserNotLoggedTryToDeleteMessage()
+        {
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+
+            var message = new MessageViewModel()
+            {
+                ReceiverId = usr.Id,
+                Text = "ti elilminerò.. appena mi loggerò!"
+            };
+
+            //creo il messageController
+            var messageController = CreateMessageController(null, null);
+
+            //risultato
+            var result = messageController.Delete(null);
+            //test
+            Assert.IsType<BadRequestResult>(result);
+        }
+    
         //Test dove elimino un utente e non va a buon fine perchè l'id è null
         [Theory]
         [InlineData(null, typeof(HttpNotFoundResult))]
@@ -125,28 +188,29 @@ namespace Cianfrusaglie.Tests
             ;
 
             //creo messaggio tra user 1 e user 2
-            var messageTest1 = new Message {Receiver = userTest2, Sender = userTest1};
+            var messageTest1 = new Message {Receiver = userTest2, Sender = userTest1, Text = "Sono bellissimo e tu no"};
 
             //creo messaggio tra user 1 e user 2
             var messageTest2 = new Message
             {
                 Receiver = userTest3,
-                Sender = userTest1
+                Sender = userTest1,
+                Text = "Sei più bello te"
             };
+
+            Context.Messages.AddRange( messageTest1, messageTest2 );
+            Context.SaveChanges();
 
             var result = Context.Messages.Where( m => m.Sender == userTest1);
             
             //create the messageController
             var messageController = CreateMessageController( userTest1.Id, userTest1.UserName );
 
-            //test 
-            //inserisco in un hash set una lista dei messaggi che ho creato
-            HashSet< Message > testResult = new HashSet< Message > {messageTest1, messageTest2,};
             //funzione da testare
-            var userTest = messageController.GetLoggedUsersMessagesWithUser(userTest2.Id);
-            //metto userTest in HashSet
-            HashSet< Message > userTestHashSet = new HashSet<Message>(userTest);
-            Assert.Equal(testResult,userTestHashSet);
+            var userTest = messageController.GetLoggedUsersMessagesWithUser(userTest2.Id).ToList();
+           
+            Assert.Contains( messageTest1, userTest);
+            Assert.DoesNotContain( messageTest2, userTest );
         }
 
 

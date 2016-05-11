@@ -6,14 +6,15 @@ using Microsoft.AspNet.Mvc;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
+using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Controllers {
-   public partial class MessagesController : Controller {
+   public class MessagesController : Controller {
       private readonly ApplicationDbContext _context;
 
       public MessagesController( ApplicationDbContext context ) { _context = context; }
 
-      public IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
+      protected IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
          if( id == null )
             throw new ArgumentNullException();
 
@@ -27,7 +28,7 @@ namespace Cianfrusaglie.Controllers {
       }
 
 
-      public IEnumerable< User > GetLoggedUsersConversationsUsers() {
+      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var userThatSendedMeAMessage =
             _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
          var userThatISentAMessage =
@@ -61,12 +62,13 @@ namespace Cianfrusaglie.Controllers {
             return HttpNotFound();
 
          ViewData[ "otherUser" ] = otherUser;
+         ViewData[ "messages" ] = GetLoggedUsersMessagesWithUser( id ).ToList();
+         ViewData[ "receiverId" ] = id;
 
-         return View( GetLoggedUsersMessagesWithUser( id ).ToList() );
+         return View();
       }
 
       // inviare un messaggio all'utente con id = id
-      //ritorna la view del receiver
       // GET: Messages/Create
       public IActionResult Create( string id ) {
          if( !LoginChecker.HasLoggedUser( this ) )
@@ -84,32 +86,25 @@ namespace Cianfrusaglie.Controllers {
 
       // POST: Messages/Create
       [HttpPost, ValidateAntiForgeryToken]
-      public IActionResult Create( MessageViewModel message ) {
+      public IActionResult Create( MessageCreateViewModel messageCreate ) {
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
 
-         if( message == null )
+         if( messageCreate == null )
             return HttpBadRequest();
 
          if( ModelState.IsValid ) {
             var loggedUsr = _context.Users.Single( u => u.Id == User.GetUserId() );
-            var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == message.ReceiverId );
+            var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == messageCreate.ReceiverId );
 
             if( receiverUsr == null )
                return HttpBadRequest(); //id utente non valido
 
-            _context.Messages.Add( 
-                new Message()
-                {
-                    Sender = loggedUsr,
-                    Receiver = receiverUsr,
-                    Text = message.Text,
-                    DateTime = DateTime.Now
-                } );
+            _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = messageCreate.Text, DateTime = DateTime.Now} );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
          }
-         return View( message );
+         return View( messageCreate );
       }
 
       // GET: Messages/Delete/5

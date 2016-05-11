@@ -74,23 +74,25 @@ namespace Cianfrusaglie.Controllers {
                     Author = author
                 };
                 _context.Announces.Add( newAnnounce );
-                foreach( KeyValuePair< int, string > kvPair in model.FormFieldDictionary ) {
-                    if( !string.IsNullOrEmpty( kvPair.Value ) ) {
-                        _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
-                            FormFieldId = kvPair.Key,
-                            Value = kvPair.Value,
-                            AnnounceId = newAnnounce.Id
-                        } );
+                if(model.FormFieldDictionary != null)
+                    foreach( var kvPair in model.FormFieldDictionary ) {
+                        if( !string.IsNullOrEmpty( kvPair.Value ) ) {
+                            _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
+                                FormFieldId = kvPair.Key,
+                                Value = kvPair.Value,
+                                AnnounceId = newAnnounce.Id
+                            } );
+                        }
                     }
-                }
-                foreach( KeyValuePair< int, bool > kvPair in model.CategoryDictionary ) {
-                    if( kvPair.Value ) {
-                        _context.AnnounceCategories.Add( new AnnounceCategory {
-                            AnnounceId = newAnnounce.Id,
-                            CategoryId = kvPair.Key
-                        } );
+                if(model.CategoryDictionary != null)
+                    foreach( var kvPair in model.CategoryDictionary ) {
+                        if( kvPair.Value ) {
+                            _context.AnnounceCategories.Add( new AnnounceCategory {
+                                AnnounceId = newAnnounce.Id,
+                                CategoryId = kvPair.Key
+                            } );
+                        }
                     }
-                }
                 _context.SaveChanges();
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
