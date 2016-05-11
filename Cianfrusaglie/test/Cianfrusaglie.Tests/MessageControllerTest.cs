@@ -11,9 +11,13 @@ using Cianfrusaglie.ViewModels;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.ModelBinding.Metadata;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Moq;
 using Xunit;
+
+
+
 
 namespace Cianfrusaglie.Tests
 {
@@ -51,15 +55,30 @@ namespace Cianfrusaglie.Tests
         }
 
 
+
+        //test voglio vedere conversazione di un utente che non esiste
+        [Fact]
+        public void UserLoggedTryToVisualizeMessageOfUserThatNotExist()
+        {
+            //tiro su l'utente dal database con quello username
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+
+            //create the messageController
+            var messageController = CreateMessageController(usr.Id, usr.UserName);
+            
+            //result
+            var result = messageController.Details("2222");
+
+            Assert.IsType<HttpNotFoundResult>(result);
+
+        }
+
+
+
         //utente non loggato cerca di vedere i messaggi di un altro
         [Fact]
         public void UserNotLoggedTryToVisualizeMessagesOfOther() {
-            //tiro su l'utente dal database cone quello username
-            var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-
-            //query per prendere id del secondo utente
-            //var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
-
+           
             //create the messageController
             //TODO DA CAMBIARE I PARAMETRI
             var messageController = CreateMessageController( null, null );
@@ -92,6 +111,50 @@ namespace Cianfrusaglie.Tests
 
         }
 
+
+        //utente non loggato cerca di mandare messaggio
+        [Fact]
+        public void UserNotLoggedTryToCreateMessage()
+        {
+            //tiro su l'utente dal database cone quello username
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+           
+            //nuovo messaggio
+            var message = new MessageViewModel()
+            {
+                ReceiverId   = usr.Id,
+                Text = "Io ci provo, ma intanto non sono loggato"
+            };
+            var messageController = CreateMessageController(null, null);
+
+            //dato l'utente, visualizzo tutti i suoi messaggi
+            var result = messageController.Create(message);
+            
+            //test 
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        //utente non loggato cerca di eliminare un messaggio
+        [Fact]
+        public void UserNotLoggedTryToDeleteMessage()
+        {
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+
+            var message = new MessageViewModel()
+            {
+                ReceiverId = usr.Id,
+                Text = "ti elilminerò.. appena mi loggerò!"
+            };
+
+            //creo il messageController
+            var messageController = CreateMessageController(null, null);
+
+            //risultato
+            var result = messageController.Delete(null);
+            //test
+            Assert.IsType<BadRequestResult>(result);
+        }
+    
         //Test dove elimino un utente e non va a buon fine perchè l'id è null
         [Theory]
         [InlineData(null, typeof(HttpNotFoundResult))]
