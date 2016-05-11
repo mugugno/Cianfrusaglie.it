@@ -95,28 +95,6 @@ namespace Cianfrusaglie.Tests
 
         }
 
-
-        //i messaggi estratti non sono vuoti
-        [Fact]
-        public void CorrectViewOfConversationBetweenTwoUsers()
-        {
-            //tiro su l'utente dal database cone quello username
-            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
-
-            //query per prendere id del secondo utente
-            var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
-
-            //create the messageController
-            var messageController = CreateMessageController(usr.Id, usr.UserName);
-
-            //dato l'utente, visualizzo tutti i suoi messaggi
-            var result = messageController.Details(secondUsr.Id);
-
-            //test 
-            Assert.IsType<ViewResult>(result);
-        }
-
-
         //Test dove si verifica che i dati estratti sono quelli corretti
         [Fact]
         public void TestGetConversationBetweenUser()
@@ -152,10 +130,9 @@ namespace Cianfrusaglie.Tests
                 messageTest2,
             };
             //funzione da testare
-            var userTest = messageController.GetLoggedUsersConversationsUsers();
-            Assert.();
+            //var userTest = messageController.GetLoggedUsersConversationsUsers();
 
-            Assert.IsType<ViewResult>(result);
+            //Assert.IsType<ViewResult>(result);
         }
 
 
