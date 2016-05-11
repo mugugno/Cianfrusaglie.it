@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
+using Cianfrusaglie.ViewModels.Announce;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Moq;
@@ -55,14 +56,14 @@ namespace Cianfrusaglie.Tests
       [Fact]
       public void CorrectInsertionIsOk() {
          var usr = Context.Users.Single( u => u.UserName.Equals(FirstUserName ) );
-         var announceController = CreateAnnounceController( usr.Id, FirstUserName);
+         var announceController = CreateAnnounceController( usr.Id, usr.UserName);
          var announce = new Announce {
             Author = usr,
             Title = "Un annuncio bello bello",
             Description = "Sono bello"
          };
-        
-         var res = announceController.Create( announce );
+         var announceViewModel = new CreateAnnounceViewModel() {Title = announce.Title, Description = announce.Description};
+         var res = announceController.Create( announceViewModel );
          Assert.Contains( announce, Context.Announces );
          Assert.IsNotType< BadRequestResult >( res );
       }
@@ -87,7 +88,11 @@ namespace Cianfrusaglie.Tests
             Title = "Un annuncio bello bello",
             Description = "Sono bello"
          };
-         var res = announceController.Create( announce );
+          var announceViewModel = new CreateAnnounceViewModel() {
+              Title = announce.Title,
+              Description = announce.Description
+          };
+         var res = announceController.Create(announceViewModel);
          Assert.IsType< BadRequestResult >( res );
       }
 
