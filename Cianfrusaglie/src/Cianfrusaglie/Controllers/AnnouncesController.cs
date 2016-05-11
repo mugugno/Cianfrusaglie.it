@@ -67,13 +67,15 @@ namespace Cianfrusaglie.Controllers
             
             
             //TODO: Aggiungere i campi della risposta di errore.
-            if (!LoginChecker.HasLoggedUser( this ))
-                return HttpBadRequest();
-            var idlogged = User.GetUserId();
-            var author = _context.Users.First(u => u.Id.Equals(idlogged));
+
             
             if (ModelState.IsValid)
             {
+                if (!LoginChecker.HasLoggedUser(this))
+                    return HttpBadRequest();
+                var idlogged = User.GetUserId();
+                var author = _context.Users.First(u => u.Id.Equals(idlogged));
+
                 var newAnnounce = new Announce() {
                     Title = model.Title,
                     Description = model.Description,
@@ -85,8 +87,13 @@ namespace Cianfrusaglie.Controllers
                 foreach (KeyValuePair<int, string> kvPair in model.FormFieldDictionary)
                 {
                     if( !string.IsNullOrEmpty( kvPair.Value ) ) {
-                        _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues() {FormFieldId = kvPair.Key, Value = kvPair.Value, AnnounceId = newAnnounce.Id} );
+                        _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues() {FormFieldId = kvPair.Key, Value = kvPair.Value, AnnounceId = newAnnounce.Id } );
                     }
+                }
+
+                foreach(KeyValuePair<int, int> kvPair in model.CategoryDictionary) {
+                    _context.AnnounceCategories.Add( new AnnounceCategory() {AnnounceId = newAnnounce.Id, CategoryId = kvPair.Key } );
+
                 }
 
 
