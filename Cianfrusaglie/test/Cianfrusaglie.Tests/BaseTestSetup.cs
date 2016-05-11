@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
@@ -62,6 +63,20 @@ namespace Cianfrusaglie.Tests {
             CreateUsers();
             CreateCategories();
             CreateAnnounces();
+        }
+
+        protected ActionContext MockActionContextForLogin( string id ) {
+            var mockHttpContext = new Mock<HttpContext>();
+            var principal = new Mock<ClaimsPrincipal>();
+            principal.Setup(p => p.Identity.IsAuthenticated).Returns(id != null);
+            if (id == null)
+                mockHttpContext.SetupGet(x => x.User).Returns(principal.Object);
+            else {
+                var c = new Claim(ClaimTypes.NameIdentifier, id);
+                principal.Setup(p => p.FindFirst(It.IsAny<string>())).Returns(c);
+                mockHttpContext.SetupGet(x => x.User).Returns(principal.Object);
+            }
+            return new ActionContext {HttpContext = mockHttpContext.Object};
         }
 
         private Mock< SignInManager< TUser > > MockSignInManager< TUser >( UserManager< User > userManager )

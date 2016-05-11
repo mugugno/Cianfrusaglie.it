@@ -17,18 +17,9 @@ namespace Cianfrusaglie.Tests
         protected MessagesController CreateMessageController(string userId, string userName)
         {
             //create the mockObject
-            var mockHttpContext = new Mock<HttpContext>();
-            //invoce this function to setup this properties
-            mockHttpContext.SetupAllProperties();
-
-            if (userId == null || userName == null)
-                return new MessagesController(Context);
-            var validPrincipal =
-                new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, userId)})});
-            mockHttpContext.Setup(h => h.User).Returns(validPrincipal);
             return new MessagesController(Context)
             {
-                ActionContext = new ActionContext {HttpContext = mockHttpContext.Object},
+                ActionContext = MockActionContextForLogin(userId),
                 Url = new Mock<IUrlHelper>().Object
             };
         }
@@ -120,7 +111,7 @@ namespace Cianfrusaglie.Tests
             var result = messageController.Details(secondUsr.Id);
 
             //test 
-            Assert.IsType<>(result);
+            Assert.IsType<ViewResult>(result);
         }
 
         //TODO INVIO MESSAGGIO(creazione)

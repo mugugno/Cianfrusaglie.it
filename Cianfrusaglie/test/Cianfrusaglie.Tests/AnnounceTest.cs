@@ -1,27 +1,23 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
-using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
 
-namespace Cianfrusaglie.Tests {
-   public class AnnounceTest : BaseTestSetup {
+namespace Cianfrusaglie.Tests
+{
+    public class AnnounceTest : BaseTestSetup {
 
         protected AnnouncesController CreateAnnounceController(string id, string userName)
         {
-            var mockHttpContext = new Mock<HttpContext>();
-            if (id == null || userName == null)
-                return new AnnouncesController(Context);
-            var validPrincipal =
-               new ClaimsPrincipal(new[] { new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, id) }) });
-            mockHttpContext.Setup(h => h.User).Returns(validPrincipal);
             return new AnnouncesController(Context)
             {
-                ActionContext = new ActionContext { HttpContext = mockHttpContext.Object },
+                ActionContext = MockActionContextForLogin( id ),
                 Url = new Mock<IUrlHelper>().Object
             };
         }
