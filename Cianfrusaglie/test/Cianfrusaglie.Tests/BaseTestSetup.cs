@@ -22,6 +22,7 @@ namespace Cianfrusaglie.Tests {
         protected const string CommonUserPassword = "Cane1!";
         protected const string FirstUserName = "pippo1";
         protected const string SecondUserName = "pippo2";
+        public const string ThirdUserName = "pippo3";
         private readonly IEmailSender _emailSender;
 
         private readonly Mock< SignInManager< User > > _mockSignInManager;
@@ -29,8 +30,6 @@ namespace Cianfrusaglie.Tests {
         protected readonly ApplicationDbContext Context;
         protected readonly UserManager< User > UserManager;
         protected SignInManager< User > SignInManager;
-
-        public string ThirdUserName { get; private set; }
 
         protected BaseTestSetup() {
             var services = new ServiceCollection();
