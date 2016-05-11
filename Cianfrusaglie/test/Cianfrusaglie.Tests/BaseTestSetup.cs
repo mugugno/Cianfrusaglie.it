@@ -22,6 +22,7 @@ namespace Cianfrusaglie.Tests {
         protected const string CommonUserPassword = "Cane1!";
         protected const string FirstUserName = "pippo1";
         protected const string SecondUserName = "pippo2";
+        public const string ThirdUserName = "pippo3";
         private readonly IEmailSender _emailSender;
 
         private readonly Mock< SignInManager< User > > _mockSignInManager;
@@ -29,8 +30,6 @@ namespace Cianfrusaglie.Tests {
         protected readonly ApplicationDbContext Context;
         protected readonly UserManager< User > UserManager;
         protected SignInManager< User > SignInManager;
-
-        public string ThirdUserName { get; private set; }
 
         protected BaseTestSetup() {
             var services = new ServiceCollection();
@@ -81,7 +80,7 @@ namespace Cianfrusaglie.Tests {
             return new ActionContext {HttpContext = mockHttpContext.Object};
         }
 
-        private Mock< SignInManager< TUser > > MockSignInManager< TUser >( UserManager< User > userManager )
+        protected Mock< SignInManager< TUser > > MockSignInManager< TUser >( UserManager< User > userManager )
             where TUser: class {
             var context = new Mock< HttpContext >();
             return new Mock< SignInManager< TUser > >( userManager,
@@ -89,9 +88,12 @@ namespace Cianfrusaglie.Tests {
                 new Mock< IUserClaimsPrincipalFactory< TUser > >().Object, null, null ) {CallBase = true};
         }
 
-        protected AccountController CreateAccountController() {
+        protected AccountController CreateAccountController(string userId) {
             return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
-                new LoggerFactory() ) {Url = new Mock< IUrlHelper >().Object};
+                new LoggerFactory() ) {
+                    Url = new Mock< IUrlHelper >().Object,
+                    ActionContext = MockActionContextForLogin( userId )
+                };
         }
 
         private void CreateUsers() {
