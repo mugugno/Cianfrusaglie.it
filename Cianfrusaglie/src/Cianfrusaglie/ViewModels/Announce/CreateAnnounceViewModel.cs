@@ -30,6 +30,8 @@ namespace Cianfrusaglie.ViewModels.Announce
 
         public Dictionary<int, string> FormFieldDictionary { get; set; }
 
+        public Dictionary<int, bool> CategoryDictionary { get; set; }
+
     }
 }
 
