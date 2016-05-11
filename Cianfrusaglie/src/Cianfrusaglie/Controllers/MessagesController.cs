@@ -27,18 +27,13 @@ namespace Cianfrusaglie.Controllers {
          return messages;
       }
 
-<<<<<<< HEAD
-      public IEnumerable< User > GetLoggedUsersConversationsUsers() {
-         var usr = _context.Users.Single( u => u.Id == User.GetUserId() );
-         var userWitchIHaveMessaged = usr.SentMessages?.Select( m => m.Receiver ) ?? new List<User>();
-         var userThatSendedMeMessage = usr.ReceivedMessages?.Select( m => m.Sender ) ?? new List<User>();
-=======
+
       protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var userThatSendedMeAMessage =
             _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
          var userThatISentAMessage =
             _context.Messages.Where( u => u.Receiver.Id.Equals( User.GetUserId() ) ).Select( u => u.Receiver ).ToList();
->>>>>>> 47f8653b06c2546c64e1b3e132446a072069efce
+
 
          userThatSendedMeAMessage.AddRange( userThatISentAMessage );
          return userThatSendedMeAMessage.Distinct();

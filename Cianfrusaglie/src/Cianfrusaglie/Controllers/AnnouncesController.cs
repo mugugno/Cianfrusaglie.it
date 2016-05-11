@@ -67,18 +67,18 @@ namespace Cianfrusaglie.Controllers
             
             
             //TODO: Aggiungere i campi della risposta di errore.
-//            if (!LoginChecker.HasLoggedUser( this ))
-//                return HttpBadRequest();
-//            var idlogged = User.GetUserId();
-//            var author = _context.Users.First(u => u.Id.Equals(idlogged));
+            if (!LoginChecker.HasLoggedUser( this ))
+                return HttpBadRequest();
+            var idlogged = User.GetUserId();
+            var author = _context.Users.First(u => u.Id.Equals(idlogged));
             
             if (ModelState.IsValid)
             {
                 var newAnnounce = new Announce() {
                     Title = model.Title,
                     Description = model.Description,
-                    MeterRange = model.Range
-//                    Author = author
+                    MeterRange = model.Range,
+                    Author = author
                 };
                 _context.Announces.Add(newAnnounce);
 

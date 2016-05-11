@@ -44,7 +44,7 @@
     }
 
 }
-<form asp-action="Create" asp-controller="Account" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
+<form asp-action="Create" asp-controller="Announces" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
     <nav class="navbar navbar-default" data-spy="affix" data-offset-top="60" id="announce-navbar" style="z-index: 15">
         <div class="panel panel-default" style="margin-left: -15px">
             <div class="col-md-3">
@@ -99,7 +99,7 @@
                                 <h3 class="panel-title">Informazioni aggiuntive</h3>
                             </div>
                             <div class="panel-body">
-
+                                
                                 @foreach (FormField field in GetFormFields())
                                 {
                                           
@@ -199,12 +199,14 @@
         // 500 sono i millisecondi di durata della transizione
         var transitionTime = 350;
         function clickForwardButton() {
-
+            if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
+                document.getElementById("forward-button").setAttribute("type","submit");
+            }
             $('#page1').hide(transitionTime);
             $('#page2').show(transitionTime);
             $('#back-button').show(0);
             document.getElementById("forward-button").innerHTML = "Pubblica";
-            document.getElementById("forward-button").setAttribute("type","submit");
+            
         }
         function clickBackButton() {
             $('#page1').show(transitionTime);
