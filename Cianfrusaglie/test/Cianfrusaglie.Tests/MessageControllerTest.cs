@@ -125,28 +125,29 @@ namespace Cianfrusaglie.Tests
             ;
 
             //creo messaggio tra user 1 e user 2
-            var messageTest1 = new Message {Receiver = userTest2, Sender = userTest1};
+            var messageTest1 = new Message {Receiver = userTest2, Sender = userTest1, Text = "Sono bellissimo e tu no"};
 
             //creo messaggio tra user 1 e user 2
             var messageTest2 = new Message
             {
                 Receiver = userTest3,
-                Sender = userTest1
+                Sender = userTest1,
+                Text = "Sei più bello te"
             };
+
+            Context.Messages.AddRange( messageTest1, messageTest2 );
+            Context.SaveChanges();
 
             var result = Context.Messages.Where( m => m.Sender == userTest1);
             
             //create the messageController
             var messageController = CreateMessageController( userTest1.Id, userTest1.UserName );
 
-            //test 
-            //inserisco in un hash set una lista dei messaggi che ho creato
-            HashSet< Message > testResult = new HashSet< Message > {messageTest1, messageTest2,};
             //funzione da testare
-            var userTest = messageController.GetLoggedUsersMessagesWithUser(userTest2.Id);
-            //metto userTest in HashSet
-            HashSet< Message > userTestHashSet = new HashSet<Message>(userTest);
-            Assert.Equal(testResult,userTestHashSet);
+            var userTest = messageController.GetLoggedUsersMessagesWithUser(userTest2.Id).ToList();
+           
+            Assert.Contains( messageTest1, userTest);
+            Assert.DoesNotContain( messageTest2, userTest );
         }
 
 
