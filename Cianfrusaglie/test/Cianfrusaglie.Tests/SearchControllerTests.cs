@@ -22,8 +22,8 @@ namespace Cianfrusaglie.Tests {
       public void SimpleSearchCategoryBased() {
          var researchController = CreateResearchController( null, null );
          var choosedOnes = new[] {"Musica", "Libri", "Videogiochi"};
-         var categories = Context.Categories.Where( c => choosedOnes.Contains( c.Name ) );
-         var result = researchController.CategoryBasedSearch( categories );
+         var categories = Context.Categories.Where( c => choosedOnes.Contains( c.Name ) ).Select(c=>c.Id);
+         var result = researchController.CategoryBySearch( categories );
 
          var announce = Context.Announces.Single( a => a.Title == "Libro di OST di Videogiochi" );
          Assert.Contains( announce, result );
@@ -43,7 +43,7 @@ namespace Cianfrusaglie.Tests {
          var researchController = CreateResearchController( null, null );
          string title = "Usato";
          var categoriesString = new[] {"Videogiochi"};
-         var categories = Context.Categories.Where( c => categoriesString.Contains( c.Name ) );
+         var categories = Context.Categories.Where( c => categoriesString.Contains( c.Name ) ).Select(c=>c.Id);
 
          var result = researchController.SearchAnnounces( title, categories );
          Assert.Contains( result, p => p.Title == "Halo 5 Usato" );
@@ -52,7 +52,7 @@ namespace Cianfrusaglie.Tests {
       [Fact]
       public void PerformSearchWithEmptyTitleAndEmptyCategoriesReturnEmptyResult() {
          var researchController = CreateResearchController( null, null );
-         var result = researchController.SearchAnnounces( "", new List< Category >() );
+         var result = researchController.SearchAnnounces( "", new List< int >() );
          Assert.Empty( result );
       }
 
@@ -63,7 +63,7 @@ namespace Cianfrusaglie.Tests {
          var allVideogamesAnnounces = Context.AnnounceCategories.Where( ac => ac.CategoryId.Equals( category.Id ) );
          var announces = allVideogamesAnnounces.Select( ac => ac.Announce ).Distinct(); //tutti gli annunnci delle categorie category
 
-         var result = researchController.SearchAnnounces( "", new[] { category } );
+         var result = researchController.SearchAnnounces( "", new[] { category.Id } );
          Assert.Empty( result.Except( announces ) );
          Assert.Empty( announces.ToList().Except( result ) );
       }
@@ -72,7 +72,7 @@ namespace Cianfrusaglie.Tests {
       public void SearchOnlyForTitle() {
          var researchController = CreateResearchController( null, null );
          var title = "Usato";
-         var result = researchController.SearchAnnounces( title, new List< Category >() );
+         var result = researchController.SearchAnnounces( title, new List< int >() );
          Assert.Contains( result, p => p.Title == "Halo 5 Usato" );
       }
    }
