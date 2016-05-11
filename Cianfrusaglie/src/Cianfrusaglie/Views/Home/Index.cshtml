@@ -119,7 +119,7 @@
                     <h4 class="modal-title">Non sei registrato</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Registati o effettua login per consultare la lista degli annunci.</p>
+                    <p>Registati o effettua login per utilizzare il nostro sito.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -138,7 +138,7 @@
                 <li data-target="#homeCarousel" data-slide-to="3"></li>
                 <li data-target="#homeCarousel" data-slide-to="4"></li>
             </ol>
-            <div class="carousel-inner" role="listbox">
+            <div class="carousel-inner" role="listbox" align="center">
                 <div class="item active">
                     <img src="https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/Goldbox/2016/it_xsite_goldbox_1500x300._CB293654318_.jpg"/>
                 </div>
@@ -168,15 +168,36 @@
         <div id="linkHome">
             <form class="form-inline" role="form">
                 <div class="form-group" id="linkRegala">
-                    <a href="~/Announces/Create" role="button"class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
+                    }
+                    else
+                    {
+                        <a href="~/Announces/Create" role="button"class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
+                    }
                     <br/><br/><label>REGALA</label>
                 </div>
                 <div class="form-group" id="linkVendi">
-                    <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                    }
+                    else
+                    {
+                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                    }
                     <br/><br/><label>VENDI</label>
                 </div>
                 <div class="form-group" id="linkBaratta">
-                    <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
+                    }
+                    else
+                    {
+                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
+                    }
                     <br/><br/><label>BARATTA</label>
                 </div>
             </form>
