@@ -4,6 +4,7 @@ using Microsoft.AspNet.Mvc;
 using Cianfrusaglie.Models;
 using System.Security.Claims;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.ViewModels.Announce;
 
 namespace Cianfrusaglie.Controllers
 {
@@ -62,21 +63,46 @@ namespace Cianfrusaglie.Controllers
         // POST: Announces/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Announce announce)
-        {
+        public IActionResult Create(CreateAnnounceViewModel model) {
+            
+            
             //TODO: Aggiungere i campi della risposta di errore.
             if (!LoginChecker.HasLoggedUser( this ))
                 return HttpBadRequest();
             var idlogged = User.GetUserId();
-            announce.Author = _context.Users.First(u => u.Id.Equals(idlogged));
+            var author = _context.Users.First(u => u.Id.Equals(idlogged));
+            
             if (ModelState.IsValid)
             {
-                
-                _context.Announces.Add(announce);
+                var newAnnounce = new Announce() {
+                    Title = model.Title,
+                    Description = model.Description,
+                    MeterRange = model.Range,
+                    Author = author
+                };
+                _context.Announces.Add(newAnnounce);
+
+                foreach (KeyValuePair<int, string> kvPair in model.FormFieldDictionary)
+                {
+                    if( !string.IsNullOrEmpty( kvPair.Value ) ) {
+                        _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues() {FormFieldId = kvPair.Key, Value = kvPair.Value, AnnounceId = newAnnounce.Id} );
+                    }
+                }
+
+
                 _context.SaveChanges();
-                return Redirect("Index");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
-            return View(announce);
+            return View(model);
+            
+
+//            System.Console.Out.WriteLine(model.Title);
+//            System.Console.Out.WriteLine(model.Description);
+//            System.Console.Out.WriteLine(model.Range);
+//            foreach ( KeyValuePair<int, string> kvPair in model.FormFieldDictionary ) {
+//                System.Console.WriteLine("Key = {0}, Value = {1}", kvPair.Key, kvPair.Value);
+//            }
+
         }
 
         // GET: Announces/Edit/5
