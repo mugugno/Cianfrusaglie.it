@@ -118,7 +118,7 @@ namespace Cianfrusaglie.Controllers {
          if( id == null )
             return HttpNotFound();
 
-         var message = _context.Messages.Single( m => m.Id == id );
+         var message = _context.Messages.SingleOrDefault( m => m.Id == id );
          if( message == null )
             return HttpNotFound();
 
