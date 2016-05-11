@@ -14,7 +14,7 @@ namespace Cianfrusaglie.Controllers {
 
       public MessagesController( ApplicationDbContext context ) { _context = context; }
 
-      protected IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
+      public IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
          if( id == null )
             throw new ArgumentNullException();
 

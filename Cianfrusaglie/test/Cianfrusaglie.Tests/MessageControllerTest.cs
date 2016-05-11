@@ -120,7 +120,7 @@ namespace Cianfrusaglie.Tests
             var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
            
             //nuovo messaggio
-            var message = new MessageViewModel()
+            var message = new MessageCreateViewModel()
             {
                 ReceiverId   = usr.Id,
                 Text = "Io ci provo, ma intanto non sono loggato"
@@ -140,7 +140,7 @@ namespace Cianfrusaglie.Tests
         {
             var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
 
-            var message = new MessageViewModel()
+            var message = new MessageCreateViewModel()
             {
                 ReceiverId = usr.Id,
                 Text = "ti elilminerò.. appena mi loggerò!"
@@ -229,7 +229,7 @@ namespace Cianfrusaglie.Tests
 
 
             //creo il ViewModel del messaggio
-            var messageViewModel = new MessageViewModel()
+            var MessageCreateViewModel = new MessageCreateViewModel()
             {
                 ReceiverId = "5098",
                 Text = "IO TE LO STO INVIANDO MA INTANTO NON ESISTI"
@@ -240,7 +240,7 @@ namespace Cianfrusaglie.Tests
             var messageController = CreateMessageController( usr.Id, usr.UserName );
 
             //dato l'utente, invio il suo messaggio a un utente che non esiste
-            var result = messageController.Create(messageViewModel);
+            var result = messageController.Create(MessageCreateViewModel);
 
             //controllo che dia una badRequest 
             Assert.IsType<BadRequestResult>(result);
@@ -253,14 +253,14 @@ namespace Cianfrusaglie.Tests
             var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var receiver = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
             var messagesController = CreateMessageController( user.Id, user.UserName );
-            var messageViewModel = new MessageViewModel() { ReceiverId = receiver.Id,Text = "Ah ciao sono Sio e ti regalo un drago."};
-            var result = messagesController.Create( messageViewModel );
+            var MessageCreateViewModel = new MessageCreateViewModel() { ReceiverId = receiver.Id,Text = "Ah ciao sono Sio e ti regalo un drago."};
+            var result = messagesController.Create( MessageCreateViewModel );
             Assert.IsNotType<BadRequestResult>( result );
             var messages = Context.Messages.Where( m => m.Receiver.Id.Equals( receiver.Id ) );
             Assert.Single( messages,
                 m =>
                     m.Sender.Id.Equals( user.Id ) && m.Receiver.Id.Equals( receiver.Id ) &&
-                    m.Text.Equals( messageViewModel.Text ) );
+                    m.Text.Equals( MessageCreateViewModel.Text ) );
         }
 
         [Fact]
@@ -268,7 +268,7 @@ namespace Cianfrusaglie.Tests
             var sender = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
             var receiver = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
             var messagesController = CreateMessageController(sender.Id, sender.UserName);
-            messagesController.Create( new MessageViewModel() {ReceiverId = receiver.Id, Text = "Dudududadada"} );
+            messagesController.Create( new MessageCreateViewModel() {ReceiverId = receiver.Id, Text = "Dudududadada"} );
             var message =
                 Context.Messages.First( m => m.Receiver.Id.Equals( receiver.Id ) && m.Sender.Id.Equals( sender.Id ) );
             var result = messagesController.DeleteConfirmed( message.Id );
