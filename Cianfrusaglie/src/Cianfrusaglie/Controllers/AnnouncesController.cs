@@ -34,26 +34,34 @@ namespace Cianfrusaglie.Controllers {
         }
 
         // GET: Announces/Create
-        public IActionResult Create() {
+        public IActionResult Create()
+        {
             //TODO scrivere in maniera più furba ma ora va benissimo così!
-            ViewData[ "formFields" ] = _context.FormFields.ToList();
-            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
-            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
-            foreach( FormField formField in _context.FormFields.ToList() ) {
-                List< Category > categories =
-                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
-                        .ToList();
-                formField2CategoriesDictionary.Add( formField.Id, categories );
-            }
-            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
+            SetViewDataForCreateAction();
             return View();
+        }
+
+        private void SetViewDataForCreateAction()
+        {
+            ViewData["formFields"] = _context.FormFields.ToList();
+            ViewData["formMacroCategories"] = _context.Categories.ToList();
+            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
+            foreach (FormField formField in _context.FormFields.ToList())
+            {
+                List<Category> categories =
+                    _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
+                        .ToList();
+                formField2CategoriesDictionary.Add(formField.Id, categories);
+            }
+            ViewData["formField2CategoriesDictionary"] = formField2CategoriesDictionary;
         }
 
         // POST: Announces/Create
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create( CreateAnnounceViewModel model ) {
             //TODO: Aggiungere i campi della risposta di errore.
+
             if( ModelState.IsValid ) {
                 if( !LoginChecker.HasLoggedUser( this ) )
                     return HttpBadRequest();
@@ -88,18 +96,7 @@ namespace Cianfrusaglie.Controllers {
                 _context.SaveChanges();
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
-            ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
-            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
-            foreach (FormField formField in _context.FormFields.ToList())
-            {
-                List<Category> categories =
-                    _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
-                        .ToList();
-                formField2CategoriesDictionary.Add(formField.Id, categories);
-            }
-            ViewData["formField2CategoriesDictionary"] = formField2CategoriesDictionary;
+            SetViewDataForCreateAction();
             return View( model );
 
             //return Redirect( "Create" );

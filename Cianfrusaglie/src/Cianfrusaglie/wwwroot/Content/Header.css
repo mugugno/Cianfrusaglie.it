@@ -193,8 +193,7 @@
     width: 260px;
 }
 .panel-body {
-  height: 200px;
-  text-align: center;
+  height: auto;
 }
 
 hr {
