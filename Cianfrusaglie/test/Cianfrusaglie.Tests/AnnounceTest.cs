@@ -1,27 +1,24 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
-using Cianfrusaglie.ViewModels.Account;
+using Cianfrusaglie.ViewModels.Announce;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
 
-namespace Cianfrusaglie.Tests {
-   public class AnnounceTest : BaseTestSetup {
+namespace Cianfrusaglie.Tests
+{
+    public class AnnounceTest : BaseTestSetup {
 
         protected AnnouncesController CreateAnnounceController(string id, string userName)
         {
-            var mockHttpContext = new Mock<HttpContext>();
-            if (id == null || userName == null)
-                return new AnnouncesController(Context);
-            var validPrincipal =
-               new ClaimsPrincipal(new[] { new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, id) }) });
-            mockHttpContext.Setup(h => h.User).Returns(validPrincipal);
             return new AnnouncesController(Context)
             {
-                ActionContext = new ActionContext { HttpContext = mockHttpContext.Object },
+                ActionContext = MockActionContextForLogin( id ),
                 Url = new Mock<IUrlHelper>().Object
             };
         }
@@ -59,13 +56,14 @@ namespace Cianfrusaglie.Tests {
       [Fact]
       public void CorrectInsertionIsOk() {
          var usr = Context.Users.Single( u => u.UserName.Equals(FirstUserName ) );
-         var announceController = CreateAnnounceController( usr.Id, FirstUserName);
+         var announceController = CreateAnnounceController( usr.Id, usr.UserName);
          var announce = new Announce {
             Author = usr,
             Title = "Un annuncio bello bello",
             Description = "Sono bello"
          };
-         var res = announceController.Create( announce );
+         var announceViewModel = new CreateAnnounceViewModel() {Title = announce.Title, Description = announce.Description};
+         var res = announceController.Create( announceViewModel );
          Assert.Contains( announce, Context.Announces );
          Assert.IsNotType< BadRequestResult >( res );
       }
@@ -90,7 +88,11 @@ namespace Cianfrusaglie.Tests {
             Title = "Un annuncio bello bello",
             Description = "Sono bello"
          };
-         var res = announceController.Create( announce );
+          var announceViewModel = new CreateAnnounceViewModel() {
+              Title = announce.Title,
+              Description = announce.Description
+          };
+         var res = announceController.Create(announceViewModel);
          Assert.IsType< BadRequestResult >( res );
       }
 

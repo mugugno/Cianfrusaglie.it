@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
+using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
@@ -17,18 +19,9 @@ namespace Cianfrusaglie.Tests
         protected MessagesController CreateMessageController(string userId, string userName)
         {
             //create the mockObject
-            var mockHttpContext = new Mock<HttpContext>();
-            //invoce this function to setup this properties
-            mockHttpContext.SetupAllProperties();
-
-            if (userId == null || userName == null)
-                return new MessagesController(Context);
-            var validPrincipal =
-                new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, userId)})});
-            mockHttpContext.Setup(h => h.User).Returns(validPrincipal);
             return new MessagesController(Context)
             {
-                ActionContext = new ActionContext {HttpContext = mockHttpContext.Object},
+                ActionContext = MockActionContextForLogin(userId),
                 Url = new Mock<IUrlHelper>().Object
             };
         }
@@ -102,26 +95,46 @@ namespace Cianfrusaglie.Tests
 
         }
 
-
-        //i messaggi estratti non sono vuoti
+        //Test dove si verifica che i dati estratti sono quelli corretti
         [Fact]
-        public void NotCorrectViewOfConversationBetweenTwoUsers()
+        public void TestGetConversationBetweenUser()
         {
-            //tiro su l'utente dal database cone quello username
-            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //creo delle conversazioni tra 2 utenti e controllo che ci siano
+            var userTest1 = Context.Users.Single(u => u.UserName == FirstUserName);
+            var userTest2 = Context.Users.Single(u => u.UserName == SecondUserName); 
+            var userTest3 = Context.Users.Single(u => u.UserName == ThirdUserName); ;
 
-            //query per prendere id del secondo utente
-            var secondUsr = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+            //creo messaggio tra user 1 e user 2
+            var messageTest1 = new Message
+            {
+                Receiver = userTest2,
+                Sender = userTest1   
+            };
 
+            //creo messaggio tra user 1 e user 2
+            var messageTest2 = new Message
+            {
+                Receiver = userTest3,
+                Sender = userTest1
+            };
+            // var result = Context.Messages.Where( m => m.Sender == userTest1);
             //create the messageController
-            var messageController = CreateMessageController(usr.Id, usr.UserName);
+            var messageController = CreateMessageController(userTest1.Id, userTest1.UserName);
 
-            //dato l'utente, visualizzo tutti i suoi messaggi
-            var result = messageController.Details(secondUsr.Id);
 
             //test 
-            //Assert.IsType<>(result);
+            //inserisco in un hash set una lista dei messaggi che ho creato
+            HashSet< Message > testResult = new HashSet<Message>
+            {
+                messageTest1,
+                messageTest2,
+            };
+            //funzione da testare
+            //var userTest = messageController.GetLoggedUsersConversationsUsers();
+
+            //Assert.IsType<ViewResult>(result);
         }
+
 
         //TODO INVIO MESSAGGIO(creazione)
         //io lo invio A un utente che non esiste
