@@ -182,16 +182,6 @@
     left: -6px;
 }
 
-#vetrinaAnnunci {
-    display: flex;
-    justify-content: center;
-
-}
-
-#panelAnnunci {
-    align-self: center;
-    width: 260px;
-}
 .panel-body {
   height: auto;
 }
@@ -300,5 +290,22 @@ hr {
     float: left;
     padding-left: 10px;
 }
+
+
+/*#menuProfilo {
+     left: auto; 
+     right: 100%;
+     display: inline-block;
+    position: absolute;
+    top: -1px;
+    visibility: hidden;
+    margin-top: 10px;
+    bottom: 0;
+}
+
+#menuProfilo li:hover .sub-menu {
+    visibility: visible;
+}*/
+
 
 
