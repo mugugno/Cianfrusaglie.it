@@ -14,7 +14,8 @@ namespace Cianfrusaglie.Controllers {
         public AnnouncesController( ApplicationDbContext context ) { _context = context; }
 
         // GET: Announces
-        public IActionResult Index() {
+        public IActionResult Index()
+        {
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             return View();
