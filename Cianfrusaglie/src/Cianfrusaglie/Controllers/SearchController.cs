@@ -17,7 +17,8 @@ namespace Cianfrusaglie.Controllers {
             categories = new List< int >();
 
          var result = SearchAnnounces( title, categories).ToList();
-         return View( result );
+            ViewData["listUsers"] = _context.Users.ToList();
+            return View( result );
       }
 
        public IActionResult RedirectToChat( string id ) {

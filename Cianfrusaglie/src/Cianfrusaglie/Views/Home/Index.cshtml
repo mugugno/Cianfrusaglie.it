@@ -30,89 +30,21 @@
         }
     }
 
+    public User GetAutore(string AuthorId)
+    {
+        foreach (var user in ViewData["listUsers"] as List<User>)
+        {
+            if (user.Id == AuthorId)
+                return user;
+        }
+        return null;
+    }
+
 }
 
 <div id="wrap">
 
-<nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100" >
-    <div class="navbar-header" >
-        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse" >
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-    </div>
-    <div class="collapse navbar-collapse js-navbar-collapse" >
-        <ul class="nav navbar-nav" >
-            <li class="dropdown dropdown-large" >
-                <a href="~/" ><span class="glyphicon glyphicon-home"></span> Home</a>
-            </li>
-            <li class="dropdown dropdown-large" >
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >Cerca per categoria <b class="caret" ></b></a>
-                <ul class="dropdown-menu dropdown-menu-large" >
-                    @foreach( var macro in GetCategories() ) {
-                        <li>
-                            <a href="~/Search?categories=@macro.Id" >@macro.Name</a>
-                            @if( GetSubCategories( @macro.Name ).ToList().Count > 0 ) {
-                                <ul class="dropdown-menu sub-menu" >
-                                    <li class="dropdown-header" >@macro.Name</li>
-                                    <li class="divider" ></li>
-                                    @foreach( var sub in GetSubCategories( @macro.Name ) ) {
-                                        <li><a href="#" >@sub.Name</a></li>
-                                    }
-                                </ul>
-                            }
-                        </li>
-                    }
-                </ul>
-            </li>
-            <li class="dropdown dropdown-large" >
-                @if( !User.Identity.IsAuthenticated ) {
-                    <a href="#" data-toggle="modal" data-target="#myWindow" >Sto Cercando</a>
-                } else {
-                    <a href="#" >Sto Cercando</a>
-                }
-            </li>
-            <li class="dropdown dropdown-large" >
-                <a href="#" >Come funziona <strong>nonhounnome.it</strong></a>
-            </li>
-        </ul>
 
-        <ul class="nav navbar-nav" id="menuRight" >
-                @if( !User.Identity.IsAuthenticated ) {
-                    <li>
-                        <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
-                    </li>
-                } else {
-                    <li class="dropdown dropdown-large">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
-                        <ul class="dropdown-menu dropdown-menu-large">
-                            <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
-                            <li><a href="">Scrivi un messaggio</a></li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header"><span class="glyphicon glyphicon-pencil"></span> Inserisci un annuncio</li>
-                            <li><a href="~/Announces/Create">Dona in regalo</a></li>
-                            <li><a href="">Vendi</a></li>
-                            <li><a href="">Baratta</a></li>
-                            <li><a href="">Stai cercando un oggetto in particolare?</a></li>
-                        </ul>
-                    </li>
-                }
-                @if( !User.Identity.IsAuthenticated ) {
-                    <li>
-                        <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-                    </li>
-                } else {
-                    <li>
-                        <a href="~/Account/LogOff"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
-                    </li>
-                }
-        </ul>
-    </div>
-</nav>
     @if(TempData["announceCreated"] != null)
     {
         <div class="alert alert-success alert-dismissible" role="alert" >
@@ -210,8 +142,8 @@
                                 <img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img-responsive" alt="a" />
                             </div>
                             <div class="info">
-                                <div class="row">
-                                    <div class="price col-md-6">
+                                
+                                   
                                         <h5>
                                             @annuncio.Title
                                         </h5>
@@ -223,15 +155,12 @@
                                         {
                                             <h5 class="price-text-color">Prezzo: @annuncio.Price</h5>
                                         }
-                                    </div>
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
-                                        <div class="rating hidden-sm col-md-6">
-                                            <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
-                                            </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
-                                            </i><i class="fa fa-star"></i>
-                                        </div>
-                                    }
+
+
+                                <div class="price">
+                                    <br/>
+                                    <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
+                                    <br/>
                                 </div>
                                 <div class="separator clear-left">
                                     @if (!User.Identity.IsAuthenticated)
@@ -248,7 +177,7 @@
                                     {
                                         <p class="btn-add">
                                             <i class="fa fa-shopping-cart"></i>
-                                            <a href="~/Announces/Details/id=@annuncio.Id" class="">Dettagli</a>
+                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="">Dettagli</a>
                                         </p>
                                         <p class="btn-details">
                                             <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
