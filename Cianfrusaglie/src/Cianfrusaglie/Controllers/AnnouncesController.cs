@@ -135,7 +135,7 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            if( !User.GetUserId().Equals( announce.Author.Id ) ) {
+            if( !User.GetUserId().Equals( announce.AuthorId ) ) {
                 return HttpBadRequest();
             }
             if( ModelState.IsValid ) {
@@ -170,7 +170,7 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            if( !User.GetUserId().Equals( announce.Author.Id ) )
+            if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
             _context.Announces.Remove( announce );
             _context.SaveChanges();
