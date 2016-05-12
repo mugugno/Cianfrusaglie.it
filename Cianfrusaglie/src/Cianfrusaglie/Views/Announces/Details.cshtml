@@ -98,11 +98,12 @@
                     <dd>
                         @{
                             var x = (User) ViewData["Autore"];
-                        }
-                        <div>
-                            @x.UserName
-                                <a href="~/Messages/Details/?id=@x.Id" style="margin-left: 3em">Contatta</a>
-                        </div>
+
+                            <div>
+                                @x.UserName
+                                <a href="~/Messages/Details/?id=@ViewData["AuthorId"] style="margin-left: 5em">Contatta</a>
+                            </div>
+                           }
                     </dd>
 
                     @if (Model.MeterRange > 0)

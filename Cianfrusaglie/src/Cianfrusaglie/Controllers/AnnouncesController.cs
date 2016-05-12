@@ -50,6 +50,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData["formFieldsValue"] = dictionary;
             ViewData["Images"] = _context.ImageUrls.Where(i => i.Announce.Equals(announce)).ToList();
             ViewData["IdAnnounce"] = id;
+            ViewData["AuthorId"] = announce.AuthorId;
             ViewData["Autore"] = announce.Author;
 
             return View( announce );
