@@ -1,5 +1,5 @@
 ﻿namespace Cianfrusaglie.Models {
    public enum FormFieldType {
-      Text, Number, Date, Url, Bool
+      text, number, select, checkbox, url
    }
 }
