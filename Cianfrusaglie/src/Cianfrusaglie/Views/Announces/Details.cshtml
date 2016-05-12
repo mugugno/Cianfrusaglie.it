@@ -24,11 +24,11 @@
 
                 <dl class="dl-horizontal" >
 
-                    @foreach (var f in (Dictionary<string, string>)ViewData["formFieldsValue"])
+                    @foreach (var f in (Dictionary<FormField, string>)ViewData["formFieldsValue"])
                     {
 
                         <dt>
-                            @f.Key
+                            @f.Key.Name
                         </dt>
                         <dd>
                             @f.Value
