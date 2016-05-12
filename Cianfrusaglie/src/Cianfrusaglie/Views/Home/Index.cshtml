@@ -107,7 +107,7 @@
     }
     <div class="container-fluid" id="containerPrincipale">
         <div id="homeCarousel" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
+            <ol class="carousel-indicators" style="z-index: 1">
                 <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#homeCarousel" data-slide-to="1"></li>
                 <li data-target="#homeCarousel" data-slide-to="2"></li>
@@ -236,7 +236,7 @@
                                             <a href="#" class="">Dettagli</a>
                                         </p>
                                         <p class="btn-details">
-                                            <i class="fa fa-list"></i><a href="#" class="">Contatta</a>
+                                            <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.Author.Id" class="">Contatta</a>
                                         </p>
                                     }
                                 </div>
