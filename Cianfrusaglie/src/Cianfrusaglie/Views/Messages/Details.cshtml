@@ -5,51 +5,96 @@
 @model Cianfrusaglie.ViewModels.MessageCreateViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Conversazione";
 }
 
-<h2>Details</h2>
+@functions
+{
 
-<div>
-    <h4>Message</h4>
-    <hr />
-    @{
-       var otherUser = ViewData[ "otherUser" ] as User;
-       foreach( var m in (IEnumerable<Message>) ViewData["messages"] ) {
-        <div>
-            <span> @m.DateTime <span style="font-size: 1.5em; font-weight: bold;">
-                    Inviato da:
-                    @if( m.Receiver.Id.Equals( User.GetUserId() ) ) {
-                        <span> @otherUser.UserName </span>
-                    } else {
-                    <span> Me </span>
-                    }
-                </span> </span>
-        </div>
-            <div>
-                <h4> @m.Text </h4>
-            </div>
-        }
+    private User GetOtherUser()
+    {
+        return ViewData["otherUser"] as User;
     }
 
-    <form asp-action="Create" asp-controller="Messages" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
+    private IEnumerable< Message > GetMessages()
+    {
+        return (IEnumerable< Message >) ViewData[ "messages" ];
+    }
 
-        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+}
 
-        <div class="form-group">
-            <label asp-for="Text" class="control-label">Messaggio</label><br />
-            <input asp-for="Text" class="form-control" />
-            <span asp-validation-for="Text" class="text-danger"></span>
-
-            <input asp-for="ReceiverId" type="hidden" value="@ViewData[ "receiverId" ]" class="form-control" />
-
-            <button class="btn btn-default" type="submit">
-                Invia
-            </button>
+<div class="panel-body" >
+    <span style="text-align: left">
+        <a asp-action="Index">Tutte le mie conversazioni</a>
+    </span>
+    <div class="panel panel-default" >
+        <div class="panel-heading" >
+            <div style="text-align: center">
+                <h2>Conversazione con @GetOtherUser().UserName</h2>
+            </div>
         </div>
-    </form>
-</div>
+        <div class="panel-body" >
+            @{
+                var otherUser = GetOtherUser();
+                foreach( var message in GetMessages() ) {
+                    <div class="row" >
+                        <div class="col-md-1" ></div>
+                        <div class="col-md-10" >
+                            <div class="panel panel-default" >
+                                <div class="panel-heading" >
+                                    <p>
+                                        <span style="float: right">@message.DateTime</span>
+                                        <span style="float: left">
+                                            @if( message.Receiver.Id.Equals( User.GetUserId() ) ) {
+                                                @otherUser.UserName
+                                            } else {
+                                                @User.GetUserName()
+                                            }
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="panel-body" style="text-align: justify" >
+                                    @message.Text
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="panel-body" >
+            <div class="row" >
+                <div class="col-md-1" ></div>
+                <div class="col-md-10" >
 
-<p>
-    <a asp-action="Index">Back to List</a>
-</p>
+                    <form asp-action="Create" asp-controller="Messages" class="form-horizontal form-register" method="post" role="form" id="tabellaForm" >
+
+                        <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
+                        <div class="row" >
+                            <div class="form-group" >
+
+                                <label asp-for="Text" class="control-label" > <span style="padding-right: 30px"></span>Messaggio</label><br />
+                                <div class="col-md-10" >
+                                    <textarea rows="4" asp-for="Text" class="form-control" ></textarea>
+                                    <span asp-validation-for="Text" class="text-danger"></span>
+
+                                    <input asp-for="ReceiverId" type="hidden" value="@ViewData[ "receiverId" ]" class="form-control" />
+                                </div>
+                                <div class="col-md-2" style="margin-top: 25px" >
+                                    <button class="btn btn-default" type="submit" >
+                                        Invia
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align: center" >
+            <a asp-action="Index" >Tutte le mie conversazioni</a>
+        </div>
+    </div>
+</div>
