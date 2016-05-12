@@ -12,8 +12,12 @@ namespace Cianfrusaglie.Controllers {
       public SearchController( ApplicationDbContext context ) { _context = context; }
 
       public IActionResult Index(string title, IEnumerable< int > categories) {
-         if( title == null )
-            title = "";
+        ViewData["listUsers"] = _context.Users.ToList();
+        ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
+        ViewData["formCategories"] = _context.Categories.ToList();
+        ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        if ( title == null )
+        title = "";
          if( categories == null )
             categories = new List< int >();
 

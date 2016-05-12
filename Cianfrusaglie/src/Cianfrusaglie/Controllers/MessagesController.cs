@@ -42,8 +42,10 @@ namespace Cianfrusaglie.Controllers {
       //tutti gli utenti con cui l'utente loggato ha messaggiato
       // GET: Messages
       public IActionResult Index() {
-         if(!LoginChecker.HasLoggedUser(this))
-            return HttpBadRequest();
+        ViewData["formCategories"] = _context.Categories.ToList();
+        ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        if (!LoginChecker.HasLoggedUser(this))
+        return HttpBadRequest();
 
          var users = GetLoggedUsersConversationsUsers().ToList();
          return View( users );
@@ -51,8 +53,11 @@ namespace Cianfrusaglie.Controllers {
 
       // GET: Messages/Details/5
       public IActionResult Details( string id ) {
-         if( !LoginChecker.HasLoggedUser( this ) )
-            return HttpBadRequest();
+
+        ViewData["formCategories"] = _context.Categories.ToList();
+        ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        if ( !LoginChecker.HasLoggedUser( this ) )
+        return HttpBadRequest();
 
          if( id == null )
             return HttpNotFound();
