@@ -52,7 +52,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData["Images"] = _context.ImageUrls.Where(i => i.Announce.Equals(announce)).ToList();
             ViewData["IdAnnounce"] = id;
             ViewData["AuthorId"] = announce.AuthorId;
-            ViewData["Autore"] = announce.Author;
+            ViewData["Autore"] =
+                _context.Users.Where(u => u.Id == announce.AuthorId).Select(u => u.UserName).SingleOrDefault();
 
             return View( announce );
         }
