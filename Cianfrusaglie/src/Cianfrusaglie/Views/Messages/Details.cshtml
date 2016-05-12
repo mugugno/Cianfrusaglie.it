@@ -21,6 +21,8 @@
         return (IEnumerable< Message >) ViewData[ "messages" ];
     }
 
+    private Dictionary< Message, string > GetReceiverList() { return (Dictionary< Message, string >) ViewData[ "receiverList" ]; }
+
 }
 
 <div class="panel-body" >
@@ -45,11 +47,15 @@
                                     <p>
                                         <span style="float: right">@message.DateTime</span>
                                         <span style="float: left">
-                                            @if( message.Receiver.Id.Equals( User.GetUserId() ) ) {
-                                                @otherUser.UserName
-                                            } else {
-                                                @User.GetUserName()
-                                            }
+                                            @{ var receiverList = GetReceiverList(); }
+                                            @if(receiverList[message].Equals( User.GetUserId() ) )
+                    {
+                        @otherUser.UserName
+                    }
+                                                else
+                    {
+                        @User.GetUserName()
+                    }
                                         </span>
                                     </p>
                                 </div>

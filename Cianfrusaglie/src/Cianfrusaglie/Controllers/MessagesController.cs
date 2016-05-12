@@ -27,8 +27,20 @@ namespace Cianfrusaglie.Controllers {
          return messages;
       }
 
+        // FIX ABORTO DA RISCRIVERE
+        public string GetReceiver(Message message)
+        {
+            if (message == null)
+                throw new ArgumentNullException();
 
-      protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
+            var receiver =
+               _context.Messages.Where( m => m.Equals( message )).Select( u => u.Receiver).Select( x => x.Id ).First();
+
+            return receiver;
+        }
+
+
+        protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
          var userThatSendedMeAMessage =
             _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Receiver ).ToList();
          var userThatISentAMessage =
@@ -69,6 +81,13 @@ namespace Cianfrusaglie.Controllers {
          ViewData[ "otherUser" ] = otherUser;
          ViewData[ "messages" ] = GetLoggedUsersMessagesWithUser( id ).ToList();
          ViewData[ "receiverId" ] = id;
+          var receiverList = new Dictionary<Message,string>();
+          foreach( Message m in GetLoggedUsersMessagesWithUser( id ).ToList() ) {
+              receiverList[ m ] = GetReceiver( m );
+          }
+          ViewData[ "receiverList" ] = receiverList;
+
+
 
          return View();
       }
