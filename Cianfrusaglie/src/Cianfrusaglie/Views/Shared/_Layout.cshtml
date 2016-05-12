@@ -97,7 +97,7 @@
                                         <li class="divider"></li>
                                         @foreach (var sub in GetSubCategories(@macro.Name))
                                         {
-                                            <li><a href="#">@sub.Name</a></li>
+                                            <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
                                         }
                                     </ul>
                                 }
@@ -135,7 +135,7 @@
                             <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
                             <li class="divider"></li>
                             <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
-                            <li><a href="">Scrivi un messaggio</a></li>
+                            <li><a href="~/Messages">Le mie conversazioni</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header"><span class="glyphicon glyphicon-pencil"></span> Inserisci un annuncio</li>
                             <li><a href="~/Announces/Create">Dona in regalo</a></li>

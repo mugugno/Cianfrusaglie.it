@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Controllers {
    public class SearchController : Controller {
@@ -18,11 +19,12 @@ namespace Cianfrusaglie.Controllers {
 
          var result = SearchAnnounces( title, categories).ToList();
             ViewData["listUsers"] = _context.Users.ToList();
+            ViewData["listImages"] = _context.ImageUrls.ToList();
             return View( result );
       }
 
-       public IActionResult RedirectToChat( string id ) {
-           return RedirectToAction( nameof(MessagesController.Details), id );
+       public IActionResult SearchRedirect( string title, IEnumerable<int> categories) {
+           return RedirectToAction("Index", new {title = title, categories = categories});
        }
       
 
@@ -43,23 +45,17 @@ namespace Cianfrusaglie.Controllers {
       }
 
       public IEnumerable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
-         var announces = _context.Announces;
-         foreach( var announce in announces )
-         {
+         var catLeafs= new List< int >();
+         foreach( var ci in categories ) {
+            var cat = _context.Categories.Include( p => p.SubCategories ).Single( c => c.Id == ci );
+            if( !cat.SubCategories.Any() )
+               catLeafs.Add( cat.Id );
+            else
+               catLeafs.AddRange( cat.SubCategories.Select( c => c.Id ).ToList() );
+         }
 
-             var ids = _context.Categories.Where(c => categories.Contains(c.OverCategory.Id)).Select(u => u.Id).ToList();
-             var announcesCategories = _context.AnnounceCategories.Where(a => a.AnnounceId.Equals(announce.Id) && (categories.Contains(a.CategoryId) || ids.Contains(a.CategoryId)));
-            
-             if (announcesCategories.Any())
-             {
-                 foreach (var tmp in announcesCategories)
-                 {
-                     var annuncio = _context.Announces.SingleOrDefault(u => u.Id == tmp.AnnounceId);
-                     yield return annuncio;
-                    }
-             }
-                    
-            }
+         var announcesCategories = _context.AnnounceCategories.Where( a => catLeafs.Contains( a.CategoryId ) );
+         return announcesCategories.Select( ac => ac.Announce ).ToList();
       }
 
        

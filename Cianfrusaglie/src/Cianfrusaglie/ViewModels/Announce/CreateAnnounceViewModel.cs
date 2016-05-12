@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
+using Microsoft.AspNet.Http;
 
 namespace Cianfrusaglie.ViewModels.Announce
 {
@@ -28,6 +29,8 @@ namespace Cianfrusaglie.ViewModels.Announce
         public Dictionary<int, string> FormFieldDictionary { get; set; }
 
         public Dictionary<int, bool> CategoryDictionary { get; set; }
+
+        public ICollection<IFormFile> Photos { get; set; }
 
     }
 }
