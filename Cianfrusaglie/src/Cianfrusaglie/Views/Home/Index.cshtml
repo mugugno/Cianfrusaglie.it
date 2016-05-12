@@ -1,5 +1,4 @@
 ﻿
-
 @functions
 {
 
@@ -81,20 +80,36 @@
         </ul>
 
         <ul class="nav navbar-nav" id="menuRight" >
-            <li>
                 @if( !User.Identity.IsAuthenticated ) {
-                    <a href="~/Account/Register" id="regLink" ><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                    <li>
+                        <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                    </li>
                 } else {
-                    <a href="#" ><span class="glyphicon glyphicon-user"></span> Profilo</a>
+                    <li class="dropdown dropdown-large">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
+                        <ul class="dropdown-menu dropdown-menu-large">
+                            <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
+                            <li><a href="">Scrivi un messaggio</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header"><span class="glyphicon glyphicon-pencil"></span> Inserisci un annuncio</li>
+                            <li><a href="~/Announces/Create">Dona in regalo</a></li>
+                            <li><a href="">Vendi</a></li>
+                            <li><a href="">Baratta</a></li>
+                            <li><a href="">Stai cercando un oggetto in particolare?</a></li>
+                        </ul>
+                    </li>
                 }
-            </li>
-            <li>
                 @if( !User.Identity.IsAuthenticated ) {
-                    <a href="~/Account/Login" id="logLink" ><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    <li>
+                        <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    </li>
                 } else {
-                    <a href="~/Account/LogOff" ><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    <li>
+                        <a href="~/Account/LogOff"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </li>
                 }
-            </li>
         </ul>
     </div>
 </nav>
@@ -224,7 +239,7 @@
                                     {
                                         <p class="btn-add">
                                             <i class="fa fa-shopping-cart"></i>
-                                            <a href="#" data-toggle="modal" data-target="#myWindow" class="">Dettagli</a>
+                                            <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
                                         </p>
                                         <p class="btn-details">
                                             <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
@@ -234,10 +249,10 @@
                                     {
                                         <p class="btn-add">
                                             <i class="fa fa-shopping-cart"></i>
-                                            <a href="#" class="">Dettagli</a>
+                                            <a href="~/Announces/Details/id=@annuncio.Id" class="">Dettagli</a>
                                         </p>
                                         <p class="btn-details">
-                                            <i class="fa fa-list"></i><a href="#" class="">Contatta</a> @*~/Messages/Details/?id=@annuncio.Author.Id*@
+                                            <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
                                         </p>
                                     }
                                 </div>
