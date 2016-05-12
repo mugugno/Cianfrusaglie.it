@@ -24,8 +24,9 @@ namespace Cianfrusaglie.Controllers {
       public IActionResult Index() {
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
-
-         return View( GetLoggedUserPublishedAnnounces().ToList() );
+        ViewData["formCategories"] = _context.Categories.ToList();
+        ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        return View( GetLoggedUserPublishedAnnounces().ToList() );
       }
       
    }
