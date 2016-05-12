@@ -6,48 +6,69 @@
 }
 
 
-<div>
-    <h2>@Html.DisplayName(Model.Title)</h2>
-    <hr/>
-    <dl class="dl-horizontal" >
+<div id="wrapper-announce">
 
-        @foreach (var f in (Dictionary<string,string>) ViewData["formFieldsValue"])
-        {
-                <dt>
-                    @f.Value
-                </dt>
-                <dd>
-                    @f.Key
-                </dd>
-        }
-        @if (Model.Closed)
-        {
-            <dt style="white-space: normal">
-                @Html.DisplayName("Disponibile a muoversi")
-            </dt>
-            <dt>
-                @Html.DisplayName("Range di disponibilita'")
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.MeterRange);
-            </dd>
-        }
-        else
-        {
-            <dt>
-                Non disponibile a muoversi
-            </dt>
-            <dd></dd>
-        }
-        <dt>
-            Data di Pubblicazione
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PublishDate)
-        </dd>
-    </dl>
+    <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
+    <div class="row">
+        <div class="col-sm-10 col-md-5">
+
+            <div class="col-item">
+                <div class="photo">
+                    <img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img-responsive" alt="a"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10 col-md-5">
+            <div class="col-item">
+
+
+                <dl class="dl-horizontal" >
+
+                    @foreach (var f in (Dictionary<string, string>)ViewData["formFieldsValue"])
+                    {
+
+                        <dt>
+                            @f.Key
+                        </dt>
+                        <dd>
+                            @f.Value
+                        </dd>
+                    }
+                    @if (Model.Closed)
+                    {
+                        <dt style="white-space: normal">
+                            @Html.DisplayName("Disponibile a muoversi")
+                        </dt>
+                        <dt>
+                            @Html.DisplayName("Range di disponibilita'")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.MeterRange);
+                        </dd>
+                    }
+                    else
+                    {
+                        <dt>
+                            Non disponibile a muoversi
+                        </dt>
+                        <dd></dd>
+                    }
+                    <dt>
+                        Data di Pubblicazione
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PublishDate)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+
+@*    <p>*@
+@*        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
+@*        <a asp-action="Index">Back to List</a>*@
+@*    </p>*@
 </div>
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</p>
+
+ 
