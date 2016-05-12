@@ -2,7 +2,27 @@
 @model  Cianfrusaglie.ViewModels.Account.LoginViewModel
 @{
     ViewData["Title"] = "Login";
+    Layout = "";
 }
+
+
+
+<html>
+<head>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Register.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Style.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+
+
+</head>
+<body>
 <div id="wrapper-register">
     <div id="register">
         <h1>
@@ -16,22 +36,21 @@
             </h2>
             <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label">Username</label><br />
-                <input asp-for="UserName" class="form-control" />
+                <label asp-for="UserName" class="control-label">Username</label><br/>
+                <input asp-for="UserName" class="form-control"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label">Password</label><br />
-                <input asp-for="Password" type="password" class="form-control" />
+                <label asp-for="Password" class="control-label">Password</label><br/>
+                <input asp-for="Password" type="password" class="form-control"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <br /><button class="btn btn-default" type="submit">Accedi</button>
+                <br/><button class="btn btn-default" type="submit">Accedi</button>
             </div>
             <span id="sottoForm"><h5>Se non sei ancora registrato, <a href="~/Account/Register">clicca qui</a></h5></span>
         </form>
     </div>
 </div>
-@*@section Scripts {
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    }*@
+</body>
+</html>

@@ -1,17 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.Announce;
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Cianfrusaglie.Controllers {
     public class AnnouncesController : Controller {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _environment;
 
-        public AnnouncesController( ApplicationDbContext context ) { _context = context; }
+        public AnnouncesController( ApplicationDbContext context, IHostingEnvironment environment ) {
+            _context = context;
+            _environment = environment;
+        }
 
         // GET: Announces
         public IActionResult Index() {
@@ -70,12 +79,25 @@ namespace Cianfrusaglie.Controllers {
 
         // POST: Announces/Create
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create( CreateAnnounceViewModel model ) {
+        public async Task<IActionResult> Create( CreateAnnounceViewModel model ) {
             //TODO: Aggiungere i campi della risposta di errore.
 
             if( ModelState.IsValid ) {
                 if( !LoginChecker.HasLoggedUser( this ) )
                     return HttpBadRequest();
+                //Upload delle foto
+                string uploads = Path.Combine(_environment.WebRootPath, "images");
+                var imagesUrls = new List< string >();
+                foreach (var file in model.Photos)
+                {
+                    if (file.Length > 0)
+                    {
+                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        imagesUrls.Add(@"\images\"+fileName);
+                        await file.SaveAsAsync(Path.Combine(uploads, fileName));
+                    }
+                }
+                //Fine upload delle immagini
                 string idlogged = User.GetUserId();
                 User author = _context.Users.First( u => u.Id.Equals( idlogged ) );
                 var newAnnounce = new Announce {
@@ -85,8 +107,12 @@ namespace Cianfrusaglie.Controllers {
                     MeterRange = model.Range,
                     Author = author
                 };
+                
                 _context.Announces.Add( newAnnounce );
-                if(model.FormFieldDictionary != null)
+                foreach (string url in imagesUrls) {
+                    _context.Add( new ImageUrl {Announce = newAnnounce, Url = url} );
+                }
+                if (model.FormFieldDictionary != null)
                     foreach( var kvPair in model.FormFieldDictionary ) {
                         if( !string.IsNullOrEmpty( kvPair.Value ) ) {
                             _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
