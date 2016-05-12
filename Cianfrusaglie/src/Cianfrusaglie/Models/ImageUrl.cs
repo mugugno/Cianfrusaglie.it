@@ -6,6 +6,7 @@ namespace Cianfrusaglie.Models {
       [Required, MaxLength( 2083 )]
       public virtual string Url { get; set; }
       [Required]
+      public virtual int AnnounceId { get; set; }
       public virtual Announce Announce { get; set; }
    }
 }

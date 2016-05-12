@@ -1,0 +1,28 @@
+@model IEnumerable<Cianfrusaglie.Models.Announce>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Storico miei annunci</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <a href="~/Announces/Details/?id=@item.Id"> @Html.DisplayFor( modelItem => item.Title ) </a>
+</td>
+        <td>
+            <a href="~/Announces/Edit/?id=@item.Id">Modifica</a> | 
+            <a href="~/Announces/Delete/?id=@item.Id">Elimina</a>
+        </td>
+    </tr>
+}
+</table>

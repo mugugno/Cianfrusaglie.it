@@ -101,7 +101,6 @@ namespace Cianfrusaglie.Controllers {
 
         //
         // POST: /Account/LogOff
-        [HttpPost, ValidateAntiForgeryToken]
         public async Task< IActionResult > LogOff() {
             await _signInManager.SignOutAsync();
             _logger.LogInformation( 4, "User logged out." );
