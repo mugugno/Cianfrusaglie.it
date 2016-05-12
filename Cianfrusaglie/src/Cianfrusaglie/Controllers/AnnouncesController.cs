@@ -47,7 +47,8 @@ namespace Cianfrusaglie.Controllers {
                 var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
                 dictionary.Add(formField, f.Value);
             }
-
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["formFieldsValue"] = dictionary;
             ViewData["Images"] = _context.ImageUrls.Where(i => i.Announce.Equals(announce)).ToList();
             ViewData["IdAnnounce"] = id;
@@ -60,6 +61,8 @@ namespace Cianfrusaglie.Controllers {
         // GET: Announces/Create
         public IActionResult Create()
         {
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["listUsers"] = _context.Users.ToList();
             ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
             ViewData["formCategories"] = _context.Categories.ToList();
@@ -157,6 +160,8 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();

@@ -76,10 +76,12 @@ namespace Cianfrusaglie.Controllers {
       // inviare un messaggio all'utente con id = id
       // GET: Messages/Create
       public IActionResult Create( string id ) {
+
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
-
-         if( id == null )
+        ViewData["formCategories"] = _context.Categories.ToList();
+        ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        if ( id == null )
             return HttpNotFound();
 
          if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
