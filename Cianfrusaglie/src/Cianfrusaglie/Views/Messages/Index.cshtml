@@ -3,20 +3,42 @@
 @model IEnumerable<Cianfrusaglie.Models.User>
 
 @{
-    ViewData["Title"] = "Conversazioni";
+    ViewData["Title"] = "Le Mie Conversazioni";
 }
 
-<h2>Index</h2>
 
-<table>    
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            <a asp-action="Details" asp-route-id="@item.Id"> @item.UserName </a>
-        </td>
-        <td>
-            <a asp-action="Delete" style="margin-left: 100px" asp-route-id="@item.Id">Delete</a>
-        </td>
-    </tr>
-}
-</table>
+
+<div class="panel-body" >
+    <div class="row" >
+        <div class="col-md-1" ></div>
+        <div class="col-md-10" >
+            <div class="panel panel-default" >
+                <div class="panel-heading" style="text-align: center" >
+                    <h3>Tutte le mie conversazioni</h3>
+                </div>
+                <div class="panel-body" >
+                    <div class="row" >
+                        <div class="col-md-3" ></div>
+                        <div class="col-md-6" >
+                            @foreach( var item in Model ) {
+                                <div class="panel panel-default" >
+                                    <div class="panel-heading" >
+                                        <a asp-action="Details" asp-route-id="@item.Id" >
+                                            <h3>
+                                                <b>@item.UserName</b>
+                                            </h3>
+                                        </a>
+                                    </div>
+                                    <div class="panel-body" >
+                                        <a asp-action="Details" asp-route-id="@item.Id" > Visualizza Conversazione </a>
+                                        <a asp-action="Delete" style="margin-left: 40%" asp-route-id="@item.Id" >Elimina Conversazione</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

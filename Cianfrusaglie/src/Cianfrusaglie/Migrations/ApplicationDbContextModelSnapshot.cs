@@ -177,8 +177,7 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AnnounceId")
-                        .IsRequired();
+                    b.Property<int>("AnnounceId");
 
                     b.Property<string>("Url")
                         .IsRequired()

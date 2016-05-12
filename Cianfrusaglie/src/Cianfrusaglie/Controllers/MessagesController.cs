@@ -107,7 +107,7 @@ namespace Cianfrusaglie.Controllers {
 
             _context.Messages.Add( new Message() { Sender = loggedUsr, Receiver = receiverUsr, Text = messageCreate.Text, DateTime = DateTime.Now} );
             _context.SaveChanges();
-            return RedirectToAction( "Index" );
+             return RedirectToAction( "Details", new {id = receiverUsr.Id} );
          }
          return View( messageCreate );
       }
