@@ -5,6 +5,7 @@ using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Services;
 using Cianfrusaglie.ViewModels.Account;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Features;
 using Microsoft.AspNet.Http.Features.Authentication.Internal;
@@ -28,6 +29,7 @@ namespace Cianfrusaglie.Tests {
         private readonly Mock< SignInManager< User > > _mockSignInManager;
         private readonly ISmsSender _smsSender;
         protected readonly ApplicationDbContext Context;
+        protected readonly IHostingEnvironment HostingEnvironmentEnvironment;
         protected readonly UserManager< User > UserManager;
         protected SignInManager< User > SignInManager;
 
@@ -45,6 +47,7 @@ namespace Cianfrusaglie.Tests {
                 h => new HttpContextAccessor {HttpContext = defaultHttpContext} );
             var serviceProvider = services.BuildServiceProvider();
             Context = serviceProvider.GetRequiredService< ApplicationDbContext >();
+            HostingEnvironmentEnvironment = serviceProvider.GetRequiredService< HostingEnvironment >();
             UserManager = serviceProvider.GetRequiredService< UserManager< User > >();
 
             SignInManager = serviceProvider.GetRequiredService< SignInManager< User > >();
