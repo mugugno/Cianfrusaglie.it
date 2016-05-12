@@ -36,7 +36,7 @@ namespace Cianfrusaglie.Controllers {
             foreach (var f in announceFormFieldsvalues)
             {
                 var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
-                dictionary.Add(f.Value,formField.Name);
+                dictionary.Add(formField.Name, f.Value);
             }
 
             ViewData["formFieldsValue"] = dictionary;
