@@ -1,0 +1,9 @@
+﻿.dl-horizontal dt{
+    white-space: normal;
+    margin-bottom: 5px;
+    width: 20%;
+}
+
+.dl-horizontal dd {
+    margin-left: 22%;
+}

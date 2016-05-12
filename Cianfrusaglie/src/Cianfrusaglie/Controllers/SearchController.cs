@@ -19,6 +19,10 @@ namespace Cianfrusaglie.Controllers {
          var result = SearchAnnounces( title, categories).ToList();
          return View( result );
       }
+
+       public IActionResult RedirectToChat( string id ) {
+           return RedirectToAction( nameof(MessagesController.Details), id );
+       }
       
 
         public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories) {
@@ -45,11 +49,11 @@ namespace Cianfrusaglie.Controllers {
              var ids = _context.Categories.Where(c => categories.Contains(c.OverCategory.Id)).Select(u => u.Id).ToList();
              var announcesCategories = _context.AnnounceCategories.Where(a => a.AnnounceId.Equals(announce.Id) && (categories.Contains(a.CategoryId) || ids.Contains(a.CategoryId)));
             
-             if (announcesCategories.Count() > 0)
+             if (announcesCategories.Any())
              {
                  foreach (var tmp in announcesCategories)
                  {
-                     var annuncio = _context.Announces.Where(u => u.Id == tmp.AnnounceId).SingleOrDefault();
+                     var annuncio = _context.Announces.SingleOrDefault(u => u.Id == tmp.AnnounceId);
                      yield return annuncio;
                     }
              }

@@ -1,39 +1,49 @@
+@using Remotion.Linq.Clauses
 @model Cianfrusaglie.Models.Announce
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
 
 <div>
-    <h4>Announce</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        
+    <h2>@Html.DisplayName(Model.Title)</h2>
+    <hr/>
+    <dl class="dl-horizontal" >
+
+        @foreach (var f in (Dictionary<string,string>) ViewData["formFieldsValue"])
+        {
+                <dt>
+                    @f.Value
+                </dt>
+                <dd>
+                    @f.Key
+                </dd>
+        }
+        @if (Model.Closed)
+        {
+            <dt style="white-space: normal">
+                @Html.DisplayName("Disponibile a muoversi")
+            </dt>
+            <dt>
+                @Html.DisplayName("Range di disponibilita'")
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.MeterRange);
+            </dd>
+        }
+        else
+        {
+            <dt>
+                Non disponibile a muoversi
+            </dt>
+            <dd></dd>
+        }
         <dt>
-            @Html.DisplayNameFor(model => model.Closed)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Closed)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PublishDate)
+            Data di Pubblicazione
         </dt>
         <dd>
             @Html.DisplayFor(model => model.PublishDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MeterRange)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MeterRange)
         </dd>
     </dl>
 </div>
