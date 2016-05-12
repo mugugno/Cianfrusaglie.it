@@ -19,11 +19,12 @@ namespace Cianfrusaglie.Controllers {
 
          var result = SearchAnnounces( title, categories).ToList();
             ViewData["listUsers"] = _context.Users.ToList();
+            ViewData["listImages"] = _context.ImageUrls.ToList();
             return View( result );
       }
 
-       public IActionResult RedirectToChat( string id ) {
-           return RedirectToAction( nameof(MessagesController.Details), id );
+       public IActionResult SearchRedirect( string title, IEnumerable<int> categories) {
+           return RedirectToAction("Index", new {title = title, categories = categories});
        }
       
 

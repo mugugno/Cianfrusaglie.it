@@ -43,7 +43,7 @@
 
     public string GetImages(int AnnounceId)
     {
-        foreach (var imm in ViewData["imageURL"] as List<ImageUrl>)
+        foreach (var imm in ViewData["listImages"] as List<ImageUrl>)
         {
             if (imm.AnnounceId == AnnounceId)
                return imm.Url;
@@ -149,7 +149,7 @@
                     <div class="col-sm-4 col-md-3">
                         <div class="col-item">
                             <div class="photo">
-                                <!--<img src="" class="img-responsive" alt="a"/>-->
+                                <img src="@GetImages(@annuncio.Id)" class="img-responsive" />
                             </div>
                            
                             <div class="info">

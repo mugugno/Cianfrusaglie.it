@@ -25,6 +25,7 @@ namespace Cianfrusaglie.Controllers {
         // GET: Announces
         public IActionResult Index()
         {
+            ViewData["listImages"] = _context.ImageUrls.ToList();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             return View();
@@ -49,7 +50,7 @@ namespace Cianfrusaglie.Controllers {
             }
 
             ViewData["formFieldsValue"] = dictionary;
-
+            ViewData["Images"] = _context.ImageUrls.Where(i => i.Announce.Equals(announce)).ToList();
 
             return View( announce );
         }
@@ -136,6 +137,8 @@ namespace Cianfrusaglie.Controllers {
                 TempData[ "announceCreated" ] = "Il tuo annuncio è stato creato correttamente!";
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
+
+
             SetViewDataForCreateAction();
             return View( model );
 
