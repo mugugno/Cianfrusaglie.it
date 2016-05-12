@@ -16,7 +16,7 @@ namespace Cianfrusaglie.Tests
 
         protected AnnouncesController CreateAnnounceController(string id, string userName)
         {
-            return new AnnouncesController(Context)
+            return new AnnouncesController(Context, HostingEnvironmentEnvironment)
             {
                 ActionContext = MockActionContextForLogin( id ),
                 Url = new Mock<IUrlHelper>().Object
