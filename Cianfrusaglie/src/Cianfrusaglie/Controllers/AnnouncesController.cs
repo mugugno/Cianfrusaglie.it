@@ -24,8 +24,9 @@ namespace Cianfrusaglie.Controllers {
 
         // GET: Announces
         public IActionResult Index() {
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData["listUsers"] = _context.Users.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData["formCategories"] = _context.Categories.ToList();
             return View();
         }
 
@@ -57,6 +58,13 @@ namespace Cianfrusaglie.Controllers {
         // GET: Announces/Create
         public IActionResult Create()
         {
+            ViewData["listUsers"] = _context.Users.ToList();
+            ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["formFields"] = _context.FormFields.ToList();
+            ViewData["formMacroCategories"] = _context.Categories.ToList();
+            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             SetViewDataForCreateAction();
             return View();
@@ -64,9 +72,7 @@ namespace Cianfrusaglie.Controllers {
 
         private void SetViewDataForCreateAction()
         {
-            ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            
             var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
             foreach (FormField formField in _context.FormFields.ToList())
             {
@@ -81,9 +87,10 @@ namespace Cianfrusaglie.Controllers {
         // POST: Announces/Create
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create( CreateAnnounceViewModel model ) {
+
             //TODO: Aggiungere i campi della risposta di errore.
 
-            if( ModelState.IsValid ) {
+            if ( ModelState.IsValid ) {
                 if( !LoginChecker.HasLoggedUser( this ) )
                     return HttpBadRequest();
                 //Upload delle foto

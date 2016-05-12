@@ -2,25 +2,7 @@
 @functions
 {
 
-    public IEnumerable<Category> GetCategories()
-    {
-        for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
-        {
-            var categories = ViewData["formCategories"] as List<Category>;
-            if (categories != null && categories[i].OverCategory == null)
-                yield return categories[i];
-        }
-    }
-
-    public IEnumerable<Category> GetSubCategories(String macro)
-    {
-        for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
-        {
-            var subCat = ViewData["formCategories"] as List<Category>;
-            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
-                yield return subCat[j];
-        }
-    }
+    
 
     public IEnumerable<Announce> GetAnnounce()
     {
@@ -49,7 +31,7 @@
     {
         <div class="alert alert-success alert-dismissible" role="alert" >
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-            <strong>Ottimo!</strong> @TempData["announceCreated"].
+            <strong>Ottimo!</strong> @TempData["announceCreated"]
         </div>
     }
     <div class="container-fluid" id="containerPrincipale">

@@ -3,6 +3,7 @@
 
     public IEnumerable<Category> GetCategories()
     {
+        var t = ViewData["numberOfCategories"];
         for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
         {
             var categories = ViewData["formCategories"] as List<Category>;
@@ -21,20 +22,13 @@
         }
     }
 
-    public IEnumerable<Announce> GetAnnounce()
-    {
-        foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
-        {
-            yield return announce;
-        }
-    }
 
 }
 
 <html>
 <head>
 
-
+    <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
