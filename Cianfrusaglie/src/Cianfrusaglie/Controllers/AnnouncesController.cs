@@ -45,7 +45,7 @@ namespace Cianfrusaglie.Controllers {
             foreach (var f in announceFormFieldsvalues)
             {
                 var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
-                dictionary.Add(f.Value,formField.Name);
+                dictionary.Add(formField.Name, f.Value);
             }
 
             ViewData["formFieldsValue"] = dictionary;
@@ -161,7 +161,7 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            if( !User.GetUserId().Equals( announce.Author.Id ) ) {
+            if( !User.GetUserId().Equals( announce.AuthorId ) ) {
                 return HttpBadRequest();
             }
             if( ModelState.IsValid ) {
@@ -196,7 +196,7 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            if( !User.GetUserId().Equals( announce.Author.Id ) )
+            if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
             _context.Announces.Remove( announce );
             _context.SaveChanges();

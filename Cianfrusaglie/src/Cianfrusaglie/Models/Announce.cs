@@ -7,6 +7,7 @@ namespace Cianfrusaglie.Models {
       public int Id { get; set; }
 
       [Required]
+      public virtual string AuthorId { get; set; }
       public virtual User Author { get; set; }
 
       [DataType( DataType.DateTime )]

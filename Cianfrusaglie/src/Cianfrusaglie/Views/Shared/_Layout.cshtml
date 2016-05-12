@@ -1,4 +1,37 @@
-﻿<html>
+﻿@functions
+{
+
+    public IEnumerable<Category> GetCategories()
+    {
+        for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
+        {
+            var categories = ViewData["formCategories"] as List<Category>;
+            if (categories != null && categories[i].OverCategory == null)
+                yield return categories[i];
+        }
+    }
+
+    public IEnumerable<Category> GetSubCategories(String macro)
+    {
+        for (var j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
+        {
+            var subCat = ViewData["formCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
+                yield return subCat[j];
+        }
+    }
+
+    public IEnumerable<Announce> GetAnnounce()
+    {
+        foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
+        {
+            yield return announce;
+        }
+    }
+
+}
+
+<html>
 <head>
 
 
@@ -6,7 +39,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Header.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Home.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Register.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/Create.css" rel="stylesheet" type="text/css"/>
@@ -20,7 +53,7 @@
 <body>
 <div id="wrap">
     <div id="pageHeader" class="container ">
-        <form class="navbar-form" role="search" asp-controller="Search" method="get">
+        <form class="navbar-form" role="search" asp-action="SearchRedirect" asp-controller="Search" method="get">
             <div id="title" class="col-md-3">
                 <a href="~/">
                     <h1>
@@ -36,7 +69,97 @@
             </div>
         </form>
     </div>
+    <nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse js-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown dropdown-large">
+                    <a href="~/"><span class="glyphicon glyphicon-home"></span> Home</a>
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cerca per categoria <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-menu-large">
+                        @foreach (var macro in GetCategories())
+                        {
+                            <li>
+                                <a href="~/Search?categories=@macro.Id">@macro.Name</a>
+                                @if (GetSubCategories(@macro.Name).ToList().Count > 0)
+                                {
+                                    <ul class="dropdown-menu sub-menu">
+                                        <li class="dropdown-header">@macro.Name</li>
+                                        <li class="divider"></li>
+                                        @foreach (var sub in GetSubCategories(@macro.Name))
+                                        {
+                                            <li><a href="#">@sub.Name</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown dropdown-large">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" data-toggle="modal" data-target="#myWindow">Sto Cercando</a>
+                    }
+                    else
+                    {
+                        <a href="#">Sto Cercando</a>
+                    }
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="#">Come funziona <strong>nonhounnome.it</strong></a>
+                </li>
+            </ul>
 
+            <ul class="nav navbar-nav" id="menuRight">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="dropdown dropdown-large">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
+                        <ul class="dropdown-menu dropdown-menu-large"  style="left: auto; right:0">
+                            <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
+                            <li><a href="">Scrivi un messaggio</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header"><span class="glyphicon glyphicon-pencil"></span> Inserisci un annuncio</li>
+                            <li><a href="~/Announces/Create">Dona in regalo</a></li>
+                            <li><a href="">Vendi</a></li>
+                            <li><a href="">Baratta</a></li>
+                            <li><a href="">Stai cercando un oggetto in particolare?</a></li>
+                        </ul>
+                    </li>
+                }
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="~/Account/LogOff"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
 
     @RenderBody()
 </div>
