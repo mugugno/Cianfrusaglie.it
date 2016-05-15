@@ -207,8 +207,7 @@ namespace Cianfrusaglie.Tests
             var messageController = CreateMessageController( userTest1.Id, userTest1.UserName );
 
             //funzione da testare
-            var userTest = messageController.GetLoggedUsersMessagesWithUser(userTest2.Id).ToList();
-
+            var userTest = messageController.GetConversationWithUser( userTest2.Id ).Keys;
             Assert.Contains( messageTest1, userTest);
             Assert.DoesNotContain( messageTest2, userTest );
         }

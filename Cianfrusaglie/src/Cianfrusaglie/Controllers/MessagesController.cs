@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
@@ -13,88 +14,59 @@ namespace Cianfrusaglie.Controllers {
 
         public MessagesController( ApplicationDbContext context ) { _context = context; }
 
-        public IEnumerable< Message > GetLoggedUsersMessagesWithUser( string id ) {
-            if( id == null )
-                throw new ArgumentNullException();
-
-            IQueryable< Message > messages =
-                _context.Messages.Where(
-                    m =>
-                        ( m.Sender.Id == User.GetUserId() && m.Receiver.Id == id ) ||
-                        ( m.Receiver.Id == User.GetUserId() && m.Sender.Id == id ) );
-
-            return messages;
+        // Dizionario di tutti messaggi, con relativo ricevente, con un dato utente
+        public Dictionary< Message, User > GetConversationWithUser(string id) {
+            var dictionary = _context.Messages
+                .Where( m =>
+                        ( m.Sender.Id.Equals(User.GetUserId()) && m.Receiver.Id.Equals(id) ) ||
+                        ( m.Receiver.Id.Equals(User.GetUserId()) && m.Sender.Id.Equals(id)))
+                .OrderBy( m=> m.DateTime ).Select( m => new {m, m.Receiver} );
+            return dictionary.ToDictionary(x => x.m, x => x.m.Receiver);
         }
 
-        // FIX ABORTO DA RISCRIVERE
-        public string GetReceiver( Message message ) {
-            if( message == null )
-                throw new ArgumentNullException();
-
-            string receiver =
-                _context.Messages.Where( m => m.Equals( message ) ).Select( u => u.Receiver ).Select( x => x.Id ).First();
-
-            return receiver;
+        // Dizionario di tutte le conversazioni dell'utente loggato
+        public Dictionary< User, Dictionary< Message, User > > GetAllConversations() {
+            var dictionary =
+                _context.Messages
+                .Where( m => m.Sender.Id.Equals( User.GetUserId() ) || m.Receiver.Id.Equals( User.GetUserId() ) )
+                .OrderByDescending( m=> m.DateTime )
+                .Select( m => m.Sender.Id.Equals(User.GetUserId()) ? m.Receiver : m.Sender) 
+                .ToList()
+                .Distinct()
+                .Select( u => new { u, u.Id });
+            return dictionary.ToDictionary(x => x.u, x => GetConversationWithUser(x.u.Id) );
         }
 
-        public User GetReceiverNew( Message message ) {
-            if( message == null )
-                throw new ArgumentNullException();
-
-            User receiver = _context.Messages.Where( m => m.Equals( message ) ).Select( u => u.Receiver ).First();
-
-            return receiver;
-        }
-
-
-        protected IEnumerable< User > GetLoggedUsersConversationsUsers() {
-            List< User > userThatSendedMeAMessage =
-                _context.Messages.Where( u => u.Sender.Id.Equals( User.GetUserId() ) ).Select( u => u.Receiver ).ToList();
-            List< User > userThatISentAMessage =
-                _context.Messages.Where( u => u.Receiver.Id.Equals( User.GetUserId() ) ).Select( u => u.Sender ).ToList();
-
-
-            userThatSendedMeAMessage.AddRange( userThatISentAMessage );
-            return userThatSendedMeAMessage.Distinct();
-        }
-
-        //tutti gli utenti con cui l'utente loggato ha messaggiato
+        // Pagina della chat, con tutte le conversazioni e relativi messaggi
         // GET: Messages
-        public IActionResult Index( string id ) {
+        public IActionResult Index( string id ="" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            List< User > users = GetLoggedUsersConversationsUsers().ToList();
-            var userAndMessagesDictionary = new Dictionary< User, Dictionary< Message, User > >();
-            foreach( User user in users ) {
-                var receiverDictionary = new Dictionary< Message, User >();
-                foreach( Message m in GetLoggedUsersMessagesWithUser( user.Id ).ToList() ) {
-                    receiverDictionary[ m ] = GetReceiverNew( m );
-                }
-                userAndMessagesDictionary[ user ] = receiverDictionary;
-            }
-
-            ViewData[ "userAndMessagesDictionary" ] = userAndMessagesDictionary;
-            if( id != null )
-                ViewData[ "idAfterRefresh" ] = id;
-            else
-                ViewData[ "idAfterRefresh" ] = "";
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData[ "allConversations" ] = GetAllConversations();
+            ViewData[ "idAfterRefresh" ] = id;
             return View();
         }
+        // Redirect dei link "Contatta" negli annunci
+        public IActionResult Details( string id="" ) {
+            return RedirectToAction( "Create", new { id = id} );
+        }
 
-        // inviare un messaggio all'utente con id = id
+        // Pagina di invio di un messaggio a un dato utente
         // GET: Messages/Create
-        public IActionResult Create( string id ) {
+        public IActionResult Create( string id="" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            if( id == null )
+            // non si può scrivere a se stessi
+            if(id == User.GetUserId())
                 return HttpNotFound();
 
             if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
                 return HttpNotFound();
-
-            ViewData[ "receiverId" ] = id;
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData[ "receiver" ] = _context.Users.First(u => u.Id.Equals( id ));
             return View();
         }
 
@@ -112,7 +84,7 @@ namespace Cianfrusaglie.Controllers {
                 User receiverUsr = _context.Users.SingleOrDefault( u => u.Id == messageCreate.ReceiverId );
 
                 if( receiverUsr == null )
-                    return HttpBadRequest(); //id utente non valido
+                    return HttpBadRequest();
 
                 _context.Messages.Add( new Message {
                     Sender = loggedUsr,
@@ -135,6 +107,8 @@ namespace Cianfrusaglie.Controllers {
             Message message = _context.Messages.SingleOrDefault( m => m.Id == id );
             if( message == null )
                 return HttpNotFound();
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
 
             return View( message );
         }

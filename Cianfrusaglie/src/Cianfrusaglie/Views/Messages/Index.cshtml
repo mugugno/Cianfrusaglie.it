@@ -9,7 +9,7 @@
 @functions
 {
 
-    private Dictionary< User, Dictionary< Message, User > > GetUserAndMessagesDictionary() { return ViewData[ "userAndMessagesDictionary" ] as Dictionary< User, Dictionary< Message, User > >; }
+    private Dictionary< User, Dictionary< Message, User > > GetUserAndMessagesDictionary() { return ViewData[ "allConversations" ] as Dictionary< User, Dictionary< Message, User > >; }
     private string GetIdAfterRefresh() { return ViewData[ "idAfterRefresh" ] as string; }
 }
 
@@ -38,11 +38,11 @@
                                 Message lastMessage = kvPair.Value.Keys.Last();
                                 int length = lastMessage.Text.Length;
                             }
-                            @if( kvPair.Key.Id.Equals( User.GetUserId() ) ) {
+                            @if( kvPair.Value[lastMessage].Id.Equals( User.GetUserId() ) ) {
                                 <div class="triangle-isosceles right bubble-no-margin" id="balloonSent" >
                                     <h6>
                                         <span style="float: right">@lastMessage.DateTime</span>
-                                        <span style="float: left"> @kvPair.Key.UserName </span>
+                                        <span style="float: left">@kvPair.Key.UserName </span>
                                     </h6>
                                     <br />
                                     <div id="messageSent" >
@@ -159,7 +159,6 @@
         $('.first-all-messages').show(0);
     else
         $("#" + id).show(0);
-    //$("#" + id).css("background-color", "#b8e2fc");
     $('.first-message-panel').css("background-color", "#b8e2fc");
 
 
