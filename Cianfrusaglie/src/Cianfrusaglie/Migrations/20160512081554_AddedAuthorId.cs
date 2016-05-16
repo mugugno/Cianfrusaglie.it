@@ -1,225 +1,97 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 
-namespace Cianfrusaglie.Migrations
-{
-    public partial class AddedAuthorId : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceCategory_Announce_AnnounceId", table: "AnnounceCategory");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceCategory_Category_CategoryId", table: "AnnounceCategory");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceFormFieldsValues_Announce_AnnounceId", table: "AnnounceFormFieldsValues");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceFormFieldsValues_FormField_FormFieldId", table: "AnnounceFormFieldsValues");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceGat_Announce_AnnounceId", table: "AnnounceGat");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceGat_Gat_GatId", table: "AnnounceGat");
-            migrationBuilder.DropForeignKey(name: "FK_CategoryFormField_Category_CategoryId", table: "CategoryFormField");
-            migrationBuilder.DropForeignKey(name: "FK_CategoryFormField_FormField_FormFieldId", table: "CategoryFormField");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", table: "AspNetRoleClaims");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserClaim<string>_User_UserId", table: "AspNetUserClaims");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_User_UserId", table: "AspNetUserLogins");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_User_UserId", table: "AspNetUserRoles");
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceCategory_Announce_AnnounceId",
-                table: "AnnounceCategory",
-                column: "AnnounceId",
-                principalTable: "Announce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceCategory_Category_CategoryId",
-                table: "AnnounceCategory",
-                column: "CategoryId",
-                principalTable: "Category",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceFormFieldsValues_Announce_AnnounceId",
-                table: "AnnounceFormFieldsValues",
-                column: "AnnounceId",
-                principalTable: "Announce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceFormFieldsValues_FormField_FormFieldId",
-                table: "AnnounceFormFieldsValues",
-                column: "FormFieldId",
-                principalTable: "FormField",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceGat_Announce_AnnounceId",
-                table: "AnnounceGat",
-                column: "AnnounceId",
-                principalTable: "Announce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceGat_Gat_GatId",
-                table: "AnnounceGat",
-                column: "GatId",
-                principalTable: "Gat",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_CategoryFormField_Category_CategoryId",
-                table: "CategoryFormField",
-                column: "CategoryId",
-                principalTable: "Category",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_CategoryFormField_FormField_FormFieldId",
-                table: "CategoryFormField",
-                column: "FormFieldId",
-                principalTable: "FormField",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId",
-                principalTable: "AspNetRoles",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserClaim<string>_User_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserLogin<string>_User_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId",
-                principalTable: "AspNetRoles",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserRole<string>_User_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+namespace Cianfrusaglie.Migrations {
+    public partial class AddedAuthorId : Migration {
+        protected override void Up( MigrationBuilder migrationBuilder ) {
+            migrationBuilder.DropForeignKey( "FK_AnnounceCategory_Announce_AnnounceId", "AnnounceCategory" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceCategory_Category_CategoryId", "AnnounceCategory" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceFormFieldsValues_Announce_AnnounceId",
+                "AnnounceFormFieldsValues" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceFormFieldsValues_FormField_FormFieldId",
+                "AnnounceFormFieldsValues" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceGat_Announce_AnnounceId", "AnnounceGat" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceGat_Gat_GatId", "AnnounceGat" );
+            migrationBuilder.DropForeignKey( "FK_CategoryFormField_Category_CategoryId", "CategoryFormField" );
+            migrationBuilder.DropForeignKey( "FK_CategoryFormField_FormField_FormFieldId", "CategoryFormField" );
+            migrationBuilder.DropForeignKey( "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", "AspNetRoleClaims" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserClaim<string>_User_UserId", "AspNetUserClaims" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserLogin<string>_User_UserId", "AspNetUserLogins" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserRole<string>_IdentityRole_RoleId", "AspNetUserRoles" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserRole<string>_User_UserId", "AspNetUserRoles" );
+            migrationBuilder.AddForeignKey( "FK_AnnounceCategory_Announce_AnnounceId", "AnnounceCategory", "AnnounceId",
+                "Announce", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_AnnounceCategory_Category_CategoryId", "AnnounceCategory", "CategoryId",
+                "Category", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_AnnounceFormFieldsValues_Announce_AnnounceId",
+                "AnnounceFormFieldsValues", "AnnounceId", "Announce", principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_AnnounceFormFieldsValues_FormField_FormFieldId",
+                "AnnounceFormFieldsValues", "FormFieldId", "FormField", principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_AnnounceGat_Announce_AnnounceId", "AnnounceGat", "AnnounceId",
+                "Announce", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_AnnounceGat_Gat_GatId", "AnnounceGat", "GatId", "Gat",
+                principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_CategoryFormField_Category_CategoryId", "CategoryFormField",
+                "CategoryId", "Category", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_CategoryFormField_FormField_FormFieldId", "CategoryFormField",
+                "FormFieldId", "FormField", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", "AspNetRoleClaims",
+                "RoleId", "AspNetRoles", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserClaim<string>_User_UserId", "AspNetUserClaims", "UserId",
+                "AspNetUsers", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserLogin<string>_User_UserId", "AspNetUserLogins", "UserId",
+                "AspNetUsers", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserRole<string>_IdentityRole_RoleId", "AspNetUserRoles",
+                "RoleId", "AspNetRoles", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserRole<string>_User_UserId", "AspNetUserRoles", "UserId",
+                "AspNetUsers", principalColumn: "Id", onDelete: ReferentialAction.Cascade );
         }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceCategory_Announce_AnnounceId", table: "AnnounceCategory");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceCategory_Category_CategoryId", table: "AnnounceCategory");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceFormFieldsValues_Announce_AnnounceId", table: "AnnounceFormFieldsValues");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceFormFieldsValues_FormField_FormFieldId", table: "AnnounceFormFieldsValues");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceGat_Announce_AnnounceId", table: "AnnounceGat");
-            migrationBuilder.DropForeignKey(name: "FK_AnnounceGat_Gat_GatId", table: "AnnounceGat");
-            migrationBuilder.DropForeignKey(name: "FK_CategoryFormField_Category_CategoryId", table: "CategoryFormField");
-            migrationBuilder.DropForeignKey(name: "FK_CategoryFormField_FormField_FormFieldId", table: "CategoryFormField");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", table: "AspNetRoleClaims");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserClaim<string>_User_UserId", table: "AspNetUserClaims");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_User_UserId", table: "AspNetUserLogins");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
-            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_User_UserId", table: "AspNetUserRoles");
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceCategory_Announce_AnnounceId",
-                table: "AnnounceCategory",
-                column: "AnnounceId",
-                principalTable: "Announce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceCategory_Category_CategoryId",
-                table: "AnnounceCategory",
-                column: "CategoryId",
-                principalTable: "Category",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceFormFieldsValues_Announce_AnnounceId",
-                table: "AnnounceFormFieldsValues",
-                column: "AnnounceId",
-                principalTable: "Announce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceFormFieldsValues_FormField_FormFieldId",
-                table: "AnnounceFormFieldsValues",
-                column: "FormFieldId",
-                principalTable: "FormField",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceGat_Announce_AnnounceId",
-                table: "AnnounceGat",
-                column: "AnnounceId",
-                principalTable: "Announce",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AnnounceGat_Gat_GatId",
-                table: "AnnounceGat",
-                column: "GatId",
-                principalTable: "Gat",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_CategoryFormField_Category_CategoryId",
-                table: "CategoryFormField",
-                column: "CategoryId",
-                principalTable: "Category",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_CategoryFormField_FormField_FormFieldId",
-                table: "CategoryFormField",
-                column: "FormFieldId",
-                principalTable: "FormField",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId",
-                principalTable: "AspNetRoles",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserClaim<string>_User_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserLogin<string>_User_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId",
-                principalTable: "AspNetRoles",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_IdentityUserRole<string>_User_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+        protected override void Down( MigrationBuilder migrationBuilder ) {
+            migrationBuilder.DropForeignKey( "FK_AnnounceCategory_Announce_AnnounceId", "AnnounceCategory" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceCategory_Category_CategoryId", "AnnounceCategory" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceFormFieldsValues_Announce_AnnounceId",
+                "AnnounceFormFieldsValues" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceFormFieldsValues_FormField_FormFieldId",
+                "AnnounceFormFieldsValues" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceGat_Announce_AnnounceId", "AnnounceGat" );
+            migrationBuilder.DropForeignKey( "FK_AnnounceGat_Gat_GatId", "AnnounceGat" );
+            migrationBuilder.DropForeignKey( "FK_CategoryFormField_Category_CategoryId", "CategoryFormField" );
+            migrationBuilder.DropForeignKey( "FK_CategoryFormField_FormField_FormFieldId", "CategoryFormField" );
+            migrationBuilder.DropForeignKey( "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", "AspNetRoleClaims" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserClaim<string>_User_UserId", "AspNetUserClaims" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserLogin<string>_User_UserId", "AspNetUserLogins" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserRole<string>_IdentityRole_RoleId", "AspNetUserRoles" );
+            migrationBuilder.DropForeignKey( "FK_IdentityUserRole<string>_User_UserId", "AspNetUserRoles" );
+            migrationBuilder.AddForeignKey( "FK_AnnounceCategory_Announce_AnnounceId", "AnnounceCategory", "AnnounceId",
+                "Announce", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_AnnounceCategory_Category_CategoryId", "AnnounceCategory", "CategoryId",
+                "Category", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_AnnounceFormFieldsValues_Announce_AnnounceId",
+                "AnnounceFormFieldsValues", "AnnounceId", "Announce", principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_AnnounceFormFieldsValues_FormField_FormFieldId",
+                "AnnounceFormFieldsValues", "FormFieldId", "FormField", principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_AnnounceGat_Announce_AnnounceId", "AnnounceGat", "AnnounceId",
+                "Announce", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_AnnounceGat_Gat_GatId", "AnnounceGat", "GatId", "Gat",
+                principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_CategoryFormField_Category_CategoryId", "CategoryFormField",
+                "CategoryId", "Category", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_CategoryFormField_FormField_FormFieldId", "CategoryFormField",
+                "FormFieldId", "FormField", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", "AspNetRoleClaims",
+                "RoleId", "AspNetRoles", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserClaim<string>_User_UserId", "AspNetUserClaims", "UserId",
+                "AspNetUsers", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserLogin<string>_User_UserId", "AspNetUserLogins", "UserId",
+                "AspNetUsers", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserRole<string>_IdentityRole_RoleId", "AspNetUserRoles",
+                "RoleId", "AspNetRoles", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
+            migrationBuilder.AddForeignKey( "FK_IdentityUserRole<string>_User_UserId", "AspNetUserRoles", "UserId",
+                "AspNetUsers", principalColumn: "Id", onDelete: ReferentialAction.Restrict );
         }
     }
 }

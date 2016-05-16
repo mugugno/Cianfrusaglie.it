@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
@@ -15,58 +14,56 @@ namespace Cianfrusaglie.Controllers {
         public MessagesController( ApplicationDbContext context ) { _context = context; }
 
         // Dizionario di tutti messaggi, con relativo ricevente, con un dato utente
-        public Dictionary< Message, User > GetConversationWithUser(string id) {
-            var dictionary = _context.Messages
-                .Where( m =>
-                        ( m.Sender.Id.Equals(User.GetUserId()) && m.Receiver.Id.Equals(id) ) ||
-                        ( m.Receiver.Id.Equals(User.GetUserId()) && m.Sender.Id.Equals(id)))
-                .OrderBy( m=> m.DateTime ).Select( m => new {m, m.Receiver} );
-            return dictionary.ToDictionary(x => x.m, x => x.m.Receiver);
+        public Dictionary< Message, User > GetConversationWithUser( string id ) {
+            var dictionary =
+                _context.Messages.Where(
+                    m =>
+                        ( m.Sender.Id.Equals( User.GetUserId() ) && m.Receiver.Id.Equals( id ) ) ||
+                        ( m.Receiver.Id.Equals( User.GetUserId() ) && m.Sender.Id.Equals( id ) ) ).OrderBy(
+                            m => m.DateTime ).Select( m => new {m, m.Receiver} );
+            return dictionary.ToDictionary( x => x.m, x => x.m.Receiver );
         }
 
         // Dizionario di tutte le conversazioni dell'utente loggato
         public Dictionary< User, Dictionary< Message, User > > GetAllConversations() {
             var dictionary =
-                _context.Messages
-                .Where( m => m.Sender.Id.Equals( User.GetUserId() ) || m.Receiver.Id.Equals( User.GetUserId() ) )
-                .OrderByDescending( m=> m.DateTime )
-                .Select( m => m.Sender.Id.Equals(User.GetUserId()) ? m.Receiver : m.Sender) 
-                .ToList()
-                .Distinct()
-                .Select( u => new { u, u.Id });
-            return dictionary.ToDictionary(x => x.u, x => GetConversationWithUser(x.u.Id) );
+                _context.Messages.Where(
+                    m => m.Sender.Id.Equals( User.GetUserId() ) || m.Receiver.Id.Equals( User.GetUserId() ) )
+                    .OrderByDescending( m => m.DateTime ).Select(
+                        m => m.Sender.Id.Equals( User.GetUserId() ) ? m.Receiver : m.Sender ).ToList().Distinct().Select
+                    ( u => new {u, u.Id} );
+            return dictionary.ToDictionary( x => x.u, x => GetConversationWithUser( x.u.Id ) );
         }
 
         // Pagina della chat, con tutte le conversazioni e relativi messaggi
         // GET: Messages
-        public IActionResult Index( string id ="" ) {
+        public IActionResult Index( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "allConversations" ] = GetAllConversations();
             ViewData[ "idAfterRefresh" ] = id;
             return View();
         }
+
         // Redirect dei link "Contatta" negli annunci
-        public IActionResult Details( string id="" ) {
-            return RedirectToAction( "Create", new { id = id} );
-        }
+        public IActionResult Details( string id = "" ) { return RedirectToAction( "Create", new {id} ); }
 
         // Pagina di invio di un messaggio a un dato utente
         // GET: Messages/Create
-        public IActionResult Create( string id="" ) {
+        public IActionResult Create( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
             // non si può scrivere a se stessi
-            if(id == User.GetUserId())
+            if( id == User.GetUserId() )
                 return HttpNotFound();
 
             if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
                 return HttpNotFound();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData[ "receiver" ] = _context.Users.First(u => u.Id.Equals( id ));
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "receiver" ] = _context.Users.First( u => u.Id.Equals( id ) );
             return View();
         }
 
@@ -80,8 +77,8 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
 
             if( ModelState.IsValid ) {
-                User loggedUsr = _context.Users.Single( u => u.Id == User.GetUserId() );
-                User receiverUsr = _context.Users.SingleOrDefault( u => u.Id == messageCreate.ReceiverId );
+                var loggedUsr = _context.Users.Single( u => u.Id == User.GetUserId() );
+                var receiverUsr = _context.Users.SingleOrDefault( u => u.Id == messageCreate.ReceiverId );
 
                 if( receiverUsr == null )
                     return HttpBadRequest();
@@ -104,11 +101,11 @@ namespace Cianfrusaglie.Controllers {
             if( id == null )
                 return HttpNotFound();
 
-            Message message = _context.Messages.SingleOrDefault( m => m.Id == id );
+            var message = _context.Messages.SingleOrDefault( m => m.Id == id );
             if( message == null )
                 return HttpNotFound();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
 
             return View( message );
         }
@@ -116,7 +113,7 @@ namespace Cianfrusaglie.Controllers {
         // POST: Messages/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed( int id ) {
-            Message message = _context.Messages.Single( m => m.Id == id );
+            var message = _context.Messages.Single( m => m.Id == id );
             _context.Messages.Remove( message );
             _context.SaveChanges();
             return RedirectToAction( "Index" );

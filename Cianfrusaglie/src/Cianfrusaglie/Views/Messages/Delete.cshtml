@@ -1,7 +1,7 @@
-@model Cianfrusaglie.Models.Message
+@model  Message 
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData[ "Title" ] = "Delete";
 }
 
 <h2>Delete</h2>
@@ -10,25 +10,25 @@
 <div>
     <h4>Message</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal" >
         <dt>
-            @Html.DisplayNameFor(model => model.DateTime)
+            @Html.DisplayNameFor( model => model.DateTime )
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DateTime)
+            @Html.DisplayFor( model => model.DateTime )
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Text)
+            @Html.DisplayNameFor( model => model.Text )
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Text)
+            @Html.DisplayFor( model => model.Text )
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+
+    <form asp-action="Delete" >
+        <div class="form-actions no-color" >
+            <input class="btn btn-default" type="submit" value="Delete" /> |
+            <a asp-action="Index" >Back to List</a>
         </div>
     </form>
 </div>

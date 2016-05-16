@@ -1,14 +1,20 @@
-﻿.dl-horizontal dt{
-    white-space: normal;
+﻿.dl-horizontal dt {
     margin-bottom: 5px;
+    white-space: normal;
     width: 50%;
 }
 
-.dl-horizontal dd {
-    margin-left: 52%;
-}
+.dl-horizontal dd { margin-left: 52%; }
 
-#wrapper-announce{
+#wrapper-announce {
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient( radial, center center, 0, center center, 460, from( #fff ), to( white ) );
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-radial-gradient( circle, #fff, white );
+    /* Firefox 3.6+ */
+    background: -moz-radial-gradient( circle, #fff, white );
+    /* IE 10 */
+    background: -ms-radial-gradient( circle, #fff, white );
     /*bottom:0;
     top: 0;
     left: 0;
@@ -19,42 +25,35 @@
     background-color: white;
     background-position: center center;
     background-repeat: no-repeat;
-    /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(white));
-    /* Safari 5.1+, Chrome 10+ */
-    background: -webkit-radial-gradient(circle, #fff, white);
-    /* Firefox 3.6+ */
-    background: -moz-radial-gradient(circle, #fff, white);
-    /* IE 10 */
-    background: -ms-radial-gradient(circle, #fff, white);
     margin-left: 5%;
 }
 
-#Announce{
-    padding-top:2em;
-    width: 28em;
+#Announce {
     margin: auto;
-
+    padding-top: 2em;
+    width: 28em;
 }
 
 /*#tableAnnounce {*/
-    /*padding-top:4em;*/
-   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+/*padding-top:4em;*/
+
+/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-size:1em;
     padding:1.5em;
     padding-left: 4em; 
     padding-right: 4em; 
     border: 1px solid #b8b8b8;
     background:#fff;*/
-    /*border-radius: 10px;  
-    margin-top: 10px; */ 
+
+/*border-radius: 10px;  
+    margin-top: 10px; */
+
 /*}*/
 
-.container-announce {
-    padding: 2em;
-}
+.container-announce { padding: 2em; }
 
-#titolo{
+#titolo {
+    color: #FFC107;
     text-align: center;
-    color:#FFC107;
 }

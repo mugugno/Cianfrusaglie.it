@@ -147,7 +147,7 @@ namespace Cianfrusaglie.Controllers {
                     }
                 _context.SaveChanges();
 
-                TempData[ "announceCreated" ] = "Il tuo annuncio è stato creato correttamente!";
+                TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
             SetViewData();

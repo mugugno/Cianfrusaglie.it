@@ -1,5 +1,4 @@
-@using System.Security.Cryptography
-@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel
+@model  Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
     ViewData[ "Title" ] = "Inserzione Annuncio";
@@ -26,7 +25,7 @@
     }
 
     private IEnumerable< FormField > GetFormFields() {
-        foreach( FormField field in (List< FormField >) ViewData[ "formFields" ] ) {
+        foreach( var field in (List< FormField >) ViewData[ "formFields" ] ) {
             yield return field;
         }
     }
@@ -37,47 +36,45 @@
         if( dictionary == null )
             return result;
 
-        foreach( Category category in dictionary[ formFieldId ] ) {
+        foreach( var category in dictionary[ formFieldId ] ) {
             result += category.Id + " ";
         }
         return result;
     }
 
 }
-<div id="wrap">
-    <form asp-action="Create" asp-controller="Announces" method="post" role="form" id="tabellaForm" enctype="multipart/form-data">
-        <nav class="navbar navbar-default" data-spy="affix" data-offset-top="60" id="announce-navbar" style="z-index: 15">
-            <div class="panel panel-default" style="margin-left: -15px">
-                <div class="col-md-3">
+<div id="wrap" >
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" method="post" role="form" >
+        <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15" >
+            <div class="panel panel-default" style="margin-left: -15px" >
+                <div class="col-md-3" >
                 </div>
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-default navbar-btn navbar-left" onclick="clickBackButton()" style="display: none" id="back-button">Indietro</button>
-                    <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="clickForwardButton()" id="forward-button">Avanti</button>
+                <div class="col-md-6" >
+                    <button class="btn btn-default navbar-btn navbar-left" id="back-button" onclick="clickBackButton()" style="display: none" type="button" >Indietro</button>
+                    <button class="btn btn-default navbar-btn navbar-right" id="forward-button" onclick="clickForwardButton()" type="button" >Avanti</button>
                 </div>
             </div>
 
         </nav>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row" id="page1">
-                    <div class="col-md-6">
-                        <div class="panel-group" id="panel-423221">
-                            @foreach (Category macroCategory in GetMacroCategories())
-                            {
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#category-@macroCategory.Id">@macroCategory.Name</a>
+        <div class="panel panel-default" >
+            <div class="panel-body" >
+                <div class="row" id="page1" >
+                    <div class="col-md-6" >
+                        <div class="panel-group" id="panel-423221" >
+                            @foreach( var macroCategory in GetMacroCategories() ) {
+                                <div class="panel panel-default" >
+                                    <div class="panel-heading" >
+                                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#category-@macroCategory.Id" >@macroCategory.Name</a>
                                     </div>
-                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <div class="form-group">
+                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse" >
+                                        <div class="panel-body" >
+                                            <div class="form-group" >
 
-                                                <div class="col-md-12">
-                                                    @foreach (Category category in GetCategories(macroCategory))
-                                                    {
-                                                        <div class="checkbox">
-                                                            <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id">
+                                                <div class="col-md-12" >
+                                                    @foreach( var category in GetCategories( macroCategory ) ) {
+                                                        <div class="checkbox" >
+                                                            <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id" >
                                                                 <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
                                                                 @category.Name
                                                             </label>
@@ -93,19 +90,17 @@
 
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel-group">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Informazioni aggiuntive</h3>
+                    <div class="col-md-6" >
+                        <div class="panel-group" >
+                            <div class="panel panel-default" >
+                                <div class="panel-heading" >
+                                    <h3 class="panel-title" >Informazioni aggiuntive</h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" >
 
-                                    @foreach (FormField field in GetFormFields())
-                                    {
-
-                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none">
-                                            <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label">@field.Name</label>
+                                    @foreach( var field in GetFormFields() ) {
+                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                            <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label" >@field.Name</label>
                                             <input asp-for="FormFieldDictionary[ field.Id ]" class="form-control" />
                                         </div>
                                     }
@@ -115,50 +110,50 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" id="page2" style="display: none">
-                    <div class="col-md-3">
+                <div class="row" id="page2" style="display: none" >
+                    <div class="col-md-3" >
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                    <div class="col-md-6" >
+                        <div class="panel panel-default" >
+                            <div class="panel-body" >
                                 <fieldset>
 
                                     @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
                                     <!-- Text input-->
-                                    <div class="form-group">
-                                        <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
-                                        <div class="col-md-7">
-                                            <input asp-for="Title" id="title-mandatory" type="text" placeholder="inserisci il titolo dell'annuncio" class="form-control" style="padding-left: 12px">
+                                    <div class="form-group" >
+                                        <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                        <div class="col-md-7" >
+                                            <input asp-for="Title" class="form-control" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text" >
                                             <span asp-validation-for="Title" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <!-- Textarea -->
-                                    <div class="form-group">
-                                        <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
-                                        <div class="col-md-7">
-                                            <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
-                                            
+                                    <div class="form-group" >
+                                        <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
+                                        <div class="col-md-7" >
+                                            <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
+
                                         </div>
                                     </div>
 
                                     <div class="form-group" >
                                         <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-7" >
                                             <div class="input-group" >
                                                 <span class="input-group-addon">
-                                                    <input type="checkbox" id="range-checkbox" onchange="clickRangeButton()">
+                                                    <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
                                                 </span>
-                                                <input asp-for="Range" id="range-input" type="number" placeholder="di quanti km?" class="form-control" style="padding-left: 12px">
+                                                <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label" for="photos">Immagini</label>
-                                        <div class="col-md-6">
-                                            <input asp-for="Photos" id="photos" name="photos" class="input-file" type="file" style="margin-top: 6px" multiple>
+                                    <div class="form-group" >
+                                        <label class="col-md-4 control-label" for="photos" >Immagini</label>
+                                        <div class="col-md-6" >
+                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" >
                                         </div>
                                     </div>
 
@@ -174,59 +169,60 @@
 </div>
 
 
+<script>
+    // TODO spostare tutto in un file js
+    document.getElementById("announce-navbar")
+        .setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    document.getElementById("range-checkbox").checked = true;
+    document.getElementById("range-input").value = 1;
+    setFieldsVisibility();
 
-    <script>
-        // TODO spostare tutto in un file js
-        document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
-        document.getElementById("range-checkbox").checked = true;
-        document.getElementById("range-input").value = 1;
-        setFieldsVisibility();
-
-        function setFieldsVisibility() {
-            var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-            var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
-            for (var i = 0; i < allFormFieldsArray.length; i++)
-                allFormFieldsArray[i].style.display = "none";
-            for (var i = 0; i < checkboxesArray.length; i++) {
-                var checkbox = checkboxesArray[i];
-                if (checkbox.checked) {
-                    var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
-                    for (var j = 0; j < categoryFormFieldsArray.length; j++)
-                        categoryFormFieldsArray[j].style.display = "block";
-                }
+    function setFieldsVisibility() {
+        var checkboxesArray = document.getElementsByClassName("category-checkboxes");
+        var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
+        for( var i = 0; i < allFormFieldsArray.length; i++ )
+            allFormFieldsArray[ i ].style.display = "none";
+        for( var i = 0; i < checkboxesArray.length; i++ ) {
+            var checkbox = checkboxesArray[ i ];
+            if( checkbox.checked ) {
+                var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
+                for( var j = 0; j < categoryFormFieldsArray.length; j++ )
+                    categoryFormFieldsArray[ j ].style.display = "block";
             }
         }
+    }
 
-        
 
-        // 500 sono i millisecondi di durata della transizione
-        var transitionTime = 350;
-        function clickForwardButton() {
-            if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
-                document.getElementById("forward-button").setAttribute("type","submit");
-            }
-            else document.getElementById("forward-button").innerHTML = "Pubblica";
-            $('#page1').hide(transitionTime);
-            $('#page2').show(transitionTime);
-            $('#back-button').show(0);    
+    // 500 sono i millisecondi di durata della transizione
+    var transitionTime = 350;
+
+    function clickForwardButton() {
+        if( document.getElementById("forward-button").innerHTML === "Pubblica" )
+            document.getElementById("forward-button").setAttribute("type", "submit");
+        else
+            document.getElementById("forward-button").innerHTML = "Pubblica";
+        $('#page1').hide(transitionTime);
+        $('#page2').show(transitionTime);
+        $('#back-button').show(0);
+    }
+
+    function clickBackButton() {
+        $('#page1').show(transitionTime);
+        $('#page2').hide(transitionTime);
+        $('#back-button').hide(0);
+        document.getElementById("forward-button").innerHTML = "Avanti";
+        document.getElementById("forward-button").setAttribute("type", "button");
+    }
+
+    function clickRangeButton() {
+        var checkbox = document.getElementById("range-checkbox");
+        var rangeInput = document.getElementById("range-input");
+        if( checkbox.checked ) {
+            rangeInput.removeAttribute("disabled");
+            rangeInput.value = 1;
+        } else {
+            rangeInput.setAttribute("disabled", "");
+            rangeInput.value = 0;
         }
-        function clickBackButton() {
-            $('#page1').show(transitionTime);
-            $('#page2').hide(transitionTime);
-            $('#back-button').hide(0);
-            document.getElementById("forward-button").innerHTML = "Avanti";
-            document.getElementById("forward-button").setAttribute("type", "button");
-        }
-        function clickRangeButton() {
-            var checkbox = document.getElementById("range-checkbox");
-            var rangeInput = document.getElementById("range-input");
-            if (checkbox.checked) {
-                rangeInput.removeAttribute("disabled");
-                rangeInput.value = 1;
-            }
-            else {
-                rangeInput.setAttribute("disabled", "");
-                rangeInput.value = 0;
-            }
-        }
-    </script>
+    }
+</script>

@@ -42,10 +42,10 @@ namespace Cianfrusaglie.Tests {
             services.AddIdentity< User, IdentityRole >().AddEntityFrameworkStores< ApplicationDbContext >()
                 .AddDefaultTokenProviders();
             services.AddCaching();
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            services.AddSession( options => {
+                options.IdleTimeout = TimeSpan.FromMinutes( 30 );
                 options.CookieName = ".MyApplication";
-            });
+            } );
 
             var defaultHttpContext = new DefaultHttpContext();
             defaultHttpContext.Features.Set( new HttpAuthenticationFeature() );
@@ -54,7 +54,7 @@ namespace Cianfrusaglie.Tests {
             var serviceProvider = services.BuildServiceProvider();
             Context = serviceProvider.GetRequiredService< ApplicationDbContext >();
 
-            var mockHostingEnvironment = new Mock<IHostingEnvironment >();
+            var mockHostingEnvironment = new Mock< IHostingEnvironment >();
             mockHostingEnvironment.Setup( h => h.WebRootPath ).Returns( "" );
 
             HostingEnvironment = mockHostingEnvironment.Object;
@@ -81,15 +81,15 @@ namespace Cianfrusaglie.Tests {
         }
 
         protected ActionContext MockActionContextForLogin( string id ) {
-            var mockHttpContext = new Mock<HttpContext>();
-            var principal = new Mock<ClaimsPrincipal>();
-            principal.Setup(p => p.Identity.IsAuthenticated).Returns(id != null);
-            if (id == null)
-                mockHttpContext.SetupGet(x => x.User).Returns(principal.Object);
+            var mockHttpContext = new Mock< HttpContext >();
+            var principal = new Mock< ClaimsPrincipal >();
+            principal.Setup( p => p.Identity.IsAuthenticated ).Returns( id != null );
+            if( id == null )
+                mockHttpContext.SetupGet( x => x.User ).Returns( principal.Object );
             else {
-                var c = new Claim(ClaimTypes.NameIdentifier, id);
-                principal.Setup(p => p.FindFirst(It.IsAny<string>())).Returns(c);
-                mockHttpContext.SetupGet(x => x.User).Returns(principal.Object);
+                var c = new Claim( ClaimTypes.NameIdentifier, id );
+                principal.Setup( p => p.FindFirst( It.IsAny< string >() ) ).Returns( c );
+                mockHttpContext.SetupGet( x => x.User ).Returns( principal.Object );
             }
             return new ActionContext {HttpContext = mockHttpContext.Object};
         }
@@ -102,7 +102,7 @@ namespace Cianfrusaglie.Tests {
                 new Mock< IUserClaimsPrincipalFactory< TUser > >().Object, null, null ) {CallBase = true};
         }
 
-        protected AccountController CreateAccountController(string userId) {
+        protected AccountController CreateAccountController( string userId ) {
             return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
                 new LoggerFactory() ) {
                     Url = new Mock< IUrlHelper >().Object,
@@ -122,10 +122,9 @@ namespace Cianfrusaglie.Tests {
             var result =
                 UserManager.CreateAsync( new User {UserName = SecondUserName, Email = "pippo2@gmail.com"},
                     registerViewModel.Password ).Result;
-            var result2ForTest = 
-                UserManager.CreateAsync(new User { UserName = ThirdUserName, Email = "pippo3@gmail.com" },
-                    registerViewModel.Password).Result;
-
+            var result2ForTest =
+                UserManager.CreateAsync( new User {UserName = ThirdUserName, Email = "pippo3@gmail.com"},
+                    registerViewModel.Password ).Result;
         }
 
         private void CreateCategories() { Context.EnsureSeedData(); }

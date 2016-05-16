@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Services;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
@@ -27,8 +25,8 @@ namespace Cianfrusaglie.Controllers {
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<AnnouncesController>();
-            }
+            _logger = loggerFactory.CreateLogger< AnnouncesController >();
+        }
 
         //
         // GET: /Account/Login
@@ -46,7 +44,7 @@ namespace Cianfrusaglie.Controllers {
             if( ModelState.IsValid ) {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                SignInResult result =
+                var result =
                     await _signInManager.PasswordSignInAsync( model.UserName, model.Password, model.RememberMe, false );
                 if( result.Succeeded ) {
                     _logger.LogInformation( 1, "User logged in." );
@@ -80,7 +78,7 @@ namespace Cianfrusaglie.Controllers {
         public async Task< IActionResult > Register( RegisterViewModel model ) {
             if( ModelState.IsValid ) {
                 var user = new User {UserName = model.UserName, Email = model.Email};
-                IdentityResult result = await _userManager.CreateAsync( user, model.Password );
+                var result = await _userManager.CreateAsync( user, model.Password );
                 if( result.Succeeded ) {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
@@ -113,8 +111,7 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult ExternalLogin( string provider, string returnUrl = null ) {
             // Request a redirect to the external login provider.
             string redirectUrl = Url.Action( "ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl} );
-            AuthenticationProperties properties = _signInManager.ConfigureExternalAuthenticationProperties( provider,
-                redirectUrl );
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties( provider, redirectUrl );
             return new ChallengeResult( provider, properties );
         }
 
@@ -122,14 +119,13 @@ namespace Cianfrusaglie.Controllers {
         // GET: /Account/ExternalLoginCallback
         [HttpGet, AllowAnonymous]
         public async Task< IActionResult > ExternalLoginCallback( string returnUrl = null ) {
-            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+            var info = await _signInManager.GetExternalLoginInfoAsync();
             if( info == null ) {
                 return RedirectToAction( nameof( Login ) );
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            SignInResult result =
-                await _signInManager.ExternalLoginSignInAsync( info.LoginProvider, info.ProviderKey, false );
+            var result = await _signInManager.ExternalLoginSignInAsync( info.LoginProvider, info.ProviderKey, false );
             if( result.Succeeded ) {
                 _logger.LogInformation( 5, "User logged in with {Name} provider.", info.LoginProvider );
                 return RedirectToLocal( returnUrl );
@@ -158,12 +154,12 @@ namespace Cianfrusaglie.Controllers {
 
             if( ModelState.IsValid ) {
                 // Get the information about the user from the external login provider
-                ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+                var info = await _signInManager.GetExternalLoginInfoAsync();
                 if( info == null ) {
                     return View( "ExternalLoginFailure" );
                 }
                 var user = new User {UserName = model.Email, Email = model.Email};
-                IdentityResult result = await _userManager.CreateAsync( user );
+                var result = await _userManager.CreateAsync( user );
                 if( result.Succeeded ) {
                     result = await _userManager.AddLoginAsync( user, info );
                     if( result.Succeeded ) {
@@ -185,11 +181,11 @@ namespace Cianfrusaglie.Controllers {
             if( userId == null || code == null ) {
                 return View( "Error" );
             }
-            User user = await _userManager.FindByIdAsync( userId );
+            var user = await _userManager.FindByIdAsync( userId );
             if( user == null ) {
                 return View( "Error" );
             }
-            IdentityResult result = await _userManager.ConfirmEmailAsync( user, code );
+            var result = await _userManager.ConfirmEmailAsync( user, code );
             return View( result.Succeeded ? "ConfirmEmail" : "Error" );
         }
 
@@ -205,7 +201,7 @@ namespace Cianfrusaglie.Controllers {
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task< IActionResult > ForgotPassword( ForgotPasswordViewModel model ) {
             if( ModelState.IsValid ) {
-                User user = await _userManager.FindByNameAsync( model.Email );
+                var user = await _userManager.FindByNameAsync( model.Email );
                 if( user == null || !await _userManager.IsEmailConfirmedAsync( user ) ) {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View( "ForgotPasswordConfirmation" );
@@ -245,12 +241,12 @@ namespace Cianfrusaglie.Controllers {
             if( !ModelState.IsValid ) {
                 return View( model );
             }
-            User user = await _userManager.FindByNameAsync( model.Email );
+            var user = await _userManager.FindByNameAsync( model.Email );
             if( user == null ) {
                 // Don't reveal that the user does not exist
                 return RedirectToAction( nameof( ResetPasswordConfirmation ), "Account" );
             }
-            IdentityResult result = await _userManager.ResetPasswordAsync( user, model.Code, model.Password );
+            var result = await _userManager.ResetPasswordAsync( user, model.Code, model.Password );
             if( result.Succeeded ) {
                 return RedirectToAction( nameof( ResetPasswordConfirmation ), "Account" );
             }
@@ -269,12 +265,12 @@ namespace Cianfrusaglie.Controllers {
         // GET: /Account/SendCode
         [HttpGet, AllowAnonymous]
         public async Task< ActionResult > SendCode( string returnUrl = null, bool rememberMe = false ) {
-            User user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if( user == null ) {
                 return View( "Error" );
             }
-            IList< string > userFactors = await _userManager.GetValidTwoFactorProvidersAsync( user );
-            List< SelectListItem > factorOptions =
+            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync( user );
+            var factorOptions =
                 userFactors.Select( purpose => new SelectListItem {Text = purpose, Value = purpose} ).ToList();
             return
                 View( new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe} );
@@ -288,7 +284,7 @@ namespace Cianfrusaglie.Controllers {
                 return View();
             }
 
-            User user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if( user == null ) {
                 return View( "Error" );
             }
@@ -315,7 +311,7 @@ namespace Cianfrusaglie.Controllers {
         [HttpGet, AllowAnonymous]
         public async Task< IActionResult > VerifyCode( string provider, bool rememberMe, string returnUrl = null ) {
             // Require that the user has already logged in via username/password or external login
-            User user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if( user == null ) {
                 return View( "Error" );
             }
@@ -333,7 +329,7 @@ namespace Cianfrusaglie.Controllers {
             // The following code protects for brute force attacks against the two factor codes.
             // If a user enters incorrect codes for a specified amount of time then the user account
             // will be locked out for a specified amount of time.
-            SignInResult result =
+            var result =
                 await
                     _signInManager.TwoFactorSignInAsync( model.Provider, model.Code, model.RememberMe,
                         model.RememberBrowser );
@@ -351,7 +347,7 @@ namespace Cianfrusaglie.Controllers {
         #region Helpers
 
         private void AddErrors( IdentityResult result ) {
-            foreach( IdentityError error in result.Errors ) {
+            foreach( var error in result.Errors ) {
                 ModelState.AddModelError( string.Empty, error.Description );
             }
         }
