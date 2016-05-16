@@ -1,61 +1,254 @@
-@model  Announce 
+@model Cianfrusaglie.ViewModels.Announce.EditAnnounceViewModel
+
 
 @{
-    ViewData[ "Title" ] = "Edit";
+    ViewData["Title"] = "Modifica Annuncio";
 }
 
-<h2>Edit</h2>
+@functions
+{
 
-<form asp-action="Edit" >
-    <div class="form-horizontal" >
-        <h4>Announce</h4>
-        <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger" ></div>
-        <input asp-for="Id" type="hidden" />
+    private IEnumerable<Category> GetMacroCategories()
+    {
+        for (int i = 0; i < (ViewData["numberOfMacroCategories"] as int? ?? 0); i++)
+        {
+            var categories = ViewData["formMacroCategories"] as List<Category>;
+            if (categories != null && categories[i].OverCategory == null)
+                yield return categories[i];
+        }
+    }
 
-        <div class="form-group" >
-            <div class="col-md-offset-2 col-md-10" >
-                <div class="checkbox" >
-                    <input asp-for="Closed" />
-                    <label asp-for="Closed" ></label>
+
+    private IEnumerable<Category> GetCategories(Category macro)
+    {
+        for (int j = 0; j < (ViewData["numberOfMacroCategories"] as int? ?? 0); j++)
+        {
+            var subCat = ViewData["formMacroCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro.Name)
+                yield return subCat[j];
+        }
+    }
+
+    private IEnumerable<FormField> GetFormFields()
+    {
+        foreach (FormField field in (List<FormField>)ViewData["formFields"])
+        {
+            yield return field;
+        }
+    }
+
+    private string StringifyCategoriesFromFormField(int formFieldId)
+    {
+        string result = "";
+        var dictionary = ViewData["formField2CategoriesDictionary"] as Dictionary<int, List<Category>>;
+        if (dictionary == null)
+            return result;
+
+        foreach (Category category in dictionary[formFieldId])
+        {
+            result += category.Id + " ";
+        }
+        return result;
+    }
+
+}
+<div id="wrap">
+    <form asp-action="Edit" asp-controller="Announces" method="post" role="form" id="tabellaForm" enctype="multipart/form-data">
+        <nav class="navbar navbar-default" data-spy="affix" data-offset-top="60" id="announce-navbar" style="z-index: 15">
+            <div class="panel panel-default" style="margin-left: -15px">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default navbar-btn navbar-left" onclick="clickBackButton()" style="display: none" id="back-button">Indietro</button>
+                    <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="clickForwardButton()" id="forward-button">Avanti</button>
+                </div>
+            </div>
+
+        </nav>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row" id="page1">
+                    <div class="col-md-6">
+                        <div class="panel-group" id="panel-423221">
+                            @foreach (Category macroCategory in GetMacroCategories())
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#category-@macroCategory.Id">@macroCategory.Name</a>
+                                    </div>
+                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="form-group">
+
+                                                <div class="col-md-12">
+                                                    @foreach (Category category in GetCategories(macroCategory))
+                                                    {
+                                                        <div class="checkbox">
+                                                            <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
+                                                                @category.Name
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Informazioni aggiuntive</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                    @foreach (FormField field in GetFormFields())
+                                    {
+
+                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none">
+                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                            <input asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="page2" style="display: none">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <fieldset>
+
+                                    @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
+
+                                    <!-- Text input-->
+                                    <div class="form-group" style="display: none;" >
+                                        <label asp-for="AnnounceId" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                        <div class="col-md-7" >
+                                            <input asp-for="AnnounceId" id="title-mandatory" type="number" class="form-control" style="padding-left: 12px" >
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="display: none;">
+                                        <label asp-for="AuthorId" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
+                                        <div class="col-md-7">
+                                            <input asp-for="AuthorId" id="title-mandatory" type="number" class="form-control" style="padding-left: 12px">
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
+                                        <div class="col-md-7">
+                                            <input asp-for="Title" id="title-mandatory" type="text" placeholder="inserisci il titolo dell'annuncio" class="form-control" style="padding-left: 12px">
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Textarea -->
+                                    <div class="form-group">
+                                        <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
+                                        <div class="col-md-7">
+                                            <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Range" class="col-md-4 control-label" for="range-input">Sei disposto a spostarti?</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" id="range-checkbox" onchange="clickRangeButton()">
+                                                </span>
+                                                <input asp-for="Range" id="range-input" type="number" placeholder="di quanti km?" class="form-control" style="padding-left: 12px">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="photos">Immagini</label>
+                                        <div class="col-md-6">
+                                            <input asp-for="Photos" id="photos" name="photos" class="input-file" type="file" style="margin-top: 6px" multiple>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="form-group" >
-            <label asp-for="Description" class="col-md-2 control-label" ></label>
-            <div class="col-md-10" >
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group" >
-            <label asp-for="PublishDate" class="col-md-2 control-label" ></label>
-            <div class="col-md-10" >
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group" >
-            <label asp-for="MeterRange" class="col-md-2 control-label" ></label>
-            <div class="col-md-10" >
-                <input asp-for="MeterRange" class="form-control" />
-                <span asp-validation-for="MeterRange" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group" >
-            <div class="col-md-offset-2 col-md-10" >
-                <input class="btn btn-default" type="submit" value="Save" />
-            </div>
-        </div>
-    </div>
-</form>
 
-<div>
-    <a asp-action="Index" >Back to List</a>
+    </form>
 </div>
 
-@section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js" ></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" ></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" ></script>
-}
+
+
+<script>
+        // TODO spostare tutto in un file js
+        document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+        document.getElementById("range-checkbox").checked = true;
+        document.getElementById("range-input").value = 1;
+        setFieldsVisibility();
+
+        function setFieldsVisibility() {
+            var checkboxesArray = document.getElementsByClassName("category-checkboxes");
+            var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
+            for (var i = 0; i < allFormFieldsArray.length; i++)
+                allFormFieldsArray[i].style.display = "none";
+            for (var i = 0; i < checkboxesArray.length; i++) {
+                var checkbox = checkboxesArray[i];
+                if (checkbox.checked) {
+                    var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
+                    for (var j = 0; j < categoryFormFieldsArray.length; j++)
+                        categoryFormFieldsArray[j].style.display = "block";
+                }
+            }
+        }
+
+
+
+        // 500 sono i millisecondi di durata della transizione
+        var transitionTime = 350;
+        function clickForwardButton() {
+            if( document.getElementById("forward-button").innerHTML === "Modifica" ) {
+                document.getElementById("forward-button").setAttribute("type","submit");
+            }
+            else document.getElementById("forward-button").innerHTML = "Modifica";
+            $('#page1').hide(transitionTime);
+            $('#page2').show(transitionTime);
+            $('#back-button').show(0);
+        }
+        function clickBackButton() {
+            $('#page1').show(transitionTime);
+            $('#page2').hide(transitionTime);
+            $('#back-button').hide(0);
+            document.getElementById("forward-button").innerHTML = "Avanti";
+            document.getElementById("forward-button").setAttribute("type", "button");
+        }
+        function clickRangeButton() {
+            var checkbox = document.getElementById("range-checkbox");
+            var rangeInput = document.getElementById("range-input");
+            if (checkbox.checked) {
+                rangeInput.removeAttribute("disabled");
+                rangeInput.value = 1;
+            }
+            else {
+                rangeInput.setAttribute("disabled", "");
+                rangeInput.value = 0;
+            }
+        }
+</script>
