@@ -1,18 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Models {
     public class FeedBack {
         public int Id { get; set; }
 
-        [Range( 0, 5 )]
+        [Range( DomainConstraints.FeedBackVoteMinRange, DomainConstraints.FeedBackVoteMaxRange )]
         public virtual int Vote { get; set; }
 
         [DataType( DataType.DateTime )]
         public virtual DateTime DateTime { get; set; }
 
-        [MaxLength( 99 )]
+        [MaxLength( DomainConstraints.FeedBackTextMaxLenght )]
         public virtual string Text { get; set; }
 
         [Required]

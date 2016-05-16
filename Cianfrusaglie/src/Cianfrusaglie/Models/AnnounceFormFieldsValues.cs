@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Models {
     public class AnnounceFormFieldsValues {
@@ -13,7 +14,7 @@ namespace Cianfrusaglie.Models {
 
         public virtual FormField FormField { get; set; }
 
-        [Required, MaxLength( 99 )]
+        [Required, MaxLength( DomainConstraints.AnnounceFormFieldsValuesValueMaxLength )]
         public string Value { get; set; }
     }
 }
