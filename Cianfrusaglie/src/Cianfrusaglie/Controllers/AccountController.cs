@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Services;
+using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
@@ -32,6 +33,9 @@ namespace Cianfrusaglie.Controllers {
         // GET: /Account/Login
         [HttpGet, AllowAnonymous]
         public IActionResult Login( string returnUrl = null ) {
+            //TODO: BadRequest da sistemare.
+            if( LoginChecker.HasLoggedUser( this ) )
+                return HttpBadRequest();
             ViewData[ "ReturnUrl" ] = returnUrl;
             return View();
         }
@@ -69,6 +73,9 @@ namespace Cianfrusaglie.Controllers {
         // GET: /Account/Register
         [HttpGet, AllowAnonymous]
         public IActionResult Register() {
+            //TODO: BadRequest da trattare
+            if(LoginChecker.HasLoggedUser( this ))
+                return HttpBadRequest();
             return View();
         }
 

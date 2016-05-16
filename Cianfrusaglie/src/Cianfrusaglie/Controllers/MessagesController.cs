@@ -58,8 +58,10 @@ namespace Cianfrusaglie.Controllers {
             // non si può scrivere a se stessi
             if( id == User.GetUserId() )
                 return HttpNotFound();
-
-            if( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
+            // non si può vedere conversazioni di utenti che non esistono.
+            if (!_context.Users.Any(u => u.Id == id))
+                return HttpNotFound();
+            if ( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
                 return HttpNotFound();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;

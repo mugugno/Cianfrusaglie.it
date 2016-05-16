@@ -31,19 +31,5 @@ namespace Cianfrusaglie.Tests {
             var result = accountController.Register();
             Assert.IsType< BadRequestResult >( result );
         }
-
-        [Fact]
-        public void UnloggedUserTriesToRegisterWithPostRequestAndFail() {
-            var accountViewModel = new RegisterViewModel() {
-                UserName = "pippo",
-                Email = "pippo@gmail.com",
-                Password = "Gggggggg111!",
-                ConfirmPassword = "Gggggggg111!"
-            };
-            var accountController = CreateAccountController( null );
-            var result = accountController.Register( accountViewModel );
-
-            Assert.IsType< BadRequestResult >( result );
-        }
     }
 }
