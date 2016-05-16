@@ -1,33 +1,27 @@
-﻿using Cianfrusaglie.Models;
-using Microsoft.AspNet.Mvc;
-using System.Linq;
+﻿using System.Linq;
+using Cianfrusaglie.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Mvc;
 
+namespace Cianfrusaglie.Controllers {
+    public class HomeController : Controller {
+        private readonly ApplicationDbContext _context;
+        public UserManager< User > UserManager;
 
-namespace Cianfrusaglie.Controllers
-{
-    public class HomeController : Controller
-    {
-        private ApplicationDbContext _context;
-        public HomeController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public HomeController( ApplicationDbContext context ) { _context = context; }
 
-        public IActionResult Index()
-        {
-            ViewData["listImages"] = _context.ImageUrls.ToList();
-            ViewData["listUsers"] = _context.Users.ToList();
-            ViewData["listAnnounces"] = _context.Announces.OrderByDescending(u=>u.PublishDate).Take(4).ToList();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        public IActionResult Index() {
+            ViewData[ "listImages" ] = _context.ImageUrls.ToList();
+            ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.OrderByDescending( u => u.PublishDate ).Take( 4 ).ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             //CreateUsers();
             return View();
         }
-        public UserManager<User> UserManager;
-        private void CreateUsers()
-        {
-           // _context.Users.Add(new User() { UserName = "pippopaolo", Email = "pippopaolo@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
+
+        private void CreateUsers() {
+            // _context.Users.Add(new User() { UserName = "pippopaolo", Email = "pippopaolo@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
             //_context.Users.Add(new User() { UserName = "pippopaolo2", Email = "pippopaolo2@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
             //Context.Users.Add(new User() { UserName = "pippopaolo3", Email = "pippopaolo3@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
             //Context.Users.Add(new User() { UserName = "pippopaolo4", Email = "pippopaolo4@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
@@ -131,25 +125,18 @@ namespace Cianfrusaglie.Controllers
             context.SaveChanges();
         }*/
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        public IActionResult About() {
+            ViewData[ "Message" ] = "Your application description page.";
 
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+        public IActionResult Contact() {
+            ViewData[ "Message" ] = "Your contact page.";
 
             return View();
         }
 
-        public IActionResult Error()
-        {
-            return View();
-        }
-
-       
+        public IActionResult Error() { return View(); }
     }
 }

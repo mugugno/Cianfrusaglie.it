@@ -1,22 +1,21 @@
-﻿@using System.Security.Claims
-
-@if (User.IsSignedIn())
-{
-    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
+﻿@if( User.IsSignedIn() ) {
+    <form asp-action="LogOff" asp-controller="Account" class="navbar-right" id="logoutForm" method="post" >
+        <ul class="nav navbar-nav navbar-right" >
             <li>
-                <a asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.GetUserName()!</a>
+                <a asp-action="Index" asp-controller="Manage" title="Manage" >Hello @User.GetUserName()!</a>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+                <button class="btn btn-link navbar-btn navbar-link" type="submit" >Log off</button>
             </li>
         </ul>
     </form>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
+} else {
+    <ul class="nav navbar-nav navbar-right" >
+        <li>
+            <a asp-action="Register" asp-controller="Account" >Register</a>
+        </li>
+        <li>
+            <a asp-action="Login" asp-controller="Account" >Log in</a>
+        </li>
     </ul>
 }

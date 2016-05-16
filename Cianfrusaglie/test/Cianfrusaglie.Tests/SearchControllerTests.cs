@@ -64,8 +64,9 @@ namespace Cianfrusaglie.Tests {
          var announces = allVideogamesAnnounces.Select( ac => ac.Announce ).Distinct(); //tutti gli annunnci delle categorie category
 
          var result = researchController.SearchAnnounces( "", new[] { category.Id } );
-         Assert.Empty( result.Except( announces ) );
-         Assert.Empty( announces.ToList().Except( result ) );
+          var enumerable = result as Announce[] ?? result.ToArray();
+          Assert.Empty( enumerable.Except( announces ) );
+         Assert.Empty( announces.ToList().Except( enumerable ) );
       }
 
       [Fact]

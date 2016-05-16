@@ -1,6 +1,5 @@
-@using System.Security.Claims
 @using System.Threading.Tasks
-@model Cianfrusaglie.ViewModels.MessageCreateViewModel 
+@model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
 @{
     ViewData[ "Title" ] = "Le Mie Conversazioni";
@@ -21,7 +20,7 @@
             </div>
             <div id="all-conversations-box" style="max-height: 61.4%; overflow-y: auto;" >
 
-                @foreach( KeyValuePair< User, Dictionary< Message, User > > kvPair in GetUserAndMessagesDictionary() ) {
+                @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
                     <div class="panel panel-default panel-message @(( kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) && GetIdAfterRefresh().Equals( "" ) ) || kvPair.Key.Id.Equals( GetIdAfterRefresh() ) ? "first-message-panel" : "")" onclick='showConversation("@kvPair.Key.Id", this)' >
 
                         <div class="panel-heading panel-message" >
@@ -35,10 +34,10 @@
                             </a>
                             <h6>Ultimo messaggio</h6>
                             @{
-                                Message lastMessage = kvPair.Value.Keys.Last();
+                                var lastMessage = kvPair.Value.Keys.Last();
                                 int length = lastMessage.Text.Length;
                             }
-                            @if( kvPair.Value[lastMessage].Id.Equals( User.GetUserId() ) ) {
+                            @if( kvPair.Value[ lastMessage ].Id.Equals( User.GetUserId() ) ) {
                                 <div class="triangle-isosceles right bubble-no-margin" id="balloonSent" >
                                     <h6>
                                         <span style="float: right">@lastMessage.DateTime</span>
@@ -76,7 +75,7 @@
     </div>
     <div class="col-md-8" id="allMessages" >
 
-        @foreach( KeyValuePair< User, Dictionary< Message, User > > kvPair in GetUserAndMessagesDictionary() ) {
+        @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
             <div class="user-messages-box @(kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) ? "first-all-messages" : "")" id="@kvPair.Key.Id" >
                 <div class="panel panel-default" >
                     <div class="panel-heading" >
@@ -86,9 +85,9 @@
                     </div>
                     <div class="panel-body conversation-box" id="@kvPair.Key.Id" >
                         @{
-                            User otherUser = kvPair.Key;
-                            Dictionary< Message, User > messages = kvPair.Value;
-                            foreach( KeyValuePair< Message, User > messageUserPair in messages ) {
+                            var otherUser = kvPair.Key;
+                            var messages = kvPair.Value;
+                            foreach( var messageUserPair in messages ) {
                                 <div class="row" >
                                     <div class="col-md-1" ></div>
                                     <div class="col-md-10" >

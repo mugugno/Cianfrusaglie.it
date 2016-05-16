@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
@@ -11,6 +10,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Net.Http.Headers;
+using System.Security.Claims;
 
 namespace Cianfrusaglie.Controllers {
     public class AnnouncesController : Controller {
@@ -24,9 +24,9 @@ namespace Cianfrusaglie.Controllers {
 
         // GET: Announces
         public IActionResult Index() {
-            ViewData["listUsers"] = _context.Users.ToList();
+            ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
             return View();
         }
 
@@ -40,75 +40,68 @@ namespace Cianfrusaglie.Controllers {
             if( announce == null ) {
                 return HttpNotFound();
             }
-            var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where(af => af.AnnounceId == id).ToList();
-            var dictionary = new Dictionary<FormField, string>();
-            foreach (var f in announceFormFieldsvalues)
-            {
-                var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
-                dictionary.Add(formField, f.Value);
+            var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where( af => af.AnnounceId == id ).ToList();
+            var dictionary = new Dictionary< FormField, string >();
+            foreach( var f in announceFormFieldsvalues ) {
+                var formField = _context.FormFields.Single( ff => ff.Id.Equals( f.FormFieldId ) );
+                dictionary.Add( formField, f.Value );
             }
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["formFieldsValue"] = dictionary;
-            ViewData["Images"] = _context.ImageUrls.Where(i => i.Announce.Equals(announce)).ToList();
-            ViewData["IdAnnounce"] = id;
-            ViewData["AuthorId"] = announce.AuthorId;
-            ViewData["Autore"] =
-                _context.Users.Where(u => u.Id == announce.AuthorId).Select(u => u.UserName).SingleOrDefault();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "formFieldsValue" ] = dictionary;
+            ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
+            ViewData[ "IdAnnounce" ] = id;
+            ViewData[ "AuthorId" ] = announce.AuthorId;
+            ViewData[ "Autore" ] =
+                _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
 
             return View( announce );
         }
 
         // GET: Announces/Create
-        public IActionResult Create()
-        {
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["listUsers"] = _context.Users.ToList();
-            ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+        public IActionResult Create() {
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "formFields" ] = _context.FormFields.ToList();
+            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             SetViewDataForCreateAction();
             return View();
         }
 
-        private void SetViewDataForCreateAction()
-        {
-            
-            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
-            foreach (var formField in _context.FormFields.ToList())
-            {
+        private void SetViewDataForCreateAction() {
+            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
+            foreach( var formField in _context.FormFields.ToList() ) {
                 var categories =
-                    _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
+                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
                         .ToList();
-                formField2CategoriesDictionary.Add(formField.Id, categories);
+                formField2CategoriesDictionary.Add( formField.Id, categories );
             }
-            ViewData["formField2CategoriesDictionary"] = formField2CategoriesDictionary;
+            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
         }
 
         // POST: Announces/Create
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( CreateAnnounceViewModel model ) {
-
+        public async Task< IActionResult > Create( CreateAnnounceViewModel model ) {
             //TODO: Aggiungere i campi della risposta di errore.
 
-            if ( ModelState.IsValid ) {
+            if( ModelState.IsValid ) {
                 if( !LoginChecker.HasLoggedUser( this ) )
                     return HttpBadRequest();
                 //Upload delle foto
-                string uploads = Path.Combine(_environment.WebRootPath, "images");
+                string uploads = Path.Combine( _environment.WebRootPath, "images" );
                 var imagesUrls = new List< string >();
-                foreach (var file in model.Photos)
-                {
-                    if (file.Length > 0)
-                    {
-                        string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                        imagesUrls.Add(@"\images\"+fileName);
-                        await file.SaveAsAsync(Path.Combine(uploads, fileName));
+                foreach( var file in model.Photos ) {
+                    if( file.Length > 0 ) {
+                        string fileName =
+                            ContentDispositionHeaderValue.Parse( file.ContentDisposition ).FileName.Trim( '"' );
+                        imagesUrls.Add( @"\images\" + fileName );
+                        await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
                     }
                 }
                 //Fine upload delle immagini
@@ -121,12 +114,12 @@ namespace Cianfrusaglie.Controllers {
                     MeterRange = model.Range,
                     Author = author
                 };
-                
+
                 _context.Announces.Add( newAnnounce );
-                foreach (string url in imagesUrls) {
+                foreach( string url in imagesUrls ) {
                     _context.Add( new ImageUrl {Announce = newAnnounce, Url = url} );
                 }
-                if (model.FormFieldDictionary != null)
+                if( model.FormFieldDictionary != null )
                     foreach( var kvPair in model.FormFieldDictionary ) {
                         if( !string.IsNullOrEmpty( kvPair.Value ) ) {
                             _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
@@ -136,7 +129,7 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
-                if(model.CategoryDictionary != null)
+                if( model.CategoryDictionary != null )
                     foreach( var kvPair in model.CategoryDictionary ) {
                         if( kvPair.Value ) {
                             _context.AnnounceCategories.Add( new AnnounceCategory {
@@ -154,7 +147,6 @@ namespace Cianfrusaglie.Controllers {
             return View( model );
 
             //return Redirect( "Create" );
-
         }
 
         // GET: Announces/Edit/5
@@ -162,9 +154,9 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
@@ -195,7 +187,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
@@ -206,7 +198,7 @@ namespace Cianfrusaglie.Controllers {
         // POST: Announces/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed( int id ) {
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null )
                 return HttpBadRequest();
             //TODO: Aggiungere i campi della risposta di errore.
