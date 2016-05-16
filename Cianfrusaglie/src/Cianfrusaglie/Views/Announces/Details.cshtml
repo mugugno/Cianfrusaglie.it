@@ -134,10 +134,17 @@
                     <dt>
                         Data di Pubblicazione
                     </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.PublishDate)
-                    </dd>
-
+                    @if( !string.IsNullOrEmpty( Model.Description ) ) {
+                        <dd>
+                            @Html.DisplayFor( model => model.PublishDate )
+                        </dd>
+                        <dt>
+                            Descrizione
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor( model => model.Description )
+                        </dd>
+                    }
                 </dl>
             </div>
 
