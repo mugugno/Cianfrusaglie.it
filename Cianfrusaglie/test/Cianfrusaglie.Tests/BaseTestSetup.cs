@@ -74,6 +74,8 @@ namespace Cianfrusaglie.Tests {
                 s =>
                     s.PasswordSignInAsync( It.IsAny< string >(), It.IsAny< string >(), It.IsAny< bool >(),
                         It.IsAny< bool >() ) ).Returns( Task.FromResult( SignInResult.Success ) );
+            _mockSignInManager.Setup( s => s.SignInAsync( It.IsAny< User >(), It.IsAny< bool >(), It.IsAny< string >() ) )
+                .Returns( Task.FromResult( SignInResult.Success ) );
 
             CreateUsers();
             CreateCategories();

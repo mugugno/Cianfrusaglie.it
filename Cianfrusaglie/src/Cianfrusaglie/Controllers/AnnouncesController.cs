@@ -62,6 +62,9 @@ namespace Cianfrusaglie.Controllers {
         // GET: Announces/Create
         public IActionResult Create()
         {
+            //TODO: Aggiungere i campi della risposta di errore.
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["listUsers"] = _context.Users.ToList();
@@ -162,12 +165,19 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
+            //TODO: BadRequest da trattare
+            if(!LoginChecker.HasLoggedUser( this ))
+                return HttpBadRequest();
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+           
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             if( announce == null ) {
                 return HttpNotFound();
             }
+            //TODO: BadRequest da trattare
+            if (!announce.AuthorId.Equals(User.GetUserId()))
+                return HttpBadRequest();
             var formFieldDictionary = new Dictionary< int, string >();
             var categoryDictionary = new Dictionary< int, bool >();
             ICollection< IFormFile > photos = null; //TODO
@@ -264,7 +274,9 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
-
+            //TODO: Aggiungere i campi della risposta di errore.
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
             Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
