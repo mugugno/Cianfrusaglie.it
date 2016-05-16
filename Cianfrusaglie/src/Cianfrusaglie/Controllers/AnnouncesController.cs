@@ -22,6 +22,10 @@ namespace Cianfrusaglie.Controllers {
             _environment = environment;
         }
 
+        /// <summary>
+        /// Questo metodo carica la pagina degli annunci.
+        /// </summary>
+        /// <returns>La View con tutti gli annunci.</returns>
         // GET: Announces
         public IActionResult Index() {
             ViewData[ "listUsers" ] = _context.Users.ToList();
@@ -30,12 +34,18 @@ namespace Cianfrusaglie.Controllers {
             return View();
         }
 
+        /// <summary>
+        /// Dato un ID, ritorna una View contenente i dettagli dell'annuncio collegato a quell'ID.
+        /// In caso di utente non loggato, ritorna una BadRequest.
+        /// Se ID non esiste allora viene ritornato un HttpNotFound.
+        /// </summary>
+        /// <param name="id">Id dell'annuncio scelto.</param>
+        /// <returns>La View contenente i dettagli dell'annuncio.</returns>
         // GET: Announces/Details/5
         public IActionResult Details( int? id ) {
             if( id == null ) {
                 return HttpNotFound();
             }
-
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
@@ -58,6 +68,11 @@ namespace Cianfrusaglie.Controllers {
             return View( announce );
         }
 
+        /// <summary>
+        /// Visualizza la pagina per la creazione di un annuncio.
+        /// In caso l'utente non sia loggato, ritorna una Bad Request.
+        /// </summary>
+        /// <returns>La pagina contenente i campi per la creazione di un annuncio.</returns>
         // GET: Announces/Create
         public IActionResult Create() {
             //TODO: Aggiungere i campi della risposta di errore.
@@ -77,6 +92,10 @@ namespace Cianfrusaglie.Controllers {
             return View();
         }
 
+        /// <summary>
+        /// Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie associate
+        /// ad un FormField.
+        /// </summary>
         private void SetViewData() {
             var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
             foreach( var formField in _context.FormFields.ToList() ) {
@@ -88,6 +107,13 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
         }
 
+        /// <summary>
+        /// Dato un modulo compilato per la creazione di un annuncio, rende persistente tale creazione, dopodiché torna alla Home.
+        /// Se l'utente non è loggato, ritorna una BadRequest.
+        /// Se il modello non è valido allora rimane sulla pagina della creazione.
+        /// </summary>
+        /// <param name="model">Il modulo compilato con i dati necessari alla creazione.</param>
+        /// <returns>Ritorna un Redirect alla Home</returns>
         // POST: Announces/Create
         [HttpPost, ValidateAntiForgeryToken]
         public async Task< IActionResult > Create( CreateAnnounceViewModel model ) {
@@ -263,6 +289,13 @@ namespace Cianfrusaglie.Controllers {
             return View( editAnnounceViewModel );
         }
 
+        /// <summary>
+        /// Dato un ID, ritorna una View per la cancellazione di tale annuncio.
+        /// Se l'utente non è loggato, ritorna una BadRequest.
+        /// Se l'id non esiste, ritorna un HttpNotFound.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>La View per la cancellazione di un annuncio.</returns>
         // GET: Announces/Delete/5
         [ActionName( "Delete" )]
         public IActionResult Delete( int? id ) {
@@ -280,6 +313,13 @@ namespace Cianfrusaglie.Controllers {
             return View( announce );
         }
 
+        /// <summary>
+        /// Conferma la cancellazione di un annuncio dal sistema (rendendo la scelta persistente).
+        /// Se l'utente non è loggato allora ritorna una BadRequest.
+        /// Se l'id non esiste allora ritorna un HttpNotFound.
+        /// </summary>
+        /// <param name="id">L'id dell'annuncio da cancellare</param>
+        /// <returns>Un Redirect all'indice di tutti gli annunci</returns>
         // POST: Announces/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed( int id ) {
