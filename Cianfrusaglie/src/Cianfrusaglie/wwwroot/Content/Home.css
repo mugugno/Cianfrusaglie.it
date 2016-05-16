@@ -1,295 +1,262 @@
 ﻿#container-fluid {
-    padding-right: 0px;
     padding-left: 0px;
+    padding-right: 0px;
 }
+
 #title {
-     padding-left:0;
+    float: left;
+    padding-left: 0;
     padding-right: 0;
-   float: left;
 }
 
 #title a {
-    color:#FFC107;
-    text-decoration: none;
+    color: #FFC107;
     text-align: center;
+    text-decoration: none;
 }
 
 .affix {
-      top: 0;
-      width: 100%;
-  }
-
-.affix + .container-fluid {
-      padding-top: 60px;
+    top: 0;
+    width: 100%;
 }
 
-#title h1{
+.affix + .container-fluid { padding-top: 60px; }
+
+#title h1 {
+    color: #FFC107;
     font-family: 'Lato', sans-serif;
-    color:#FFC107;
-    margin-bottom:0;
-    margin-top:10px;
-    font-size:3em;
+    font-size: 3em;
+    margin-bottom: 0;
+    margin-top: 10px;
     text-align: center;
 }
 
-#title h5{
+#title h5 {
+    color: #FFC107;
     font-family: 'Lato', sans-serif;
-    color:#FFC107;
-    margin-top:0;
+    margin-top: 0;
     text-align: center;
 }
 
 #linkHome {
-    padding-top: 20px;
     padding-bottom: 20px;
-    padding-left:0;
-    padding-right:0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 20px;
     text-align: center
 }
 
 #linkHome span {
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY( -50% );
 }
 
 #linkRegala, #LinkVendi, #linkBaratta {
-    padding-bottom:0;
+    color: #333333;
+    font-size: large;
+    font-style: italic;
+    padding-bottom: 0;
     padding-left: 100px;
     padding-right: 100px;
-    font-size: large;
-    font-style:italic; 
-    color: #333333;
 }
 
 .btn-round.btn-lg {
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    padding: 6px 6px;
-    font-size: 60px;
-    line-height: 2;
     border-radius: 100px;
+    font-size: 60px;
+    height: 100px;
+    line-height: 2;
+    padding: 6px 6px;
+    text-align: center;
+    width: 100px;
 }
 
 #horizontalMenu {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
-    z-index:20;
+    box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.19 );
+    z-index: 20;
 }
 
 
-#menuRight {
-   float: right;
-}
+#menuRight { float: right; }
 
 .dropdown-menu-large {
-  margin-left: 16px;
-  margin-right: 16px;
-  padding: 20px 0px;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 20px 0px;
     z-index: 110;
 }
+
 .dropdown-menu-large > li > ul {
-  padding: 0;
-  margin: 0;
+    margin: 0;
+    padding: 0;
 }
-.dropdown-menu-large > li > ul > li  {
-  list-style: none;
-}
+
+.dropdown-menu-large > li > ul > li { list-style: none; }
+
 .dropdown-menu-large > li > ul > li > a {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight:300;
-  line-height: 1.428571429;
-  color: #333333;
-  white-space: normal;
+    clear: both;
+    color: #333333;
+    display: block;
+    font-weight: 300;
+    line-height: 1.428571429;
+    padding: 3px 20px;
+    white-space: normal;
 }
+
 .dropdown-menu-large > li ul > li > a:hover,
 .dropdown-menu-large > li ul > li > a:focus {
-  text-decoration: none;
-  color: #262626;
-  background-color: #f5f5f5;
+    background-color: #f5f5f5;
+    color: #262626;
+    text-decoration: none;
 }
+
 .dropdown-menu-large .disabled > a,
 .dropdown-menu-large .disabled > a:hover,
-.dropdown-menu-large .disabled > a:focus {
-  color: #999999;
-}
+.dropdown-menu-large .disabled > a:focus { color: #999999; }
+
 .dropdown-menu-large .disabled > a:hover,
 .dropdown-menu-large .disabled > a:focus {
-  text-decoration: none;
-  background-color: transparent;
-  background-image: none;
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-  cursor: not-allowed;
+    background-color: transparent;
+    background-image: none;
+    cursor: not-allowed;
+    filter: progid:DXImageTransform.Microsoft.gradient( enabled = false );
+    text-decoration: none;
 }
+
 .dropdown-menu-large .dropdown-header {
-  color: orange;
-  font-size: 18px;
+    color: orange;
+    font-size: 18px;
 }
-@media (max-width: 768px) {
-  .dropdown-menu-large {
-    margin-left: 0 ;
-    margin-right: 0 ;
-  }
-  .dropdown-menu-large > li {
-    margin-bottom: 30px;
-  }
-  .dropdown-menu-large > li:last-child {
-    margin-bottom: 0;
-  }
-  .dropdown-menu-large .dropdown-header {
-    padding: 3px 15px !important;
-  }
+
+@media ( max-width: 768px ) {
+    .dropdown-menu-large {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .dropdown-menu-large > li { margin-bottom: 30px; }
+
+    .dropdown-menu-large > li:last-child { margin-bottom: 0; }
+
+    .dropdown-menu-large .dropdown-header { padding: 3px 15px !important; }
 }
 
 .sub-menu {
+    bottom: 0;
     display: inline-block;
     left: 100%;
+    margin-top: 10px;
     position: absolute;
     top: -1px;
     visibility: hidden;
-    margin-top: 10px;
-    bottom: 0;
 }
 
-.dropdown-menu li:hover .sub-menu {
-    visibility: visible;
-}
+.dropdown-menu li:hover .sub-menu { visibility: visible; }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
+.dropdown:hover .dropdown-menu { display: block; }
 
-.panel-heading {
-    margin-bottom: 0;
-}
+.panel-heading { margin-bottom: 0; }
 
 
 .dropdown-menu .sub-menu:before {
     border-bottom: 7px solid transparent;
     border-left: none;
-    border-right: 7px solid rgba(0, 0, 0, 0.2);
+    border-right: 7px solid rgba( 0, 0, 0, 0.2 );
     border-top: 7px solid transparent;
     left: -7px;
     top: 10px;
 }
+
 .dropdown-menu .sub-menu:after {
-    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
     border-left: none;
     border-right: 6px solid #fff;
-    border-bottom: 6px solid transparent;
+    border-top: 6px solid transparent;
     left: 10px;
-    top: 11px;
     left: -6px;
+    top: 11px;
 }
 
-.panel-body {
-  height: auto;
-}
+.panel-body { height: auto; }
 
 hr {
     border-color: #c7c7c7;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.19 );
     margin-top: 0;
 }
 
 /*CAROUSEL FIGO ANNUNCI*/
-@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
-.col-item
-{
+
+@import url( http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css );
+
+.col-item {
+    background: #FFF;
     border: 1px solid #E1E1E1;
     border-radius: 5px;
-    background: #FFF;
     margin: 15px;
 }
-.col-item .photo img
-{
+
+.col-item .photo img {
     margin: 0 auto;
     width: 100%;
 }
 
-.col-item .info
-{
-    padding: 10px;
+.col-item .info {
     border-radius: 0 0 5px 5px;
     margin-top: 1px;
+    padding: 10px;
 }
 
-.col-item:hover .info {
-    background-color: #F5F5DC;
-}
-.col-item .price
-{
+.col-item:hover .info { background-color: #F5F5DC; }
+
+.col-item .price {
     /*width: 50%;*/
     float: left;
     margin-top: 5px;
 }
 
-.col-item .price h5
-{
+.col-item .price h5 {
     line-height: 20px;
     margin: 0;
 }
 
-.price-text-color
-{
-    color: #219FD1;
-}
+.price-text-color { color: #219FD1; }
 
-.col-item .info .rating
-{
-    color: #777;
-}
+.col-item .info .rating { color: #777; }
 
-.col-item .rating
-{
+.col-item .rating {
     /*width: 50%;*/
     float: left;
     font-size: 17px;
-    text-align: right;
+    height: 52px;
     line-height: 52px;
     margin-bottom: 10px;
-    height: 52px;
+    text-align: right;
 }
 
-.col-item .separator
-{
-    border-top: 1px solid #E1E1E1;
-}
+.col-item .separator { border-top: 1px solid #E1E1E1; }
 
-.clear-left
-{
-    clear: left;
-}
+.clear-left { clear: left; }
 
-.col-item .separator p
-{
+.col-item .separator p {
     line-height: 20px;
     margin-bottom: 0;
     margin-top: 10px;
     text-align: center;
 }
 
-.col-item .separator p i
-{
-    margin-right: 5px;
-}
-.col-item .btn-add
-{
-    width: 50%;
+.col-item .separator p i { margin-right: 5px; }
+
+.col-item .btn-add {
     float: left;
-}
-
-.col-item .btn-add
-{
-    border-right: 1px solid #E1E1E1;
-}
-
-.col-item .btn-details
-{
     width: 50%;
+}
+
+.col-item .btn-add { border-right: 1px solid #E1E1E1; }
+
+.col-item .btn-details {
     float: left;
     padding-left: 10px;
+    width: 50%;
 }
 
 
@@ -307,6 +274,3 @@ hr {
 #menuProfilo li:hover .sub-menu {
     visibility: visible;
 }*/
-
-
-

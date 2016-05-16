@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Cianfrusaglie.Tests {
     public class MessageControllerTest : BaseTestSetup {
-        protected MessagesController CreateMessageController( string userId, string userName ) {
+        protected MessagesController CreateMessageController( string userId ) {
             //create the mockObject
             return new MessagesController( Context ) {
                 ActionContext = MockActionContextForLogin( userId ),
@@ -27,7 +27,7 @@ namespace Cianfrusaglie.Tests {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
 
             //create the messageController
-            var messageController = CreateMessageController( usr.Id, usr.UserName );
+            var messageController = CreateMessageController( usr.Id );
 
             //risultato
             var result = messageController.Delete( falseId );
@@ -47,13 +47,13 @@ namespace Cianfrusaglie.Tests {
             var secondUsr = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
 
             //create the messageController
-            var messageController = CreateMessageController( usr.Id, usr.UserName );
+            var messageController = CreateMessageController( usr.Id );
 
             //dato l'utente, estraggo tutti i loro messaggi
             var result = messageController.Details( secondUsr.Id );
 
             //test 
-            Assert.IsType< ViewResult >( result );
+            Assert.IsType< RedirectToActionResult >( result );
         }
 
         //io lo elimino e la cosa NON è andata a buon fine
@@ -62,7 +62,7 @@ namespace Cianfrusaglie.Tests {
         public void SendMessageToUserThatExistsIsOk() {
             var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var receiver = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
-            var messagesController = CreateMessageController( user.Id, user.UserName );
+            var messagesController = CreateMessageController( user.Id );
             var messageViewModel = new MessageCreateViewModel {
                 ReceiverId = receiver.Id,
                 Text = "Ah ciao sono Sio e ti regalo un drago."
@@ -97,7 +97,7 @@ namespace Cianfrusaglie.Tests {
             };
 
             //create the messageController
-            var messageController = CreateMessageController( usr.Id, usr.UserName );
+            var messageController = CreateMessageController( usr.Id );
 
             //dato l'utente, invio il suo messaggio a un utente che non esiste
             var result = messageController.Create( messageViewModel );
@@ -128,7 +128,7 @@ namespace Cianfrusaglie.Tests {
             var result = Context.Messages.Where( m => m.Sender == userTest1 );
 
             //create the messageController
-            var messageController = CreateMessageController( userTest1.Id, userTest1.UserName );
+            var messageController = CreateMessageController( userTest1.Id );
 
             //funzione da testare
             var userTest = messageController.GetConversationWithUser( userTest2.Id ).Keys;
@@ -140,7 +140,7 @@ namespace Cianfrusaglie.Tests {
         public void UserDeletesMessageFromConversationIsOk() {
             var sender = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var receiver = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
-            var messagesController = CreateMessageController( sender.Id, sender.UserName );
+            var messagesController = CreateMessageController( sender.Id );
             messagesController.Create( new MessageCreateViewModel {ReceiverId = receiver.Id, Text = "Dudududadada"} );
             var message =
                 Context.Messages.First( m => m.Receiver.Id.Equals( receiver.Id ) && m.Sender.Id.Equals( sender.Id ) );
@@ -163,7 +163,7 @@ namespace Cianfrusaglie.Tests {
             var secondUsr = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
 
             //create the messageController
-            var messageController = CreateMessageController( usr.Id, usr.UserName );
+            var messageController = CreateMessageController( usr.Id );
 
             //dato l'utente, visualizzo tutti i suoi messaggi
             var result = messageController.Index();
@@ -180,7 +180,7 @@ namespace Cianfrusaglie.Tests {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
 
             //create the messageController
-            var messageController = CreateMessageController( usr.Id, usr.UserName );
+            var messageController = CreateMessageController( usr.Id );
 
             //result
             var result = messageController.Details( "2222" );
@@ -188,6 +188,12 @@ namespace Cianfrusaglie.Tests {
             Assert.IsType< HttpNotFoundResult >( result );
         }
 
+        [Fact]
+        public void VisitorTriesToOpenCreationPageAndFail() {
+            var messageController = CreateMessageController(null);
+            var result = messageController.Create();
+            Assert.IsType<BadRequestResult>(result);
+        }
 
         //utente non loggato cerca di mandare messaggio
         [Fact]
@@ -200,7 +206,7 @@ namespace Cianfrusaglie.Tests {
                 ReceiverId = usr.Id,
                 Text = "Io ci provo, ma intanto non sono loggato"
             };
-            var messageController = CreateMessageController( null, null );
+            var messageController = CreateMessageController( null );
 
             //dato l'utente, visualizzo tutti i suoi messaggi
             var result = messageController.Create( message );
@@ -217,7 +223,7 @@ namespace Cianfrusaglie.Tests {
             var message = new MessageCreateViewModel {ReceiverId = usr.Id, Text = "ti elilminerò.. appena mi loggerò!"};
 
             //creo il messageController
-            var messageController = CreateMessageController( null, null );
+            var messageController = CreateMessageController( null );
 
             //risultato
             var result = messageController.Delete( null );
@@ -231,7 +237,7 @@ namespace Cianfrusaglie.Tests {
         public void UserNotLoggedTryToVisualizeMessagesOfOther() {
             //create the messageController
             //TODO DA CAMBIARE I PARAMETRI
-            var messageController = CreateMessageController( null, null );
+            var messageController = CreateMessageController( null );
 
             //dato l'utente, visualizzo tutti i suoi messaggi
             var result = messageController.Index();

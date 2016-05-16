@@ -1,114 +1,119 @@
-﻿#wrapper-register{
-    bottom:0;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    min-height: 100%;
-    position: absolute;
+﻿#wrapper-register {
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient( radial, center center, 0, center center, 460, from( #fff ), to( #EAEAEA ) );
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-radial-gradient( circle, #fff, #EAEAEA );
+    /* Firefox 3.6+ */
+    background: -moz-radial-gradient( circle, #fff, #EAEAEA );
+    /* IE 10 */
+    background: -ms-radial-gradient( circle, #fff, #EAEAEA );
     /*Leggero gradiente*/
     background-color: #EAEAEA;
     background-position: center center;
     background-repeat: no-repeat;
-    /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#EAEAEA));
-    /* Safari 5.1+, Chrome 10+ */
-    background: -webkit-radial-gradient(circle, #fff, #EAEAEA);
-    /* Firefox 3.6+ */
-    background: -moz-radial-gradient(circle, #fff, #EAEAEA);
-    /* IE 10 */
-    background: -ms-radial-gradient(circle, #fff, #EAEAEA);
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    min-height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
-#register{
-    padding-top:2em;
-    width: 28em;
+#register {
     margin: auto;
+    padding-top: 2em;
+    width: 28em;
 }
 
-#tabellaForm {
-    margin-top: 10px;
-}
-#register i {
-    color: #d4d4d4;
-}
-.form-register{
-    padding-top:4em;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    font-size:1em;
-    padding:1.5em;
-    padding-left: 4em; 
-    padding-right: 4em; 
+#tabellaForm { margin-top: 10px; }
+
+#register i { color: #d4d4d4; }
+
+.form-register {
+    background: #fff;
     border: 1px solid #b8b8b8;
-    background:#fff;
     border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 6px 20px 0 rgba( 0, 0, 0, 0.19 );
+    font-size: 1em;
+    padding: 1.5em;
+    padding-left: 4em;
+    padding-right: 4em;
+    padding-top: 4em;
 }
-.form-register h2{
-  
-    font-weight:100;
+
+.form-register h2 { font-weight: 100; }
+
+#register h1 {
+    font-size: 2.5em;
+    text-align: center;
 }
-#register h1{
-    text-align:center;
-    font-size:2.5em;
+
+#register h5 {
+    color: #FFC107;
+    text-align: center;
 }
-#register h5{
-    color:#FFC107;
-    text-align:center;
-}
-#register h1 a{
-    color:#FFC107;
+
+#register h1 a {
+    color: #FFC107;
     text-decoration: none;
 }
-.form-register input{
-    width:100%;
-    height:2.2em;
-    padding:.2em;
-    font-weight:100;
-}
-#sottoForm h5{
-    text-align:right;
-    margin:0;
-    padding:0;
+
+.form-register input {
+    font-weight: 100;
+    height: 2.2em;
+    padding: .2em;
+    width: 100%;
 }
 
-#sottoForm h5 a{
-    color:#FFC107;
-    font-weight:100;
+#sottoForm h5 {
+    margin: 0;
+    padding: 0;
+    text-align: right;
 }
-.form-register button[type="submit"]{
-    width:100%;
-    margin-bottom:0;
-    height:2.8em;
-    cursor:pointer;
-    padding:0;
-    border: 1px solid #BD900A;
-    font-size:1em;
+
+#sottoForm h5 a {
+    color: #FFC107;
+    font-weight: 100;
+}
+
+.form-register button[ type = "submit" ] {
     background: #FFC107;
-    background: -webkit-linear-gradient(#FFC107, #FFE082); /* For Safari 5.1 to 6.0 */
-    background: -webkit-linear-gradient(#FFC107, #FFE082); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#FFC107, #FFE082); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#FFC107, #FFE082); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#FFC107, #FFE082); /* Standard syntax */
+    background: -webkit-linear-gradient( #FFC107, #FFE082 ); /* For Safari 5.1 to 6.0 */
+    background: -webkit-linear-gradient( #FFC107, #FFE082 ); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient( #FFC107, #FFE082 ); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient( #FFC107, #FFE082 ); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #FFC107, #FFE082 ); /* Standard syntax */
+    border: 1px solid #BD900A;
     border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    height: 2.8em;
+    margin-bottom: 0;
+    padding: 0;
+    width: 100%;
 }
 
 /* enable absolute positioning */
-.inner-addon {
-  position: relative;
-}
+
+.inner-addon { position: relative; }
 
 /* style glyph */
+
 .inner-addon .glyphicon {
-  position: absolute;
-  padding: 10px;
-  pointer-events: none;
+    padding: 10px;
+    pointer-events: none;
+    position: absolute;
 }
 
 /* align glyph */
-.left-addon .glyphicon  { left:  0px;}
-.right-addon .glyphicon { right: 0px;}
+
+.left-addon .glyphicon { left: 0px; }
+
+.right-addon .glyphicon { right: 0px; }
 
 /* add padding  */
-.left-addon input  { padding-left:  30px; }
-.right-addon input { padding-right: 30px; }
 
+.left-addon input { padding-left: 30px; }
+
+.right-addon input { padding-right: 30px; }

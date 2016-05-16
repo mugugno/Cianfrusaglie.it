@@ -1,54 +1,54 @@
-@model IEnumerable<Cianfrusaglie.Models.Announce>
+@model  IEnumerable< Announce > 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData[ "Title" ] = "Index";
 }
 
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" >Create New</a>
 </p>
-<table class="table">
+<table class="table" >
     <tr>
-        
+
         <th>
-            @Html.DisplayNameFor(model => model.Closed)
+            @Html.DisplayNameFor( model => model.Closed )
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor( model => model.Description )
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PublishDate)
+            @Html.DisplayNameFor( model => model.PublishDate )
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeterRange)
+            @Html.DisplayNameFor( model => model.MeterRange )
         </th>
         <th></th>
     </tr>
-    
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Closed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PublishDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MeterRange)
-        </td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </td>
-    </tr>
-}
+
+    @foreach( var item in Model ) {
+        <tr>
+            <td>
+                @Html.DisplayFor( modelItem => item.City )
+            </td>
+            <td>
+                @Html.DisplayFor( modelItem => item.Closed )
+            </td>
+            <td>
+                @Html.DisplayFor( modelItem => item.Description )
+            </td>
+            <td>
+                @Html.DisplayFor( modelItem => item.PublishDate )
+            </td>
+            <td>
+                @Html.DisplayFor( modelItem => item.MeterRange )
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" >Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id" >Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" >Delete</a>
+            </td>
+        </tr>
+    }
 </table>

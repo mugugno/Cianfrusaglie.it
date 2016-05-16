@@ -1,66 +1,67 @@
-﻿#create{
-    padding-top:4em;
-    width: 50%;
+﻿#create {
     margin: auto;
+    padding-top: 4em;
+    width: 50%;
 }
 
 .form-create {
-    padding-top:4em;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    font-size:1em;
-    padding:1.5em;
-    border: 1px solid #b8b8b8;
-    background:#fff;
     -ms-border-radius: 10px;
+    background: #fff;
+    border: 1px solid #b8b8b8;
     border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 6px 20px 0 rgba( 0, 0, 0, 0.19 );
+    font-size: 1em;
+    padding: 1.5em;
+    padding-top: 4em;
 }
 
-.form-create h2{
-    font-weight:100;
+.form-create h2 { font-weight: 100; }
+
+#create h1 {
+    font-size: 2.5em;
+    text-align: center;
 }
-#create h1{
-    text-align:center;
-    font-size:2.5em;
-}
-#create h1 a{
-    color:#FFC107;
+
+#create h1 a {
+    color: #FFC107;
     text-decoration: none;
 }
-.form-create input{
-    width:100%;
-    margin-bottom:1.2em;
-    height:2.2em;
-    padding:.2em;  
-    font-weight:100;
+
+.form-create input {
+    font-weight: 100;
+    height: 2.2em;
+    margin-bottom: 1.2em;
+    padding: .2em;
+    width: 100%;
 }
-.form-create h4{
-    text-align:left;
-    margin:0;
-    padding:0;
+
+.form-create h4 {
+    margin: 0;
+    padding: 0;
+    text-align: left;
 }
-.form-create h4 a{
-    color:#FFC107;
-    font-size:1em;
-    font-weight:100;
+
+.form-create h4 a {
+    color: #FFC107;
+    font-size: 1em;
+    font-weight: 100;
 }
-.form-create button[type="submit"]{
-    width:100%;
-    margin-bottom:1.2em;
-    height:2.8em;
-    cursor:pointer;
-    padding:0;
-    border: 1px solid #BD900A;
-    font-size:1em;
+
+.form-create button[ type = "submit" ] {
     background: #FFC107;
-    background: -webkit-linear-gradient(#FFC107, #FFE082); /* For Safari 5.1 to 6.0 */
-    background: -webkit-linear-gradient(#FFC107, #FFE082); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#FFC107, #FFE082); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#FFC107, #FFE082); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#FFC107, #FFE082); /* Standard syntax */
+    background: -webkit-linear-gradient( #FFC107, #FFE082 ); /* For Safari 5.1 to 6.0 */
+    background: -webkit-linear-gradient( #FFC107, #FFE082 ); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient( #FFC107, #FFE082 ); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient( #FFC107, #FFE082 ); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #FFC107, #FFE082 ); /* Standard syntax */
+    border: 1px solid #BD900A;
     border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    height: 2.8em;
+    margin-bottom: 1.2em;
+    padding: 0;
+    width: 100%;
 }
 
-.panel-group {
-    margin-top: 15px;
-}
-
+.panel-group { margin-top: 15px; }

@@ -1,24 +1,24 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:63838/",
-      "sslPort": 0
+  "iisSettings" : {
+    "windowsAuthentication" : false,
+    "anonymousAuthentication" : true,
+    "iisExpress" : {
+      "applicationUrl" : "http://localhost:63838/",
+      "sslPort" : 0
     }
   },
-  "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "Hosting:Environment": "Development"
+  "profiles" : {
+    "IIS Express" : {
+      "commandName" : "IISExpress",
+      "launchBrowser" : true,
+      "environmentVariables" : {
+        "Hosting:Environment" : "Development"
       }
     },
-    "web": {
-      "commandName": "web",
-      "environmentVariables": {
-        "Hosting:Environment": "Development"
+    "web" : {
+      "commandName" : "web",
+      "environmentVariables" : {
+        "Hosting:Environment" : "Development"
       }
     }
   }
