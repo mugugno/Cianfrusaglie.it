@@ -39,7 +39,7 @@ namespace Cianfrusaglie.Tests
          string id = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) ).Id;
          var announceController = CreateAnnounceController( id, FirstUserName);
          announce.Description = "Ho cambiato qualcosa";
-         var res = announceController.Edit( announce );
+         var res = announceController.Edit( announce.Id );
          Assert.IsType< BadRequestResult >( res );
       }
 
@@ -79,7 +79,7 @@ namespace Cianfrusaglie.Tests
          var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
          string old = announce.Description;
          announce.Description += "Ho cambiato la descriozne ahahah";
-         announceController.Edit( announce );
+         announceController.Edit( announce.Id );
 
          var updatedAnnounce = Context.Announces.Single( a => a.Id.Equals( announce.Id ) );
          Assert.NotEqual( updatedAnnounce.Description, old );
@@ -104,7 +104,7 @@ namespace Cianfrusaglie.Tests
       public void VisitorTriesToEditAnnounceAndFail() {
          var announceController = CreateAnnounceController( null, null );
          var announce = Context.Announces.Single( a => a.Author.UserName.Equals( FirstUserName ) );
-         var res = announceController.Edit( announce );
+         var res = announceController.Edit( announce.Id );
          Assert.IsType< BadRequestResult >( res );
       }
 
