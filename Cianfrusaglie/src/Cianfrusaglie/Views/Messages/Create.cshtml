@@ -1,18 +1,35 @@
 ﻿@model Cianfrusaglie.ViewModels.MessageCreateViewModel
 
-<form asp-action="Create" asp-controller="Messages" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
+@functions {
 
-    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+    private User GetUser() { return ViewData[ "receiver" ] as User; }
+}
 
-    <div class="form-group" >
-        <label asp-for="Text" class="control-label" >Messaggio</label><br />
-        <input asp-for="Text" class="form-control" />
-        <span asp-validation-for="Text" class="text-danger"></span>
-        
-        <input asp-for="ReceiverId" type="hidden" value="@ViewData[ "receiverId" ]" class="form-control" />
+<div class="panel-body" >
+    <div class="panel panel-default" >
+        <div class="panel-heading" >
+            <div style="text-align: center" >
+                <h3>Invia un messaggio a @GetUser().UserName</h3>
+            </div>
+        </div>
+        <form asp-action="Create" asp-controller="Messages" class="form-register" id="send-message" method="post" role="form" >
 
-        <button class="btn btn-default" type="submit">
-            Submit
-        </button>
+            <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
+            <div class="row" >
+                <div class="form-group" >
+                    <div class="col-md-10" >
+                        <textarea asp-for="Text" class="form-control" rows="8" ></textarea>
+                        <span asp-validation-for="Text" class="text-danger"></span>
+
+                        <input asp-for="ReceiverId" type="hidden" value="@GetUser().Id" class="form-control" />
+                    </div>
+                    <div class="col-md-2" style="margin-top: 5%; padding-left: 5px; padding-right: 30px;" >
+                        <button class="btn btn-default" type="submit" >
+                            Invia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+</div>

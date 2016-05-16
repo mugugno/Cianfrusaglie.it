@@ -16,7 +16,7 @@ namespace Cianfrusaglie.Tests
 
         protected AnnouncesController CreateAnnounceController(string id, string userName)
         {
-            return new AnnouncesController(Context, HostingEnvironmentEnvironment)
+            return new AnnouncesController(Context, HostingEnvironment)
             {
                 ActionContext = MockActionContextForLogin( id ),
                 Url = new Mock<IUrlHelper>().Object
@@ -62,8 +62,12 @@ namespace Cianfrusaglie.Tests
             Title = "Un annuncio bello bello",
             Description = "Sono bello"
          };
-         var announceViewModel = new CreateAnnounceViewModel() {Title = announce.Title, Description = announce.Description};
-         var res = announceController.Create( announceViewModel );
+         var announceViewModel = new CreateAnnounceViewModel() {
+             Title = announce.Title,
+             Description = announce.Description,
+             Photos = new List< IFormFile >()
+         };
+         var res = announceController.Create( announceViewModel ).Result;
          Assert.True(Context.Announces.Any(a => a.Author.Equals(usr) && a.Title.Equals( announce.Title ) && a.Description.Equals( announce.Description )) );
          Assert.IsNotType< BadRequestResult >( res );
       }
@@ -92,7 +96,7 @@ namespace Cianfrusaglie.Tests
               Title = announce.Title,
               Description = announce.Description
           };
-         var res = announceController.Create(announceViewModel);
+         var res = announceController.Create(announceViewModel).Result;
          Assert.IsType< BadRequestResult >( res );
       }
 

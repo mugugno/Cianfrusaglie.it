@@ -1,22 +1,173 @@
-@using System.Collections.Generic
+@using System.Security.Claims
 @using System.Threading.Tasks
-@model IEnumerable<Cianfrusaglie.Models.User>
+@model Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
 @{
-    ViewData["Title"] = "Conversazioni";
+    ViewData[ "Title" ] = "Le Mie Conversazioni";
 }
 
-<h2>Index</h2>
+@functions
+{
 
-<table>    
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            <a asp-action="Details" asp-route-id="@item.Id"> @item.UserName </a>
-        </td>
-        <td>
-            <a asp-action="Delete" style="margin-left: 100px" asp-route-id="@item.Id">Delete</a>
-        </td>
-    </tr>
+    private Dictionary< User, Dictionary< Message, User > > GetUserAndMessagesDictionary() { return ViewData[ "allConversations" ] as Dictionary< User, Dictionary< Message, User > >; }
+    private string GetIdAfterRefresh() { return ViewData[ "idAfterRefresh" ] as string; }
 }
-</table>
+
+<div class="row" id="fluid-row" >
+    <div class="col-md-3" id="allConversations" >
+        <div class="panel panel-default" >
+            <div class="panel-heading" id="my-conversations" >
+                <h3>Le mie conversazioni</h3>
+            </div>
+            <div id="all-conversations-box" style="max-height: 61.4%; overflow-y: auto;" >
+
+                @foreach( KeyValuePair< User, Dictionary< Message, User > > kvPair in GetUserAndMessagesDictionary() ) {
+                    <div class="panel panel-default panel-message @(( kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) && GetIdAfterRefresh().Equals( "" ) ) || kvPair.Key.Id.Equals( GetIdAfterRefresh() ) ? "first-message-panel" : "")" onclick='showConversation("@kvPair.Key.Id", this)' >
+
+                        <div class="panel-heading panel-message" >
+                            <h4>
+                                <b>@kvPair.Key.UserName</b>
+                            </h4>
+                        </div>
+                        <div class="panel-body panel-message" >
+                            <a asp-action="Delete" style="float: right" asp-route-id="@kvPair.Key.Id" >
+                                <h6>Elimina Conversazione</h6>
+                            </a>
+                            <h6>Ultimo messaggio</h6>
+                            @{
+                                Message lastMessage = kvPair.Value.Keys.Last();
+                                int length = lastMessage.Text.Length;
+                            }
+                            @if( kvPair.Value[lastMessage].Id.Equals( User.GetUserId() ) ) {
+                                <div class="triangle-isosceles right bubble-no-margin" id="balloonSent" >
+                                    <h6>
+                                        <span style="float: right">@lastMessage.DateTime</span>
+                                        <span style="float: left">@kvPair.Key.UserName </span>
+                                    </h6>
+                                    <br />
+                                    <div id="messageSent" >
+                                        @lastMessage.Text.Substring( 0, Math.Min( 125, length ) )
+                                        @if( length > 100 ) {
+                                            <span>...</span>
+                                        }
+                                    </div>
+                                </div>
+                            } else {
+                                <div class="triangle-isosceles left bubble-no-margin" id="balloonReceived" >
+                                    <h6>
+                                        <span style="float: right">@lastMessage.DateTime</span>
+                                        <span style="float: left"> @User.GetUserName() </span>
+                                    </h6>
+                                    <br />
+                                    <div id="messageReceived" >
+                                        @lastMessage.Text.Substring( 0, Math.Min( 125, length ) )
+                                        @if( length > 100 ) {
+                                            <span>...</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-8" id="allMessages" >
+
+        @foreach( KeyValuePair< User, Dictionary< Message, User > > kvPair in GetUserAndMessagesDictionary() ) {
+            <div class="user-messages-box @(kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) ? "first-all-messages" : "")" id="@kvPair.Key.Id" >
+                <div class="panel panel-default" >
+                    <div class="panel-heading" >
+                        <div style="text-align: center" >
+                            <h3>Conversazione con @kvPair.Key.UserName</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body conversation-box" id="@kvPair.Key.Id" >
+                        @{
+                            User otherUser = kvPair.Key;
+                            Dictionary< Message, User > messages = kvPair.Value;
+                            foreach( KeyValuePair< Message, User > messageUserPair in messages ) {
+                                <div class="row" >
+                                    <div class="col-md-1" ></div>
+                                    <div class="col-md-10" >
+                                        @if( messageUserPair.Value.Id.Equals( User.GetUserId() ) ) {
+                                            <div class="triangle-isosceles right" id="balloonSent" >
+                                                <h6>
+                                                    <span style="float: right">@messageUserPair.Key.DateTime</span>
+                                                    <span style="float: left"> @otherUser.UserName </span>
+                                                </h6>
+                                                <br />
+                                                <div id="messageSent" >
+                                                    @messageUserPair.Key.Text
+                                                </div>
+                                            </div>
+                                        } else {
+                                            <div class="triangle-isosceles left" id="balloonReceived" >
+                                                <h6>
+                                                    <span style="float: right">@messageUserPair.Key.DateTime</span>
+                                                    <span style="float: left"> @User.GetUserName() </span>
+                                                </h6>
+                                                <br />
+                                                <div id="messageReceived" >
+                                                    @messageUserPair.Key.Text
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+
+                    <form asp-action="Create" asp-controller="Messages" class="form-register" id="send-message" method="post" role="form" >
+
+                        <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
+                        <div class="row" >
+                            <div class="form-group" >
+                                <div class="col-md-10" >
+                                    <textarea asp-for="Text" class="form-control" rows="4" ></textarea>
+                                    <span asp-validation-for="Text" class="text-danger"></span>
+
+                                    <input asp-for="ReceiverId" type="hidden" value="@kvPair.Key.Id" class="form-control" />
+                                </div>
+                                <div class="col-md-2" style="margin-top: 25px; padding-left: 5px; padding-right: 30px;" >
+                                    <button class="btn btn-default" type="submit" >
+                                        Invia
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    $("#wrap").css("padding-bottom", "30px");
+    $(".conversation-box").scrollTop(30000);
+    $('.user-messages-box').hide(0);
+
+    var id = '@ViewData[ "idAfterRefresh" ]';
+    if( id === "" )
+        $('.first-all-messages').show(0);
+    else
+        $("#" + id).show(0);
+    $('.first-message-panel').css("background-color", "#b8e2fc");
+
+
+    function showConversation(id, itself) {
+        $('.panel-message').css("background-color", "");
+        $(".conversation-box").scrollTop(30000);
+        $('.user-messages-box').hide(0);
+        $("#" + id).show(0);
+        $(itself).css("background-color", "#b8e2fc");
+    }
+
+</script>

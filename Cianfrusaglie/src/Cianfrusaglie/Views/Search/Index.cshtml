@@ -16,7 +16,18 @@
         return null;
     }
 
+    public string GetImages(int AnnounceId)
+    {
+        foreach (var imm in ViewData["listImages"] as List<ImageUrl>)
+        {
+            if (imm.AnnounceId == AnnounceId)
+                return imm.Url;
+        }
+        return null;
+    }
 }
+
+
 
 
 
@@ -30,7 +41,7 @@
                 <div class="col-sm-3">
                     <div class="col-item">
                         <div class="photo">
-                            <img src="http://ecx.images-amazon.com/images/I/61QG2uHzY3L._SL1000_.jpg" class="img-responsive" alt="a" />
+                            <img src="@GetImages(@annuncio.Id)" class="img-responsive" />
                         </div>
                         <div class="info">
 

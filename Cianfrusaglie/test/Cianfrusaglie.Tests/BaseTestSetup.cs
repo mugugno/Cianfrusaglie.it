@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
@@ -29,7 +30,7 @@ namespace Cianfrusaglie.Tests {
         private readonly Mock< SignInManager< User > > _mockSignInManager;
         private readonly ISmsSender _smsSender;
         protected readonly ApplicationDbContext Context;
-        protected readonly IHostingEnvironment HostingEnvironmentEnvironment;
+        protected readonly IHostingEnvironment HostingEnvironment;
         protected readonly UserManager< User > UserManager;
         protected SignInManager< User > SignInManager;
 
@@ -40,6 +41,11 @@ namespace Cianfrusaglie.Tests {
 
             services.AddIdentity< User, IdentityRole >().AddEntityFrameworkStores< ApplicationDbContext >()
                 .AddDefaultTokenProviders();
+            services.AddCaching();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.CookieName = ".MyApplication";
+            });
 
             var defaultHttpContext = new DefaultHttpContext();
             defaultHttpContext.Features.Set( new HttpAuthenticationFeature() );
@@ -47,7 +53,12 @@ namespace Cianfrusaglie.Tests {
                 h => new HttpContextAccessor {HttpContext = defaultHttpContext} );
             var serviceProvider = services.BuildServiceProvider();
             Context = serviceProvider.GetRequiredService< ApplicationDbContext >();
-            HostingEnvironmentEnvironment = serviceProvider.GetRequiredService< HostingEnvironment >();
+
+            var mockHostingEnvironment = new Mock<IHostingEnvironment >();
+            mockHostingEnvironment.Setup( h => h.WebRootPath ).Returns( "" );
+
+            HostingEnvironment = mockHostingEnvironment.Object;
+
             UserManager = serviceProvider.GetRequiredService< UserManager< User > >();
 
             SignInManager = serviceProvider.GetRequiredService< SignInManager< User > >();

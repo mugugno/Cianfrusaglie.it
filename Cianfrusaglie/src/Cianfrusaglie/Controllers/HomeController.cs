@@ -16,8 +16,9 @@ namespace Cianfrusaglie.Controllers
 
         public IActionResult Index()
         {
+            ViewData["listImages"] = _context.ImageUrls.ToList();
             ViewData["listUsers"] = _context.Users.ToList();
-            ViewData["listAnnounces"] = _context.Announces.OrderBy(u=>u.PublishDate).Take(4).ToList();
+            ViewData["listAnnounces"] = _context.Announces.OrderByDescending(u=>u.PublishDate).Take(4).ToList();
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             //CreateUsers();

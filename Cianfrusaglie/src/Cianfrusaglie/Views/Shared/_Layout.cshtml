@@ -3,6 +3,7 @@
 
     public IEnumerable<Category> GetCategories()
     {
+        var t = ViewData["numberOfCategories"];
         for (var i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
         {
             var categories = ViewData["formCategories"] as List<Category>;
@@ -21,20 +22,13 @@
         }
     }
 
-    public IEnumerable<Announce> GetAnnounce()
-    {
-        foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
-        {
-            yield return announce;
-        }
-    }
 
 }
 
 <html>
 <head>
 
-
+    <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
@@ -45,7 +39,8 @@
     <link href="~/Content/Create.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/SubmitAnnounce.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/VisualizzaAnnuncio.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Search.css"  rel="stylesheet" type="text/css" />
+    <link href="~/Content/Messages.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 
     
@@ -57,7 +52,7 @@
             <div id="title" class="col-md-3">
                 <a href="~/">
                     <h1>
-                        nonhounnome.it
+                        cianfrusAPP.net
                     </h1>
                     <h5>Il posto giusto per le tue cianfrusaglie</h5>
                 </a>
@@ -97,7 +92,7 @@
                                         <li class="divider"></li>
                                         @foreach (var sub in GetSubCategories(@macro.Name))
                                         {
-                                            <li><a href="#">@sub.Name</a></li>
+                                            <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
                                         }
                                     </ul>
                                 }
@@ -116,7 +111,7 @@
                     }
                 </li>
                 <li class="dropdown dropdown-large">
-                    <a href="#">Come funziona <strong>nonhounnome.it</strong></a>
+                    <a href="#">Come funziona <strong>cianfrusAPP.net</strong></a>
                 </li>
             </ul>
 
@@ -133,15 +128,17 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large"  style="left: auto; right:0">
                             <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
+                            <li><a href="~/History/Index">I miei annunci</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
-                            <li><a href="">Scrivi un messaggio</a></li>
+                            <li><a href="~/Messages">Le mie conversazioni</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header"><span class="glyphicon glyphicon-pencil"></span> Inserisci un annuncio</li>
                             <li><a href="~/Announces/Create">Dona in regalo</a></li>
                             <li><a href="">Vendi</a></li>
                             <li><a href="">Baratta</a></li>
                             <li><a href="">Stai cercando un oggetto in particolare?</a></li>
+                          
                         </ul>
                     </li>
                 }

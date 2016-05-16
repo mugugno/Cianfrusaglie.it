@@ -16,23 +16,25 @@
     margin: 0;
     position: absolute;*/
     /*Leggero gradiente*/
-    background-color: #EAEAEA;
+    background-color: white;
     background-position: center center;
     background-repeat: no-repeat;
     /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#EAEAEA));
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(white));
     /* Safari 5.1+, Chrome 10+ */
-    background: -webkit-radial-gradient(circle, #fff, #EAEAEA);
+    background: -webkit-radial-gradient(circle, #fff, white);
     /* Firefox 3.6+ */
-    background: -moz-radial-gradient(circle, #fff, #EAEAEA);
+    background: -moz-radial-gradient(circle, #fff, white);
     /* IE 10 */
-    background: -ms-radial-gradient(circle, #fff, #EAEAEA);
+    background: -ms-radial-gradient(circle, #fff, white);
+    margin-left: 5%;
 }
 
 #Announce{
     padding-top:2em;
     width: 28em;
     margin: auto;
+
 }
 
 /*#tableAnnounce {*/
@@ -48,11 +50,11 @@
     margin-top: 10px; */ 
 /*}*/
 
-#container-announce {
+.container-announce {
     padding: 2em;
 }
 
 #titolo{
-    margin-left: 10%;
+    text-align: center;
     color:#FFC107;
 }
