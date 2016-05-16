@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.ViewModels.Account {
     public class ResetPasswordViewModel {
@@ -6,8 +7,9 @@ namespace Cianfrusaglie.ViewModels.Account {
         public string Email { get; set; }
 
         [Required,
-         StringLength( 100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6 ),
-         DataType( DataType.Password )]
+         StringLength( DomainConstraints.UserPasswordMaxLengh,
+             ErrorMessage = "The {0} must be at least {2} characters long.",
+             MinimumLength = DomainConstraints.UserPasswordMinLengh ), DataType( DataType.Password )]
         public string Password { get; set; }
 
         [DataType( DataType.Password ), Display( Name = "Confirm password" ),

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,8 +35,9 @@ namespace Cianfrusaglie.Controllers {
 
         public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
             Task< IEnumerable< Announce > > categoryTask = null;
-            if( categories.Any() )
-                categoryTask = Task.Run( () => CategoryBySearch( categories ) );
+           var catEnum = categories as IList< int > ?? categories.ToList();
+           if( catEnum.Any() )
+                categoryTask = Task.Run( () => CategoryBySearch( catEnum ) );
             Task< IEnumerable< Announce > > textTask = null;
             if( title != "" )
                 textTask = Task.Run( () => TitleBasedSearch( title ) );
@@ -59,17 +61,17 @@ namespace Cianfrusaglie.Controllers {
             }
 
             var announcesCategories = _context.AnnounceCategories.Where( a => catLeafs.Contains( a.CategoryId ) );
-            return announcesCategories.Select( ac => ac.Announce ).ToList();
+            return announcesCategories.Select( ac => ac.Announce )
+               .Where( announce => !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) ).ToList();
         }
 
 
         public IEnumerable< Announce > TitleBasedSearch( string title ) {
-            foreach( var announce in _context.Announces )
-                if( AreSimilar( announce.Title, title ) )
-                    yield return announce;
+           return _context.Announces.Where( announce => 
+               !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) && AreSimilar( announce.Title, title ) );
         }
 
-        protected bool AreSimilar( string firstString, string secondString ) {
+       protected bool AreSimilar( string firstString, string secondString ) {
             var first = firstString.ToLower().Split( ' ' );
             var second = secondString.ToLower().Split( ' ' );
             var common = first.Where( s => second.Contains( s ) );
