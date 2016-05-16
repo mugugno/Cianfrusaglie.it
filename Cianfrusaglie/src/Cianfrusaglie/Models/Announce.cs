@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Models {
    public class Announce {
@@ -15,10 +16,10 @@ namespace Cianfrusaglie.Models {
       [DataType( DataType.DateTime )]
       public virtual Nullable<DateTime> DeadLine { get; set; }
 
-      [Required, MinLength( 3 ), MaxLength( 80 )]
+      [Required, MinLength( DomainConstraints.AnnounceTitleMinLenght ), MaxLength( DomainConstraints.AnnounceTitleMaxLenght )]
       public virtual string Title { get; set; }
 
-      [MaxLength( 255 )]
+      [MaxLength( DomainConstraints.AnnounceDescriptionMaxLenght )]
       public virtual string Description { get; set; }
 
       public virtual ICollection< ImageUrl > Images { get; set; } 
@@ -28,13 +29,13 @@ namespace Cianfrusaglie.Models {
       public virtual double Latitude { get; set; }
       public virtual double Longitude { get; set; }
 
-      [Range( 0, int.MaxValue )]
+      [Range( DomainConstraints.AnnounceMeterRangeMinLenght, DomainConstraints.AnnounceMeterRangeMaxLenght )]
       public virtual int MeterRange { get; set; } // in kilometri
 
       /// <summary>
       /// se = 0 è una donazione o un baratto
       /// </summary>
-      [Range(0,int.MaxValue)]
+      [Range(DomainConstraints.AnnouncePriceMinLenght, DomainConstraints.AnnouncePriceMaxLenght)]
       public virtual int Price { get; set; }
 
       public virtual int PriceRange { get; set; }

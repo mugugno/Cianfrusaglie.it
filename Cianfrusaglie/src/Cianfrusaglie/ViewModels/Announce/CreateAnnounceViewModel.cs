@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Microsoft.AspNet.Http;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.ViewModels.Announce
 {
@@ -14,12 +15,12 @@ namespace Cianfrusaglie.ViewModels.Announce
     {
 
         [Required]
-        [StringLength(128, ErrorMessage = "Il titolo deve contenere almeno 3 caratteri", MinimumLength = 3)]
+        [StringLength(DomainConstraints.AnnounceTitleMaxLenght, ErrorMessage = "Il titolo deve contenere almeno 3 caratteri", MinimumLength = DomainConstraints.AnnounceTitleMinLenght)]
         [Display(Name = "Titolo")]
         public string Title { get; set; }
 
         [Display(Name = "Descrizione")]
-        [StringLength(255)]
+        [StringLength(DomainConstraints.AnnounceDescriptionMaxLenght)]
         public string Description { get; set; }
 
         
