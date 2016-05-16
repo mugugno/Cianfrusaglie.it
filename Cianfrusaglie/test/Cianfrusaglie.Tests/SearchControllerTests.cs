@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Controllers;
@@ -75,6 +76,25 @@ namespace Cianfrusaglie.Tests {
          var title = "Usato";
          var result = researchController.SearchAnnounces( title, new List< int >() );
          Assert.Contains( result, p => p.Title == "Halo 5 Usato" );
+      }
+
+      [Fact]
+      public void SearchOnCategoriesDoesntContainClosedOrExpired() {
+         var researchController = CreateResearchController( null );
+         var category = Context.Categories.Where( c => c.Name.Equals( "Cucina" ) || c.Name.Equals("Libri") ).Select( c => c.Id );
+
+         var result = researchController.CategoryBySearch( category ).ToList();
+         Assert.True( !result.Any( p => p.Closed ) );
+         Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
+      }
+
+      [Theory, InlineData( "C for Dummies" ), InlineData( "Libro di Mariangiongiangela" )]
+      public void SearchOnTitleDoesntContainClosedOrExpired( string title ) {
+         var researchController = CreateResearchController( null );
+
+         var result = researchController.TitleBasedSearch( title );
+         Assert.True( !result.Any( p => p.Closed ) );
+         Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
       }
    }
 }

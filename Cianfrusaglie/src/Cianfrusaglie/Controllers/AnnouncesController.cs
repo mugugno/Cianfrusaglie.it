@@ -129,7 +129,7 @@ namespace Cianfrusaglie.Controllers {
                   fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
                   await file.SaveAsAsync(Path.Combine(uploads, fileName));
 
-                  imgUrl.Url = @"images/" + fileName;
+                  imgUrl.Url = @"/images/" + fileName;
                 }
                 //Fine upload delle immagini
                 

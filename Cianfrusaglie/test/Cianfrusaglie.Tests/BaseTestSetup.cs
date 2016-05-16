@@ -132,12 +132,14 @@ namespace Cianfrusaglie.Tests {
         private void CreateCategories() { Context.EnsureSeedData(); }
 
         private void CreateAnnounces() {
-            var announce = new Announce();
-            var usr = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
-            announce.Author = usr;
-            announce.Title = "Libro di OST di Videogiochi";
-            announce.Description = "Tutti i compositori da Uematsu in giù";
-            Context.Announces.Add( announce );
+         var firstUser = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var secondUser = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
+           var announce = new Announce {
+              Author = secondUser,
+              Title = "Libro di OST di Videogiochi",
+              Description = "Tutti i compositori da Uematsu in giù"
+           };
+           Context.Announces.Add( announce );
 
             var announceCategory1 = new AnnounceCategory {
                 Announce = announce,
@@ -156,12 +158,9 @@ namespace Cianfrusaglie.Tests {
             Context.AnnounceCategories.Add( announceCategory12 );
             Context.SaveChanges();
 
-            var announce2 = new Announce();
-            var usr2 = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-            announce2.Author = usr2;
-            announce2.Title = "Halo 5 Usato";
-            announce2.Description = "Guardiani ovunque";
-            Context.Announces.Add( announce2 );
+            
+           var announce2 = new Announce {Author = firstUser, Title = "Halo 5 Usato", Description = "Guardiani ovunque"};
+           Context.Announces.Add( announce2 );
 
             var announceCategory2 = new AnnounceCategory {
                 Announce = announce2,
@@ -169,6 +168,26 @@ namespace Cianfrusaglie.Tests {
             };
             Context.AnnounceCategories.Add( announceCategory2 );
             Context.SaveChanges();
-        }
+
+           var announce3 = new Announce {Author = firstUser, Title = "C for Dummies", Description = "Impara il C", DeadLine = DateTime.Now.AddDays(-1)};
+           Context.Announces.Add( announce3 );
+
+            var announceCategory3 = new AnnounceCategory {
+               Announce = announce3,
+               Category = Context.Categories.Single( a => a.Name.Equals( "Libri" ) )
+            };
+            Context.AnnounceCategories.Add( announceCategory3 );
+            Context.SaveChanges();
+
+         var announce4 = new Announce { Author = firstUser, Title = "Libro di Mariangiongiangela", Description = "non gettate il forno dalla finestra", Closed= true };
+         Context.Announces.Add( announce4 );
+
+         var announceCategory4 = new AnnounceCategory {
+            Announce = announce4,
+            Category = Context.Categories.Single( a => a.Name.Equals( "Cucina" ) )
+         };
+         Context.AnnounceCategories.Add( announceCategory4 );
+         Context.SaveChanges();
+      }
     }
 }
