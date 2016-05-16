@@ -57,15 +57,15 @@
 
         </nav>
 
-        <div class="panel panel-default" >
+        <div class="panel" >
             <div class="panel-body" >
                 <div class="row" id="page1" >
                     <div class="col-md-6" >
                         <div class="panel-group" id="panel-423221" >
                             @foreach( var macroCategory in GetMacroCategories() ) {
                                 <div class="panel panel-default" >
-                                    <div class="panel-heading" >
-                                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#category-@macroCategory.Id" >@macroCategory.Name</a>
+                                    <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id" >
+                                        @macroCategory.Name
                                     </div>
                                     <div id="category-@macroCategory.Id" class="panel-collapse collapse" >
                                         <div class="panel-body" >

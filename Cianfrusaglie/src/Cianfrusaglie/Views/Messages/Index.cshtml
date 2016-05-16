@@ -1,4 +1,7 @@
+@using System.Security.Claims
 @using System.Threading.Tasks
+@using System.Collections.Generic
+@using Cianfrusaglie.Models
 @model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
 @{
@@ -13,11 +16,13 @@
 }
 
 <div class="row" id="fluid-row" >
+@if( GetUserAndMessagesDictionary().Any() ) {
     <div class="col-md-3" id="allConversations" >
         <div class="panel panel-default" >
             <div class="panel-heading" id="my-conversations" >
                 <h3>Le mie conversazioni</h3>
             </div>
+
             <div id="all-conversations-box" style="max-height: 61.4%; overflow-y: auto;" >
 
                 @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
@@ -29,9 +34,9 @@
                             </h4>
                         </div>
                         <div class="panel-body panel-message" >
-                            <a asp-action="Delete" style="float: right" asp-route-id="@kvPair.Key.Id" >
+                            @*<a asp-action="Delete" style="float: right" asp-route-id="@kvPair.Key.Id" >
                                 <h6>Elimina Conversazione</h6>
-                            </a>
+                            </a>*@
                             <h6>Ultimo messaggio</h6>
                             @{
                                 var lastMessage = kvPair.Value.Keys.Last();
@@ -145,10 +150,23 @@
             </div>
         }
     </div>
+} else {
+    <div class="panel-body" >
+        <div class="panel panel-default" >
+            <div class="panel-heading" id="my-conversations" >
+                <h3>Le mie conversazioni</h3>
+            </div>
+            <div class="panel-body" >
+                <div>Non hai ancora alcuna conversazione!</div>
+            </div>
+        </div>
+    </div>
+        }
+
 </div>
 
 
-<script>
+    <script>
     $("#wrap").css("padding-bottom", "30px");
     $(".conversation-box").scrollTop(30000);
     $('.user-messages-box').hide(0);
@@ -170,3 +188,6 @@
     }
 
 </script>
+
+
+
