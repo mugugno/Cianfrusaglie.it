@@ -99,33 +99,37 @@ namespace Cianfrusaglie.Controllers {
             if ( ModelState.IsValid ) {
                 if( !LoginChecker.HasLoggedUser( this ) )
                     return HttpBadRequest();
-                //Upload delle foto
-                string uploads = Path.Combine(_environment.WebRootPath, "images");
-                var imagesUrls = new List< string >();
-                foreach (var file in model.Photos)
-                {
-                    if (file.Length > 0)
-                    {
-                        string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                        imagesUrls.Add(@"\images\"+fileName);
-                        await file.SaveAsAsync(Path.Combine(uploads, fileName));
-                    }
+
+            string idlogged = User.GetUserId();
+            var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
+            var newAnnounce = new Announce {
+               PublishDate = DateTime.Now,
+               Title = model.Title,
+               Description = model.Description,
+               MeterRange = model.Range,
+               Author = author
+            };
+            _context.Announces.Add( newAnnounce );
+            _context.SaveChanges();
+
+            //Upload delle foto
+            string uploads = Path.Combine(_environment.WebRootPath, "images");
+                foreach (var file in model.Photos) {
+                   if( file.Length <= 0 )
+                      continue;
+
+                   var imgUrl = new ImageUrl {Announce = newAnnounce, Url = ""};
+                  _context.Add( imgUrl );
+                  _context.SaveChanges();
+
+                  string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                  fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
+                  await file.SaveAsAsync(Path.Combine(uploads, fileName));
+
+                  imgUrl.Url = @"images/" + fileName;
                 }
                 //Fine upload delle immagini
-                string idlogged = User.GetUserId();
-                var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
-                var newAnnounce = new Announce {
-                    PublishDate = DateTime.Now,
-                    Title = model.Title,
-                    Description = model.Description,
-                    MeterRange = model.Range,
-                    Author = author
-                };
                 
-                _context.Announces.Add( newAnnounce );
-                foreach (string url in imagesUrls) {
-                    _context.Add( new ImageUrl {Announce = newAnnounce, Url = url} );
-                }
                 if (model.FormFieldDictionary != null)
                     foreach( var kvPair in model.FormFieldDictionary ) {
                         if( !string.IsNullOrEmpty( kvPair.Value ) ) {
