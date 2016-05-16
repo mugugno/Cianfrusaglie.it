@@ -16,7 +16,7 @@ namespace Cianfrusaglie.Controllers {
       }
 
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
-         var myAnnounces = _context.Announces.Where( a => a.AuthorId == User.GetUserId() );
+         var myAnnounces = _context.Announces.Include( p => p.Images ).Where( a => a.AuthorId == User.GetUserId() );
          return myAnnounces;
       } 
 
