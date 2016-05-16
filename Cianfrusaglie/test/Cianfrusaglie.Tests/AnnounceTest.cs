@@ -90,7 +90,7 @@ namespace Cianfrusaglie.Tests {
         public void UserDeletesHisAnnounces() {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var announceController = CreateAnnounceController( usr.Id );
-            var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
+            var announce = Context.Announces.First( a => a.Author.Equals( usr ) );
             var res = announceController.DeleteConfirmed( announce.Id );
             Assert.DoesNotContain( announce, Context.Announces );
             Assert.IsNotType< BadRequestResult >( res );
@@ -100,9 +100,9 @@ namespace Cianfrusaglie.Tests {
         public void UserEditsHisAnnounce() {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var announceController = CreateAnnounceController( usr.Id );
-            var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
+            var announce = Context.Announces.First( a => a.Author.Equals( usr ) );
             string old = announce.Description;
-            announce.Description += "Ho cambiato la descriozne ahahah";
+            announce.Description += "Ho cambiato la descrizione ahahah";
             announceController.Edit( announce.Id );
 
             var updatedAnnounce = Context.Announces.Single( a => a.Id.Equals( announce.Id ) );
@@ -113,7 +113,7 @@ namespace Cianfrusaglie.Tests {
         public void UserTriesToDeleteAlreadyDeletedAnnounce() {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var announceController = CreateAnnounceController( usr.Id );
-            var announce = Context.Announces.Single( a => a.Author.Equals( usr ) );
+            var announce = Context.Announces.First( a => a.Author.Equals( usr ) );
             announceController.DeleteConfirmed( announce.Id );
 
             var res = announceController.DeleteConfirmed( announce.Id );
@@ -122,7 +122,7 @@ namespace Cianfrusaglie.Tests {
 
         [Fact]
         public void UserTriesToDeleteAnnounceOfOthers() {
-            var announce = Context.Announces.Single( a => a.Author.UserName.Equals( SecondUserName ) );
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( SecondUserName ) );
             string id = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) ).Id;
             var announceController = CreateAnnounceController( id );
             announce.Description = "Ho cambiato qualcosa";
@@ -132,7 +132,7 @@ namespace Cianfrusaglie.Tests {
 
         [Fact]
         public void UserTriesToEditAnnounceOfOthers() {
-            var announce = Context.Announces.Single( a => a.Author.UserName.Equals( SecondUserName ) );
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( SecondUserName ) );
             string id = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) ).Id;
             var announceController = CreateAnnounceController( id );
             announce.Description = "Ho cambiato qualcosa";
@@ -155,7 +155,7 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void VisitorTriesToDeleteAnnounceAndFail() {
             var announceController = CreateAnnounceController( null );
-            var announce = Context.Announces.Single( a => a.Author.UserName.Equals( FirstUserName ) );
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( FirstUserName ) );
             var res = announceController.DeleteConfirmed( announce.Id );
             Assert.IsType< BadRequestResult >( res );
         }
@@ -163,7 +163,7 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void VisitorTriesToEditAnnounceAndFail() {
             var announceController = CreateAnnounceController( null );
-            var announce = Context.Announces.Single( a => a.Author.UserName.Equals( FirstUserName ) );
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( FirstUserName ) );
             var res = announceController.Edit( announce.Id );
             Assert.IsType< BadRequestResult >( res );
         }
@@ -171,7 +171,7 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void VisitorTriesToOpenDeletePageAndFail() {
             var announceController = CreateAnnounceController( null );
-            var announce = Context.Announces.Single( a => a.Author.UserName.Equals( FirstUserName ) );
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( FirstUserName ) );
             var res = announceController.Delete( announce.Id );
             Assert.IsType< BadRequestResult >( res );
         }

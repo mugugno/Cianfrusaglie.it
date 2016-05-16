@@ -18,7 +18,7 @@ namespace Cianfrusaglie.Tests {
             };
         }
 
-        //Test dove elimino un utente e non va a buon fine perchè l'id è null
+        //Test dove elimino un messaggio e non va a buon fine perchè l'id è null oppure non esiste.
         [Theory, InlineData( null, typeof( HttpNotFoundResult ) ), InlineData( 2222, typeof( BadRequestResult ) )]
         public void DeleteUserButHisNotExist( int? falseId, Type errorType ) {
             //creo un messaggio di un utente fittizio e vedo che non riesce a eliminarlo con httpNotFound
@@ -172,22 +172,6 @@ namespace Cianfrusaglie.Tests {
             Assert.IsNotType< BadRequestResult >( result );
         }
 
-
-        //test voglio vedere conversazione di un utente che non esiste
-        [Fact]
-        public void UserLoggedTryToVisualizeMessageOfUserThatNotExist() {
-            //tiro su l'utente dal database con quello username
-            var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-
-            //create the messageController
-            var messageController = CreateMessageController( usr.Id );
-
-            //result
-            var result = messageController.Details( "2222" );
-
-            Assert.IsType< HttpNotFoundResult >( result );
-        }
-
         [Fact]
         public void VisitorTriesToOpenCreationPageAndFail() {
             var messageController = CreateMessageController(null);
@@ -218,19 +202,47 @@ namespace Cianfrusaglie.Tests {
         //utente non loggato cerca di eliminare un messaggio
         [Fact]
         public void UserNotLoggedTryToDeleteMessage() {
-            var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-
-            var message = new MessageCreateViewModel {ReceiverId = usr.Id, Text = "ti elilminerò.. appena mi loggerò!"};
+            var message = Context.Messages.First();
 
             //creo il messageController
             var messageController = CreateMessageController( null );
 
             //risultato
-            var result = messageController.Delete( null );
+            var result = messageController.Delete( message.Id );
             //test
-            Assert.IsType< HttpNotFoundResult >( result );
+            Assert.IsType< BadRequestResult >( result );
         }
 
+        [Fact]
+        public void VisitorTriesToOpenMessageCreationOrConversationMessageAndFails() {
+            var messageController = CreateMessageController( null );
+            var result = messageController.Create( );
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
+        public void UserTriesToReadConversationOfNonExistingUser() {
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            var messageController = CreateMessageController(usr.Id);
+            var result = messageController.Create( "piripicchio non esisto" );
+            Assert.IsType<HttpNotFoundResult>(result);
+        }
+
+        [Fact]
+        public void UserTriesToConfirmDeletionOfNonExistingMessageAndFails() {
+            var usr = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            var messageController = CreateMessageController(usr.Id);
+            var result = messageController.DeleteConfirmed( 1090 );
+            Assert.IsType<HttpNotFoundResult>(result);
+        }
+
+        [Fact]
+        public void VisitorTriesToConfirmDeletionOfMessageAndFails()
+        {
+            var messageController = CreateMessageController(null);
+            var result = messageController.DeleteConfirmed(Context.Messages.First().Id);
+            Assert.IsType<BadRequestResult>(result);
+        }
 
         //utente non loggato cerca di vedere i messaggi di un altro
         [Fact]

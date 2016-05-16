@@ -102,7 +102,9 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult Delete( int? id ) {
             if( id == null )
                 return HttpNotFound();
-
+            //TODO: Bad Request da trattare
+            if( !LoginChecker.HasLoggedUser( this ) )
+                return HttpBadRequest();
             var message = _context.Messages.SingleOrDefault( m => m.Id == id );
             if( message == null )
                 return HttpNotFound();
@@ -115,7 +117,13 @@ namespace Cianfrusaglie.Controllers {
         // POST: Messages/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed( int id ) {
-            var message = _context.Messages.Single( m => m.Id == id );
+            //TODO: Bad Request da trattare
+            if(! LoginChecker.HasLoggedUser( this ) )
+                return HttpBadRequest();
+            var message = _context.Messages.SingleOrDefault( m => m.Id == id );
+            //TODO: Gestire qui la HTTP not found
+            if( message == null )
+                return HttpNotFound();
             _context.Messages.Remove( message );
             _context.SaveChanges();
             return RedirectToAction( "Index" );

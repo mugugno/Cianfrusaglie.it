@@ -80,6 +80,7 @@ namespace Cianfrusaglie.Tests {
             CreateUsers();
             CreateCategories();
             CreateAnnounces();
+            CreateMessages();
         }
 
         protected ActionContext MockActionContextForLogin( string id ) {
@@ -189,5 +190,20 @@ namespace Cianfrusaglie.Tests {
          Context.AnnounceCategories.Add( announceCategory4 );
          Context.SaveChanges();
       }
+
+        private void CreateMessages() {
+            var firstUser = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+            var secondUser = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+
+            var msg1 = new Message() {
+                DateTime = DateTime.Now.AddSeconds( -1 ),
+                Receiver = secondUser,
+                Sender = firstUser,
+                Text = "Ciao, come stai?"
+            };
+
+            Context.Messages.Add( msg1 );
+            Context.SaveChanges();
+        }
     }
 }

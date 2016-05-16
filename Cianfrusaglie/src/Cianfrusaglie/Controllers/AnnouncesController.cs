@@ -24,9 +24,9 @@ namespace Cianfrusaglie.Controllers {
 
         // GET: Announces
         public IActionResult Index() {
-            ViewData["listUsers"] = _context.Users.ToList();
+            ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
             return View();
         }
 
@@ -40,100 +40,92 @@ namespace Cianfrusaglie.Controllers {
             if( announce == null ) {
                 return HttpNotFound();
             }
-            var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where(af => af.AnnounceId == id).ToList();
-            var dictionary = new Dictionary<FormField, string>();
-            foreach (var f in announceFormFieldsvalues)
-            {
-                var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
-                dictionary.Add(formField, f.Value);
+            var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where( af => af.AnnounceId == id ).ToList();
+            var dictionary = new Dictionary< FormField, string >();
+            foreach( var f in announceFormFieldsvalues ) {
+                var formField = _context.FormFields.Single( ff => ff.Id.Equals( f.FormFieldId ) );
+                dictionary.Add( formField, f.Value );
             }
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["formFieldsValue"] = dictionary;
-            ViewData["Images"] = _context.ImageUrls.Where(i => i.Announce.Equals(announce)).ToList();
-            ViewData["IdAnnounce"] = id;
-            ViewData["AuthorId"] = announce.AuthorId;
-            ViewData["Autore"] =
-                _context.Users.Where(u => u.Id == announce.AuthorId).Select(u => u.UserName).SingleOrDefault();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "formFieldsValue" ] = dictionary;
+            ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
+            ViewData[ "IdAnnounce" ] = id;
+            ViewData[ "AuthorId" ] = announce.AuthorId;
+            ViewData[ "Autore" ] =
+                _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
 
             return View( announce );
         }
 
         // GET: Announces/Create
-        public IActionResult Create()
-        {
+        public IActionResult Create() {
             //TODO: Aggiungere i campi della risposta di errore.
-            if (!LoginChecker.HasLoggedUser(this))
+            if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["listUsers"] = _context.Users.ToList();
-            ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "formFields" ] = _context.FormFields.ToList();
+            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             SetViewData();
             return View();
         }
 
-        private void SetViewData()
-        {
-            
-            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
-            foreach (var formField in _context.FormFields.ToList())
-            {
+        private void SetViewData() {
+            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
+            foreach( var formField in _context.FormFields.ToList() ) {
                 var categories =
-                    _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
+                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
                         .ToList();
-                formField2CategoriesDictionary.Add(formField.Id, categories);
+                formField2CategoriesDictionary.Add( formField.Id, categories );
             }
-            ViewData["formField2CategoriesDictionary"] = formField2CategoriesDictionary;
+            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
         }
 
         // POST: Announces/Create
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( CreateAnnounceViewModel model ) {
-
+        public async Task< IActionResult > Create( CreateAnnounceViewModel model ) {
             //TODO: Aggiungere i campi della risposta di errore.
+            if( !LoginChecker.HasLoggedUser( this ) )
+                return HttpBadRequest();
+            if( ModelState.IsValid ) {
+                string idlogged = User.GetUserId();
+                var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
+                var newAnnounce = new Announce {
+                    PublishDate = DateTime.Now,
+                    Title = model.Title,
+                    Description = model.Description,
+                    MeterRange = model.Range,
+                    Author = author
+                };
+                _context.Announces.Add( newAnnounce );
+                _context.SaveChanges();
 
-            if ( ModelState.IsValid ) {
-                if( !LoginChecker.HasLoggedUser( this ) )
-                    return HttpBadRequest();
+                //Upload delle foto
+                string uploads = Path.Combine( _environment.WebRootPath, "images" );
+                foreach( var file in model.Photos ) {
+                    if( file.Length <= 0 )
+                        continue;
 
-            string idlogged = User.GetUserId();
-            var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
-            var newAnnounce = new Announce {
-               PublishDate = DateTime.Now,
-               Title = model.Title,
-               Description = model.Description,
-               MeterRange = model.Range,
-               Author = author
-            };
-            _context.Announces.Add( newAnnounce );
-            _context.SaveChanges();
+                    var imgUrl = new ImageUrl {Announce = newAnnounce, Url = ""};
+                    _context.Add( imgUrl );
+                    _context.SaveChanges();
 
-            //Upload delle foto
-            string uploads = Path.Combine(_environment.WebRootPath, "images");
-                foreach (var file in model.Photos) {
-                   if( file.Length <= 0 )
-                      continue;
+                    string fileName = ContentDispositionHeaderValue.Parse( file.ContentDisposition ).FileName.Trim( '"' );
+                    fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
+                    await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
-                   var imgUrl = new ImageUrl {Announce = newAnnounce, Url = ""};
-                  _context.Add( imgUrl );
-                  _context.SaveChanges();
-
-                  string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                  fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
-                  await file.SaveAsAsync(Path.Combine(uploads, fileName));
-
-                  imgUrl.Url = @"/images/" + fileName;
+                    imgUrl.Url = @"/images/" + fileName;
                 }
                 //Fine upload delle immagini
-                
-                if (model.FormFieldDictionary != null)
+
+                if( model.FormFieldDictionary != null )
                     foreach( var kvPair in model.FormFieldDictionary ) {
                         if( !string.IsNullOrEmpty( kvPair.Value ) ) {
                             _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
@@ -143,7 +135,7 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
-                if(model.CategoryDictionary != null)
+                if( model.CategoryDictionary != null )
                     foreach( var kvPair in model.CategoryDictionary ) {
                         if( kvPair.Value ) {
                             _context.AnnounceCategories.Add( new AnnounceCategory {
@@ -161,7 +153,6 @@ namespace Cianfrusaglie.Controllers {
             return View( model );
 
             //return Redirect( "Create" );
-
         }
 
         // GET: Announces/Edit/5
@@ -170,17 +161,17 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             }
             //TODO: BadRequest da trattare
-            if(!LoginChecker.HasLoggedUser( this ))
+            if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
-           
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             if( announce == null ) {
                 return HttpNotFound();
             }
             //TODO: BadRequest da trattare
-            if (!announce.AuthorId.Equals(User.GetUserId()))
+            if( !announce.AuthorId.Equals( User.GetUserId() ) )
                 return HttpBadRequest();
             var formFieldDictionary = new Dictionary< int, string >();
             var categoryDictionary = new Dictionary< int, bool >();
@@ -191,8 +182,8 @@ namespace Cianfrusaglie.Controllers {
             foreach( var formField in _context.AnnounceFormFieldsValues ) {
                 if( formField.AnnounceId == announce.Id ) {
                     /*formFieldDictionary[ formField.FormFieldId ] = formField.Value;*/
-                    formFieldDictionary[ formField.FormFieldId] = formField.Value ;
-                } 
+                    formFieldDictionary[ formField.FormFieldId ] = formField.Value;
+                }
             }
             /*foreach( var formField in announce.AnnouncesFormFields ) {
                 formFieldDictionary[ formField.FormFieldId ] = formField.FormField.Name;
@@ -204,13 +195,13 @@ namespace Cianfrusaglie.Controllers {
             foreach( var category in _context.AnnounceCategories ) {
                 if( category.AnnounceId == announce.Id ) {
                     /*categoryDictionary[ category.CategoryId ] = true;*/
-                    categoryDictionary[ category.CategoryId] = true ;
-                } 
+                    categoryDictionary[ category.CategoryId ] = true;
+                }
             }
             /*foreach( var category in announce.AnnounceCategories ) {
                 categoryDictionary[ category.CategoryId ] = true;
             }*/
-            var editAnnounce = new EditAnnounceViewModel() {
+            var editAnnounce = new EditAnnounceViewModel {
                 AnnounceId = (int) id,
                 CategoryDictionary = categoryDictionary,
                 Description = announce.Description,
@@ -221,7 +212,7 @@ namespace Cianfrusaglie.Controllers {
                 AuthorId = announce.AuthorId
             };
             SetViewData();
-            return View(editAnnounce);
+            return View( editAnnounce );
         }
 
         // POST: Announces/Edit/5
@@ -235,14 +226,14 @@ namespace Cianfrusaglie.Controllers {
             }*/
             if( ModelState.IsValid ) {
                 string idlogged = User.GetUserId();
-                User author = _context.Users.First(u => u.Id.Equals(idlogged));
-                var newAnnounce = _context.Announces.SingleOrDefault(m => m.Id == editAnnounceViewModel.AnnounceId);
+                var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
+                var newAnnounce = _context.Announces.SingleOrDefault( m => m.Id == editAnnounceViewModel.AnnounceId );
                 newAnnounce.PublishDate = DateTime.Now;
                 newAnnounce.Title = editAnnounceViewModel.Title;
                 newAnnounce.Description = editAnnounceViewModel.Description;
                 newAnnounce.MeterRange = editAnnounceViewModel.Range;
                 newAnnounce.Author = author;
-                _context.Announces.Update(newAnnounce);
+                _context.Announces.Update( newAnnounce );
                 /*if (editAnnounceViewModel.FormFieldDictionary != null)
                     foreach (var kvPair in editAnnounceViewModel.FormFieldDictionary)
                     {
@@ -279,9 +270,9 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             }
             //TODO: Aggiungere i campi della risposta di errore.
-            if (!LoginChecker.HasLoggedUser(this))
+            if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
@@ -292,7 +283,7 @@ namespace Cianfrusaglie.Controllers {
         // POST: Announces/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed( int id ) {
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null )
                 return HttpBadRequest();
             //TODO: Aggiungere i campi della risposta di errore.
