@@ -4,7 +4,7 @@ namespace Cianfrusaglie.Models {
     public static class ApplicationDbInitializer {
         public static void EnsureSeedData( this ApplicationDbContext ctx ) {
             if( !ctx.Categories.Any() ) {
-                var c = new Category {Name = "Libri Musica Film"};
+                var c = new Category {Name = "Libri, Musica e Film"};
                 ctx.Categories.Add( c );
                 ctx.SaveChanges();
 
@@ -81,7 +81,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                c = new Category {Name = "Sport Tempo libero Fai da te"};
+                c = new Category {Name = "Sport, Tempo libero e Fai da te"};
                 ctx.Categories.Add( c );
                 ctx.SaveChanges();
 
@@ -158,7 +158,7 @@ namespace Cianfrusaglie.Models {
                 ctx.Categories.Add( ePeriferiche );
                 ctx.SaveChanges();
 
-                var eFV = new Category {OverCategory = c, Name = "Foto e videocamera"};
+                var eFV = new Category {OverCategory = c, Name = "Foto e videocamere"};
                 ctx.Categories.Add( eFV );
                 ctx.SaveChanges();
 
