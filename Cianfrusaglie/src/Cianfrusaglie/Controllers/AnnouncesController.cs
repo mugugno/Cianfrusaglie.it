@@ -162,13 +162,9 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
-<<<<<<< HEAD
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
-=======
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
->>>>>>> b3acac95279148757ce5d5250fe8f9defc520d5a
             if( announce == null ) {
                 return HttpNotFound();
             }
