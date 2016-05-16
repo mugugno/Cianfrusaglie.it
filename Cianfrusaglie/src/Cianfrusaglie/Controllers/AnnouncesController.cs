@@ -36,12 +36,12 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             }
 
-            Announce announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
             var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where(af => af.AnnounceId == id).ToList();
-            Dictionary<FormField, string> dictionary = new Dictionary<FormField, string>();
+            var dictionary = new Dictionary<FormField, string>();
             foreach (var f in announceFormFieldsvalues)
             {
                 var formField=(_context.FormFields.Single(ff=> ff.Id.Equals(f.FormFieldId)));
@@ -80,9 +80,9 @@ namespace Cianfrusaglie.Controllers {
         {
             
             var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
-            foreach (FormField formField in _context.FormFields.ToList())
+            foreach (var formField in _context.FormFields.ToList())
             {
-                List<Category> categories =
+                var categories =
                     _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
                         .ToList();
                 formField2CategoriesDictionary.Add(formField.Id, categories);
@@ -106,14 +106,14 @@ namespace Cianfrusaglie.Controllers {
                 {
                     if (file.Length > 0)
                     {
-                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                         imagesUrls.Add(@"\images\"+fileName);
                         await file.SaveAsAsync(Path.Combine(uploads, fileName));
                     }
                 }
                 //Fine upload delle immagini
                 string idlogged = User.GetUserId();
-                User author = _context.Users.First( u => u.Id.Equals( idlogged ) );
+                var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
                 var newAnnounce = new Announce {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
@@ -146,6 +146,7 @@ namespace Cianfrusaglie.Controllers {
                         }
                     }
                 _context.SaveChanges();
+
                 TempData[ "announceCreated" ] = "Il tuo annuncio è stato creato correttamente!";
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
