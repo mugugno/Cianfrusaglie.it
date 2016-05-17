@@ -24,6 +24,51 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
+        /// Effettua l'upload delle immagini per un determinato annuncio
+        /// </summary>
+        /// <param name="formFiles">immagini dal form</param>
+        /// <param name="announce">l'annuncio</param>
+        /// <returns></returns>
+        private async Task UploadAnnounceImages(ICollection<IFormFile> formFiles, Announce announce)
+        {
+            string uploads = Path.Combine(_environment.WebRootPath, "images");
+            foreach (var file in formFiles)
+            {
+                if( file.ContentType != "image/png" && file.ContentType != "image/jpeg" )
+                    continue;
+                if( file.Length <= 0 )
+                    continue;
+
+                var imgUrl = new ImageUrl {Announce = announce, Url = ""};
+                _context.Add( imgUrl );
+                _context.SaveChanges();
+
+                string fileName = ContentDispositionHeaderValue.Parse( file.ContentDisposition ).FileName.Trim( '"' );
+                fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
+                await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
+
+                imgUrl.Url = @"/images/" + fileName;
+            }
+        }
+
+        /// <summary>
+        /// Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie associate
+        /// ad un FormField.
+        /// </summary>
+        private void SetViewData()
+        {
+            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
+            foreach (var formField in _context.FormFields.ToList())
+            {
+                var categories =
+                    _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
+                        .ToList();
+                formField2CategoriesDictionary.Add(formField.Id, categories);
+            }
+            ViewData["formField2CategoriesDictionary"] = formField2CategoriesDictionary;
+        }
+
+        /// <summary>
         /// Questo metodo carica la pagina degli annunci.
         /// </summary>
         /// <returns>La View con tutti gli annunci.</returns>
@@ -91,21 +136,7 @@ namespace Cianfrusaglie.Controllers {
             SetViewData();
             return View();
         }
-
-        /// <summary>
-        /// Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie associate
-        /// ad un FormField.
-        /// </summary>
-        private void SetViewData() {
-            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
-            foreach( var formField in _context.FormFields.ToList() ) {
-                var categories =
-                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
-                        .ToList();
-                formField2CategoriesDictionary.Add( formField.Id, categories );
-            }
-            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
-        }
+        
 
         /// <summary>
         /// Dato un modulo compilato per la creazione di un annuncio, rende persistente tale creazione, dopodiché torna alla Home.
@@ -134,21 +165,7 @@ namespace Cianfrusaglie.Controllers {
                 _context.SaveChanges();
 
                 //Upload delle foto
-                string uploads = Path.Combine( _environment.WebRootPath, "images" );
-                foreach( var file in model.Photos ) {
-                    if( file.Length <= 0 )
-                        continue;
-
-                    var imgUrl = new ImageUrl {Announce = newAnnounce, Url = ""};
-                    _context.Add( imgUrl );
-                    _context.SaveChanges();
-
-                    string fileName = ContentDispositionHeaderValue.Parse( file.ContentDisposition ).FileName.Trim( '"' );
-                    fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
-                    await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
-
-                    imgUrl.Url = @"/images/" + fileName;
-                }
+                await UploadAnnounceImages( model.Photos, newAnnounce );
                 //Fine upload delle immagini
 
                 if( model.FormFieldDictionary != null )
@@ -335,7 +352,5 @@ namespace Cianfrusaglie.Controllers {
             _context.SaveChanges();
             return RedirectToAction( nameof(HistoryController.Index), "History" );
         }
-
-        public IActionResult SubmitAnnounce() { return View(); }
     }
 }
