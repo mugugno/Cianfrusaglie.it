@@ -19,7 +19,10 @@ namespace Cianfrusaglie.Controllers {
          var myAnnounces = _context.Announces.Include( p => p.Images ).Where( a => a.AuthorId == User.GetUserId() );
          return myAnnounces;
       } 
-
+      /// <summary>
+      /// Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro)
+      /// </summary>
+      /// <returns>La View di tutti i tuoi annunci</returns>
       // GET: History
       public IActionResult Index() {
          if( !LoginChecker.HasLoggedUser( this ) )
