@@ -130,13 +130,24 @@
                                     </div>
 
                                     <!-- Textarea -->
-                                    <div class="form-group" >
-                                        <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
-                                        <div class="col-md-7" >
-                                            <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
+                                    <div class="form-group">
+                                        <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
+                                        <div class="col-md-7">
+                                            <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
 
                                         </div>
                                     </div>
+
+                                    <!-- Prezzo -->
+                                    @if (ViewData["isVendita"] as bool? ?? false)
+                                    {
+                                        <div class="form-group">
+                                            <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
+                                            <div class="col-md-7">
+                                                <input type="number" asp-for="Price" class="form-control" id="price" name="Price"/>
+                                            </div>
+                                        </div>
+                                    }
 
                                     <div class="form-group" >
                                         <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
