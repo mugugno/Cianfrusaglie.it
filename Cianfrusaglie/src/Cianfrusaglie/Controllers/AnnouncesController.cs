@@ -117,7 +117,7 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>La pagina contenente i campi per la creazione di un annuncio.</returns>
         // GET: Announces/Create
-        public IActionResult Create() {
+        public IActionResult Create(bool vendita=false) {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
@@ -130,6 +130,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formFields" ] = _context.FormFields.ToList();
             ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
+            ViewData["isVendita"] = vendita;
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             SetViewData();
             return View();
@@ -163,12 +164,14 @@ namespace Cianfrusaglie.Controllers {
             if( ModelState.IsValid ) {
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
-                var newAnnounce = new Announce {
+                var newAnnounce = new Announce
+                {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
                     MeterRange = model.Range,
-                    Author = author
+                    Author = author,
+                    Price = model.Price
                 };
                 _context.Announces.Add( newAnnounce );
                 _context.SaveChanges();
@@ -285,6 +288,7 @@ namespace Cianfrusaglie.Controllers {
                 newAnnounce.Description = editAnnounceViewModel.Description;
                 newAnnounce.MeterRange = editAnnounceViewModel.Range;
                 newAnnounce.Author = author;
+                newAnnounce.Price = editAnnounceViewModel.Price;
                 _context.Announces.Update( newAnnounce );
                 /*if (editAnnounceViewModel.FormFieldDictionary != null)
                     foreach (var kvPair in editAnnounceViewModel.FormFieldDictionary)

@@ -35,6 +35,16 @@ namespace Cianfrusaglie.Controllers {
             return dictionary.ToDictionary( x => x.u, x => GetConversationWithUser( x.u.Id ) );
         }
 
+        public void SetMessagesToReadStatus() {
+            var unreadMessages =_context.Messages.Where( m => m.Receiver.Id.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
+            foreach( var message in unreadMessages ) {
+                message.Read = true;
+                _context.SaveChanges();
+            }
+            _context.SaveChanges();
+
+        }
+
         // Pagina della chat, con tutte le conversazioni e relativi messaggi
         // GET: Messages
         public IActionResult Index( string id = "" ) {
@@ -44,6 +54,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "allConversations" ] = GetAllConversations();
             ViewData[ "idAfterRefresh" ] = id;
+            SetMessagesToReadStatus();
             return View();
         }
 
