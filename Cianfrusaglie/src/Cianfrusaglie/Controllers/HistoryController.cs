@@ -6,6 +6,7 @@ using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
+using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
    public class HistoryController : Controller {
@@ -29,6 +30,7 @@ namespace Cianfrusaglie.Controllers {
             return HttpBadRequest();
         ViewData["formCategories"] = _context.Categories.ToList();
         ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+        ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
         return View( GetLoggedUserPublishedAnnounces().ToList() );
       }
       

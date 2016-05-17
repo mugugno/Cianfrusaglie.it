@@ -128,11 +128,21 @@
                 }
                 else
                 {
-                    @* Pulsante Notifiche *@
+                    @* Pulsante Notifiche #FFC107; *@
                     <li class="dropdown dropdown-large" >
-                        <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="size: 2em" ><b class="caret" ></b></a>
+                        @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
+                            <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;" ><b class="caret" ></b></a>
+                        }
+                        else
+                        {
+                            <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em"><b class="caret"></b></a>
+                        }
                         <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
                             <li class="dropdown-header" ><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
+                            @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
+                                <li><a href="~/Messages" >Ci sono nuovi messaggi da leggere</a></li>
+                            }
+
                         </ul>
                     </li>
 

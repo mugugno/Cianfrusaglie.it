@@ -12,6 +12,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Net.Http.Headers;
+using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
     public class AnnouncesController : Controller {
@@ -109,7 +110,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "AuthorId" ] = announce.AuthorId;
             ViewData[ "Autore" ] =
                 _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
-
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             return View( announce );
         }
 
@@ -133,6 +134,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             ViewData["isVendita"] = vendita;
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             //TODO scrivere in maniera più furba ma ora va benissimo così!
             SetViewData();
             return View();
@@ -329,7 +331,9 @@ namespace Cianfrusaglie.Controllers {
             if( announce == null ) {
                 return HttpNotFound();
             }
-
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             return View( announce );
         }
 

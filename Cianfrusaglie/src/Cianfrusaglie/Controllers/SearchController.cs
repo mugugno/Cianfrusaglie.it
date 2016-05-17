@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
     public class SearchController : Controller {
@@ -12,6 +14,12 @@ namespace Cianfrusaglie.Controllers {
 
         public SearchController( ApplicationDbContext context ) { _context = context; }
 
+        /// <summary>
+        /// Restituisce la pagina con i risultati della ricerca.
+        /// </summary>
+        /// <param name="title">La stringa scritta nella barra di ricerca</param>
+        /// <param name="categories">Le categorie selezionate</param>
+        /// <returns>La View con i risultati della ricerca</returns>
         public IActionResult Index( string title, IEnumerable< int > categories ) {
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
@@ -25,6 +33,7 @@ namespace Cianfrusaglie.Controllers {
             var result = SearchAnnounces( title, categories ).ToList();
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "listImages" ] = _context.ImageUrls.ToList();
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             return View( result );
         }
 
