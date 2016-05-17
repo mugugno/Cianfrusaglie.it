@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using Cianfrusaglie.Constants
 @model Cianfrusaglie.ViewModels.Account.LoginViewModel
 @{
     ViewData[ "Title" ] = "Login";
@@ -25,7 +26,7 @@
 <div id="wrapper-register" >
     <div id="register" >
         <h1>
-            <a href="~/" >questo<strong>e</strong>quello</a>
+            <a href="~/" >@CommonStrings.SiteName</a>
         </h1>
         <h5>Il posto giusto per le tue cianfrusaglie</h5>
         <form asp-action="Login" asp-controller="Account" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" >

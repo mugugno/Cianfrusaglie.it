@@ -54,14 +54,15 @@ namespace Cianfrusaglie.Tests {
             Assert.IsNotType< BadRequestResult >( res );
         }
 
-        [Fact]
-        public void RequestingExistingAnnounceIsCorrectlyVisualizedForEdit() {
-            var announce = Context.Announces.First();
-            var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-            var announceController = CreateAnnounceController( usr.Id );
-            var res = announceController.Edit( announce.Id );
-            Assert.IsNotType< BadRequestResult >( res );
-        }
+        // Per il momento non vogliamo consentire l'edit di un annuncio
+        //[Fact]
+        //public void RequestingExistingAnnounceIsCorrectlyVisualizedForEdit() {
+        //    var announce = Context.Announces.First();
+        //    var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+        //    var announceController = CreateAnnounceController( usr.Id );
+        //    var res = announceController.Edit( announce.Id );
+        //    Assert.IsNotType< BadRequestResult >( res );
+        //}
 
         [Fact]
         public void RequestNotExistingAnnounceForDelete() {

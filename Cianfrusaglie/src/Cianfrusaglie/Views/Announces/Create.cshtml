@@ -130,13 +130,24 @@
                                     </div>
 
                                     <!-- Textarea -->
-                                    <div class="form-group" >
-                                        <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
-                                        <div class="col-md-7" >
-                                            <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
+                                    <div class="form-group">
+                                        <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
+                                        <div class="col-md-7">
+                                            <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
 
                                         </div>
                                     </div>
+
+                                    <!-- Prezzo -->
+                                    @if (ViewData["isVendita"] as bool? ?? false)
+                                    {
+                                        <div class="form-group">
+                                            <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
+                                            <div class="col-md-7">
+                                                <input type="number" asp-for="Price" class="form-control" id="price" name="Price"/>
+                                            </div>
+                                        </div>
+                                    }
 
                                     <div class="form-group" >
                                         <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
@@ -153,9 +164,13 @@
                                     <div class="form-group" >
                                         <label class="col-md-4 control-label" for="photos" >Immagini</label>
                                         <div class="col-md-6" >
-                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" >
+                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*">
                                         </div>
                                     </div>
+
+                                    <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+                                    <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
+                                    <div id="googleMap" style="width:500px;height:380px;"></div>
 
                                 </fieldset>
                             </div>
@@ -169,6 +184,7 @@
 </div>
 
 
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script>
     // TODO spostare tutto in un file js
     document.getElementById("announce-navbar")
@@ -225,4 +241,78 @@
             rangeInput.value = 0;
         }
     }
+
+    //google maps
+    function initialize() {
+        //navigator.geolocation.getCurrentPosition( initializeGMaps, unableToGeoLocalize );
+        initializeGMaps(null, 51.508742, -0.120850);
+    }
+
+    function unableToGeoLocalize(positionError) {
+        //posizione genova brignole
+        initializeGMaps(null, 44.40678, 8.93391);
+    }
+
+    var map;
+    function initializeGMaps(position, lat, long) {
+        if( position != null ) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+        }
+
+        var mapProp = {
+            center: new google.maps.LatLng(lat, long),
+            zoom: 5,
+            streetViewControl: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0)
+                return;
+
+            var bounds = new google.maps.LatLngBounds();
+
+            if (places[0].geometry.viewport) {
+                bounds.union(places[0].geometry.viewport);
+            } else {
+                bounds.extend(places[0].geometry.location);
+            }
+            map.fitBounds(bounds);
+
+            placeMarker(places[0].geometry.location, places[0].title);
+        });
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
+
+    var marker = null;
+    function placeMarker(location, title) {
+        if( marker != null )
+            marker.setMap(null);
+
+        marker = new google.maps.Marker({
+            position: location,
+            title: title,
+            animation: google.maps.Animation.BOUNCE,
+            map: map
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: 'Latitude: ' + location.lat() +
+            '<br>Longitude: ' + location.lng()
+        });
+        infowindow.open(map, marker);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
 </script>
