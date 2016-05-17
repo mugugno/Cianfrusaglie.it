@@ -157,6 +157,15 @@ namespace Cianfrusaglie.Tests {
             Context.AnnounceCategories.Add( announceCategory1 );
             Context.AnnounceCategories.Add( announceCategory11 );
             Context.AnnounceCategories.Add( announceCategory12 );
+
+            var announceFormField = new AnnounceFormFieldsValues() {
+                Announce = announce,
+                FormField = Context.FormFields.Single( f => f.Name == "Titolo" ),
+                Value = "Ciao"
+            };
+
+            Context.AnnounceFormFieldsValues.Add( announceFormField );
+
             Context.SaveChanges();
 
             
