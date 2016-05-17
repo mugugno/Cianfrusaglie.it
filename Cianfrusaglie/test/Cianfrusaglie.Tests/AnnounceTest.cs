@@ -183,5 +183,27 @@ namespace Cianfrusaglie.Tests {
             var result = announceController.Create();
             Assert.IsType< BadRequestResult >( result );
         }
+
+        [Fact]
+        public void GatFromEmptyAnnounceAreEmpty() {
+            var announceController = CreateAnnounceController( null );                     
+            var result = announceController.GenerateGats(Context.Announces.First(a=>a.Author.UserName.Equals(FirstUserName)));
+            Assert.Empty( result );
+        }
+
+        [Fact]
+        public void GatAreGeneratedCorrectly()
+        {
+            var announceController = CreateAnnounceController(null);
+            string s = "Ciao";
+            var gat = new Gat() { Text = s };
+            var announce = Context.Announces.Single( a => a.Title == "Libro di OST di Videogiochi" );
+            var announceGat = new AnnounceGat() { Announce = announce, Gat = gat };
+            Context.Gats.Add(gat);
+            Context.AnnounceGats.Add( announceGat );
+            Context.SaveChanges();
+            var result = announceController.GenerateGats(announce);
+            Assert.True(result.Any( g => g.Text.Equals( s ) ));
+        }
     }
 }

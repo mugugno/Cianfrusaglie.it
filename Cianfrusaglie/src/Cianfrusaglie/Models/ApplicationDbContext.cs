@@ -21,6 +21,8 @@ namespace Cianfrusaglie.Models {
         public DbSet< Interested > Interested { get; set; }
         public DbSet< FieldDefaultValue > FieldDefaultValues { get; set; }
         public DbSet< ImageUrl > ImageUrls { get; set; }
+        public DbSet< UserGatHistogram > UserGatHistograms { get; set; }
+        public DbSet< UserCategoryPreferences > UserCategoryPreferenceses { get; set; }
 
         protected override void OnModelCreating( ModelBuilder builder ) {
             base.OnModelCreating( builder );
@@ -34,8 +36,10 @@ namespace Cianfrusaglie.Models {
 
             builder.Entity< AnnounceCategory >().HasKey( x => new {x.AnnounceId, x.CategoryId} );
 
-            builder.Entity< AnnounceCategory >().HasOne( pc => pc.Announce ).WithMany( p => p.AnnounceCategories )
-                .HasForeignKey( pc => pc.AnnounceId );
+           builder.Entity< Announce >().HasMany( a => a.AnnounceCategories ).WithOne( ac => ac.Announce ).HasForeignKey(
+              a => a.AnnounceId ).IsRequired( true );
+            //builder.Entity< AnnounceCategory >().HasOne( pc => pc.Announce ).WithMany( p => p.AnnounceCategories )
+            //    .HasForeignKey( pc => pc.AnnounceId );
 
             builder.Entity< AnnounceCategory >().HasOne( pc => pc.Category ).WithMany( c => c.CategoryAnnounces )
                 .HasForeignKey( pc => pc.CategoryId );
@@ -83,9 +87,10 @@ namespace Cianfrusaglie.Models {
                 u => u.AnnounceId ).OnDelete( DeleteBehavior.Restrict );
 
 
-            builder.Entity< Interested >().HasOne( u => u.Announce ).WithMany( u => u.Interested ).OnDelete(
+            builder.Entity< Interested >().HasIndex( i => new {i.AnnounceId, i.UserId} ).IsUnique(true);
+            builder.Entity< Interested >().HasOne( u => u.Announce ).WithMany( u => u.Interested ).HasForeignKey( i => i.AnnounceId ).OnDelete(
                 DeleteBehavior.Restrict );
-            builder.Entity< Interested >().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).OnDelete(
+            builder.Entity< Interested >().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).HasForeignKey( i => i.UserId ).OnDelete(
                 DeleteBehavior.Restrict );
 
 
@@ -99,6 +104,8 @@ namespace Cianfrusaglie.Models {
 
             builder.Entity< User >().HasIndex( u => u.UserName ).IsUnique( true );
             builder.Entity< User >().HasIndex( u => u.Email ).IsUnique( true );
+
+            
         }
     }
 }

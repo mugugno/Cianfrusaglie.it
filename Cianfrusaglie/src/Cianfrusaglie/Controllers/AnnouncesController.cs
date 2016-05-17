@@ -26,6 +26,25 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
+        /// Genera i Gat a partire da un annuncio.
+        /// </summary>
+        /// <param name="announce">L'annuncio appena creato.</param>
+        /// <returns>I Gat relativi all'annuncio</returns>
+        public IEnumerable< Gat > GenerateGats( Announce announce ) {
+            var formFieldsValues = _context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
+            foreach( var fieldsValue in formFieldsValues ) {
+                yield return new Gat() {Text = GetStringFromAnnounceFormField( fieldsValue )};
+            }
+        }
+
+        /// <summary>
+        /// Dato un AnnounceFormField, genera il corrispettivo valore stringa.
+        /// </summary>
+        /// <param name="formField">L'announceFormField da trattare.</param>
+        /// <returns>Il valore in formato stringa per inserirlo nel DB.</returns>
+        public string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) { return formField.Value; }
+
+        /// <summary>
         ///     Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
         /// <param name="formFiles">immagini dal form</param>
@@ -90,7 +109,7 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
-            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.Include(u=>u.Interested).SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
@@ -109,6 +128,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "Autore" ] =
                 _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            if(announce.Interested!=null)
+                ViewData["interested"] = announce.Interested.Where(c => c.UserId.Equals(User.GetUserId())).Select(u=>u.UserId).SingleOrDefault();
             return View( announce );
         }
 
@@ -205,6 +226,11 @@ namespace Cianfrusaglie.Controllers {
                     }
                 _context.SaveChanges();
 
+                //Inserimento Gat
+                var gats = GenerateGats(newAnnounce);
+                _context.Gats.AddRange( gats );
+                _context.SaveChanges();
+
                 TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
@@ -223,7 +249,50 @@ namespace Cianfrusaglie.Controllers {
 
             //return Redirect( "Create" );
         }
+        /// <summary>
+        /// Aggiunge un utente agli interessati di un annuncio
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="AnnounceId"></param>
+        /// <returns></returns>
+        public bool Interested(int? AnnounceId)
+        {
+            if (AnnounceId == null)
+            {
+                return false;
+            }
+            if (!LoginChecker.HasLoggedUser(this))
+                return false;
 
+            var UserTmp = _context.Users.Where(c => c.Id.Equals(User.GetUserId())).SingleOrDefault();
+            var AnnTmp = _context.Announces.Include(u=>u.Interested).Where(c => c.Id == AnnounceId).SingleOrDefault();
+
+            Interested exis2=null;
+            if (AnnTmp.Interested != null)
+                exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
+            if (exis2 != null) return false;
+
+
+            Interested exis = null;
+            if (AnnTmp.Interested != null)
+                exis = AnnTmp.Interested.Where(c => c.UserId.Equals(User.GetUserId())).SingleOrDefault();
+            if (exis == null)
+            {
+                var interestedTmp = new Interested();
+                interestedTmp.User = UserTmp;
+                interestedTmp.Announce = AnnTmp;
+                interestedTmp.DateTime = DateTime.Now;
+                _context.Interested.Add(interestedTmp);
+                _context.SaveChanges();
+            }
+            else
+            {
+                _context.Interested.Remove(exis);
+                _context.SaveChanges();
+            }
+
+            return true;
+        }
         // GET: Announces/Edit/5
         public IActionResult Edit( int? id ) {
             if( id == null ) {
