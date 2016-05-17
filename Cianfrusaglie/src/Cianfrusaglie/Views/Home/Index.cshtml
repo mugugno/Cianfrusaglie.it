@@ -1,4 +1,5 @@
-﻿@using Microsoft.Data.Entity.Query.Internal
+﻿@using System.Security.Claims
+@using Microsoft.Data.Entity.Query.Internal
 
 @functions
 {
@@ -149,9 +150,9 @@
                                 <div class="separator clear-left">
                                     @if (!User.Identity.IsAuthenticated)
                                     {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
+                                        <p class="btn-add" >
+                                            <i class="fa fa-shopping-cart" ></i>
+                                            <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
                                         </p>
                                         <p class="btn-details">
                                             <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
@@ -159,13 +160,15 @@
                                     }
                                     else
                                     {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="">Dettagli</a>
+                                        <p class="btn-add" >
+                                            <i class="fa fa-shopping-cart" ></i>
+                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
                                         </p>
-                                        <p class="btn-details">
-                                            <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
-                                        </p>
+                                        if( annuncio.AuthorId != User.GetUserId() ) {
+                                             <p class="btn-details" >
+                                                 <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
+                                             </p>
+                                         }
                                     }
                                 </div>
                                 <div class="clearfix"></div>
