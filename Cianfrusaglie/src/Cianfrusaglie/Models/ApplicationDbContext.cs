@@ -34,8 +34,10 @@ namespace Cianfrusaglie.Models {
 
             builder.Entity< AnnounceCategory >().HasKey( x => new {x.AnnounceId, x.CategoryId} );
 
-            builder.Entity< AnnounceCategory >().HasOne( pc => pc.Announce ).WithMany( p => p.AnnounceCategories )
-                .HasForeignKey( pc => pc.AnnounceId );
+           builder.Entity< Announce >().HasMany( a => a.AnnounceCategories ).WithOne( ac => ac.Announce ).HasForeignKey(
+              a => a.AnnounceId ).IsRequired( true );
+            //builder.Entity< AnnounceCategory >().HasOne( pc => pc.Announce ).WithMany( p => p.AnnounceCategories )
+            //    .HasForeignKey( pc => pc.AnnounceId );
 
             builder.Entity< AnnounceCategory >().HasOne( pc => pc.Category ).WithMany( c => c.CategoryAnnounces )
                 .HasForeignKey( pc => pc.CategoryId );

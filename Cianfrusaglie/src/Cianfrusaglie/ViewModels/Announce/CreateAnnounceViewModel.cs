@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Cianfrusaglie.Attributes;
 using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Http;
 
@@ -29,6 +30,7 @@ namespace Cianfrusaglie.ViewModels.Announce {
 
         public Dictionary< int, bool > CategoryDictionary { get; set; }
 
-        public ICollection< IFormFile > Photos { get; set; }
+         [EnsureMinimumElements( 1, ErrorMessage = "Almeno una categoria richiesta!" )]
+         public ICollection< IFormFile > Photos { get; set; }
     }
 }
