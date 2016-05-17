@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cianfrusaglie.Models;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Internal;
 
 namespace Cianfrusaglie.Controllers {
     public class SearchController : Controller {
@@ -15,11 +16,13 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult Index( string title, IEnumerable< int > categories ) {
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "lastAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
-            ViewData[ "listDonations" ] = _context.Announces.Where(u => u.Price == 0).ToList();
-            ViewData[ "listSales" ] = _context.Announces.Where(u => u.Price > 0).ToList();
+            ViewData[ "listAnnounce" ] = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
             //TODO QUANDO SI FARANNO I BARATTI
             //ViewData["listExchange"] = _context.Announces.Where();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "" +
+                      "for" +
+                      "" +
+                      "mCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             if( title == null )
                 title = "";
