@@ -8,10 +8,12 @@ namespace Cianfrusaglie.Models {
         [DataType( DataType.DateTime )]
         public virtual DateTime DateTime { get; set; }
 
-        public virtual int UserId { get; set; }
+        public virtual string UserId { get; set; }
 
         [Required]
         public virtual User User { get; set; }
+
+        public virtual int AnnounceId { get; set; }
 
         [Required]
         public virtual Announce Announce { get; set; }
