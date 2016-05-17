@@ -10,6 +10,7 @@ using Cianfrusaglie.ViewModels.Announce;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using Microsoft.Net.Http.Headers;
 
 namespace Cianfrusaglie.Controllers {
@@ -305,7 +306,7 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
@@ -333,7 +334,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
             _context.Announces.Remove( announce );
             _context.SaveChanges();
-            return RedirectToAction( "Index" );
+            return RedirectToAction( nameof(HistoryController.Index), "History" );
         }
 
         public IActionResult SubmitAnnounce() { return View(); }
