@@ -19,7 +19,6 @@ namespace Cianfrusaglie.ViewModels.Announce {
         [Display( Name = "Descrizione" ), StringLength( DomainConstraints.AnnounceDescriptionMaxLenght )]
         public string Description { get; set; }
 
-
         [Display( Name = "Distanza" )]
         public int Range { get; set; }
 
