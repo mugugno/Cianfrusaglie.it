@@ -14,6 +14,7 @@ namespace Cianfrusaglie.Constants {
         public const int AnnounceMeterRangeMaxLenght = int.MaxValue;
         public const int AnnouncePriceMinLenght = 0;
         public const int AnnouncePriceMaxLenght = int.MaxValue;
+        public const long AnnouncePhotosMaxLenght = 1000000;
 
         //Constrains per AnnounceFormFieldsValues
         public const int AnnounceFormFieldsValuesValueMaxLength = 99;

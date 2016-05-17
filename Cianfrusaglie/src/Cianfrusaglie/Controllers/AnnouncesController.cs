@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.Announce;
@@ -24,16 +25,14 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        /// Effettua l'upload delle immagini per un determinato annuncio
+        ///     Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
         /// <param name="formFiles">immagini dal form</param>
         /// <param name="announce">l'annuncio</param>
         /// <returns></returns>
-        private async Task UploadAnnounceImages(ICollection<IFormFile> formFiles, Announce announce)
-        {
-            string uploads = Path.Combine(_environment.WebRootPath, "images");
-            foreach (var file in formFiles)
-            {
+        private async Task UploadAnnounceImages( ICollection< IFormFile > formFiles, Announce announce ) {
+            string uploads = Path.Combine( _environment.WebRootPath, "images" );
+            foreach( var file in formFiles ) {
                 if( file.ContentType != "image/png" && file.ContentType != "image/jpeg" )
                     continue;
                 if( file.Length <= 0 )
@@ -52,43 +51,42 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        /// Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie associate
-        /// ad un FormField.
+        ///     Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie
+        ///     associate
+        ///     ad un FormField.
         /// </summary>
-        private void SetViewData()
-        {
-            var formField2CategoriesDictionary = new Dictionary<int, List<Category>>();
-            foreach (var formField in _context.FormFields.ToList())
-            {
+        private void SetViewData() {
+            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
+            foreach( var formField in _context.FormFields.ToList() ) {
                 var categories =
-                    _context.CategoryFormFields.Where(cf => cf.FormFieldId == formField.Id).Select(o => o.Category)
+                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
                         .ToList();
-                formField2CategoriesDictionary.Add(formField.Id, categories);
+                formField2CategoriesDictionary.Add( formField.Id, categories );
             }
-            ViewData["formField2CategoriesDictionary"] = formField2CategoriesDictionary;
+            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
         }
 
         /// <summary>
-        /// Questo metodo carica la pagina degli annunci.
+        ///     Questo metodo carica la pagina degli annunci.
         /// </summary>
         /// <returns>La View con tutti gli annunci.</returns>
         // GET: Announces
         public IActionResult Index() {
-            return RedirectToAction( nameof(HistoryController.Index), "History" );
+            return RedirectToAction( nameof( HistoryController.Index ), "History" );
         }
 
         /// <summary>
-        /// Dato un ID, ritorna una View contenente i dettagli dell'annuncio collegato a quell'ID.
-        /// In caso di utente non loggato, ritorna una BadRequest.
-        /// Se ID non esiste allora viene ritornato un HttpNotFound.
+        ///     Dato un ID, ritorna una View contenente i dettagli dell'annuncio collegato a quell'ID.
+        ///     In caso di utente non loggato, ritorna una BadRequest.
+        ///     Se ID non esiste allora viene ritornato un HttpNotFound.
         /// </summary>
         /// <param name="id">Id dell'annuncio scelto.</param>
         /// <returns>La View contenente i dettagli dell'annuncio.</returns>
         // GET: Announces/Details/5
         public IActionResult Details( int? id ) {
-            if (!LoginChecker.HasLoggedUser(this))
+            if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            if ( id == null ) {
+            if( id == null ) {
                 return HttpNotFound();
             }
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
@@ -114,8 +112,8 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        /// Visualizza la pagina per la creazione di un annuncio.
-        /// In caso l'utente non sia loggato, ritorna una Bad Request.
+        ///     Visualizza la pagina per la creazione di un annuncio.
+        ///     In caso l'utente non sia loggato, ritorna una Bad Request.
         /// </summary>
         /// <returns>La pagina contenente i campi per la creazione di un annuncio.</returns>
         // GET: Announces/Create
@@ -136,12 +134,13 @@ namespace Cianfrusaglie.Controllers {
             SetViewData();
             return View();
         }
-        
+
 
         /// <summary>
-        /// Dato un modulo compilato per la creazione di un annuncio, rende persistente tale creazione, dopodiché torna alla Home.
-        /// Se l'utente non è loggato, ritorna una BadRequest.
-        /// Se il modello non è valido allora rimane sulla pagina della creazione.
+        ///     Dato un modulo compilato per la creazione di un annuncio, rende persistente tale creazione, dopodiché torna alla
+        ///     Home.
+        ///     Se l'utente non è loggato, ritorna una BadRequest.
+        ///     Se il modello non è valido allora rimane sulla pagina della creazione.
         /// </summary>
         /// <param name="model">Il modulo compilato con i dati necessari alla creazione.</param>
         /// <returns>Ritorna un Redirect alla Home</returns>
@@ -151,6 +150,16 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
+            if( model.Photos.Count < 1 ) {
+                ModelState.AddModelError( "Photos", "Devi inserire almeno un immagine" );
+            }
+            foreach( var formFile in model.Photos ) {
+                if( formFile.Length > DomainConstraints.AnnouncePhotosMaxLenght ) {
+                    ModelState.AddModelError( "Photos",
+                        "Non puoi inserire immagini superiori a " + DomainConstraints.AnnouncePhotosMaxLenght / 100000 +
+                        " MB" );
+                }
+            }
             if( ModelState.IsValid ) {
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
@@ -307,9 +316,9 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        /// Dato un ID, ritorna una View per la cancellazione di tale annuncio.
-        /// Se l'utente non è loggato, ritorna una BadRequest.
-        /// Se l'id non esiste, ritorna un HttpNotFound.
+        ///     Dato un ID, ritorna una View per la cancellazione di tale annuncio.
+        ///     Se l'utente non è loggato, ritorna una BadRequest.
+        ///     Se l'id non esiste, ritorna un HttpNotFound.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>La View per la cancellazione di un annuncio.</returns>
@@ -331,9 +340,9 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        /// Conferma la cancellazione di un annuncio dal sistema (rendendo la scelta persistente).
-        /// Se l'utente non è loggato allora ritorna una BadRequest.
-        /// Se l'id non esiste allora ritorna un HttpNotFound.
+        ///     Conferma la cancellazione di un annuncio dal sistema (rendendo la scelta persistente).
+        ///     Se l'utente non è loggato allora ritorna una BadRequest.
+        ///     Se l'id non esiste allora ritorna un HttpNotFound.
         /// </summary>
         /// <param name="id">L'id dell'annuncio da cancellare</param>
         /// <returns>Un Redirect all'indice di tutti gli annunci</returns>
@@ -350,7 +359,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
             _context.Announces.Remove( announce );
             _context.SaveChanges();
-            return RedirectToAction( nameof(HistoryController.Index), "History" );
+            return RedirectToAction( nameof( HistoryController.Index ), "History" );
         }
     }
 }
