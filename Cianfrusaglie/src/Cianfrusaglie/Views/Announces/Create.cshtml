@@ -1,3 +1,4 @@
+@using Microsoft.AspNet.JsonPatch.Helpers
 @model  Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
@@ -19,7 +20,7 @@
     private IEnumerable< Category > GetCategories( Category macro ) {
         for( int j = 0; j < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); j++ ) {
             var subCat = ViewData[ "formMacroCategories" ] as List< Category >;
-            if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Name == macro.Name )
+            if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Id == macro.Id )
                 yield return subCat[ j ];
         }
     }
@@ -54,8 +55,15 @@
                     <button class="btn btn-default navbar-btn navbar-right" id="forward-button" onclick="clickForwardButton()" type="button" >Avanti</button>
                 </div>
             </div>
-
         </nav>
+
+
+        <div class="panel-group col-md-14" >
+            <div class="panel panel-default" >
+                <h5 style="margin-left: 3em" >Scegli una o pi&ugrave categorie apparteneti al tuo oggetto:</h5>
+            </div>
+        </div>
+
 
         <div class="panel" >
             <div class="panel-body" >
@@ -130,21 +138,20 @@
                                     </div>
 
                                     <!-- Textarea -->
-                                    <div class="form-group">
-                                        <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
-                                        <div class="col-md-7">
-                                            <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
+                                    <div class="form-group" >
+                                        <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
+                                        <div class="col-md-7" >
+                                            <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
 
                                         </div>
                                     </div>
 
                                     <!-- Prezzo -->
-                                    @if (ViewData["isVendita"] as bool? ?? false)
-                                    {
-                                        <div class="form-group">
-                                            <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
-                                            <div class="col-md-7">
-                                                <input type="number" asp-for="Price" class="form-control" id="price" name="Price"/>
+                                    @if( ViewData[ "isVendita" ] as bool? ?? false ) {
+                                        <div class="form-group" >
+                                            <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
+                                            <div class="col-md-7" >
+                                                <input type="number" asp-for="Price" class="form-control" id="price" name="Price" />
                                             </div>
                                         </div>
                                     }
@@ -154,8 +161,8 @@
                                         <div class="col-md-7" >
                                             <div class="input-group" >
                                                 <span class="input-group-addon">
-                                                    <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
-                                                </span>
+                                                                <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
+                                                            </span>
                                                 <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                             </div>
                                         </div>
@@ -164,13 +171,14 @@
                                     <div class="form-group" >
                                         <label class="col-md-4 control-label" for="photos" >Immagini</label>
                                         <div class="col-md-6" >
-                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*">
+                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
+                                            <span asp-validation-for="Photos" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-                                    <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
-                                    <div id="googleMap" style="width:500px;height:380px;"></div>
+                                    <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
+                                    <div id="googleMap" style="width: 500px; height: 380px;" ></div>
 
                                 </fieldset>
                             </div>
@@ -181,6 +189,24 @@
         </div>
 
     </form>
+</div>
+
+<div class="modal fade" id="myWindow" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Scegli almeno una categoria!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Devi scegliere almeno una categoria!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 
@@ -213,6 +239,11 @@
     var transitionTime = 350;
 
     function clickForwardButton() {
+        if( !atLeastOneCategorySelected() ) {
+            $('#myWindow').modal('show');
+            return;
+        }
+
         if( document.getElementById("forward-button").innerHTML === "Pubblica" )
             document.getElementById("forward-button").setAttribute("type", "submit");
         else
@@ -240,6 +271,14 @@
             rangeInput.setAttribute("disabled", "");
             rangeInput.value = 0;
         }
+    }
+
+    function atLeastOneCategorySelected() {
+        var categoriesCheckBoxes = document.getElementsByClassName("category-checkboxes");
+        for(var i = 0; i< categoriesCheckBoxes.length; i++)
+            if( categoriesCheckBoxes[ i ].checked )
+                return true;
+        return false;
     }
 
     //google maps

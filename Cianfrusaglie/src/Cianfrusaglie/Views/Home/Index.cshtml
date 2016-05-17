@@ -50,9 +50,9 @@
             <ol class="carousel-indicators" style="z-index: 1">
                 <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#homeCarousel" data-slide-to="1"></li>
-                <li data-target="#homeCarousel" data-slide-to="2"></li>
+             <!--   <li data-target="#homeCarousel" data-slide-to="2"></li>
                 <li data-target="#homeCarousel" data-slide-to="3"></li>
-                <li data-target="#homeCarousel" data-slide-to="4"></li>
+                <li data-target="#homeCarousel" data-slide-to="4"></li> -->
             </ol>
             <div class="carousel-inner" role="listbox" align="center">
                 <div class="item active">
@@ -88,7 +88,7 @@
                 <div class="form-group" id="linkVendi">
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                        <a href="~/Announces/Create?vendita=true" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
                     }
                     else
                     {

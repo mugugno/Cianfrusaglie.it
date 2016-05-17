@@ -6,6 +6,7 @@ using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
 using Microsoft.AspNet.Mvc;
+using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
     public class MessagesController : Controller {
@@ -35,6 +36,17 @@ namespace Cianfrusaglie.Controllers {
             return dictionary.ToDictionary( x => x.u, x => GetConversationWithUser( x.u.Id ) );
         }
 
+        // Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
+        public void SetMessagesToReadStatus() {
+            var unreadMessages =_context.Messages.Where( m => m.Receiver.Id.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
+            foreach( var message in unreadMessages ) {
+                message.Read = true;
+                _context.SaveChanges();
+            }
+            _context.SaveChanges();
+
+        }
+
         // Pagina della chat, con tutte le conversazioni e relativi messaggi
         // GET: Messages
         public IActionResult Index( string id = "" ) {
@@ -44,6 +56,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "allConversations" ] = GetAllConversations();
             ViewData[ "idAfterRefresh" ] = id;
+            SetMessagesToReadStatus();
+            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
             return View();
         }
 
@@ -66,6 +80,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "receiver" ] = _context.Users.First( u => u.Id.Equals( id ) );
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             return View();
         }
 
@@ -110,7 +125,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             return View( message );
         }
 

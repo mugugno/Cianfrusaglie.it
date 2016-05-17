@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using Cianfrusaglie.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
+using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
     public class HomeController : Controller {
@@ -16,6 +18,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "listAnnounces" ] = _context.Announces.OrderByDescending( u => u.PublishDate ).Take( 4 ).ToList();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             //CreateUsers();
             return View();
         }

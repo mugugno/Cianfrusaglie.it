@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160517082444_AddedReadStatusMessage")]
+    partial class AddedReadStatusMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -191,19 +192,19 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AnnounceId");
+                    b.Property<int?>("AnnounceId")
+                        .IsRequired();
 
                     b.Property<DateTime?>("ChooseDate");
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnnounceId", "UserId")
-                        .IsUnique();
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
@@ -477,7 +478,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
