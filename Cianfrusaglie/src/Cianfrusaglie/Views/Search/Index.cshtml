@@ -1,4 +1,5 @@
-﻿@model  IEnumerable< Announce > 
+﻿@using System.Security.Claims
+@model  IEnumerable< Announce > 
 
 @{
     ViewData[ "Title" ] = "Index";
@@ -68,9 +69,11 @@
                                     <i class="fa fa-shopping-cart" ></i>
                                     <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
                                 </p>
-                                <p class="btn-details" >
-                                    <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
-                                </p>
+                                if( annuncio.AuthorId != User.GetUserId() ) {
+                                    <p class="btn-details" >
+                                        <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
+                                    </p>
+                                }
                             }
                         </div>
                         <div class="clearfix" ></div>
