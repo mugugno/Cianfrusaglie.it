@@ -29,10 +29,7 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>La View con tutti gli annunci.</returns>
         // GET: Announces
         public IActionResult Index() {
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            return View();
+            return RedirectToAction( nameof(HistoryController.Index), "History" );
         }
 
         /// <summary>
@@ -44,7 +41,9 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>La View contenente i dettagli dell'annuncio.</returns>
         // GET: Announces/Details/5
         public IActionResult Details( int? id ) {
-            if( id == null ) {
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
+            if ( id == null ) {
                 return HttpNotFound();
             }
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
