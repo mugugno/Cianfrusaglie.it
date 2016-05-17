@@ -13,7 +13,7 @@ namespace Cianfrusaglie.Attributes {
       }
 
       public override bool IsValid( object value ) {
-         var list = value as IList;
+         var list = value as ICollection;
          return list?.Count >= _minElements;
       }
    }

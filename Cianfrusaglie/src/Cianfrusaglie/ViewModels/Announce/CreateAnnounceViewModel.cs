@@ -5,9 +5,6 @@ using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Http;
 
 namespace Cianfrusaglie.ViewModels.Announce {
-
-
-
     public class CreateAnnounceViewModel {
         public bool vendita { get; set; }
 
@@ -28,9 +25,10 @@ namespace Cianfrusaglie.ViewModels.Announce {
 
         public Dictionary< int, string > FormFieldDictionary { get; set; }
 
-        public Dictionary< int, bool > CategoryDictionary { get; set; }
+      [EnsureMinimumElements( 1, ErrorMessage = "Almeno una categoria richiesta!" )]
+      public Dictionary< int, bool > CategoryDictionary { get; set; }
 
-         [EnsureMinimumElements( 1, ErrorMessage = "Almeno una categoria richiesta!" )]
+         [EnsureMinimumElements( 1, ErrorMessage = "Almeno una foto richiesta!" )]
          public ICollection< IFormFile > Photos { get; set; }
     }
 }
