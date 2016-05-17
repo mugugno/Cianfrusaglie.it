@@ -26,6 +26,25 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
+        /// Genera i Gat a partire da un annuncio.
+        /// </summary>
+        /// <param name="announce">L'annuncio appena creato.</param>
+        /// <returns>I Gat relativi all'annuncio</returns>
+        public IEnumerable< Gat > GenerateGats( Announce announce ) {
+            var formFieldsValues = _context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
+            foreach( var fieldsValue in formFieldsValues ) {
+                yield return new Gat() {Text = GetStringFromAnnounceFormField( fieldsValue )};
+            }
+        }
+
+        /// <summary>
+        /// Dato un AnnounceFormField, genera il corrispettivo valore stringa.
+        /// </summary>
+        /// <param name="formField">L'announceFormField da trattare.</param>
+        /// <returns>Il valore in formato stringa per inserirlo nel DB.</returns>
+        public string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) { return formField.Value; }
+
+        /// <summary>
         ///     Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
         /// <param name="formFiles">immagini dal form</param>
@@ -205,6 +224,11 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
+                _context.SaveChanges();
+
+                //Inserimento Gat
+                var gats = GenerateGats(newAnnounce);
+                _context.Gats.AddRange( gats );
                 _context.SaveChanges();
 
                 TempData[ "announceCreated" ] = true;
