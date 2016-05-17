@@ -32,6 +32,7 @@
     color: lightgrey;
     display: inline-block;
     padding: 2em;
+    cursor:pointer;
 
 }
 /*.icon-detail .icon-det:hover{
