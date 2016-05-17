@@ -44,7 +44,9 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>La View contenente i dettagli dell'annuncio.</returns>
         // GET: Announces/Details/5
         public IActionResult Details( int? id ) {
-            if( id == null ) {
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
+            if ( id == null ) {
                 return HttpNotFound();
             }
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
