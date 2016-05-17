@@ -1,0 +1,168 @@
+﻿#messageSent { text-align: justify; }
+
+#messageReceived { text-align: justify; }
+
+#balloonSent {
+    margin-left: 200px;
+    margin-right: 50px;
+}
+
+#balloonReceived {
+    margin-left: 50px;
+    margin-right: 200px;
+}
+
+#allConversations {
+    margin-bottom: 0;
+    margin-left: 2%;
+}
+
+#allMessages { margin-right: 2%; }
+
+h6 {
+    color: darkblue;
+    font-size: 0.75em;
+    margin-bottom: 4px;
+    margin-top: 4px;
+}
+
+#fluid-row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.conversation-box {
+    max-height: 45%;
+    overflow-y: auto;
+}
+
+#all-conversation-box {
+    max-height: 40%;
+    overflow-y: auto;
+    position: relative;
+}
+
+#my-conversations { text-align: center; }
+
+#send-message {
+    margin: 5px 5px 5px 5px;
+    padding: 2px 5px 10px 10px;
+}
+
+
+.panel.panel-message { margin: 5px 5px 5px 5px; }
+
+.panel-heading.panel-message {
+    height: 45px;
+    margin-bottom: 0;
+}
+
+.panel-body.panel-message { margin-top: -10px; }
+
+
+/* THE SPEECH BUBBLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.triangle-isosceles {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background: #f3961c; /* default background for browsers without gradient support */
+    /* css3 */
+    background: -webkit-gradient( linear, 0 0, 0 100%, from( #f9d835 ), to( #f3961c ) );
+    background: -moz-linear-gradient( #f9d835, #f3961c );
+    background: -o-linear-gradient( #f9d835, #f3961c );
+    background: linear-gradient( #f9d835, #f3961c );
+    border-radius: 10px;
+    color: #000;
+    margin: 0.4em 0 0.4em;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 1px;
+    position: relative;
+}
+
+/* Variant : for top positioned triangle
+------------------------------------------ */
+
+.triangle-isosceles.top {
+    background: -webkit-gradient( linear, 0 0, 0 100%, from( #f3961c ), to( #f9d835 ) );
+    background: -moz-linear-gradient( #f3961c, #f9d835 );
+    background: -o-linear-gradient( #f3961c, #f9d835 );
+    background: linear-gradient( #f3961c, #f9d835 );
+}
+
+/* Variant : for left/right positioned triangle
+------------------------------------------ */
+
+.triangle-isosceles.left {
+    background: #FEEDAA;
+    margin-left: 50px;
+}
+
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.triangle-isosceles.right {
+    background: #FEE871;
+    margin-right: 0px;
+}
+
+.triangle-isosceles.bubble-no-margin {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+/* THE TRIANGLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+/* creates triangle */
+
+.triangle-isosceles:after {
+    border-color: #f3961c transparent;
+    border-style: solid;
+    border-width: 15px 15px 0; /* vary these values to change the angle of the vertex */
+    bottom: -15px; /* value = - border-top-width - border-bottom-width */
+    content: "";
+    /* reduce the damage in FF3.0 */
+    display: block;
+    left: 50px; /* controls horizontal position */
+    position: absolute;
+    width: 0;
+}
+
+/* Variant : top
+------------------------------------------ */
+
+.triangle-isosceles.top:after {
+    border-color: #f3961c transparent;
+    border-width: 0 15px 15px; /* vary these values to change the angle of the vertex */
+    bottom: auto;
+    left: auto;
+    right: 50px; /* controls horizontal position */
+    top: -15px; /* value = - border-top-width - border-bottom-width */
+}
+
+/* Variant : left
+------------------------------------------ */
+
+.triangle-isosceles.left:after {
+    border-color: transparent #FEEDAA;
+    border-width: 10px 11px 10px 0;
+    bottom: auto;
+    left: -10px; /* value = - border-left-width - border-right-width */
+    top: 16px; /* controls vertical position */
+}
+
+/* Variant : right
+------------------------------------------ */
+
+.triangle-isosceles.right:after {
+    border-color: transparent #FEE871;
+    border-width: 10px 0 10px 11px;
+    bottom: auto;
+    left: auto;
+    right: -10px; /* value = - border-left-width - border-right-width */
+    top: 16px; /* controls vertical position */
+}

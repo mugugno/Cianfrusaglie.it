@@ -1,4 +1,8 @@
-﻿@functions
+﻿@using System
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using Cianfrusaglie.Constants
+@functions
 {
 
     public IEnumerable<Category> GetCategories()
@@ -28,7 +32,7 @@
 <html>
 <head>
 
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
@@ -39,7 +43,8 @@
     <link href="~/Content/Create.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/SubmitAnnounce.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/VisualizzaAnnuncio.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Search.css"  rel="stylesheet" type="text/css" />
+    <link href="~/Content/Messages.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 
     
@@ -51,7 +56,7 @@
             <div id="title" class="col-md-3">
                 <a href="~/">
                     <h1>
-                        cianfrusAPP.net
+                        @CommonStrings.SiteName
                     </h1>
                     <h5>Il posto giusto per le tue cianfrusaglie</h5>
                 </a>
@@ -110,7 +115,7 @@
                     }
                 </li>
                 <li class="dropdown dropdown-large">
-                    <a href="#">Come funziona <strong>cianfrusAPP.net</strong></a>
+                    <a href="#">Come funziona <strong>@CommonStrings.SiteName</strong></a>
                 </li>
             </ul>
 
@@ -123,6 +128,37 @@
                 }
                 else
                 {
+                    @* Pulsante Notifiche *@
+                    <li class="dropdown dropdown-large" >
+                        @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
+                        @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
+                            <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;" ><b class="caret" ></b></a>
+                        } else {
+                            <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em" ><b class="caret" ></b></a>
+                        }
+
+                        @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
+                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
+                                <li class="dropdown-header" >
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                    <span><a href="~/Messages"> Hai nuovi Messaggi da leggere!</a></span>
+                                </li>
+                            </ul>
+                        } else {
+                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
+                                <li style="text-align: center" >
+                                    <span>Nessuna notifica</span>
+                                </li>
+                            </ul>
+
+                        }
+
+
+
+
+
+                    </li>
+
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large"  style="left: auto; right:0">
@@ -177,11 +213,27 @@
 
         </div>
     </div>
+    
+    <div id="confirm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Sei sicuro di voler continuare?</p>
+                </div>
 
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm">Conferma</button>
+                    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+            <div id="footer" class="panel-footer">
+                Copyright © 2016 Mugugno / All rights reserved.
+            </div>
 
-<div id="footer" class="panel-footer">
-    Copyright © 2016 Mugugno / All rights reserved.
-</div>
+    <script src="~/js/AnnounceDetails.js"></script>
 
 </body>
 </html>

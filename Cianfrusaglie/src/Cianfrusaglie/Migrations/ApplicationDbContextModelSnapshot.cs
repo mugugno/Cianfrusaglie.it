@@ -191,19 +191,19 @@ namespace Cianfrusaglie.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AnnounceId")
-                        .IsRequired();
+                    b.Property<int>("AnnounceId");
 
                     b.Property<DateTime?>("ChooseDate");
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnnounceId", "UserId")
+                        .IsUnique();
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
@@ -212,6 +212,8 @@ namespace Cianfrusaglie.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("DateTime");
+
+                    b.Property<bool>("Read");
 
                     b.Property<string>("ReceiverId")
                         .IsRequired();
@@ -287,6 +289,34 @@ namespace Cianfrusaglie.Migrations
                         .IsUnique();
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.UserCategoryPreferences", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.UserGatHistogram", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Count");
+
+                    b.Property<int>("GatId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
@@ -475,7 +505,7 @@ namespace Cianfrusaglie.Migrations
 
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.Message", b =>
@@ -491,6 +521,28 @@ namespace Cianfrusaglie.Migrations
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>
                 {
+                    b.HasOne("Cianfrusaglie.Models.User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.UserCategoryPreferences", b =>
+                {
+                    b.HasOne("Cianfrusaglie.Models.Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Cianfrusaglie.Models.User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Cianfrusaglie.Models.UserGatHistogram", b =>
+                {
+                    b.HasOne("Cianfrusaglie.Models.Gat")
+                        .WithMany()
+                        .HasForeignKey("GatId");
+
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");

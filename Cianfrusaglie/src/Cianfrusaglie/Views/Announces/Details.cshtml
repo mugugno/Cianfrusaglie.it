@@ -1,4 +1,5 @@
 @using System.Collections
+@using System.Security.Claims
 @using System.Threading.Tasks
 @using Microsoft.Data.Entity.Query.Expressions
 @using Remotion.Linq.Clauses
@@ -8,10 +9,10 @@
     ViewData["Title"] = "Details";
 }
 
-<link href="../../wwwroot/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <div id="wrapper-announce">
 
-    <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
+
     <div class="row">
         <div class="col-sm-10 col-md-5">
             <!--IMMAGINI + carosello-->
@@ -73,6 +74,23 @@
             </div>
         </div>
         <div class="col-sm-10 col-md-5">
+            <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
+            <div class="icon-detail">
+                <form action="#" method="POST">
+                    @if (@ViewData["interested"] == null)
+                    {
+                        <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Interessato</span></a>
+                    }
+                    else
+                    {
+                        <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Non sono pi&ugrave; interessato</span></a>
+
+                    }
+
+                </form>
+            </div>
+            
+
             <div class="col-item">
                 <dl class="dl-horizontal container-announce">
 
@@ -96,14 +114,13 @@
                         Autore
                     </dt>
                     <dd>
-                        @{
-                          
-
+                        @if( (string) ViewData[ "AuthorId" ] != User.GetUserId() ) {
                             <div>
-                               @ViewData["Autore"]
-                                <a href="~/Messages/Details/?id=@ViewData["AuthorId"]" style="margin-left:5em">Contatta</a>
+                                @ViewData[ "Autore" ]
+                                <a href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" style="margin-left: 5em" >Contatta</a>
                             </div>
-                           }
+                        }
+
                     </dd>
 
                     @if (Model.MeterRange > 0)
@@ -134,10 +151,17 @@
                     <dt>
                         Data di Pubblicazione
                     </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.PublishDate)
-                    </dd>
-
+                    @if( !string.IsNullOrEmpty( Model.Description ) ) {
+                        <dd>
+                            @Html.DisplayFor( model => model.PublishDate )
+                        </dd>
+                        <dt>
+                            Descrizione
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor( model => model.Description )
+                        </dd>
+                    }
                 </dl>
             </div>
 
@@ -145,15 +169,37 @@
 
     </div>
 
+    <script type="text/javascript">
+        
 
+        $('a[name="confirm_levels"]').on('click', function (e) {
+            var $form = $(this).closest('form');
+            e.preventDefault();
+            var tmp = @ViewData["IdAnnounce"];
+
+            $('#confirm').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#confirm', function (e) {
+                    $.get("/Announces/Interested?AnnounceId=1", function () {
+                        if($('.text-det').text()=="Interessato")
+                            $('.text-det').html("Non sono pi&ugrave; interessato");
+                        else
+                            $('.text-det').text("Interessato");
+                    })
+                  .fail(function () {
+                      alert("error");
+                  })
+                  
+                
+                });
+        });
+        
+    </script>
     @*    <p>*@
     @*        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
     @*        <a asp-action="Index">Back to List</a>*@
     @*    </p>*@
 </div>
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="../../wwwroot/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
 

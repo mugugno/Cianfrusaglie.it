@@ -1,4 +1,5 @@
-﻿@using Microsoft.Data.Entity.Query.Internal
+﻿@using System.Security.Claims
+@using Microsoft.Data.Entity.Query.Internal
 
 @functions
 {
@@ -41,7 +42,7 @@
     {
         <div class="alert alert-success alert-dismissible" role="alert" >
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-            <strong>Ottimo!</strong> @TempData["announceCreated"]
+            <strong>Ottimo! </strong> Il tuo annuncio è stato creato correttamente!
         </div>
     }
     <div class="container-fluid" id="containerPrincipale">
@@ -49,9 +50,9 @@
             <ol class="carousel-indicators" style="z-index: 1">
                 <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#homeCarousel" data-slide-to="1"></li>
-                <li data-target="#homeCarousel" data-slide-to="2"></li>
+             <!--   <li data-target="#homeCarousel" data-slide-to="2"></li>
                 <li data-target="#homeCarousel" data-slide-to="3"></li>
-                <li data-target="#homeCarousel" data-slide-to="4"></li>
+                <li data-target="#homeCarousel" data-slide-to="4"></li> -->
             </ol>
             <div class="carousel-inner" role="listbox" align="center">
                 <div class="item active">
@@ -87,11 +88,11 @@
                 <div class="form-group" id="linkVendi">
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                        <a href="~/Announces/Create?vendita=true" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
                     }
                     else
                     {
-                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                        <a href="~/Announces/Create/?vendita=true" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
                     }
                     <br/><br/><label>VENDI</label>
                 </div>
@@ -149,9 +150,9 @@
                                 <div class="separator clear-left">
                                     @if (!User.Identity.IsAuthenticated)
                                     {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
+                                        <p class="btn-add" >
+                                            <i class="fa fa-shopping-cart" ></i>
+                                            <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
                                         </p>
                                         <p class="btn-details">
                                             <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
@@ -159,13 +160,15 @@
                                     }
                                     else
                                     {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="">Dettagli</a>
+                                        <p class="btn-add" >
+                                            <i class="fa fa-shopping-cart" ></i>
+                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
                                         </p>
-                                        <p class="btn-details">
-                                            <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
-                                        </p>
+                                        if( annuncio.AuthorId != User.GetUserId() ) {
+                                             <p class="btn-details" >
+                                                 <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
+                                             </p>
+                                         }
                                     }
                                 </div>
                                 <div class="clearfix"></div>

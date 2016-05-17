@@ -1,47 +1,62 @@
-@model Cianfrusaglie.Models.Announce
+@model  Announce 
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData[ "Title" ] = "Elimina annuncio";
 }
 
-<h2>Delete</h2>
+<h2>Elimina il tuo annuncio</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Announce</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Closed)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Closed)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PublishDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PublishDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MeterRange)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MeterRange)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+<div class="panel-body" >
+    <div class="panel panel-default" >
+        <div class="panel-heading" style="text-align: center">
+            <h2>Sei proprio sicuro di voler cancellare questo annuncio?</h2>
         </div>
-    </form>
+        <div class="panel-body" >
+            <div class="col-md-3" >
+                @if( Model.Images.Any() ) {
+                    <div class="photo" >
+                        <img class="img-responsive" src="@Model.Images.First().Url" />
+                    </div>
+                }
+            </div>
+            <div class="col-md-8" >
+                <dl class="dl-horizontal" >
+
+
+                    <dt>
+                        Titolo:
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor( model => model.Title )
+                    </dd>
+                    <dt>
+                        Descrizione
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor( model => model.Description )
+                    </dd>
+                    <dt>
+                        Data di pubblicazione
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor( model => model.PublishDate )
+                    </dd>
+
+                </dl>
+
+            </div>
+        </div>
+        <div class="panel-footer" >
+            <div style="text-align: center">
+
+                <form asp-action="Delete">
+                    <div class="form-actions no-color" >
+                        <input type="hidden" id="id" name="id" value="@Model.Id"/>
+                        <input class="btn btn-default" type="submit" value="Elimina definitivamente" style="margin-right: 100px" />
+                        <a class="btn btn-default" href="~/History/Index" >Torna a tutti i miei annunci</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

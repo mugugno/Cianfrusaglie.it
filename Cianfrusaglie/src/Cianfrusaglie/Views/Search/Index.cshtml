@@ -1,101 +1,117 @@
-﻿@model IEnumerable<Announce>
+﻿@using System.Security.Claims
+@using Microsoft.AspNet.Razor.CodeGenerators.Visitors
+@model  IEnumerable< Announce > 
 
 @{
-        ViewData[ "Title" ] = "Index";
+    ViewData[ "Title" ] = "Index";
 }
 
 @functions {
 
-    public User GetAutore(string AuthorId)
-    {
-        foreach (var user in ViewData["listUsers"] as List<User>)
-        {
-            if (user.Id == AuthorId)
+    public User GetAutore( string AuthorId ) {
+        foreach( var user in ViewData[ "listUsers" ] as List< User > ) {
+            if( user.Id == AuthorId )
                 return user;
         }
         return null;
     }
 
-    public string GetImages(int AnnounceId)
-    {
-        foreach (var imm in ViewData["listImages"] as List<ImageUrl>)
-        {
-            if (imm.AnnounceId == AnnounceId)
+    public string GetImages( int AnnounceId ) {
+        foreach( var imm in ViewData[ "listImages" ] as List< ImageUrl > ) {
+            if( imm.AnnounceId == AnnounceId )
                 return imm.Url;
         }
         return null;
     }
+
 }
 
 
-
-
-
 <div class="container">
-    
 
-    <div class="row">
-        
-            @foreach (var annuncio in Model)
-            {
-                <div class="col-sm-3">
+    <!--Carousel Donation Announce
+    <div id="homeCarousel" class="carousel slide" data-ride="carousel">
+       <!-- <ol class="carousel-indicators" style="z-index: 1">
+            <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#homeCarousel" data-slide-to="1"></li>
+            <!--   <li data-target="#homeCarousel" data-slide-to="2"></li>
+               <li data-target="#homeCarousel" data-slide-to="3"></li>
+               <li data-target="#homeCarousel" data-slide-to="4"></li>
+        </ol> 
+        <div class="carousel-inner" role="listbox" align="center">
+   
+           <!--     <div class="col-sm-4 col-md-3">
                     <div class="col-item">
-                        <div class="photo">
-                            <img src="@GetImages(@annuncio.Id)" class="img-responsive" />
+                        
+                    </div>
+                    <a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                </div>
+       -->
+    <!--Carousel Sale Announce-->
+
+
+
+
+        
+        <div class="row" >
+
+            @foreach( var annuncio in Model ) {
+                <div class="col-sm-3" >
+                    <div class="col-item" >
+                        <div class="photo" >
+                            <img src="@GetImages( annuncio.Id )" class="img-responsive" />
                         </div>
-                        <div class="info">
+                        <div class="info" >
 
 
                             <h5>
                                 @annuncio.Title
-                        </h5>
-                        @if (@annuncio.Price == 0)
-                         {
-                            <h5 class="price-text-color">IN REGALO</h5>
-                         }
-                         else
-                         {
-                            <h5 class="price-text-color">Prezzo: @annuncio.Price</h5>
-                         }
+                            </h5>
+                            @if( annuncio.Price == 0 ) {
+                                <h5 class="price-text-color" >IN REGALO</h5>
+                            } else {
+                                <h5 class="price-text-color" >Prezzo: @annuncio.Price</h5>
+                            }
 
 
-                        <div class="price">
-                            <br />
-                            <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
-                                            <br />
-                                        </div>
-                                        <div class="separator clear-left">
-                                            @if (!User.Identity.IsAuthenticated)
-                                                    {
-                                                        <p class="btn-add">
-                                                            <i class="fa fa-shopping-cart"></i>
-                                                            <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
-                                                        </p>
-                                                        <p class="btn-details">
-                                                            <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
-                                                        </p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="btn-add">
-                                                            <i class="fa fa-shopping-cart"></i>
-                                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="">Dettagli</a>
-                                                        </p>
-                                                        <p class="btn-details">
-                                                            <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
-                                                        </p>
-                                                    }
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="price" >
+                                <br />
+                                <h5>Autore: @GetAutore( annuncio.AuthorId ).UserName</h5>
+                                <br />
+                            </div>
+                            <div class="separator clear-left" >
+                                @if( !User.Identity.IsAuthenticated ) {
+                                    <p class="btn-add" >
+                                        <i class="fa fa-shopping-cart" ></i>
+                                        <a data-target="#myWindow" data-toggle="modal" href="#" >Dettagli</a>
+                                    </p>
+                                    <p class="btn-details" >
+                                        <i class="fa fa-list" ></i><a class="" data-target="#myWindow" data-toggle="modal" href="#" >Contatta</a>
+                                    </p>
+                                } else {
+                                    <p class="btn-add" >
+                                        <i class="fa fa-shopping-cart" ></i>
+                                        <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
+                                    </p>
+                                    if( annuncio.AuthorId != User.GetUserId() ) {
+                                        <p class="btn-details" >
+                                            <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
+                                        </p>
+                                    }
+                                }
+                            </div>
+                            <div class="clearfix" ></div>
+                        </div>
+                    </div>
+                </div>
             }
-</div>
-</div>
-
-
-
- 
-
-
+        </div>
+    </div>

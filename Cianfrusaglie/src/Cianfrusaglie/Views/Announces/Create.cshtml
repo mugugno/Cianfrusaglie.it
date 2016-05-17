@@ -1,5 +1,5 @@
-@using System.Security.Cryptography
-@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel
+@using Microsoft.AspNet.JsonPatch.Helpers
+@model  Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
     ViewData[ "Title" ] = "Inserzione Annuncio";
@@ -20,13 +20,13 @@
     private IEnumerable< Category > GetCategories( Category macro ) {
         for( int j = 0; j < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); j++ ) {
             var subCat = ViewData[ "formMacroCategories" ] as List< Category >;
-            if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Name == macro.Name )
+            if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Id == macro.Id )
                 yield return subCat[ j ];
         }
     }
 
     private IEnumerable< FormField > GetFormFields() {
-        foreach( FormField field in (List< FormField >) ViewData[ "formFields" ] ) {
+        foreach( var field in (List< FormField >) ViewData[ "formFields" ] ) {
             yield return field;
         }
     }
@@ -37,47 +37,52 @@
         if( dictionary == null )
             return result;
 
-        foreach( Category category in dictionary[ formFieldId ] ) {
+        foreach( var category in dictionary[ formFieldId ] ) {
             result += category.Id + " ";
         }
         return result;
     }
 
 }
-<div id="wrap">
-    <form asp-action="Create" asp-controller="Announces" method="post" role="form" id="tabellaForm" enctype="multipart/form-data">
-        <nav class="navbar navbar-default" data-spy="affix" data-offset-top="60" id="announce-navbar" style="z-index: 15">
-            <div class="panel panel-default" style="margin-left: -15px">
-                <div class="col-md-3">
+<div id="wrap" >
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" method="post" role="form" >
+        <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15" >
+            <div class="panel panel-default" style="margin-left: -15px" >
+                <div class="col-md-3" >
                 </div>
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-default navbar-btn navbar-left" onclick="clickBackButton()" style="display: none" id="back-button">Indietro</button>
-                    <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="clickForwardButton()" id="forward-button">Avanti</button>
+                <div class="col-md-6" >
+                    <button class="btn btn-default navbar-btn navbar-left" id="back-button" onclick="clickBackButton()" style="display: none" type="button" >Indietro</button>
+                    <button class="btn btn-default navbar-btn navbar-right" id="forward-button" onclick="clickForwardButton()" type="button" >Avanti</button>
                 </div>
             </div>
-
         </nav>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row" id="page1">
-                    <div class="col-md-6">
-                        <div class="panel-group" id="panel-423221">
-                            @foreach (Category macroCategory in GetMacroCategories())
-                            {
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-423221" href="#category-@macroCategory.Id">@macroCategory.Name</a>
-                                    </div>
-                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <div class="form-group">
 
-                                                <div class="col-md-12">
-                                                    @foreach (Category category in GetCategories(macroCategory))
-                                                    {
-                                                        <div class="checkbox">
-                                                            <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id">
+        <div class="panel-group col-md-14" >
+            <div class="panel panel-default" >
+                <h5 style="margin-left: 3em" >Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</h5>
+            </div>
+        </div>
+
+
+        <div class="panel" >
+            <div class="panel-body" >
+                <div class="row" id="page1" >
+                    <div class="col-md-6" >
+                        <div class="panel-group" id="panel-423221" >
+                            @foreach( var macroCategory in GetMacroCategories() ) {
+                                <div class="panel panel-default" >
+                                    <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id" >
+                                        @macroCategory.Name
+                                    </div>
+                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse" >
+                                        <div class="panel-body" >
+                                            <div class="form-group" >
+
+                                                <div class="col-md-12" >
+                                                    @foreach( var category in GetCategories( macroCategory ) ) {
+                                                        <div class="checkbox" >
+                                                            <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id" >
                                                                 <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
                                                                 @category.Name
                                                             </label>
@@ -93,19 +98,17 @@
 
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel-group">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Informazioni aggiuntive</h3>
+                    <div class="col-md-6" >
+                        <div class="panel-group" >
+                            <div class="panel panel-default" >
+                                <div class="panel-heading" >
+                                    <h3 class="panel-title" >Informazioni aggiuntive</h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" >
 
-                                    @foreach (FormField field in GetFormFields())
-                                    {
-
-                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none">
-                                            <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label">@field.Name</label>
+                                    @foreach( var field in GetFormFields() ) {
+                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                            <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label" >@field.Name</label>
                                             <input asp-for="FormFieldDictionary[ field.Id ]" class="form-control" />
                                         </div>
                                     }
@@ -115,52 +118,67 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" id="page2" style="display: none">
-                    <div class="col-md-3">
+                <div class="row" id="page2" style="display: none" >
+                    <div class="col-md-3" >
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
+                    <div class="col-md-6" >
+                        <div class="panel panel-default" >
+                            <div class="panel-body" >
                                 <fieldset>
 
                                     @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
                                     <!-- Text input-->
-                                    <div class="form-group">
-                                        <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
-                                        <div class="col-md-7">
-                                            <input asp-for="Title" id="title-mandatory" type="text" placeholder="inserisci il titolo dell'annuncio" class="form-control" style="padding-left: 12px">
+                                    <div class="form-group" >
+                                        <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                        <div class="col-md-7" >
+                                            <input asp-for="Title" class="form-control" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text" >
                                             <span asp-validation-for="Title" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                     <!-- Textarea -->
-                                    <div class="form-group">
-                                        <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
-                                        <div class="col-md-7">
-                                            <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
-                                            
+                                    <div class="form-group" >
+                                        <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
+                                        <div class="col-md-7" >
+                                            <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
+
                                         </div>
                                     </div>
 
+                                    <!-- Prezzo -->
+                                    @if( ViewData[ "isVendita" ] as bool? ?? false ) {
+                                        <div class="form-group" >
+                                            <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
+                                            <div class="col-md-7" >
+                                                <input type="number" asp-for="Price" class="form-control" id="price" name="Price" />
+                                            </div>
+                                        </div>
+                                    }
+
                                     <div class="form-group" >
                                         <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
-                                        <div class="col-md-7">
+                                        <div class="col-md-7" >
                                             <div class="input-group" >
                                                 <span class="input-group-addon">
-                                                    <input type="checkbox" id="range-checkbox" onchange="clickRangeButton()">
-                                                </span>
-                                                <input asp-for="Range" id="range-input" type="number" placeholder="di quanti km?" class="form-control" style="padding-left: 12px">
+                                                                <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
+                                                            </span>
+                                                <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label" for="photos">Immagini</label>
-                                        <div class="col-md-6">
-                                            <input asp-for="Photos" id="photos" name="photos" class="input-file" type="file" style="margin-top: 6px" multiple>
+                                    <div class="form-group" >
+                                        <label class="col-md-4 control-label" for="photos" >Immagini</label>
+                                        <div class="col-md-6" >
+                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
+                                            <span asp-validation-for="Photos" class="text-danger"></span>
                                         </div>
                                     </div>
+
+                                    <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+                                    <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
+                                    <div id="googleMap" style="width: 500px; height: 380px;" ></div>
 
                                 </fieldset>
                             </div>
@@ -173,60 +191,167 @@
     </form>
 </div>
 
+<div class="modal fade" id="myWindow" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Scegli almeno una categoria!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Devi scegliere almeno una categoria!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
-    <script>
-        // TODO spostare tutto in un file js
-        document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
-        document.getElementById("range-checkbox").checked = true;
-        document.getElementById("range-input").value = 1;
-        setFieldsVisibility();
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script>
+    // TODO spostare tutto in un file js
+    document.getElementById("announce-navbar")
+        .setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    document.getElementById("range-checkbox").checked = true;
+    document.getElementById("range-input").value = 1;
+    setFieldsVisibility();
 
-        function setFieldsVisibility() {
-            var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-            var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
-            for (var i = 0; i < allFormFieldsArray.length; i++)
-                allFormFieldsArray[i].style.display = "none";
-            for (var i = 0; i < checkboxesArray.length; i++) {
-                var checkbox = checkboxesArray[i];
-                if (checkbox.checked) {
-                    var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
-                    for (var j = 0; j < categoryFormFieldsArray.length; j++)
-                        categoryFormFieldsArray[j].style.display = "block";
-                }
+    function setFieldsVisibility() {
+        var checkboxesArray = document.getElementsByClassName("category-checkboxes");
+        var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
+        for( var i = 0; i < allFormFieldsArray.length; i++ )
+            allFormFieldsArray[ i ].style.display = "none";
+        for( var i = 0; i < checkboxesArray.length; i++ ) {
+            var checkbox = checkboxesArray[ i ];
+            if( checkbox.checked ) {
+                var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
+                for( var j = 0; j < categoryFormFieldsArray.length; j++ )
+                    categoryFormFieldsArray[ j ].style.display = "block";
             }
         }
+    }
 
-        
 
-        // 500 sono i millisecondi di durata della transizione
-        var transitionTime = 350;
-        function clickForwardButton() {
-            if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
-                document.getElementById("forward-button").setAttribute("type","submit");
-            }
-            else document.getElementById("forward-button").innerHTML = "Pubblica";
-            $('#page1').hide(transitionTime);
-            $('#page2').show(transitionTime);
-            $('#back-button').show(0);    
+    // 500 sono i millisecondi di durata della transizione
+    var transitionTime = 350;
+
+    function clickForwardButton() {
+        if( !atLeastOneCategorySelected() ) {
+            $('#myWindow').modal('show');
+            return;
         }
-        function clickBackButton() {
-            $('#page1').show(transitionTime);
-            $('#page2').hide(transitionTime);
-            $('#back-button').hide(0);
-            document.getElementById("forward-button").innerHTML = "Avanti";
-            document.getElementById("forward-button").setAttribute("type", "button");
+
+        if( document.getElementById("forward-button").innerHTML === "Pubblica" )
+            document.getElementById("forward-button").setAttribute("type", "submit");
+        else
+            document.getElementById("forward-button").innerHTML = "Pubblica";
+        $('#page1').hide(transitionTime);
+        $('#page2').show(transitionTime);
+        $('#back-button').show(0);
+    }
+
+    function clickBackButton() {
+        $('#page1').show(transitionTime);
+        $('#page2').hide(transitionTime);
+        $('#back-button').hide(0);
+        document.getElementById("forward-button").innerHTML = "Avanti";
+        document.getElementById("forward-button").setAttribute("type", "button");
+    }
+
+    function clickRangeButton() {
+        var checkbox = document.getElementById("range-checkbox");
+        var rangeInput = document.getElementById("range-input");
+        if( checkbox.checked ) {
+            rangeInput.removeAttribute("disabled");
+            rangeInput.value = 1;
+        } else {
+            rangeInput.setAttribute("disabled", "");
+            rangeInput.value = 0;
         }
-        function clickRangeButton() {
-            var checkbox = document.getElementById("range-checkbox");
-            var rangeInput = document.getElementById("range-input");
-            if (checkbox.checked) {
-                rangeInput.removeAttribute("disabled");
-                rangeInput.value = 1;
-            }
-            else {
-                rangeInput.setAttribute("disabled", "");
-                rangeInput.value = 0;
-            }
+    }
+
+    function atLeastOneCategorySelected() {
+        var categoriesCheckBoxes = document.getElementsByClassName("category-checkboxes");
+        for(var i = 0; i< categoriesCheckBoxes.length; i++)
+            if( categoriesCheckBoxes[ i ].checked )
+                return true;
+        return false;
+    }
+
+    //google maps
+    function initialize() {
+        //navigator.geolocation.getCurrentPosition( initializeGMaps, unableToGeoLocalize );
+        initializeGMaps(null, 51.508742, -0.120850);
+    }
+
+    function unableToGeoLocalize(positionError) {
+        //posizione genova brignole
+        initializeGMaps(null, 44.40678, 8.93391);
+    }
+
+    var map;
+    function initializeGMaps(position, lat, long) {
+        if( position != null ) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
         }
-    </script>
+
+        var mapProp = {
+            center: new google.maps.LatLng(lat, long),
+            zoom: 5,
+            streetViewControl: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0)
+                return;
+
+            var bounds = new google.maps.LatLngBounds();
+
+            if (places[0].geometry.viewport) {
+                bounds.union(places[0].geometry.viewport);
+            } else {
+                bounds.extend(places[0].geometry.location);
+            }
+            map.fitBounds(bounds);
+
+            placeMarker(places[0].geometry.location, places[0].title);
+        });
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
+
+    var marker = null;
+    function placeMarker(location, title) {
+        if( marker != null )
+            marker.setMap(null);
+
+        marker = new google.maps.Marker({
+            position: location,
+            title: title,
+            animation: google.maps.Animation.BOUNCE,
+            map: map
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: 'Latitude: ' + location.lat() +
+            '<br>Longitude: ' + location.lng()
+        });
+        infowindow.open(map, marker);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>

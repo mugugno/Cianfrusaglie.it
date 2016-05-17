@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.Mvc.Rendering;
 
-namespace Cianfrusaglie.ViewModels.Manage
-{
-    public class ConfigureTwoFactorViewModel
-    {
+namespace Cianfrusaglie.ViewModels.Manage {
+    public class ConfigureTwoFactorViewModel {
         public string SelectedProvider { get; set; }
 
-        public ICollection<SelectListItem> Providers { get; set; }
+        public ICollection< SelectListItem > Providers { get; set; }
     }
 }

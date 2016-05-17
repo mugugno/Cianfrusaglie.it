@@ -1,53 +1,48 @@
 ﻿body {
-   font-family: 'Lato', sans-serif;
-   margin:0;
-
-}
-
-a, h1, h2, h3, h4, h5, h6 {
     font-family: 'Lato', sans-serif;
+    margin: 0;
 }
 
-button{
-    padding:0;
-}
+a, h1, h2, h3, h4, h5, h6 { font-family: 'Lato', sans-serif; }
+
+button { padding: 0; }
 
 #wrap {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -40px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -40px;
+    min-height: 100%;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
 }
 
 #pageHeader {
-    width:100%;
-    height:100px;
-    position: relative;
+    background-color: white;
     border-bottom: 1px solid;
     border-bottom-color: #FFC107;
     border-top: 1px solid;
     border-top-color: #FFC107;
-    background-color: white;
     display: inline-block;
-    padding-right: 0;
+    height: 100px;
     padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    width: 100%;
 }
 
 
 #barraRicerca {
-    position: absolute;
     float: left;
+    position: absolute;
     top: 60%;
-    transform: translateY(-60%);
+    transform: translateY( -60% );
 }
 
 #footer {
-    height: 40px;
-    bottom:0;
-    text-align: center;
-    font-weight: bold;
     border-top: 1px solid;
     border-top-color: #FFC107;
+    bottom: 0;
+    font-weight: bold;
+    height: 40px;
+    text-align: center;
 }

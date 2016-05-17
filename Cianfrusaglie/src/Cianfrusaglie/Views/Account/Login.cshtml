@@ -1,52 +1,52 @@
 ﻿@using System.Threading.Tasks
-@model  Cianfrusaglie.ViewModels.Account.LoginViewModel
+@using Cianfrusaglie.Constants
+@model Cianfrusaglie.ViewModels.Account.LoginViewModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData[ "Title" ] = "Login";
     Layout = "";
 }
-
 
 
 <html>
 <head>
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Register.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Style.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+    <link href= "https://fonts.googleapis.com/css?family=Source+Sans+Pro"  rel="stylesheet" type="text/css" >
+    <link href= "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet" type="text/css" />
+    <link href= "~/Content/Register.css"  rel="stylesheet" type="text/css" />
+    <link href= "~/Content/Style.css"  rel="stylesheet" type="text/css" />
+    <link href= "~/Content/Search.css"  rel="stylesheet" type="text/css" />
+    <link href= "https://fonts.googleapis.com/css?family=Lato"  rel="stylesheet" type="text/css" >
 
 
 </head>
 <body>
-<div id="wrapper-register">
-    <div id="register">
+<div id="wrapper-register" >
+    <div id="register" >
         <h1>
-            <a href="~/">questo<strong>e</strong>quello</a>
+            <a href="~/" >@CommonStrings.SiteName</a>
         </h1>
         <h5>Il posto giusto per le tue cianfrusaglie</h5>
-        <form asp-action="Login" asp-controller="Account" class="form-horizontal form-register" method="post" role="form" id="tabellaForm">
+        <form asp-action="Login" asp-controller="Account" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" >
 
             <h2>
                 <strong>Accedi</strong>
             </h2>
-            <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label">Username</label><br/>
-                <input asp-for="UserName" class="form-control"/>
+            <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
+            <div class="form-group" >
+                <label asp-for="UserName" class="control-label" >Username</label><br />
+                <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label">Password</label><br/>
-                <input asp-for="Password" type="password" class="form-control"/>
+            <div class="form-group" >
+                <label asp-for="Password" class="control-label" >Password</label><br />
+                <input asp-for="Password" class="form-control" type="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <br/><button class="btn btn-default" type="submit">Accedi</button>
+            <div class="form-group" >
+                <br /><button class="btn btn-default" type="submit" >Accedi</button>
             </div>
             <span id="sottoForm"><h5>Se non sei ancora registrato, <a href="~/Account/Register">clicca qui</a></h5></span>
         </form>

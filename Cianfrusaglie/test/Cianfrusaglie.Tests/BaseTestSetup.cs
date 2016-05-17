@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
@@ -29,7 +30,7 @@ namespace Cianfrusaglie.Tests {
         private readonly Mock< SignInManager< User > > _mockSignInManager;
         private readonly ISmsSender _smsSender;
         protected readonly ApplicationDbContext Context;
-        protected readonly IHostingEnvironment HostingEnvironmentEnvironment;
+        protected readonly IHostingEnvironment HostingEnvironment;
         protected readonly UserManager< User > UserManager;
         protected SignInManager< User > SignInManager;
 
@@ -40,6 +41,11 @@ namespace Cianfrusaglie.Tests {
 
             services.AddIdentity< User, IdentityRole >().AddEntityFrameworkStores< ApplicationDbContext >()
                 .AddDefaultTokenProviders();
+            services.AddCaching();
+            services.AddSession( options => {
+                options.IdleTimeout = TimeSpan.FromMinutes( 30 );
+                options.CookieName = ".MyApplication";
+            } );
 
             var defaultHttpContext = new DefaultHttpContext();
             defaultHttpContext.Features.Set( new HttpAuthenticationFeature() );
@@ -47,7 +53,12 @@ namespace Cianfrusaglie.Tests {
                 h => new HttpContextAccessor {HttpContext = defaultHttpContext} );
             var serviceProvider = services.BuildServiceProvider();
             Context = serviceProvider.GetRequiredService< ApplicationDbContext >();
-            HostingEnvironmentEnvironment = serviceProvider.GetRequiredService< HostingEnvironment >();
+
+            var mockHostingEnvironment = new Mock< IHostingEnvironment >();
+            mockHostingEnvironment.Setup( h => h.WebRootPath ).Returns( "" );
+
+            HostingEnvironment = mockHostingEnvironment.Object;
+
             UserManager = serviceProvider.GetRequiredService< UserManager< User > >();
 
             SignInManager = serviceProvider.GetRequiredService< SignInManager< User > >();
@@ -63,22 +74,25 @@ namespace Cianfrusaglie.Tests {
                 s =>
                     s.PasswordSignInAsync( It.IsAny< string >(), It.IsAny< string >(), It.IsAny< bool >(),
                         It.IsAny< bool >() ) ).Returns( Task.FromResult( SignInResult.Success ) );
+            _mockSignInManager.Setup( s => s.SignInAsync( It.IsAny< User >(), It.IsAny< bool >(), It.IsAny< string >() ) )
+                .Returns( Task.FromResult( SignInResult.Success ) );
 
             CreateUsers();
             CreateCategories();
             CreateAnnounces();
+            CreateMessages();
         }
 
         protected ActionContext MockActionContextForLogin( string id ) {
-            var mockHttpContext = new Mock<HttpContext>();
-            var principal = new Mock<ClaimsPrincipal>();
-            principal.Setup(p => p.Identity.IsAuthenticated).Returns(id != null);
-            if (id == null)
-                mockHttpContext.SetupGet(x => x.User).Returns(principal.Object);
+            var mockHttpContext = new Mock< HttpContext >();
+            var principal = new Mock< ClaimsPrincipal >();
+            principal.Setup( p => p.Identity.IsAuthenticated ).Returns( id != null );
+            if( id == null )
+                mockHttpContext.SetupGet( x => x.User ).Returns( principal.Object );
             else {
-                var c = new Claim(ClaimTypes.NameIdentifier, id);
-                principal.Setup(p => p.FindFirst(It.IsAny<string>())).Returns(c);
-                mockHttpContext.SetupGet(x => x.User).Returns(principal.Object);
+                var c = new Claim( ClaimTypes.NameIdentifier, id );
+                principal.Setup( p => p.FindFirst( It.IsAny< string >() ) ).Returns( c );
+                mockHttpContext.SetupGet( x => x.User ).Returns( principal.Object );
             }
             return new ActionContext {HttpContext = mockHttpContext.Object};
         }
@@ -91,7 +105,7 @@ namespace Cianfrusaglie.Tests {
                 new Mock< IUserClaimsPrincipalFactory< TUser > >().Object, null, null ) {CallBase = true};
         }
 
-        protected AccountController CreateAccountController(string userId) {
+        protected AccountController CreateAccountController( string userId ) {
             return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
                 new LoggerFactory() ) {
                     Url = new Mock< IUrlHelper >().Object,
@@ -111,21 +125,22 @@ namespace Cianfrusaglie.Tests {
             var result =
                 UserManager.CreateAsync( new User {UserName = SecondUserName, Email = "pippo2@gmail.com"},
                     registerViewModel.Password ).Result;
-            var result2ForTest = 
-                UserManager.CreateAsync(new User { UserName = ThirdUserName, Email = "pippo3@gmail.com" },
-                    registerViewModel.Password).Result;
-
+            var result2ForTest =
+                UserManager.CreateAsync( new User {UserName = ThirdUserName, Email = "pippo3@gmail.com"},
+                    registerViewModel.Password ).Result;
         }
 
         private void CreateCategories() { Context.EnsureSeedData(); }
 
         private void CreateAnnounces() {
-            var announce = new Announce();
-            var usr = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
-            announce.Author = usr;
-            announce.Title = "Libro di OST di Videogiochi";
-            announce.Description = "Tutti i compositori da Uematsu in giù";
-            Context.Announces.Add( announce );
+         var firstUser = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+         var secondUser = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
+           var announce = new Announce {
+              Author = secondUser,
+              Title = "Libro di OST di Videogiochi",
+              Description = "Tutti i compositori da Uematsu in giù"
+           };
+           Context.Announces.Add( announce );
 
             var announceCategory1 = new AnnounceCategory {
                 Announce = announce,
@@ -142,20 +157,61 @@ namespace Cianfrusaglie.Tests {
             Context.AnnounceCategories.Add( announceCategory1 );
             Context.AnnounceCategories.Add( announceCategory11 );
             Context.AnnounceCategories.Add( announceCategory12 );
+
+            var announceFormField = new AnnounceFormFieldsValues() {
+                Announce = announce,
+                FormField = Context.FormFields.Single( f => f.Name == "Titolo" ),
+                Value = "Ciao"
+            };
+
+            Context.AnnounceFormFieldsValues.Add( announceFormField );
+
             Context.SaveChanges();
 
-            var announce2 = new Announce();
-            var usr2 = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
-            announce2.Author = usr2;
-            announce2.Title = "Halo 5 Usato";
-            announce2.Description = "Guardiani ovunque";
-            Context.Announces.Add( announce2 );
+            
+           var announce2 = new Announce {Author = firstUser, Title = "Halo 5 Usato", Description = "Guardiani ovunque"};
+           Context.Announces.Add( announce2 );
 
             var announceCategory2 = new AnnounceCategory {
                 Announce = announce2,
                 Category = Context.Categories.Single( a => a.Name.Equals( "Videogiochi" ) )
             };
             Context.AnnounceCategories.Add( announceCategory2 );
+            Context.SaveChanges();
+
+           var announce3 = new Announce {Author = firstUser, Title = "C for Dummies", Description = "Impara il C", DeadLine = DateTime.Now.AddDays(-1)};
+           Context.Announces.Add( announce3 );
+
+            var announceCategory3 = new AnnounceCategory {
+               Announce = announce3,
+               Category = Context.Categories.Single( a => a.Name.Equals( "Libri" ) )
+            };
+            Context.AnnounceCategories.Add( announceCategory3 );
+            Context.SaveChanges();
+
+         var announce4 = new Announce { Author = firstUser, Title = "Libro di Mariangiongiangela", Description = "non gettate il forno dalla finestra", Closed= true };
+         Context.Announces.Add( announce4 );
+
+         var announceCategory4 = new AnnounceCategory {
+            Announce = announce4,
+            Category = Context.Categories.Single( a => a.Name.Equals( "Cucina" ) )
+         };
+         Context.AnnounceCategories.Add( announceCategory4 );
+         Context.SaveChanges();
+      }
+
+        private void CreateMessages() {
+            var firstUser = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+            var secondUser = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+
+            var msg1 = new Message() {
+                DateTime = DateTime.Now.AddSeconds( -1 ),
+                Receiver = secondUser,
+                Sender = firstUser,
+                Text = "Ciao, come stai?"
+            };
+
+            Context.Messages.Add( msg1 );
             Context.SaveChanges();
         }
     }

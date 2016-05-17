@@ -1,44 +1,202 @@
-@using System.Collections.Generic
+@using System.Security.Claims
 @using System.Threading.Tasks
-@model IEnumerable<Cianfrusaglie.Models.User>
+@using System.Collections.Generic
+@using Cianfrusaglie.Models
+@model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
 @{
-    ViewData["Title"] = "Le Mie Conversazioni";
+    ViewData[ "Title" ] = "Le Mie Conversazioni";
 }
 
+@functions
+{
 
+    private Dictionary< User, Dictionary< Message, User > > GetUserAndMessagesDictionary() { return ViewData[ "allConversations" ] as Dictionary< User, Dictionary< Message, User > >; }
+    private string GetIdAfterRefresh() { return ViewData[ "idAfterRefresh" ] as string; }
+}
 
-<div class="panel-body" >
-    <div class="row" >
-        <div class="col-md-1" ></div>
-        <div class="col-md-10" >
-            <div class="panel panel-default" >
-                <div class="panel-heading" style="text-align: center" >
-                    <h3>Tutte le mie conversazioni</h3>
-                </div>
-                <div class="panel-body" >
-                    <div class="row" >
-                        <div class="col-md-3" ></div>
-                        <div class="col-md-6" >
-                            @foreach( var item in Model ) {
-                                <div class="panel panel-default" >
-                                    <div class="panel-heading" >
-                                        <a asp-action="Details" asp-route-id="@item.Id" >
-                                            <h3>
-                                                <b>@item.UserName</b>
-                                            </h3>
-                                        </a>
+<div class="row" id="fluid-row" >
+@if( GetUserAndMessagesDictionary().Any() ) {
+    @* Pannello con tutte le persone con tutte le persone con cui l'utente ha conversato *@
+    <div class="col-md-3" id="allConversations" >
+        <div class="panel panel-default" >
+            <div class="panel-heading" id="my-conversations" >
+                <h3>Le mie conversazioni</h3>
+            </div>
+
+            <div id="all-conversations-box" style="max-height: 61.4%; overflow-y: auto;" >
+
+                @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
+                    <div class="panel panel-default panel-message @(( kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) && GetIdAfterRefresh().Equals( "" ) ) || kvPair.Key.Id.Equals( GetIdAfterRefresh() ) ? "first-message-panel" : "")" onclick='showConversation("@kvPair.Key.Id", this)' >
+
+                        <div class="panel-heading panel-message" >
+                            <h4>
+                                <b>@kvPair.Key.UserName</b>
+                            </h4>
+                        </div>
+                        @* Mostra l'ultimo messaggio scambiato con il dato utente *@
+                        <div class="panel-body panel-message" >
+                            @*<a asp-action="Delete" style="float: right" asp-route-id="@kvPair.Key.Id" >
+                                <h6>Elimina Conversazione</h6>
+                            </a>*@
+                            <h6>Ultimo messaggio</h6>
+                            @{
+                                var lastMessage = kvPair.Value.Keys.Last();
+                                int length = lastMessage.Text.Length;
+                            }
+                            @if( kvPair.Value[ lastMessage ].Id.Equals( User.GetUserId() ) ) {
+                                @* Disegna il balloon, fa vedere solo la preview del messaggio se è troppo lungo *@
+                                <div class="triangle-isosceles right bubble-no-margin" id="balloonSent" >
+                                    <h6>
+                                        <span style="float: right">@lastMessage.DateTime</span>
+                                        <span style="float: left">@kvPair.Key.UserName </span>
+                                    </h6>
+                                    <br />
+                                    <div id="messageSent" >
+                                        @lastMessage.Text.Substring( 0, Math.Min( 125, length ) )
+                                        @if( length > 100 ) {
+                                            <span>...</span>
+                                        }
                                     </div>
-                                    <div class="panel-body" >
-                                        <a asp-action="Details" asp-route-id="@item.Id" > Visualizza Conversazione </a>
-                                        <a asp-action="Delete" style="margin-left: 40%" asp-route-id="@item.Id" >Elimina Conversazione</a>
+                                </div>
+                            } else {
+                                <div class="triangle-isosceles left bubble-no-margin" id="balloonReceived" >
+                                    <h6>
+                                        <span style="float: right">@lastMessage.DateTime</span>
+                                        <span style="float: left"> @User.GetUserName() </span>
+                                    </h6>
+                                    <br />
+                                    <div id="messageReceived" >
+                                        @lastMessage.Text.Substring( 0, Math.Min( 125, length ) )
+                                        @if( length > 100 ) {
+                                            <span>...</span>
+                                        }
                                     </div>
                                 </div>
                             }
                         </div>
                     </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    @* Mostra il pannello con l'intera conversazione con l'utente selezionato nel pannello precedente *@
+    <div class="col-md-8" id="allMessages" >
+
+        @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
+            <div class="user-messages-box @(kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) ? "first-all-messages" : "")" id="@kvPair.Key.Id" >
+                <div class="panel panel-default" >
+                    <div class="panel-heading" >
+                        <div style="text-align: center" >
+                            <h3>Conversazione con @kvPair.Key.UserName</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body conversation-box" id="@kvPair.Key.Id" >
+                        @{
+                            var otherUser = kvPair.Key;
+                            var messages = kvPair.Value;
+                            foreach( var messageUserPair in messages ) {
+                                <div class="row" >
+                                    <div class="col-md-1" ></div>
+                                    <div class="col-md-10" >
+                                        @* Disegna il balloon *@
+                                        @if( messageUserPair.Value.Id.Equals( User.GetUserId() ) ) {
+                                            <div class="triangle-isosceles right" id="balloonSent" >
+                                                <h6>
+                                                    <span style="float: right">@messageUserPair.Key.DateTime</span>
+                                                    <span style="float: left"> @otherUser.UserName </span>
+                                                </h6>
+                                                <br />
+                                                <div id="messageSent" >
+                                                    @messageUserPair.Key.Text
+                                                </div>
+                                            </div>
+                                        } else {
+                                            <div class="triangle-isosceles left" id="balloonReceived" >
+                                                <h6>
+                                                    <span style="float: right">@messageUserPair.Key.DateTime</span>
+                                                    <span style="float: left"> @User.GetUserName() </span>
+                                                </h6>
+                                                <br />
+                                                <div id="messageReceived" >
+                                                    @messageUserPair.Key.Text
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    @* Form di invio nuovo messaggio *@
+
+                    <form asp-action="Create" asp-controller="Messages" class="form-register" id="send-message" method="post" role="form" >
+
+                        <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
+                        <div class="row" >
+                            <div class="form-group" >
+                                <div class="col-md-10" >
+                                    <textarea asp-for="Text" class="form-control" rows="4" ></textarea>
+                                    <span asp-validation-for="Text" class="text-danger"></span>
+
+                                    <input asp-for="ReceiverId" type="hidden" value="@kvPair.Key.Id" class="form-control" />
+                                </div>
+                                <div class="col-md-2" style="margin-top: 25px; padding-left: 5px; padding-right: 30px;" >
+                                    <button class="btn btn-default" type="submit" >
+                                        Invia
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
+            </div>
+        }
+    </div>
+} else { @* Schermata alternativa se la conversazione è vuota *@
+    <div class="panel-body" >
+        <div class="panel panel-default" >
+            <div class="panel-heading" id="my-conversations" >
+                <h3>Le mie conversazioni</h3>
+            </div>
+            <div class="panel-body" >
+                <div>Non hai ancora alcuna conversazione!</div>
             </div>
         </div>
     </div>
+        }
+
 </div>
+
+
+<script>
+    /* Esecuzione onload: nasconde tutte le conversazioni tranne l'ultima, 
+    imposta il colore di sfondo e scorre la scrollbar fino in fondo, così che si veda l'ultimo messaggio */
+    $("#wrap").css("padding-bottom", "30px");
+    $(".conversation-box").scrollTop(30000);
+    $('.user-messages-box').hide(0);
+
+    var id = '@ViewData[ "idAfterRefresh" ]';
+    if( id === "" )
+        $('.first-all-messages').show(0);
+    else
+        $("#" + id).show(0);
+    $('.first-message-panel').css("background-color", "#b8e2fc");
+
+    /* Quando si seleziona una conversazione nel primo pannello, viene aggiornato cosa deve essere mostrato*/
+
+    function showConversation(id, itself) {
+        $('.panel-message').css("background-color", "");
+        $(".conversation-box").scrollTop(30000);
+        $('.user-messages-box').hide(0);
+        $("#" + id).show(0);
+        $(itself).css("background-color", "#b8e2fc");
+    }
+
+</script>
+
+
+
