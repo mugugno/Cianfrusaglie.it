@@ -14,7 +14,11 @@ namespace Cianfrusaglie.Controllers {
 
         public IActionResult Index( string title, IEnumerable< int > categories ) {
             ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            ViewData[ "lastAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            ViewData[ "listDonations" ] = _context.Announces.Where(u => u.Price == 0).ToList();
+            ViewData[ "listSales" ] = _context.Announces.Where(u => u.Price > 0).ToList();
+            //TODO QUANDO SI FARANNO I BARATTI
+            //ViewData["listExchange"] = _context.Announces.Where();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             if( title == null )

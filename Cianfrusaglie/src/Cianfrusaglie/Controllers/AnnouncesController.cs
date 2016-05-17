@@ -155,15 +155,15 @@ namespace Cianfrusaglie.Controllers {
             if( ModelState.IsValid ) {
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
-              
-                var newAnnounce = new Announce {
+                var newAnnounce = new Announce
+                {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
                     MeterRange = model.Range,
                     Author = author,
                     Price = model.Price
-             };
+                };
                 _context.Announces.Add( newAnnounce );
                 _context.SaveChanges();
 
@@ -279,6 +279,7 @@ namespace Cianfrusaglie.Controllers {
                 newAnnounce.Description = editAnnounceViewModel.Description;
                 newAnnounce.MeterRange = editAnnounceViewModel.Range;
                 newAnnounce.Author = author;
+                newAnnounce.Price = editAnnounceViewModel.Price;
                 _context.Announces.Update( newAnnounce );
                 /*if (editAnnounceViewModel.FormFieldDictionary != null)
                     foreach (var kvPair in editAnnounceViewModel.FormFieldDictionary)
