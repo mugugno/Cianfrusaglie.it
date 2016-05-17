@@ -155,9 +155,11 @@ namespace Cianfrusaglie.Controllers {
                 ModelState.AddModelError( "Photos", "Devi inserire almeno un immagine" );
             }
             foreach( var formFile in model.Photos ) {
-                if( formFile.Length > DomainConstraints.AnnouncePhotosMaxLenght ) {
+                if (formFile.ContentType != "image/png" && formFile.ContentType != "image/jpeg")
+                    ModelState.AddModelError( "Photos", "I file devono essere delle immagini!" );
+                if ( formFile.Length > DomainConstraints.AnnouncePhotosMaxLenght ) {
                     ModelState.AddModelError( "Photos",
-                        "Non puoi inserire immagini superiori a " + DomainConstraints.AnnouncePhotosMaxLenght / 100000 +
+                        "Non puoi inserire immagini superiori a " + DomainConstraints.AnnouncePhotosMaxLenght / 1000000 +
                         " MB" );
                 }
             }
@@ -204,6 +206,16 @@ namespace Cianfrusaglie.Controllers {
                 TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["listUsers"] = _context.Users.ToList();
+            ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["formFields"] = _context.FormFields.ToList();
+            ViewData["formMacroCategories"] = _context.Categories.ToList();
+            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            ViewData["isVendita"] = model.vendita;
             SetViewData();
             return View( model );
 

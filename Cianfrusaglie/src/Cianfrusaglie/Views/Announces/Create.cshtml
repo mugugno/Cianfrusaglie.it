@@ -148,9 +148,7 @@
 
                                                     </div>
                                                 </div>
-                                                <<<<<<< HEAD
-                                                =======
-
+                                               
                                                 <!-- Prezzo -->
                                                 @if (ViewData["isVendita"] as bool? ?? false)
                                                 {
@@ -162,7 +160,6 @@
                                                     </div>
                                                 }
 
-                                                >>>>>>> ab96013b5aefb1c1f0b7d39f81c6f6c2249ff50a
                                                 <div class="form-group">
                                                     <label asp-for="Range" class="col-md-4 control-label" for="range-input">Sei disposto a spostarti?</label>
                                                     <div class="col-md-7">
@@ -178,7 +175,8 @@
                                                 <div class="form-group">
                                                     <label class="col-md-4 control-label" for="photos">Immagini</label>
                                                     <div class="col-md-6">
-                                                        <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*">
+                                                        <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
+                                                        <span asp-validation-for="Photos" class="text-danger"></span>
                                                     </div>
                                                 </div>
 
