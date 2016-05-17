@@ -242,6 +242,13 @@ namespace Cianfrusaglie.Controllers {
 
             var UserTmp = _context.Users.Where(c => c.Id.Equals(User.GetUserId())).SingleOrDefault();
             var AnnTmp = _context.Announces.Include(u=>u.Interested).Where(c => c.Id == AnnounceId).SingleOrDefault();
+
+            Interested exis2=null;
+            if (AnnTmp.Interested != null)
+                exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
+            if (exis2 != null) return false;
+
+
             Interested exis = null;
             if (AnnTmp.Interested != null)
                 exis = AnnTmp.Interested.Where(c => c.UserId.Equals(User.GetUserId())).SingleOrDefault();
@@ -256,7 +263,7 @@ namespace Cianfrusaglie.Controllers {
             }
             else
             {
-                AnnTmp.Interested.Remove(exis);
+                _context.Interested.Remove(exis);
                 _context.SaveChanges();
             }
 

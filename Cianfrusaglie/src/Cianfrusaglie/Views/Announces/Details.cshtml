@@ -176,26 +176,23 @@
             var $form = $(this).closest('form');
             e.preventDefault();
             var tmp = @ViewData["IdAnnounce"];
-            alert(tmp);
 
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#confirm', function (e) {
                     $.get("/Announces/Interested?AnnounceId=1", function () {
-                        alert("success");
+                        if($('.text-det').text()=="Interessato")
+                            $('.text-det').html("Non sono pi&ugrave; interessato");
+                        else
+                            $('.text-det').text("Interessato");
                     })
-                  .done(function () {
-                      alert("second success");
-                  })
                   .fail(function () {
                       alert("error");
                   })
-                  .always(function () {
-                      alert("finished");
-                  });
+                  
                 
                 });
         });
-
+        
     </script>
     @*    <p>*@
     @*        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
