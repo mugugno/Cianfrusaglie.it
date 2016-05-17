@@ -5,9 +5,6 @@ using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Http;
 
 namespace Cianfrusaglie.ViewModels.Announce {
-
-
-
     public class CreateAnnounceViewModel {
         public bool vendita { get; set; }
 
