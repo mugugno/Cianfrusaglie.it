@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Cianfrusaglie.Constants;
+using Microsoft.AspNet.Http;
 
 namespace Cianfrusaglie.ViewModels.Account {
     public class RegisterViewModel {
@@ -22,5 +23,7 @@ namespace Cianfrusaglie.ViewModels.Account {
         [DataType( DataType.Password ), Display( Name = "Confirm password" ),
          Compare( "Password", ErrorMessage = "The password and confirmation password do not match." )]
         public string ConfirmPassword { get; set; }
+
+        public IFormFile Photo { get; set; }
     }
 }
