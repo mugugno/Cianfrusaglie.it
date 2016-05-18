@@ -121,7 +121,12 @@ namespace Cianfrusaglie.Controllers {
                 }
             }
             if( ModelState.IsValid ) {
-                var user = new User {UserName = model.UserName, Email = model.Email};
+                var user = new User {
+                   UserName = model.UserName,
+                   Email = model.Email,
+                   Latitude = double.Parse( model.Latitude ),
+                   Longitude = double.Parse( model.Longitude )
+                };
                 string imageUrl = "";
                 if ( model.Photo != null ) {
                     imageUrl = await UploadProfileImage( model.Photo, user );
