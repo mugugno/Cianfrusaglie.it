@@ -1,4 +1,5 @@
 @using System.Collections
+@using System.Collections.Generic
 @using System.Security.Claims
 @using System.Threading.Tasks
 @using Microsoft.Data.Entity.Query.Expressions
@@ -9,6 +10,21 @@
     ViewData["Title"] = "Details";
 }
 
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="/js/googleMaps.js" ></script>
+<script>
+    function parseFloatIgnoreCommas(number) {
+        var numberNoCommas = number.replace(/,/g, '.');
+        return parseFloat(numberNoCommas);
+    }
+
+    $(document).ready( function() {
+        var latitude = parseFloatIgnoreCommas("@Model.Latitude");
+        var longitude = parseFloatIgnoreCommas("@Model.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initializeGMaps(position, true);
+    } );
+</script>
 
 <div id="wrapper-announce">
 
@@ -104,9 +120,7 @@
                             @f.Value
                         </dd>
                     }
-<<<<<<< HEAD
-                   
-=======
+
                     <br/>
                     @if (Model.Description != null)
                     {
@@ -117,7 +131,6 @@
                             @Html.DisplayFor(model => model.Description)
                         </dd>
                     }
->>>>>>> 53f4bb47425f57d1db7c479c710a3faa730d17d5
                     @if(Model.Price>0)
                     {
                         <dt>
@@ -195,6 +208,8 @@
                 </dl>
             </div>
 
+            <div id="googleMap" style="width: 500px; height: 380px;"></div>
+
         </div>
 
     </div>
@@ -210,14 +225,14 @@
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#confirm', function (e) {
                     $.get("/Announces/Interested?AnnounceId=1", function () {
-                        if($('.text-det').text()=="Interessato")
-                            $('.text-det').html("Non sono pi&ugrave; interessato");
-                        else
-                            $('.text-det').text("Interessato");
-                    })
-                  .fail(function () {
-                      alert("error");
-                  })
+                            if($('.text-det').text()=="Interessato")
+                                $('.text-det').html("Non sono pi&ugrave; interessato");
+                            else
+                                $('.text-det').text("Interessato");
+                        })
+                        .fail(function () {
+                            alert("error");
+                        })
                   
                 
                 });
