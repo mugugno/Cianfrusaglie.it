@@ -104,10 +104,7 @@
                             @f.Value
                         </dd>
                     }
-<<<<<<< HEAD
-                   
-=======
-                    <br/>
+
                     @if (Model.Description != null)
                     {
                         <dt>
@@ -117,7 +114,6 @@
                             @Html.DisplayFor(model => model.Description)
                         </dd>
                     }
->>>>>>> 53f4bb47425f57d1db7c479c710a3faa730d17d5
                     @if(Model.Price>0)
                     {
                         <dt>
@@ -180,7 +176,7 @@
                     </dt>
                     @if( !string.IsNullOrEmpty( Model.Description ) ) {
                         <dd>
-                            @Html.DisplayFor( model => model.PublishDate )
+                            @Html.DisplayFor( model => model.PublishDate)
                         </dd>
                     }
                     @if (Model.DeadLine != null)
