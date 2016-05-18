@@ -32,7 +32,7 @@
         return null;
     }
 
-    public IEnumerable<Announce> GetAnnounce()
+    public IEnumerable<Announce> GetAnnounce(int idCat)
     {
         foreach (var announce in ViewData["listAnnounce"] as List<Announce>)
         {
@@ -48,9 +48,8 @@
     <div class="container">
         <div class="row">
             <div class="row">
-                @foreach (var announce in GetAnnounce())
+               @foreach (var announce in Model)
                 {
-
                     <div class="item active">
                         <div class="col-sm-4 col-md-3">
                             @if (announce.Price == 0)
