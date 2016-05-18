@@ -245,7 +245,11 @@ namespace Cianfrusaglie.Controllers {
             ViewData["formFields"] = _context.FormFields.ToList();
             ViewData["formMacroCategories"] = _context.Categories.ToList();
             ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
-            ViewData["isVendita"] = model.vendita;
+            if( model.Price != 0 ) {
+                ViewData[ "isVendita" ] = true;
+            } else {
+                ViewData[ "isVendita" ] = false;
+            }
             SetViewData();
             return View( model );
 
