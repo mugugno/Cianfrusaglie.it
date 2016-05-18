@@ -96,7 +96,7 @@
 
                     @foreach (var f in (Dictionary<FormField, string>) ViewData["formFieldsValue"])
                     {
-
+        
                         <dt>
                             @f.Key.Name
                         </dt>
@@ -104,12 +104,7 @@
                             @f.Value
                         </dd>
                     }
-                    <dt>
-                        Descrizione
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Description)
-                    </dd>
+                   
                     @if(Model.Price>0)
                     {
                         <dt>
