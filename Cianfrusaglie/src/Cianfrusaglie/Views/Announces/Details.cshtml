@@ -104,12 +104,16 @@
                             @f.Value
                         </dd>
                     }
-                    <dt>
-                        Descrizione
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Description)
-                    </dd>
+                    <br/>
+                    @if (Model.Description != null)
+                    {
+                        <dt>
+                            Dettagli annuncio
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+                    }
                     @if(Model.Price>0)
                     {
                         <dt>
@@ -152,7 +156,7 @@
                            Si
                         </dd>
                         <dt>
-                            @Html.DisplayName("Range di disponibilita'")
+                            @Html.DisplayName("Range di disponibilita' in km")
                         </dt>
                         <dd>
                             @Html.DisplayFor(model => model.MeterRange)
@@ -173,6 +177,15 @@
                     @if( !string.IsNullOrEmpty( Model.Description ) ) {
                         <dd>
                             @Html.DisplayFor( model => model.PublishDate )
+                        </dd>
+                    }
+                    @if (Model.DeadLine != null)
+                    {
+                        <dt>
+                            Questo annuncio scade il
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DeadLine)
                         </dd>
                     }
                 </dl>

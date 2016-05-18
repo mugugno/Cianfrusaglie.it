@@ -1,10 +1,16 @@
 ﻿.dl-horizontal dt {
-    margin-bottom: 5px;
     white-space: normal;
     width: 50%;
+    margin-bottom: 0;
 }
 
-.dl-horizontal dd { margin-left: 52%; }
+.dl-horizontal {
+   margin-bottom: 0; 
+}
+
+.dl-horizontal dd { margin-left: 52%;
+    margin-bottom: 0;
+}
 
 #wrapper-announce {
     /* Safari 4-5, Chrome 1-9 */
