@@ -22,7 +22,7 @@
         var latitude = parseFloatIgnoreCommas("@Model.Latitude");
         var longitude = parseFloatIgnoreCommas("@Model.Longitude");
         var position = new google.maps.LatLng(latitude, longitude);
-        initializeGMaps(position, true);
+        initializeGMaps(position, true, @Model.MeterRange);
     } );
 </script>
 
