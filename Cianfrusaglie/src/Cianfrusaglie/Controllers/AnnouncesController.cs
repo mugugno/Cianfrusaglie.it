@@ -245,7 +245,11 @@ namespace Cianfrusaglie.Controllers {
             ViewData["formFields"] = _context.FormFields.ToList();
             ViewData["formMacroCategories"] = _context.Categories.ToList();
             ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
-            ViewData["isVendita"] = model.vendita;
+            if( model.Price != 0 ) {
+                ViewData[ "isVendita" ] = true;
+            } else {
+                ViewData[ "isVendita" ] = false;
+            }
             SetViewData();
             return View( model );
 
@@ -429,16 +433,17 @@ namespace Cianfrusaglie.Controllers {
         // GET: Announces/Delete/5
         [ActionName( "Delete" )]
         public IActionResult Delete( int? id ) {
-            if( id == null ) {
+            if( id == null )
                 return HttpNotFound();
-            }
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
-            if( announce == null ) {
+                var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
+            if (announce == null)
                 return HttpNotFound();
-            }
+            if (!User.GetUserId().Equals(announce.AuthorId))
+                return HttpBadRequest();
+
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);

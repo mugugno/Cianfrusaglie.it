@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.Models;
+using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Internal;
@@ -21,7 +22,7 @@ namespace Cianfrusaglie.Controllers {
         /// <param name="title">La stringa scritta nella barra di ricerca</param>
         /// <param name="categories">Le categorie selezionate</param>
         /// <returns>La View con i risultati della ricerca</returns>
-        public IActionResult Index( string title, IEnumerable< int > categories ) {
+        public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "lastAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
             ViewData[ "listAnnounce" ] = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
@@ -38,6 +39,12 @@ namespace Cianfrusaglie.Controllers {
                 categories = new List< int >();
 
             var result = SearchAnnounces( title, categories ).ToList();
+
+           if( LoginChecker.HasLoggedUser(this) && range > 0 ) {
+              var loggedUser = _context.Users.Single(u => u.Id.Equals( User.GetUserId() ));
+              result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).ToList();
+           }
+
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "listImages" ] = _context.ImageUrls.ToList();
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
@@ -86,6 +93,12 @@ namespace Cianfrusaglie.Controllers {
            return _context.Announces.Where( announce => 
                !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) && AreSimilar( announce.Title, title ) );
         }
+
+       public IEnumerable< Announce > DistanceSearch( IEnumerable<Announce> announces, double latitude, double longitude, int range ) {
+          return
+             announces.Where(
+                a => GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
+       } 
 
        protected bool AreSimilar( string firstString, string secondString ) {
             var first = firstString.ToLower().Split( ' ' );

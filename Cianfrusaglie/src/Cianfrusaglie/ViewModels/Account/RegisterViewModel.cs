@@ -25,5 +25,8 @@ namespace Cianfrusaglie.ViewModels.Account {
         public string ConfirmPassword { get; set; }
 
         public IFormFile Photo { get; set; }
+
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

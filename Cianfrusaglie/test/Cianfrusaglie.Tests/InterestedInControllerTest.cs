@@ -36,6 +36,5 @@ namespace Cianfrusaglie.Tests
             Assert.IsType<BadRequestResult>(interestedIn.Index());
         }
 
-        // TODO altri test da aggiungere?
     }
 }

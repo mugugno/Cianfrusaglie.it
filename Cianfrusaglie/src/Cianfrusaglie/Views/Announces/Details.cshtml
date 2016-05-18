@@ -96,7 +96,7 @@
 
                     @foreach (var f in (Dictionary<FormField, string>) ViewData["formFieldsValue"])
                     {
-
+        
                         <dt>
                             @f.Key.Name
                         </dt>
@@ -104,12 +104,20 @@
                             @f.Value
                         </dd>
                     }
-                    <dt>
-                        Descrizione
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Description)
-                    </dd>
+<<<<<<< HEAD
+                   
+=======
+                    <br/>
+                    @if (Model.Description != null)
+                    {
+                        <dt>
+                            Dettagli annuncio
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+                    }
+>>>>>>> 53f4bb47425f57d1db7c479c710a3faa730d17d5
                     @if(Model.Price>0)
                     {
                         <dt>
@@ -152,7 +160,7 @@
                            Si
                         </dd>
                         <dt>
-                            @Html.DisplayName("Range di disponibilita'")
+                            @Html.DisplayName("Range di disponibilita' in km")
                         </dt>
                         <dd>
                             @Html.DisplayFor(model => model.MeterRange)
@@ -173,6 +181,15 @@
                     @if( !string.IsNullOrEmpty( Model.Description ) ) {
                         <dd>
                             @Html.DisplayFor( model => model.PublishDate )
+                        </dd>
+                    }
+                    @if (Model.DeadLine != null)
+                    {
+                        <dt>
+                            Questo annuncio scade il
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DeadLine)
                         </dd>
                     }
                 </dl>
