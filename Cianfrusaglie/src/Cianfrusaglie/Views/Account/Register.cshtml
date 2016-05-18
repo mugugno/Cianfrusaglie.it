@@ -17,7 +17,20 @@
     <link href= "~/Content/Style.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Search.css"  rel="stylesheet" type="text/css" />
     <link href= "https://fonts.googleapis.com/css?family=Lato"  rel="stylesheet" type="text/css" >
+    <link href="~/css/maps.css" rel="stylesheet" type="text/css" />
 
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script src="/js/googleMaps.js" ></script>
+    <script>
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function onRegisterSubmit() {
+            $("#latitudeInput").attr("value", marker.position.lat());
+            $("#longitudeInput").attr("value", marker.position.lng());
+
+            return true;
+        }
+    </script>
 
 </head>
 <body>
@@ -27,7 +40,7 @@
             <a href="~/" >@CommonStrings.SiteName</a>
         </h1>
         <h5>Il posto giusto per le tue cianfrusaglie</h5>
-        <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" >
+        <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" onsubmit="return onRegisterSubmit()" >
 
             <h2>
                 <strong>Registrati</strong>
@@ -57,11 +70,18 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
             </div>
-            <div class="form-group">
-                <label asp-for="Photo" class="control-label">Immagine profilo</label>
-                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+            <div class="form-group" >
+                <label asp-for="Photo" class="control-label" >Immagine profilo</label>
+                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*" >
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
+
+            <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+            <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
+            <div id="googleMap" style="width: 500px; height: 380px;"></div>
+            <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+            <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+
             <div class="form-group" >
                 <br /><button class="btn btn-default" type="submit" >Crea il tuo account</button>
             </div>
