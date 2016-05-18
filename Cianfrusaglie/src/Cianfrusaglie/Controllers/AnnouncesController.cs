@@ -463,7 +463,14 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
             if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
+
+            var im = _context.ImageUrls.Where(i => i.AnnounceId.Equals(announce.Id));
+            foreach (var imm in im)
+            {
+                _context.ImageUrls.Remove(imm);
+            }
             _context.Announces.Remove( announce );
+            
             _context.SaveChanges();
             return RedirectToAction( nameof( HistoryController.Index ), "History" );
         }

@@ -40,8 +40,18 @@ namespace Cianfrusaglie {
             services.AddEntityFramework().AddSqlServer().AddDbContext< ApplicationDbContext >(
                 options => options.UseSqlServer( Configuration[ "Data:DefaultConnection:ConnectionString" ] ) );
 
-            services.AddIdentity< User, IdentityRole >( o => o.User.RequireUniqueEmail = true )
-                .AddEntityFrameworkStores< ApplicationDbContext >().AddDefaultTokenProviders();
+            // Opzioni sui ruoli
+            // Modificare qui le impostazioni sulle password accettate e rifiutate
+            services.AddIdentity< User, IdentityRole >( options => 
+            {
+                options.User.RequireUniqueEmail = true ;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonLetterOrDigit = false;
+                options.Password.RequireUppercase = false;
+            })
+            .AddEntityFrameworkStores< ApplicationDbContext >().AddDefaultTokenProviders();
 
             services.AddMvc();
 
