@@ -1,9 +1,10 @@
 ﻿body {
-    font-family: 'Lato', sans-serif;
+    /*font-family: 'Lato', sans-serif;*/
+    font-family: 'Roboto', sans-serif;
     margin: 0;
 }
 
-a, h1, h2, h3, h4, h5, h6 { font-family: 'Lato', sans-serif; }
+a, h1, h2, h3, h4, h5, h6 {font-family: 'Roboto', sans-serif; }
 
 button { padding: 0; }
 

@@ -128,23 +128,21 @@
         <div class="container">
 
 
-            <div class="row">
+           
 
+            <!--
+                
+            
+                -->
+
+            <div class="row">
+                <br /><br />
                 @foreach (var annuncio in GetAnnounce())
             {
-                    <div class="col-sm-4 col-md-3">
-                        @if (annuncio.Price == 0)
-                        {
-                            idDiv = "donation";
-                        }
-                        @if (annuncio.Price > 0)
-                        {
-                            idDiv = "sale";
-                        }
-                        <div class="col-item" id="@idDiv">
-                            <div class="info">
-                                <h5>Categoria: </h5>
-                            </div>
+                    <div class="col-sm-5 col-md-4">
+                        
+                        <div class="col-item" >
+                            
                             <div class="photo">
                                 <img src="@GetImages(@annuncio.Id)" class="img-responsive" />
                             </div>
@@ -152,21 +150,22 @@
                             <div class="info">
 
 
-                                <h5>
+                                <h3>
                                     @annuncio.Title
-                                </h5>
+                                </h3>
                                 @if (@annuncio.Price == 0)
                                 {
-                                    <h5 class="price-text-color">IN REGALO</h5>
+                                    <!--<h5 class="price-text-color">IN REGALO</h5>-->
+                                    <span class="btn btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                                 }
                                 else
                                 {
+                                    <span class="btn btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
                                     <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
                                 }
 
 
                                 <div class="price">
-                                    <br />
                                     <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
                                     <br />
                                 </div>
