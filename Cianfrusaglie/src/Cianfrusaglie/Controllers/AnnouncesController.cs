@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -194,8 +195,8 @@ namespace Cianfrusaglie.Controllers {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
-                    Latitude = double.Parse( model.Latitude ),
-                    Longitude = double.Parse( model.Longitude ),
+                    Latitude = double.Parse( model.Latitude, CultureInfo.InvariantCulture ),
+                    Longitude = double.Parse( model.Longitude, CultureInfo.InvariantCulture ),
                     MeterRange = model.Range,
                     Author = author,
                     Price = model.Price

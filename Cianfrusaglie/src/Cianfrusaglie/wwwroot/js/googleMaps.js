@@ -13,7 +13,7 @@ var map, marker;
 
 /// inizializza Google Maps alla posizione position
 /// onlyView è true se non si può modificare la posizione del marker (usato con onlyView = true in visualizza annuncio o profilo utente)
-function initializeGMaps(position, onlyView) {
+function initializeGMaps(position, onlyView, radius) {
     if( onlyView == null )
         onlyView = false;
 
@@ -27,7 +27,7 @@ function initializeGMaps(position, onlyView) {
 
     placeMarker(position);
 
-    if( !onlyView ) {
+    if( !onlyView ) { //parte di input della posizione e click utente per riposizionare il marker
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[ google.maps.ControlPosition.TOP_LEFT ].push(input);
@@ -51,6 +51,19 @@ function initializeGMaps(position, onlyView) {
         });
 
         google.maps.event.addListener(map, 'click', function(event) { placeMarker(event.latLng); });
+    } else if( radius != null && radius > 0 ) {
+        //creo un cerchio intorno alla posizione
+        // Add the circle for this city to the map.
+        var cityCircle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: marker.position,
+            radius: radius * 1000
+        });
     }
 }
 
@@ -64,10 +77,4 @@ function placeMarker(location, title) {
         animation: google.maps.Animation.BOUNCE,
         map: map
     });
-
-    var infowindow = new google.maps.InfoWindow({
-        content: 'Latitude: ' + location.lat() +
-        '<br>Longitude: ' + location.lng()
-    });
-    infowindow.open(map, marker);
 }

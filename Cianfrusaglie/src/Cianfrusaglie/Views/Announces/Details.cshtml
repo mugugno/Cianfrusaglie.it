@@ -1,4 +1,5 @@
 @using System.Collections
+@using System.Collections.Generic
 @using System.Security.Claims
 @using System.Threading.Tasks
 @using Microsoft.Data.Entity.Query.Expressions
@@ -9,6 +10,21 @@
     ViewData["Title"] = "Details";
 }
 
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="/js/googleMaps.js" ></script>
+<script>
+    function parseFloatIgnoreCommas(number) {
+        var numberNoCommas = number.replace(/,/g, '.');
+        return parseFloat(numberNoCommas);
+    }
+
+    $(document).ready( function() {
+        var latitude = parseFloatIgnoreCommas("@Model.Latitude");
+        var longitude = parseFloatIgnoreCommas("@Model.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initializeGMaps(position, true, @Model.MeterRange);
+    } );
+</script>
 
 <div id="wrapper-announce">
 
@@ -196,6 +212,8 @@
                     }
                 </dl>
             </div>
+
+            <div id="googleMap" style="width: 500px; height: 380px;"></div>
 
         </div>
 
