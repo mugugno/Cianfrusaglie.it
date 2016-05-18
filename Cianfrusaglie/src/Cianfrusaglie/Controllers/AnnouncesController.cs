@@ -230,8 +230,14 @@ namespace Cianfrusaglie.Controllers {
                 _context.SaveChanges();
 
                 //Inserimento Gat
-                var gats = GenerateGats(newAnnounce);
-                _context.Gats.AddRange( gats );
+                var gats = GenerateGats(newAnnounce).ToList();
+                _context.Gats.AddRange(gats);
+                _context.SaveChanges();
+                foreach ( var gat in gats ) {
+                    var announceGat = new AnnounceGat() {Announce = newAnnounce, Gat = gat};
+                    _context.AnnounceGats.Add( announceGat );
+                }
+               
                 _context.SaveChanges();
 
                 TempData[ "announceCreated" ] = true;
@@ -298,7 +304,9 @@ namespace Cianfrusaglie.Controllers {
 
                 foreach( var gat in announceGats ) {
                     if( userGats.Select(a => a.Gat).Contains( gat ) ) {
-                        userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) ).Count++;
+                        var userGatHistogram = userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) );
+                        userGatHistogram.Count = 7;
+                        _context.UserGatHistograms.Update( userGatHistogram );
                     } else {
                         var newGat = new UserGatHistogram() {Count = 1, Gat=gat, User = UserTmp};
                         _context.UserGatHistograms.Add( newGat );
@@ -309,6 +317,20 @@ namespace Cianfrusaglie.Controllers {
             }
             else
             {
+                foreach (var gat in announceGats)
+                {
+                    if (userGats.Select(a => a.Gat).Contains(gat)) {
+                        var userGatHistogram = userGats.Single(a => a.UserId.Equals(User.GetUserId()) && a.Gat.Equals(gat));
+                        if( --userGatHistogram.Count <= 0 )
+                            _context.UserGatHistograms.Remove( userGatHistogram );
+                        else
+                            _context.UserGatHistograms.Update( userGatHistogram );
+                    }
+                    //else {
+                    //    var newGat = new UserGatHistogram() { Count = 1, Gat = gat, User = UserTmp };
+                    //    _context.UserGatHistograms.Add(newGat);
+                    //}
+                }
                 _context.Interested.Remove(exis);
                 _context.SaveChanges();
             }

@@ -91,54 +91,58 @@
         </div>
         <div class="col-sm-10 col-md-5">
             <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
-            <div class="icon-detail">
-                <form action="#" method="POST">
-                    @if (@ViewData["interested"] == null && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()) )
-                    {
+
+            @if (@ViewData["interested"] == null && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
+            {
+                <div class="icon-detail">
+                    <form action="#" method="POST">
                         <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Interessato</span></a>
-                    }
-                    else if(!Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
-                    {
+                    </form>
+                </div>
+            }
+            else if (!Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
+            {
+                <div class="icon-detail">
+                    <form action="#" method="POST">
                         <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Non sono pi&ugrave; interessato</span></a>
+                    </form>
+                </div>
+            }
 
-                    }
 
-                </form>
-            </div>
-            
+
 
             <div class="col-item">
                 <dl class="dl-horizontal container-announce">
 
-                    @foreach (var f in (Dictionary<FormField, string>) ViewData["formFieldsValue"])
+                    @foreach (var f in (Dictionary<FormField, string>)ViewData["formFieldsValue"])
                     {
-        
+
                         <dt>
                             @f.Key.Name
                         </dt>
-                        <dd>
-                            @f.Value
-                        </dd>
+                            <dd>
+                                @f.Value
+                            </dd>
                     }
 
-                    <br/>
                     @if (Model.Description != null)
                     {
                         <dt>
                             Dettagli annuncio
                         </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.Description)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Description)
+                            </dd>
                     }
-                    @if(Model.Price>0)
+                    @if (Model.Price > 0)
                     {
                         <dt>
                             Prezzo
                         </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.Price) &euro;
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.Price) &euro;
+                            </dd>
                     }
                 </dl>
             </div>
@@ -149,51 +153,52 @@
                     <dt>
                         Autore
                     </dt>
-                    
-                        @if ((string)ViewData["AuthorId"] != User.GetUserId())
-                        {
-                            <dd>
-                                <div>
-                                    @ViewData["Autore"]
-                                    <a href="~/Messages/Details/?id=@ViewData["AuthorId"]" style="margin-left: 5em">Contatta</a>
-                                </div>
-                            </dd>
-                        }
-                        else
-                        {
-                            <dd>Hai creato tu questo annuncio</dd>
-                        }
+
+                    @if ((string)ViewData["AuthorId"] != User.GetUserId())
+                    {
+                        <dd>
+                            <div>
+                                @ViewData["Autore"]
+                                <a href="~/Messages/Details/?id=@ViewData["AuthorId"]" style="margin-left: 5em">Contatta</a>
+                            </div>
+                        </dd>
+                    }
+                    else
+                    {
+                        <dd>Hai creato tu questo annuncio</dd>
+                    }
                     @if (Model.MeterRange > 0)
                     {
-                        
+
                         <dt style="white-space: normal">
                             @Html.DisplayName("Disponibile a muoversi")
                         </dt>
-                        <dd>
-                           Si
-                        </dd>
-                        <dt>
-                            @Html.DisplayName("Range di disponibilita' in km")
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.MeterRange)
-                        </dd>
+                            <dd>
+                                Si
+                            </dd>
+                            <dt>
+                                @Html.DisplayName("Range di disponibilita' in km")
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.MeterRange)
+                            </dd>
                     }
                     else
                     {
                         <dt>
                             Disponibile a muoversi
                         </dt>
-                        <dd>
-                            No
-                        </dd>
+                            <dd>
+                                No
+                            </dd>
                     }
                     <dt>
                         Data di Pubblicazione
                     </dt>
-                    @if( !string.IsNullOrEmpty( Model.Description ) ) {
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
                         <dd>
-                            @Html.DisplayFor( model => model.PublishDate )
+                            @Html.DisplayFor(model => model.PublishDate)
                         </dd>
                     }
                     @if (Model.DeadLine != null)
@@ -201,9 +206,9 @@
                         <dt>
                             Questo annuncio scade il
                         </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.DeadLine)
-                        </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.DeadLine)
+                            </dd>
                     }
                 </dl>
             </div>
@@ -211,6 +216,8 @@
             <div id="googleMap" style="width: 500px; height: 380px;"></div>
 
         </div>
+
+
 
     </div>
 
@@ -224,17 +231,14 @@
 
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#confirm', function (e) {
-                    $.get("/Announces/Interested?AnnounceId=1", function () {
-                            if($('.text-det').text()=="Interessato")
-                                $('.text-det').html("Non sono pi&ugrave; interessato");
-                            else
-                                $('.text-det').text("Interessato");
-                        })
-                        .fail(function () {
-                            alert("error");
-                        })
-                  
-                
+                    $.get("/Announces/Interested?AnnounceId=" + tmp,
+                            function() {
+                                if( $('.text-det').text() === "Interessato" )
+                                    $('.text-det').html("Non sono pi&ugrave; interessato");
+                                else
+                                    $('.text-det').text("Interessato");
+                            })
+                        .fail(function() { alert("error"); });
                 });
         });
         
