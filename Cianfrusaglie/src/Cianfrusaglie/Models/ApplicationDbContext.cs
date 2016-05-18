@@ -93,7 +93,6 @@ namespace Cianfrusaglie.Models {
             builder.Entity< Interested >().HasOne( u => u.User ).WithMany( u => u.InterestedAnnounces ).HasForeignKey( i => i.UserId ).OnDelete(
                 DeleteBehavior.Restrict );
 
-
             builder.Entity< FieldDefaultValue >().HasOne( f => f.FormField ).WithMany( f => f.DefaultValues ).OnDelete(
                 DeleteBehavior.Restrict );
 
