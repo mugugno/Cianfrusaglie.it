@@ -9,7 +9,8 @@ function unableToGeoLocalize(positionError) {
     initializeGMaps(new google.maps.LatLng(44.40678, 8.93391));
 }
 
-var map;
+var map, marker;
+
 function initializeGMaps(position) {
     var mapProp = {
         center: position,
@@ -48,7 +49,6 @@ function initializeGMaps(position) {
     });
 }
 
-var marker = null;
 function placeMarker(location, title) {
     if (marker != null)
         marker.setMap(null);
