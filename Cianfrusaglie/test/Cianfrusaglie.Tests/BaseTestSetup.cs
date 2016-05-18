@@ -200,7 +200,7 @@ namespace Cianfrusaglie.Tests {
          Context.SaveChanges();
       }
 
-        private void CreateMessages() {
+        protected void CreateMessages() {
             var firstUser = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var secondUser = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
 

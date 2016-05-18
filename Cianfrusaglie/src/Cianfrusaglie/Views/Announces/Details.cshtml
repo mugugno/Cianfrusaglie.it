@@ -104,6 +104,21 @@
                             @f.Value
                         </dd>
                     }
+                    <dt>
+                        Descrizione
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+                    @if(Model.Price>0)
+                    {
+                        <dt>
+                            Prezzo
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Price) &euro;
+                        </dd>
+                    }
                 </dl>
             </div>
 
@@ -113,16 +128,20 @@
                     <dt>
                         Autore
                     </dt>
-                    <dd>
-                        @if( (string) ViewData[ "AuthorId" ] != User.GetUserId() ) {
-                            <div>
-                                @ViewData[ "Autore" ]
-                                <a href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" style="margin-left: 5em" >Contatta</a>
-                            </div>
+                    
+                        @if ((string)ViewData["AuthorId"] != User.GetUserId())
+                        {
+                            <dd>
+                                <div>
+                                    @ViewData["Autore"]
+                                    <a href="~/Messages/Details/?id=@ViewData["AuthorId"]" style="margin-left: 5em">Contatta</a>
+                                </div>
+                            </dd>
                         }
-
-                    </dd>
-
+                        else
+                        {
+                            <dd>Hai creato tu questo annuncio</dd>
+                        }
                     @if (Model.MeterRange > 0)
                     {
                         
@@ -154,12 +173,6 @@
                     @if( !string.IsNullOrEmpty( Model.Description ) ) {
                         <dd>
                             @Html.DisplayFor( model => model.PublishDate )
-                        </dd>
-                        <dt>
-                            Descrizione
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor( model => model.Description )
                         </dd>
                     }
                 </dl>
