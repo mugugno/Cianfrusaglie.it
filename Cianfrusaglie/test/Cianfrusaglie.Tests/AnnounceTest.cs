@@ -82,8 +82,8 @@ namespace Cianfrusaglie.Tests {
 
         [Fact]
         public void RequestNotExistingAnnounceForView() {
-            var announceController = CreateAnnounceController( null );
-            var res = announceController.Details( 20 );
+            var announceController = CreateAnnounceController( Context.Users.Single(u=>u.UserName.Equals(FirstUserName)).Id );
+            var res = announceController.Details( 900 );
             Assert.IsType< HttpNotFoundResult >( res );
         }
 
@@ -222,7 +222,7 @@ namespace Cianfrusaglie.Tests {
         {
             string id = Context.Users.Single(u => u.UserName.Equals(SecondUserName)).Id;
             var announceController = CreateAnnounceController(id);
-            var ann = Context.Announces.Where(u => u.AuthorId.Equals(id) && u.Closed == false).First();
+            var ann = Context.Announces.First(u => u.AuthorId.Equals(id) && u.Closed == false);
             Assert.False(announceController.Interested(ann.Id));
         }
         [Fact]
@@ -230,9 +230,9 @@ namespace Cianfrusaglie.Tests {
         {
             string id = Context.Users.Single(u => u.UserName.Equals(FirstUserName)).Id;
             var announceController = CreateAnnounceController(id);
-            var ann = Context.Announces.Where(u => !u.AuthorId.Equals(id) && u.Closed==false).First();
+            var ann = Context.Announces.First(u => !u.AuthorId.Equals(id) && u.Closed==false);
             announceController.Interested(ann.Id);
-            var intrstd = Context.Interested.Where(u => u.AnnounceId == ann.Id && u.UserId == id).SingleOrDefault();
+            var intrstd = Context.Interested.SingleOrDefault(u => u.AnnounceId == ann.Id && u.UserId == id);
             Assert.NotNull(intrstd);
         }
         [Fact]
@@ -240,10 +240,10 @@ namespace Cianfrusaglie.Tests {
         {
             string id = Context.Users.Single(u => u.UserName.Equals(FirstUserName)).Id;
             var announceController = CreateAnnounceController(id);
-            var ann = Context.Announces.Where(u => !u.AuthorId.Equals(id) && u.Closed == false).First();
+            var ann = Context.Announces.First(u => !u.AuthorId.Equals(id) && u.Closed == false);
             announceController.Interested(ann.Id);
             announceController.Interested(ann.Id);
-            var intrstd = Context.Interested.Where(u => u.AnnounceId == ann.Id && u.UserId == id).SingleOrDefault();
+            var intrstd = Context.Interested.SingleOrDefault(u => u.AnnounceId == ann.Id && u.UserId == id);
             Assert.Null(intrstd);
         }
         [Fact]
@@ -251,7 +251,7 @@ namespace Cianfrusaglie.Tests {
         {
             string id = Context.Users.Single(u => u.UserName.Equals(SecondUserName)).Id;
             var announceController = CreateAnnounceController(id);
-            var ann = Context.Announces.Where(u => u.Closed==true && !u.AuthorId.Equals(id)).First();       
+            var ann = Context.Announces.First(u => u.Closed==true && !u.AuthorId.Equals(id));       
             Assert.False(announceController.Interested(ann.Id));
         }
     }

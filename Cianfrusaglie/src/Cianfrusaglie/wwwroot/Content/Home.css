@@ -84,6 +84,10 @@
 .btn-round.btn-sm.card-img {
     position:absolute;
     top:0;
+    background: #FFC107;
+}
+.btn-round.btn-sm.card-img:hover {
+    background: #FFC107;
 }
 #horizontalMenu {
     box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.19 );
