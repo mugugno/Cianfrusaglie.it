@@ -132,6 +132,17 @@ namespace Cianfrusaglie.Tests {
         }
 
         [Fact]
+        public void UserTriesToViewPageDeletionAnnounceOfOthersAndFail()
+        {
+            var announce = Context.Announces.First(a => a.Author.UserName.Equals(SecondUserName));
+            string id = Context.Users.Single(u => u.UserName.Equals(FirstUserName)).Id;
+            var announceController = CreateAnnounceController(id);
+            announce.Description = "Ho cambiato qualcosa";
+            var res = announceController.Delete(announce.Id);
+            Assert.IsType<BadRequestResult>(res);
+        }
+
+        [Fact]
         public void UserTriesToEditAnnounceOfOthers() {
             var announce = Context.Announces.First( a => a.Author.UserName.Equals( SecondUserName ) );
             string id = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) ).Id;
