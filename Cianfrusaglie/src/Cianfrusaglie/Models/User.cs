@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Cianfrusaglie.Models {
@@ -13,6 +14,9 @@ namespace Cianfrusaglie.Models {
         public virtual double Longitude { get; set; }
 
         public bool RememberMe { get; set; }
+
+        [MaxLength(DomainConstraints.ImageUrlUrlMaxLenght)]
+        public virtual string ProfileImageUrl { get; set; }
 
         public virtual ICollection< Announce > PublishedAnnounces { get; set; }
         public virtual ICollection< Interested > InterestedAnnounces { get; set; }

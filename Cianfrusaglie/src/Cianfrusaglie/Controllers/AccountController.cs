@@ -1,15 +1,20 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Services;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.Account;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 
 namespace Cianfrusaglie.Controllers {
     [Authorize]
@@ -19,14 +24,37 @@ namespace Cianfrusaglie.Controllers {
         private readonly SignInManager< User > _signInManager;
         private readonly ISmsSender _smsSender;
         private readonly UserManager< User > _userManager;
+        private readonly IHostingEnvironment _environment;
 
         public AccountController( UserManager< User > userManager, SignInManager< User > signInManager,
-            IEmailSender emailSender, ISmsSender smsSender, ILoggerFactory loggerFactory ) {
+            IEmailSender emailSender, ISmsSender smsSender, ILoggerFactory loggerFactory, IHostingEnvironment environment ) {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
+            _environment = environment;
             _logger = loggerFactory.CreateLogger< AnnouncesController >();
+        }
+
+        /// <summary>
+        ///     Effettua l'upload dell'immagine profilo utente
+        /// </summary>
+        /// <param name="formFile">immagine dal form</param>
+        /// <param name="user">utente</param>
+        /// <returns></returns>
+        private async Task< string > UploadProfileImage( IFormFile formFile, User user ) {
+            string uploads = Path.Combine( _environment.WebRootPath, "images" );
+
+            if(formFile.ContentType == "image/png" || formFile.ContentType == "image/jpeg" ) {
+                if(formFile.Length > 0 ) {
+                    string fileName = ContentDispositionHeaderValue.Parse(formFile.ContentDisposition ).FileName.Trim( '"' );
+                    fileName = user.Id + Path.GetExtension( fileName );
+                    await formFile.SaveAsAsync( Path.Combine( uploads, fileName ) );
+
+                    return @"/images/" + fileName;
+                }
+            }
+            return null;
         }
 
         //
@@ -74,7 +102,7 @@ namespace Cianfrusaglie.Controllers {
         [HttpGet, AllowAnonymous]
         public IActionResult Register() {
             //TODO: BadRequest da trattare
-            if(LoginChecker.HasLoggedUser( this ))
+            if( LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
             return View();
         }
@@ -83,8 +111,24 @@ namespace Cianfrusaglie.Controllers {
         // POST: /Account/Register
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task< IActionResult > Register( RegisterViewModel model ) {
+            if( model.Photo != null ) {
+                if( model.Photo.ContentType != "image/png" && model.Photo.ContentType != "image/jpeg" )
+                    ModelState.AddModelError( "Photos", "I file devono essere delle immagini!" );
+                if( model.Photo.Length > DomainConstraints.AnnouncePhotosMaxLenght ) {
+                    ModelState.AddModelError( "Photos",
+                        "Non puoi inserire immagini superiori a " + DomainConstraints.AnnouncePhotosMaxLenght / 1000000 +
+                        " MB" );
+                }
+            }
             if( ModelState.IsValid ) {
                 var user = new User {UserName = model.UserName, Email = model.Email};
+                string imageUrl = "";
+                if ( model.Photo != null ) {
+                    imageUrl = await UploadProfileImage( model.Photo, user );
+                } else {
+                    imageUrl = CommonStrings.DefaultProfileImageUrl;
+                }
+                user.ProfileImageUrl = imageUrl;
                 var result = await _userManager.CreateAsync( user, model.Password );
                 if( result.Succeeded ) {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
