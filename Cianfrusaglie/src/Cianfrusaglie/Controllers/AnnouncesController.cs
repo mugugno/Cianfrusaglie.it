@@ -63,7 +63,7 @@ namespace Cianfrusaglie.Controllers {
                 _context.SaveChanges();
 
                 string fileName = ContentDispositionHeaderValue.Parse( file.ContentDisposition ).FileName.Trim( '"' );
-                fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
+                fileName = "i" + imgUrl.Id + Path.GetExtension( fileName );
                 await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
                 imgUrl.Url = @"/images/" + fileName;
