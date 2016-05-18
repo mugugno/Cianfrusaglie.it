@@ -77,10 +77,19 @@
             <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
             <div class="icon-detail">
                 <form action="#" method="POST">
-                    <a href="" data-toggle="modal" data-target="#confirm"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Interessato</span></a>
+                    @if (@ViewData["interested"] == null)
+                    {
+                        <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Interessato</span></a>
+                    }
+                    else
+                    {
+                        <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Non sono pi&ugrave; interessato</span></a>
+
+                    }
+
                 </form>
             </div>
-           
+            
 
             <div class="col-item">
                 <dl class="dl-horizontal container-announce">
@@ -160,7 +169,31 @@
 
     </div>
 
+    <script type="text/javascript">
+        
 
+        $('a[name="confirm_levels"]').on('click', function (e) {
+            var $form = $(this).closest('form');
+            e.preventDefault();
+            var tmp = @ViewData["IdAnnounce"];
+
+            $('#confirm').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#confirm', function (e) {
+                    $.get("/Announces/Interested?AnnounceId=1", function () {
+                        if($('.text-det').text()=="Interessato")
+                            $('.text-det').html("Non sono pi&ugrave; interessato");
+                        else
+                            $('.text-det').text("Interessato");
+                    })
+                  .fail(function () {
+                      alert("error");
+                  })
+                  
+                
+                });
+        });
+        
+    </script>
     @*    <p>*@
     @*        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
     @*        <a asp-action="Index">Back to List</a>*@
