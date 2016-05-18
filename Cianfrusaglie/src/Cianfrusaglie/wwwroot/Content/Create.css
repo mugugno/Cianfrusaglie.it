@@ -65,3 +65,23 @@
 }
 
 .panel-group { margin-top: 15px; }
+
+h5 {
+    margin-left: 1em;
+      /*  font-weight: bold;*/
+}
+
+#sceltaCategorie {
+    padding:0.2em;
+    background-color: #ffe186;
+    /*opacity: 0.5;*/
+
+    
+
+ /* width: 42.5em;
+  margin-left:1.5em ;*/
+ /*padding-left: 2em;
+ padding-right: 2em;*/
+ /*border-left: 5px solid black;
+ border-right: 5px solid black;*/
+}

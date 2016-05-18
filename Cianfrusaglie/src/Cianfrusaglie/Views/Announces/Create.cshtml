@@ -62,121 +62,136 @@
             </div>
         </nav>
 
-
-        <div class="panel-group col-md-14" >
-            <div class="panel panel-default" >
-                <h5 style="margin-left: 3em" >Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</h5>
+        <!--<div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221">
+            <div class="panel-group col-md-14">
+                <div class="panel">
+                    
+                </div>
             </div>
-        </div>
+        </div>-->
+
+        <!--<div class="panel panel-default" id="sceltaCategorie">
+            <h5 id="scelta"> Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</h5>
+        </div>-->
 
 
-        <div class="panel" >
-            <div class="panel-body" >
-                <div class="row" id="page1" >
-                    <div class="col-md-6" >
-                        <div class="panel-group" id="panel-423221" >
-                            @foreach( var macroCategory in GetMacroCategories() ) {
-                                <div class="panel panel-default" >
-                                    <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id" >
-                                        @macroCategory.Name
-                                    </div>
-                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse" >
-                                        <div class="panel-body" >
-                                            <div class="form-group" >
 
-                                                <div class="col-md-12" >
-                                                    @foreach( var category in GetCategories( macroCategory ) ) {
-                                                        <div class="checkbox" >
-                                                            <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id" >
-                                                                <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
-                                                                @category.Name
-                                                            </label>
-                                                        </div>
-                                                    }
+            <div class="panel">
+                <div class="panel-body">
+                 
+                    <div class="row" id="page1">
+                        <div class="col-md-6">
+
+                            <div class="panel-group" id="panel-423221">
+                                <div class="panel panel-default" id="sceltaCategorie">
+                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</strong></h5>
+                                </div>
+                                @foreach (var macroCategory in GetMacroCategories())
+                                {
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id">
+                                            @macroCategory.Name
+                                        </div>
+                                        <div id="category-@macroCategory.Id" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <div class="form-group">
+
+                                                    <div class="col-md-12">
+                                                        @foreach (var category in GetCategories(macroCategory))
+                                                        {
+                                                            <div class="checkbox">
+                                                                <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id">
+                                                                    <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
+                                                                    @category.Name
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
+                                }
 
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6" >
-                        <div class="panel-group" >
-                            <div class="panel panel-default" >
-                                <div class="panel-heading" >
-                                    <h3 class="panel-title" >Informazioni aggiuntive</h3>
-                                </div>
-                                <div class="panel-body" >
+                        <div class="col-md-6">
+                            <div class="panel-group">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Informazioni aggiuntive</h3>
+                                    </div>
+                                    <div class="panel-body">
 
-                                    @foreach( var field in GetFormFields() ) {
-                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
-                                            <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label" >@field.Name</label>
-                                            <input asp-for="FormFieldDictionary[ field.Id ]" class="form-control" />
-                                        </div>
-                                    }
+                                        @foreach (var field in GetFormFields())
+                                        {
+                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label">@field.Name</label>
+                                                <input asp-for="FormFieldDictionary[ field.Id ]" class="form-control"/>
+                                            </div>
+                                        }
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" id="page2" style="display: none" >
-                    <div class="col-md-3" >
-                    </div>
-                    <div class="col-md-6" >
-                        <div class="panel panel-default" >
-                            <div class="panel-body" >
-                                <fieldset>
+                    <div class="row" id="page2" style="display: none">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <fieldset>
 
-                                    @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
+                                        @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
-                                    <!-- Text input-->
-                                    <div class="form-group" >
-                                        <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
-                                        <div class="col-md-7" >
-                                            <input asp-for="Title" class="form-control" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text" >
-                                            <span asp-validation-for="Title" class="text-danger"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Textarea -->
-                                    <div class="form-group" >
-                                        <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
-                                        <div class="col-md-7" >
-                                            <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Prezzo -->
-                                    @if( ViewData[ "isVendita" ] as bool? ?? false ) {
-                                        <div class="form-group" >
-                                            <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
-                                            <div class="col-md-7" >
-                                                <input type="number" asp-for="Price" class="form-control" id="price" name="Price" />
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
+                                            <div class="col-md-7">
+                                                <input asp-for="Title" class="form-control" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text">
+                                                <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
-                                    }
 
-                                    <div class="form-group" >
-                                        <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
-                                        <div class="col-md-7" >
-                                            <div class="input-group" >
-                                                <span class="input-group-addon">
-                                                                <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
-                                                            </span>
-                                                <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
+                                        <!-- Textarea -->
+                                        <div class="form-group">
+                                            <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
+                                            <div class="col-md-7">
+                                                <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
+
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
-                                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
-                                    </div>
+                                        <!-- Prezzo -->
+                                        @if (ViewData["isVendita"] as bool? ?? false)
+                                        {
+                                            <div class="form-group">
+                                                <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
+                                                <div class="col-md-7">
+                                                    <input type="number" asp-for="Price" class="form-control" id="price" name="Price"/>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <div class="form-group">
+                                            <label asp-for="Range" class="col-md-4 control-label" for="range-input">Sei disposto a spostarti?</label>
+                                            <div class="col-md-7">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
+                                                    </span>
+                                                    <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
+                                            <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
+                                        </div>
 
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="photos">Immagini</label>
@@ -190,15 +205,15 @@
                                         <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
                                         <div id="googleMap" style="width: 500px; height: 380px;"></div>
 
-</fieldset>
+                                    </fieldset>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </form>
+</form>
 </div>
 
 <div class="modal fade" id="myWindow" role="dialog">
