@@ -142,10 +142,7 @@
                                         <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione</label>
                                         <div class="col-md-7" >
                                             <textarea asp-for="Description" class="form-control" id="description" name="description" ></textarea>
-
                                         </div>
-                                    </div>
-
                                     <!-- Prezzo -->
                                     @if( ViewData[ "isVendita" ] as bool? ?? false ) {
                                         <div class="form-group" >
@@ -178,7 +175,7 @@
 
                                     <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                                     <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
-                                    <div id="googleMap" style="width: 500px; height: 380px;" ></div>
+                                    <div id="googleMap" style="width: 500px; height: 380px;" ></div></div>
 
                                 </fieldset>
                             </div>

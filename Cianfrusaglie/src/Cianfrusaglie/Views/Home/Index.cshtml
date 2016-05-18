@@ -73,7 +73,7 @@
         </div>
 
         <div id="linkHome">
-            <form class="form-inline" role="form">
+            <div class="form-inline" role="form">
                 <div class="form-group" id="linkRegala">
                     @if (!User.Identity.IsAuthenticated)
                     {
@@ -107,7 +107,7 @@
                     }
                     <br/><br/><label>BARATTA</label>
                 </div>
-            </form>
+            </div>
         </div>
 
 
@@ -138,7 +138,7 @@
                                         }
                                         else
                                         {
-                                            <h5 class="price-text-color">Prezzo: @annuncio.Price</h5>
+                                            <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
                                         }
 
 
