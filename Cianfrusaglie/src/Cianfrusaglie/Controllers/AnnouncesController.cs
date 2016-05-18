@@ -194,6 +194,8 @@ namespace Cianfrusaglie.Controllers {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
+                    Latitude = double.Parse( model.Latitude ),
+                    Longitude = double.Parse( model.Longitude ),
                     MeterRange = model.Range,
                     Author = author,
                     Price = model.Price
@@ -269,6 +271,9 @@ namespace Cianfrusaglie.Controllers {
             var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( AnnounceId )).Select( a => a.Gat );
             var userGats = _context.UserGatHistograms.Where( u => u.UserId.Equals( User.GetUserId() ) );
 
+            if (AnnTmp.Closed) return false;
+            if (AnnTmp.AuthorId.Equals(User.GetUserId()))
+                return false;
             Interested exis2=null;
             if (AnnTmp.Interested != null)
                 exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
