@@ -1,5 +1,7 @@
+@using System.Collections.Generic
+@using System.Threading.Tasks
 @using Microsoft.AspNet.JsonPatch.Helpers
-@model  Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
+@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
     ViewData[ "Title" ] = "Inserzione Annuncio";
@@ -44,8 +46,11 @@
     }
 
 }
+
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
 <div id="wrap" >
-    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" method="post" role="form" >
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post" role="form" >
         <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15" >
             <div class="panel panel-default" style="margin-left: -15px" >
                 <div class="col-md-3" >
@@ -168,19 +173,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group" >
-                                        <label class="col-md-4 control-label" for="photos" >Immagini</label>
-                                        <div class="col-md-6" >
-                                            <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
-                                            <span asp-validation-for="Photos" class="text-danger"></span>
-                                        </div>
+                                    <div class="form-group">
+                                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
                                     </div>
 
-                                    <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-                                    <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
-                                    <div id="googleMap" style="width: 500px; height: 380px;" ></div>
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label" for="photos">Immagini</label>
+                                            <div class="col-md-6">
+                                                <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*">
+                                                <span asp-validation-for="Photos" class="text-danger"></span>
+                                            </div>
+                                        </div>
 
-                                </fieldset>
+                                        <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+                                        <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
+                                        <div id="googleMap" style="width: 500px; height: 380px;"></div>
+
+</fieldset>
                             </div>
                         </div>
                     </div>
@@ -209,8 +219,6 @@
     </div>
 </div>
 
-
-<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script>
     // TODO spostare tutto in un file js
     document.getElementById("announce-navbar")
@@ -244,9 +252,13 @@
             return;
         }
 
-        if( document.getElementById("forward-button").innerHTML === "Pubblica" )
+        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
+            //aggiungiamo al form la posizione di google maps
+            $("#latitudeInput").attr("value", marker.position.lat());
+            $("#longitudeInput").attr("value", marker.position.lng());
+
             document.getElementById("forward-button").setAttribute("type", "submit");
-        else
+        } else
             document.getElementById("forward-button").innerHTML = "Pubblica";
         $('#page1').hide(transitionTime);
         $('#page2').show(transitionTime);
@@ -283,29 +295,28 @@
 
     //google maps
     function initialize() {
-        //navigator.geolocation.getCurrentPosition( initializeGMaps, unableToGeoLocalize );
-        initializeGMaps(null, 51.508742, -0.120850);
+        navigator.geolocation.getCurrentPosition( function(location) {
+            initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
+        }, unableToGeoLocalize );
+        //initializeGMaps(null, 51.508742, -0.120850);
     }
 
     function unableToGeoLocalize(positionError) {
         //posizione genova brignole
-        initializeGMaps(null, 44.40678, 8.93391);
+        initializeGMaps(new google.maps.LatLng(44.40678, 8.93391));
     }
 
     var map;
-    function initializeGMaps(position, lat, long) {
-        if( position != null ) {
-            lat = position.coords.latitude;
-            long = position.coords.longitude;
-        }
-
+    function initializeGMaps(position) {
         var mapProp = {
-            center: new google.maps.LatLng(lat, long),
+            center: position,
             zoom: 5,
             streetViewControl: false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+        placeMarker(position);
 
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
