@@ -194,6 +194,8 @@ namespace Cianfrusaglie.Controllers {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
+                    Latitude = double.Parse( model.Latitude ),
+                    Longitude = double.Parse( model.Longitude ),
                     MeterRange = model.Range,
                     Author = author,
                     Price = model.Price
