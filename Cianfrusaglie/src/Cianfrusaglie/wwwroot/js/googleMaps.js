@@ -64,10 +64,4 @@ function placeMarker(location, title) {
         animation: google.maps.Animation.BOUNCE,
         map: map
     });
-
-    var infowindow = new google.maps.InfoWindow({
-        content: 'Latitude: ' + location.lat() +
-        '<br>Longitude: ' + location.lng()
-    });
-    infowindow.open(map, marker);
 }
