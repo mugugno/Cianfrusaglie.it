@@ -14,16 +14,6 @@
         }
     }
 
-    /*public IEnumerable<Category> GetAnnounceCategories(int announceId)
-    {
-        foreach (var cat in ViewData["listCategory"] as List<Category>)
-        {
-            if ()
-                return imm.Url;
-        }
-        return null;
-    }*/
-
     public User GetAutore(string AuthorId)
     {
         foreach (var user in ViewData["listUsers"] as List<User>)
@@ -155,7 +145,7 @@
                                 </h3>
                                 @if (@annuncio.Price == 0)
                                 {
-                                    <!--<h5 class="price-text-color">IN REGALO</h5>-->
+                                    <h5 class="price-text-color">IN REGALO</h5>
                                     <span class="btn btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                                 }
                                 else
