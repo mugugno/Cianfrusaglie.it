@@ -266,7 +266,9 @@ namespace Cianfrusaglie.Controllers {
 
             var UserTmp = _context.Users.Where(c => c.Id.Equals(User.GetUserId())).SingleOrDefault();
             var AnnTmp = _context.Announces.Include(u=>u.Interested).Where(c => c.Id == AnnounceId).SingleOrDefault();
-
+            if (AnnTmp.Closed) return false;
+            if (AnnTmp.AuthorId.Equals(User.GetUserId()))
+                return false;
             Interested exis2=null;
             if (AnnTmp.Interested != null)
                 exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
