@@ -157,8 +157,12 @@
                                         {
                                             <div class="form-group">
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
-                                                <div class="col-md-7">
-                                                    <input type="number" asp-for="Price" class="form-control" id="price" name="Price"/>
+                                                <div class="col-md-7" >
+                                                    <div class="input-group">
+
+                                                        <input type="number" asp-for="Price" class="form-control" id="price" name="Price" />
+                                                        <span class="input-group-addon">&euro;</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         }
@@ -170,7 +174,8 @@
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
                                                     </span>
-                                                    <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number">
+                                                    <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
+                                                    <span class="input-group-addon">Km</span>
                                                 </div>
                                             </div>
                                         </div>
