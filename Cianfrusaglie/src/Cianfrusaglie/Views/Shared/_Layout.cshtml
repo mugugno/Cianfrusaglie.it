@@ -128,29 +128,43 @@
                 }
                 else
                 {
-                    @* Pulsante Notifiche #FFC107; *@
+                    @* Pulsante Notifiche *@
                     <li class="dropdown dropdown-large" >
+                        @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
                         @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
                             <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;" ><b class="caret" ></b></a>
+                        } else {
+                            <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em" ><b class="caret" ></b></a>
                         }
-                        else
-                        {
-                            <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em"><b class="caret"></b></a>
-                        }
-                        <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
-                            <li class="dropdown-header" ><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
-                            @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
-                                <li><a href="~/Messages" >Ci sono nuovi messaggi da leggere</a></li>
-                            }
 
-                        </ul>
+                        @if( ViewData[ "IsThereNewMessage" ] as bool? ?? false ) {
+                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
+                                <li class="dropdown-header" >
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                    <span><a href="~/Messages"> Hai nuovi Messaggi da leggere!</a></span>
+                                </li>
+                            </ul>
+                        } else {
+                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
+                                <li style="text-align: center" >
+                                    <span>Nessuna notifica</span>
+                                </li>
+                            </ul>
+
+                        }
+
+
+
+
+
                     </li>
-
+                @* Menù profilo *@
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
                         <ul class="dropdown-menu dropdown-menu-large"  style="left: auto; right:0">
                             <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
-                            <li><a href="~/History/Index">I miei annunci</a></li>
+                            <li><a href="~/History/Index" >I miei annunci</a></li>
+                            <li><a href="~/InterestedIn/Index">Annunci che mi interessano</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
                             <li><a href="~/Messages">Le mie conversazioni</a></li>
@@ -205,7 +219,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Sei sicuro di voler prenotare l'oggetto</p>
+                    <p>Sei sicuro di voler continuare?</p>
                 </div>
 
                 <div class="modal-footer">
@@ -215,7 +229,7 @@
             </div>
         </div>
     </div>
-
+    
             <div id="footer" class="panel-footer">
                 Copyright © 2016 Mugugno / All rights reserved.
             </div>

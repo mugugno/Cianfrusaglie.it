@@ -77,11 +77,11 @@
             <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
             <div class="icon-detail">
                 <form action="#" method="POST">
-                    @if (@ViewData["interested"] == null)
+                    @if (@ViewData["interested"] == null && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()) )
                     {
                         <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Interessato</span></a>
                     }
-                    else
+                    else if(!Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
                     {
                         <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Non sono pi&ugrave; interessato</span></a>
 
@@ -104,6 +104,21 @@
                             @f.Value
                         </dd>
                     }
+                    <dt>
+                        Descrizione
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+                    @if(Model.Price>0)
+                    {
+                        <dt>
+                            Prezzo
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Price) &euro;
+                        </dd>
+                    }
                 </dl>
             </div>
 
@@ -113,16 +128,20 @@
                     <dt>
                         Autore
                     </dt>
-                    <dd>
-                        @if( (string) ViewData[ "AuthorId" ] != User.GetUserId() ) {
-                            <div>
-                                @ViewData[ "Autore" ]
-                                <a href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" style="margin-left: 5em" >Contatta</a>
-                            </div>
+                    
+                        @if ((string)ViewData["AuthorId"] != User.GetUserId())
+                        {
+                            <dd>
+                                <div>
+                                    @ViewData["Autore"]
+                                    <a href="~/Messages/Details/?id=@ViewData["AuthorId"]" style="margin-left: 5em">Contatta</a>
+                                </div>
+                            </dd>
                         }
-
-                    </dd>
-
+                        else
+                        {
+                            <dd>Hai creato tu questo annuncio</dd>
+                        }
                     @if (Model.MeterRange > 0)
                     {
                         
@@ -155,12 +174,6 @@
                         <dd>
                             @Html.DisplayFor( model => model.PublishDate )
                         </dd>
-                        <dt>
-                            Descrizione
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor( model => model.Description )
-                        </dd>
                     }
                 </dl>
             </div>
@@ -176,26 +189,23 @@
             var $form = $(this).closest('form');
             e.preventDefault();
             var tmp = @ViewData["IdAnnounce"];
-            alert(tmp);
 
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#confirm', function (e) {
                     $.get("/Announces/Interested?AnnounceId=1", function () {
-                        alert("success");
+                        if($('.text-det').text()=="Interessato")
+                            $('.text-det').html("Non sono pi&ugrave; interessato");
+                        else
+                            $('.text-det').text("Interessato");
                     })
-                  .done(function () {
-                      alert("second success");
-                  })
                   .fail(function () {
                       alert("error");
                   })
-                  .always(function () {
-                      alert("finished");
-                  });
+                  
                 
                 });
         });
-
+        
     </script>
     @*    <p>*@
     @*        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@

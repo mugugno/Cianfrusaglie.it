@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using Cianfrusaglie.Constants
 @model Cianfrusaglie.ViewModels.Account.RegisterViewModel
 @{
     ViewData[ "Title" ] = "Register";
@@ -23,10 +24,10 @@
 <div id="wrapper-register" >
     <div id="register" >
         <h1>
-            <a href="~/" >questo<strong>e</strong>quello</a>
+            <a href="~/" >@CommonStrings.SiteName</a>
         </h1>
         <h5>Il posto giusto per le tue cianfrusaglie</h5>
-        <form asp-action="Register" asp-controller="Account" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" >
+        <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" >
 
             <h2>
                 <strong>Registrati</strong>
@@ -55,6 +56,11 @@
                 <input asp-for="ConfirmPassword" class="form-control" type="password" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
+            </div>
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label">Immagine profilo</label>
+                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+                <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group" >
                 <br /><button class="btn btn-default" type="submit" >Crea il tuo account</button>

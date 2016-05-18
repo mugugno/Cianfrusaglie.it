@@ -63,7 +63,7 @@ namespace Cianfrusaglie.Controllers {
                 _context.SaveChanges();
 
                 string fileName = ContentDispositionHeaderValue.Parse( file.ContentDisposition ).FileName.Trim( '"' );
-                fileName = fileName.Replace( Path.GetFileNameWithoutExtension( fileName ), "i" + imgUrl.Id );
+                fileName = "i" + imgUrl.Id + Path.GetExtension( fileName );
                 await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
                 imgUrl.Url = @"/images/" + fileName;
@@ -194,6 +194,8 @@ namespace Cianfrusaglie.Controllers {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
+                    Latitude = double.Parse( model.Latitude ),
+                    Longitude = double.Parse( model.Longitude ),
                     MeterRange = model.Range,
                     Author = author,
                     Price = model.Price
@@ -266,6 +268,18 @@ namespace Cianfrusaglie.Controllers {
 
             var UserTmp = _context.Users.Where(c => c.Id.Equals(User.GetUserId())).SingleOrDefault();
             var AnnTmp = _context.Announces.Include(u=>u.Interested).Where(c => c.Id == AnnounceId).SingleOrDefault();
+            var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( AnnounceId )).Select( a => a.Gat );
+            var userGats = _context.UserGatHistograms.Where( u => u.UserId.Equals( User.GetUserId() ) );
+
+            if (AnnTmp.Closed) return false;
+            if (AnnTmp.AuthorId.Equals(User.GetUserId()))
+                return false;
+            Interested exis2=null;
+            if (AnnTmp.Interested != null)
+                exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
+            if (exis2 != null) return false;
+
+
             Interested exis = null;
             if (AnnTmp.Interested != null)
                 exis = AnnTmp.Interested.Where(c => c.UserId.Equals(User.GetUserId())).SingleOrDefault();
@@ -276,11 +290,21 @@ namespace Cianfrusaglie.Controllers {
                 interestedTmp.Announce = AnnTmp;
                 interestedTmp.DateTime = DateTime.Now;
                 _context.Interested.Add(interestedTmp);
+
+                foreach( var gat in announceGats ) {
+                    if( userGats.Select(a => a.Gat).Contains( gat ) ) {
+                        userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) ).Count++;
+                    } else {
+                        var newGat = new UserGatHistogram() {Count = 1, Gat=gat, User = UserTmp};
+                        _context.UserGatHistograms.Add( newGat );
+                    }
+                }
+
                 _context.SaveChanges();
             }
             else
             {
-                AnnTmp.Interested.Remove(exis);
+                _context.Interested.Remove(exis);
                 _context.SaveChanges();
             }
 
@@ -405,16 +429,17 @@ namespace Cianfrusaglie.Controllers {
         // GET: Announces/Delete/5
         [ActionName( "Delete" )]
         public IActionResult Delete( int? id ) {
-            if( id == null ) {
+            if( id == null )
                 return HttpNotFound();
-            }
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
-            if( announce == null ) {
+                var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
+            if (announce == null)
                 return HttpNotFound();
-            }
+            if (!User.GetUserId().Equals(announce.AuthorId))
+                return HttpBadRequest();
+
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
@@ -439,7 +464,14 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
             if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
+
+            var im = _context.ImageUrls.Where(i => i.AnnounceId.Equals(announce.Id));
+            foreach (var imm in im)
+            {
+                _context.ImageUrls.Remove(imm);
+            }
             _context.Announces.Remove( announce );
+            
             _context.SaveChanges();
             return RedirectToAction( nameof( HistoryController.Index ), "History" );
         }

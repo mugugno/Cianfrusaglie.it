@@ -216,5 +216,43 @@ namespace Cianfrusaglie.Tests {
             var result = announceController.GenerateGats(announce);
             Assert.True(result.Any( g => g.Text.Equals( s ) ));
         }
+
+        [Fact]
+        public void UserInterestedInHisOwnAnnounceAndFail()
+        {
+            string id = Context.Users.Single(u => u.UserName.Equals(SecondUserName)).Id;
+            var announceController = CreateAnnounceController(id);
+            var ann = Context.Announces.Where(u => u.AuthorId.Equals(id) && u.Closed == false).First();
+            Assert.False(announceController.Interested(ann.Id));
+        }
+        [Fact]
+        public void UserInterestedInAnnounceAndNotNull()
+        {
+            string id = Context.Users.Single(u => u.UserName.Equals(FirstUserName)).Id;
+            var announceController = CreateAnnounceController(id);
+            var ann = Context.Announces.Where(u => !u.AuthorId.Equals(id) && u.Closed==false).First();
+            announceController.Interested(ann.Id);
+            var intrstd = Context.Interested.Where(u => u.AnnounceId == ann.Id && u.UserId == id).SingleOrDefault();
+            Assert.NotNull(intrstd);
+        }
+        [Fact]
+        public void UserUnInterestedInAnnounceAndNull()
+        {
+            string id = Context.Users.Single(u => u.UserName.Equals(FirstUserName)).Id;
+            var announceController = CreateAnnounceController(id);
+            var ann = Context.Announces.Where(u => !u.AuthorId.Equals(id) && u.Closed == false).First();
+            announceController.Interested(ann.Id);
+            announceController.Interested(ann.Id);
+            var intrstd = Context.Interested.Where(u => u.AnnounceId == ann.Id && u.UserId == id).SingleOrDefault();
+            Assert.Null(intrstd);
+        }
+        [Fact]
+        public void UserInterestedInClosedAnnounceAndFail()
+        {
+            string id = Context.Users.Single(u => u.UserName.Equals(SecondUserName)).Id;
+            var announceController = CreateAnnounceController(id);
+            var ann = Context.Announces.Where(u => u.Closed==true && !u.AuthorId.Equals(id)).First();       
+            Assert.False(announceController.Interested(ann.Id));
+        }
     }
 }

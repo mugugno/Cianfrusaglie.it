@@ -263,6 +263,9 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("ProfileImageUrl")
+                        .HasAnnotation("MaxLength", 2083);
+
                     b.Property<bool>("RememberMe");
 
                     b.Property<string>("SecurityStamp");

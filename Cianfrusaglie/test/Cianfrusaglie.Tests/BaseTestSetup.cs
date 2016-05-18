@@ -107,7 +107,7 @@ namespace Cianfrusaglie.Tests {
 
         protected AccountController CreateAccountController( string userId ) {
             return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
-                new LoggerFactory() ) {
+                new LoggerFactory(), HostingEnvironment) {
                     Url = new Mock< IUrlHelper >().Object,
                     ActionContext = MockActionContextForLogin( userId )
                 };
@@ -200,7 +200,7 @@ namespace Cianfrusaglie.Tests {
          Context.SaveChanges();
       }
 
-        private void CreateMessages() {
+        protected void CreateMessages() {
             var firstUser = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var secondUser = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
 
