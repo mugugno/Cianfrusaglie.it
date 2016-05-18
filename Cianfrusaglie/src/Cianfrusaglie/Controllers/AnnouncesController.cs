@@ -268,7 +268,12 @@ namespace Cianfrusaglie.Controllers {
 
             var UserTmp = _context.Users.Where(c => c.Id.Equals(User.GetUserId())).SingleOrDefault();
             var AnnTmp = _context.Announces.Include(u=>u.Interested).Where(c => c.Id == AnnounceId).SingleOrDefault();
+            var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( AnnounceId )).Select( a => a.Gat );
+            var userGats = _context.UserGatHistograms.Where( u => u.UserId.Equals( User.GetUserId() ) );
 
+            if (AnnTmp.Closed) return false;
+            if (AnnTmp.AuthorId.Equals(User.GetUserId()))
+                return false;
             Interested exis2=null;
             if (AnnTmp.Interested != null)
                 exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
@@ -285,6 +290,16 @@ namespace Cianfrusaglie.Controllers {
                 interestedTmp.Announce = AnnTmp;
                 interestedTmp.DateTime = DateTime.Now;
                 _context.Interested.Add(interestedTmp);
+
+                foreach( var gat in announceGats ) {
+                    if( userGats.Select(a => a.Gat).Contains( gat ) ) {
+                        userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) ).Count++;
+                    } else {
+                        var newGat = new UserGatHistogram() {Count = 1, Gat=gat, User = UserTmp};
+                        _context.UserGatHistograms.Add( newGat );
+                    }
+                }
+
                 _context.SaveChanges();
             }
             else

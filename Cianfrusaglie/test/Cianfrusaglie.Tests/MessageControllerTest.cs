@@ -2,11 +2,14 @@
 using System.Linq;
 using Castle.Core.Internal;
 using Cianfrusaglie.Controllers;
+using Cianfrusaglie.Migrations;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels;
 using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
+using static Cianfrusaglie.Tests.BaseTestSetup;
+using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Tests {
     public class MessageControllerTest : BaseTestSetup {
@@ -255,6 +258,28 @@ namespace Cianfrusaglie.Tests {
             var result = messageController.Index();
             //test 
             Assert.IsType< BadRequestResult >( result );
+        }
+
+
+        // TODO Scrivere questi test
+
+        // Utente loggato riceve un messaggio e di conseguenza riceve una notifica
+        [Fact]
+        public void UserReceivesMessageAndReceivesNotification() {
+            CreateMessages();
+            var userId = Context.Users.SingleOrDefault( u => u.UserName.Equals( SecondUserName ) ).Id;
+            var result = IsThereNewMessage( userId, Context );
+            Assert.True(result);
+        }
+
+        // Utente loggato visualizza il nuovo messaggio e la notifica sparisce
+        [Fact]
+        public void UserVisualizesNewMessageAndNotificationDisappears() {
+            CreateMessages();
+            var userId = Context.Users.SingleOrDefault(u => u.UserName.Equals(SecondUserName)).Id;
+            var conversations = CreateMessageController( userId ).Index( userId );
+            var result = IsThereNewMessage( userId, Context );
+            Assert.False( result );
         }
     }
 }

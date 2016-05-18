@@ -19,6 +19,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            ViewData["listCategory"] = _context.Categories.ToList();
             //CreateUsers();
             return View();
         }

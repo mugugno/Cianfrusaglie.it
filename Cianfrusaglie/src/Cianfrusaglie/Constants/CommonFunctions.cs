@@ -21,10 +21,7 @@ namespace Cianfrusaglie.Constants
                 return false;
             }
             var unreadMessages = context.Messages.Where(m => m.Receiver.Id.Equals(userId) && !m.Read).ToList();
-            if( unreadMessages.Any() ) {
-                return true;
-            }
-            return false;
+            return unreadMessages.Any();
         }
 
     }
