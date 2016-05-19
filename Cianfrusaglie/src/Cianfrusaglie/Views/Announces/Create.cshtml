@@ -301,7 +301,7 @@
     }
 
     //google maps
-    google.maps.event.addDomListener(window, 'load', initialize);
+    $(document).ready(function() { initialize(1); });
     $("#range-input").change(function () {
         setCircle(marker.position, $("#range-input").val());
     });

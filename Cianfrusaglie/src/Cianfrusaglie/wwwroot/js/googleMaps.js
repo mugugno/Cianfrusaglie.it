@@ -1,6 +1,6 @@
-﻿function initialize() {
+﻿function initialize(radius) {
     navigator.geolocation.getCurrentPosition(function (location) {
-        initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
+        initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude), false, radius);
     }, unableToGeoLocalize);
 }
 
@@ -16,6 +16,8 @@ var map, marker, cityCircle;
 function initializeGMaps(position, onlyView, radius) {
     if( onlyView == null )
         onlyView = false;
+    if( radius == null )
+        radius = 0;
 
     var mapProp = {
         center: position,
@@ -50,8 +52,13 @@ function initializeGMaps(position, onlyView, radius) {
             placeMarker(places[ 0 ].geometry.location, places[ 0 ].title);
         });
 
-        setCircle(marker.position, 1);
-        google.maps.event.addListener(map, 'click', function(event) { placeMarker(event.latLng); });
+        if (radius > 0)
+            setCircle(marker.position, 1);
+        google.maps.event.addListener(map, 'click', function(event) {
+            placeMarker(event.latLng);
+            if (radius > 0)
+                setCircle(marker.position, $("#range-input").val());
+        });
     } else if( radius != null && radius > 0 ) {
         //creo un cerchio intorno alla posizione
         setCircle(marker.position, radius);
