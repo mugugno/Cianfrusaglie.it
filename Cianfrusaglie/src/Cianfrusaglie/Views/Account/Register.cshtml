@@ -50,25 +50,25 @@
 
 
                         <!--NOME-->
-                        <!--<h4>Su di te</h4>
+                        <h4>Su di te</h4>
                         <div class="form-group">
                             <label asp-for="Name" class="control-label">Nome</label><br/>
                             <input asp-for="Name" class="form-control"/>
                             <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>-->
+                        </div>
                         <!--COGNOME-->
-                        <!--<h4>Su di te</h4>
                         <div class="form-group">
-                            <label asp-for="Surname" class="control-label">Nome</label><br/>
+                            <label asp-for="Surname" class="control-label">Cognome</label><br/>
                             <input asp-for="Surname" class="form-control"/>
                             <span asp-validation-for="Surname" class="text-danger"></span>
-                        </div>-->
+                        </div>
                         <!--SESSO-->
-                        <!--<h4>Su di te</h4>
                         <div class="form-group">
-                            <label asp-for="Sex" class="control-label">Nome</label><br />
-                            <input type="checkbox" asp-for="Sex" class="form-control" />
-                            <span asp-validation-for="Sex" class="text-danger"></span>
+                            <label asp-for="Genre" class="control-label">Sesso</label><br />
+                            Uomo <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control"/>
+                            Donna  <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control"/>
+                            Non specificato <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control"/>
+                            <span asp-validation-for="Genre" class="text-danger"></span>
                         </div>--> 
                         <!-------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
                         <div class="form-group">
