@@ -284,9 +284,11 @@
         if( checkbox.checked ) {
             rangeInput.removeAttribute("disabled");
             rangeInput.value = 1;
+            setCircle(marker.position, 1);
         } else {
             rangeInput.setAttribute("disabled", "");
             rangeInput.value = 0;
+            cityCircle.setMap(null);
         }
     }
 
@@ -300,4 +302,7 @@
 
     //google maps
     google.maps.event.addDomListener(window, 'load', initialize);
+    $("#range-input").change(function () {
+        setCircle(marker.position, $("#range-input").val());
+    });
 </script>
