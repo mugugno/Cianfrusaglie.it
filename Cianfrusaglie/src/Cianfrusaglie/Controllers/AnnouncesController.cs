@@ -151,6 +151,33 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "formFields" ] = _context.FormFields.ToList();
+
+
+            var fields = _context.FormFields.ToList();
+            var defaultValues = _context.FieldDefaultValues.ToList();
+
+            var dValueString = new List<string>();
+            var dictionary = new Dictionary<FormField, List<FieldDefaultValue>>();
+            foreach(var field in fields)
+            {
+                foreach(var defaultValue in defaultValues)
+                {
+
+                    if (field.Equals(defaultValue.FormField))
+                        dValueString.Add(defaultValue.Value);
+                }
+            }
+                dictionary.Add(field, field.);
+
+            var dictionary2 = new Dictionary<FormField, List<string>>();
+            foreach(var f in dictionary.Values)
+            {
+                dictionary2.Add
+            }
+            ViewData["formFieldDefaultValue"] = dictionary;
+
+
+
             ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             ViewData["isVendita"] = vendita;

@@ -1317,7 +1317,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var tipoGiocattolo = new FormField {Name = "Tipo Giocattolo", Type = FormFieldType.checkbox};
+                var tipoGiocattolo = new FormField {Name = "Tipo Giocattolo", Type = FormFieldType.select};
                 ctx.FormFields.Add( tipoGiocattolo );
                 ctx.SaveChanges();
 
