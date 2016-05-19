@@ -395,7 +395,7 @@ namespace Cianfrusaglie.Controllers {
                 foreach( var gat in announceGats ) {
                     if( userGats.Select(a => a.Gat).Contains( gat ) ) {
                         var userGatHistogram = userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) );
-                        userGatHistogram.Count = 7;
+                        userGatHistogram.Count++;
                         _context.UserGatHistograms.Update( userGatHistogram );
                     } else {
                         var newGat = new UserGatHistogram() {Count = 1, Gat=gat, User = UserTmp};

@@ -308,30 +308,37 @@
         $('#page1').show(transitionTime);
         $('#page2').hide(transitionTime);
         $('#back-button').hide(0);
-                                                document.getElementById("forward-button").innerHTML = "Avanti";
-                                                document.getElementById("forward-button").setAttribute("type", "button");
-                                            }
 
-                                            function clickRangeButton() {
-                                                var checkbox = document.getElementById("range-checkbox");
-                                                var rangeInput = document.getElementById("range-input");
-                                                if( checkbox.checked ) {
-                                                        rangeInput.removeAttribute("disabled");
-                                                        rangeInput.value = 1;
-                                                    } else {
-                                                        rangeInput.setAttribute("disabled", "");
-                                                        rangeInput.value = 0;
-                                                    }
-                                                    }
+        document.getElementById("forward-button").innerHTML = "Avanti";
+        document.getElementById("forward-button").setAttribute("type", "button");
+    }
 
-                                                function atLeastOneCategorySelected() {
-                                                    var categoriesCheckBoxes = document.getElementsByClassName("category-checkboxes");
-                                                    for(var i = 0; i< categoriesCheckBoxes.length; i++)
-                                                        if( categoriesCheckBoxes[ i ].checked )
+    function clickRangeButton() {
+        var checkbox = document.getElementById("range-checkbox");
+        var rangeInput = document.getElementById("range-input");
+        if( checkbox.checked ) {
+            rangeInput.removeAttribute("disabled");
+            rangeInput.value = 1;
+            setCircle(marker.position, 1);
+        } else {
+            rangeInput.setAttribute("disabled", "");
+            rangeInput.value = 0;
+            cityCircle.setMap(null);
+        }
+    }
+
+    function atLeastOneCategorySelected() {
+        var categoriesCheckBoxes = document.getElementsByClassName("category-checkboxes");
+        for(var i = 0; i< categoriesCheckBoxes.length; i++)
+            if( categoriesCheckBoxes[ i ].checked )
                 return true;
-                                                    return false;
-                                                }
+        return false;
+     }
 
-                                                //google maps
-                                                google.maps.event.addDomListener(window, 'load', initialize);
+    //google maps
+    $(document).ready(function() { initialize(1); });
+    $("#range-input").change(function () {
+        setCircle(marker.position, $("#range-input").val());
+    });
+
 </script>
