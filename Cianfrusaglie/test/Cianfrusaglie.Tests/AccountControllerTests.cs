@@ -16,6 +16,7 @@ using Xunit;
 
 namespace Cianfrusaglie.Tests {
     public class AccountControllerTests : BaseTestSetup {
+
         [Fact]
         public void LoggedUserTriesToLoginAndFail() {
             var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );

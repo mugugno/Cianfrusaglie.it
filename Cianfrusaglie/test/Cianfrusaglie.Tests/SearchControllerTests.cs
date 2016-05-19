@@ -30,8 +30,9 @@ namespace Cianfrusaglie.Tests {
          Assert.Contains( announce, result );
       }
 
-      [Theory, InlineData( "Libro di Videogiochi", "Libro di OST di Videogiochi" ), InlineData( "Halo", "Halo 5 Usato" )
-      ]
+      [Theory, 
+       InlineData( "Libro di Videogiochi", "Libro di OST di Videogiochi" ),
+       InlineData( "Halo", "Halo 5 Usato" )]
       public void SimpleSearchTitleBased( string searchExample, string realTitle ) {
          var researchController = CreateResearchController( null );
          var result = researchController.TitleBasedSearch( searchExample );
@@ -88,7 +89,9 @@ namespace Cianfrusaglie.Tests {
          Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
       }
 
-      [Theory, InlineData( "C for Dummies" ), InlineData( "Libro di Mariangiongiangela" )]
+      [Theory, 
+      InlineData( "C for Dummies" ), 
+      InlineData( "Libro di Mariangiongiangela" )]
       public void SearchOnTitleDoesntContainClosedOrExpired( string title ) {
          var researchController = CreateResearchController( null );
 

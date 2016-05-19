@@ -14,6 +14,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNet.Mvc.Rendering;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
@@ -151,6 +152,34 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "formFields" ] = _context.FormFields.ToList();
+
+
+            var fields = _context.FormFields.ToList();
+            var defaultValues = _context.FieldDefaultValues.ToList();
+
+            var dValueString = new List<SelectListItem>();
+            var dictionary = new Dictionary<int, List<SelectListItem>>();
+            foreach(var field in fields)
+            {
+                var i = 0;
+                dValueString = new List<SelectListItem>();
+                foreach (var defaultValue in defaultValues)
+                {
+                    if (field.Id.Equals(defaultValue.FormFieldId))
+                    {
+                        var selectListItem = new SelectListItem
+                        {
+                            Text = defaultValue.Value,
+                            Value = defaultValue.Value
+                        };
+                        dValueString.Add(selectListItem);
+                    }
+                }
+                dictionary.Add(field.Id, dValueString);
+            }
+            ViewData["formFieldDefaultValue"] = dictionary;
+
+            
             ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             ViewData["isVendita"] = vendita;
@@ -187,7 +216,10 @@ namespace Cianfrusaglie.Controllers {
                         " MB" );
                 }
             }
-            if( ModelState.IsValid ) {
+
+            /*if (ModelState.IsValid)*/
+
+            if(ModelState.IsValid){
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
                 var newAnnounce = new Announce
@@ -218,7 +250,36 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
-                if( model.CategoryDictionary != null )
+                if (model.CheckboxFormFieldDictionary != null)
+                    foreach (var kvPair in model.CheckboxFormFieldDictionary)
+                    {
+                        if (!string.IsNullOrEmpty(kvPair.Value.ToString()))
+                        {
+                            if (kvPair.Value)
+                            {
+                                _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                                {
+                                    FormFieldId = kvPair.Key,
+                                    Value = "si",
+                                    AnnounceId = newAnnounce.Id
+                                });
+                            }
+                        }
+                    }
+                if (model.SelectFormFieldDictionary != null)
+                    foreach (var kvPair in model.SelectFormFieldDictionary)
+                    {
+                        if (!string.IsNullOrEmpty(kvPair.Value))
+                        {
+                            _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                            {
+                                FormFieldId = kvPair.Key,
+                                Value = kvPair.Value,
+                                AnnounceId = newAnnounce.Id
+                            });
+                        }
+                    }
+                if ( model.CategoryDictionary != null )
                     foreach( var kvPair in model.CategoryDictionary ) {
                         if( kvPair.Value ) {
                             _context.AnnounceCategories.Add( new AnnounceCategory {
@@ -243,6 +304,8 @@ namespace Cianfrusaglie.Controllers {
                 TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
+            var model1 = ModelState.ErrorCount;
+            var model2 = ModelState;
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["listUsers"] = _context.Users.ToList();
@@ -257,6 +320,33 @@ namespace Cianfrusaglie.Controllers {
             } else {
                 ViewData[ "isVendita" ] = false;
             }
+            
+
+            var fields = _context.FormFields.ToList();
+            var defaultValues = _context.FieldDefaultValues.ToList();
+
+            var dValueString = new List<SelectListItem>();
+            var dictionary = new Dictionary<int, List<SelectListItem>>();
+            foreach (var field in fields)
+            {
+                var i = 0;
+                dValueString = new List<SelectListItem>();
+                foreach (var defaultValue in defaultValues)
+                {
+                    if (field.Id.Equals(defaultValue.FormFieldId))
+                    {
+                        var selectListItem = new SelectListItem
+                        {
+                            Text = defaultValue.Value,
+                            Value = defaultValue.Value
+                        };
+                        dValueString.Add(selectListItem);
+                    }
+                }
+                dictionary.Add(field.Id, dValueString);
+            }
+            ViewData["formFieldDefaultValue"] = dictionary;
+
             SetViewData();
             return View( model );
 
@@ -305,7 +395,7 @@ namespace Cianfrusaglie.Controllers {
                 foreach( var gat in announceGats ) {
                     if( userGats.Select(a => a.Gat).Contains( gat ) ) {
                         var userGatHistogram = userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) );
-                        userGatHistogram.Count = 7;
+                        userGatHistogram.Count++;
                         _context.UserGatHistograms.Update( userGatHistogram );
                     } else {
                         var newGat = new UserGatHistogram() {Count = 1, Gat=gat, User = UserTmp};

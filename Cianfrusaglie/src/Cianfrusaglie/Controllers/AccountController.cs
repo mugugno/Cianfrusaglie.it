@@ -105,6 +105,10 @@ namespace Cianfrusaglie.Controllers {
             //TODO: BadRequest da trattare
             if( LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
+
+            ViewData["formMacroCategories"] = _context.Categories.ToList();
+            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+
             return View();
         }
 

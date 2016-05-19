@@ -4,7 +4,7 @@
 @model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
-    ViewData[ "Title" ] = "Inserzione Annuncio";
+    ViewData["Title"] = "Inserzione Annuncio";
 }
 
 @functions
@@ -87,8 +87,8 @@
                                                         @foreach (var category in GetCategories(macroCategory))
                                                         {
                                                             <div class="checkbox">
-                                                                <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id">
-                                                                    <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
+                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                    <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
                                                                     @category.Name
                                                                 </label>
                                                             </div>
@@ -110,13 +110,47 @@
                                         <h3 class="panel-title">Informazioni aggiuntive</h3>
                                     </div>
                                     <div class="panel-body">
+                                        @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
+                                            foreach (var field in GetFormFields())
+                                            {
+                                                switch (field.Type)
+                                                {
+                                                    case FormFieldType.checkbox:
+                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
+                                                                
+                                                            <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
+                                                            @field.Name
+                                                            </label>
+                                                        </div>
+                                                        break;
+                                      
 
-                                        @foreach (var field in GetFormFields())
-                                        {
-                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label">@field.Name</label>
-                                                <input asp-for="FormFieldDictionary[ field.Id ]" class="form-control"/>
-                                            </div>
+                                                    case FormFieldType.select:
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+
+                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]">
+                                                                <option selected="selected" value=""></option>
+                                                            </select>
+                                                        </div>
+                                                        break;
+
+                                                    case FormFieldType.text:
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                            <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                        </div>
+                                                        break;
+
+                                                }
+
+                                                /*
+                                                <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                    <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                    <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
+                                                </div>**/
+                                            }
                                         }
 
                                     </div>
@@ -154,7 +188,7 @@
 
                                         <!-- Prezzo -->
                                         @if (ViewData["isVendita"] as bool? ?? false)
-                                        {
+                                                    {
                                             <div class="form-group">
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
                                                 <div class="col-md-7" >
@@ -232,48 +266,49 @@
     document.getElementById("range-input").value = 1;
     setFieldsVisibility();
 
-    function setFieldsVisibility() {
-        var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-        var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
-        for( var i = 0; i < allFormFieldsArray.length; i++ )
-            allFormFieldsArray[ i ].style.display = "none";
-        for( var i = 0; i < checkboxesArray.length; i++ ) {
-            var checkbox = checkboxesArray[ i ];
-            if( checkbox.checked ) {
-                var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
-                for( var j = 0; j < categoryFormFieldsArray.length; j++ )
-                    categoryFormFieldsArray[ j ].style.display = "block";
-            }
-        }
-    }
+                                                function setFieldsVisibility() {
+                                                    var checkboxesArray = document.getElementsByClassName("category-checkboxes");
+                                                    var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
+                                                    for( var i = 0; i < allFormFieldsArray.length; i++ )
+                                                        allFormFieldsArray[ i ].style.display = "none";
+                                                    for( var i = 0; i < checkboxesArray.length; i++ ) {
+                                                        var checkbox = checkboxesArray[ i ];
+                                                        if( checkbox.checked ) {
+                                                        var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
+                                                        for( var j = 0; j < categoryFormFieldsArray.length; j++ )
+                                                            categoryFormFieldsArray[ j ].style.display = "block";
+                                                    }
+                                                }
+                                            }
 
 
-    // 500 sono i millisecondi di durata della transizione
-    var transitionTime = 350;
+                                            // 500 sono i millisecondi di durata della transizione
+                                            var transitionTime = 350;
 
-    function clickForwardButton() {
-        if( !atLeastOneCategorySelected() ) {
+                                            function clickForwardButton() {
+                                                if( !atLeastOneCategorySelected() ) {
             $('#myWindow').modal('show');
-            return;
-        }
+                                                    return;
+                                                }
 
-        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
+                                                if (document.getElementById("forward-button").innerHTML === "Pubblica") {
             //aggiungiamo al form la posizione di google maps
             $("#latitudeInput").attr("value", marker.position.lat());
             $("#longitudeInput").attr("value", marker.position.lng());
 
-            document.getElementById("forward-button").setAttribute("type", "submit");
-        } else
-            document.getElementById("forward-button").innerHTML = "Pubblica";
+                                                    document.getElementById("forward-button").setAttribute("type", "submit");
+                                                } else
+                                                    document.getElementById("forward-button").innerHTML = "Pubblica";
         $('#page1').hide(transitionTime);
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
-    }
+                                            }
 
-    function clickBackButton() {
+                                            function clickBackButton() {
         $('#page1').show(transitionTime);
         $('#page2').hide(transitionTime);
         $('#back-button').hide(0);
+
         document.getElementById("forward-button").innerHTML = "Avanti";
         document.getElementById("forward-button").setAttribute("type", "button");
     }
@@ -284,9 +319,11 @@
         if( checkbox.checked ) {
             rangeInput.removeAttribute("disabled");
             rangeInput.value = 1;
+            setCircle(marker.position, 1);
         } else {
             rangeInput.setAttribute("disabled", "");
             rangeInput.value = 0;
+            cityCircle.setMap(null);
         }
     }
 
@@ -296,8 +333,12 @@
             if( categoriesCheckBoxes[ i ].checked )
                 return true;
         return false;
-    }
+     }
 
     //google maps
-    google.maps.event.addDomListener(window, 'load', initialize);
+    $(document).ready(function() { initialize(1); });
+    $("#range-input").change(function () {
+        setCircle(marker.position, $("#range-input").val());
+    });
+
 </script>
