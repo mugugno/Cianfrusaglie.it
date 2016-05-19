@@ -28,13 +28,14 @@ namespace Cianfrusaglie.Controllers {
         private readonly ApplicationDbContext _context;
 
         public AccountController( UserManager< User > userManager, SignInManager< User > signInManager,
-            IEmailSender emailSender, ISmsSender smsSender, ILoggerFactory loggerFactory, IHostingEnvironment environment ) {
+            IEmailSender emailSender, ISmsSender smsSender, ILoggerFactory loggerFactory, IHostingEnvironment environment, ApplicationDbContext context) {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _environment = environment;
             _logger = loggerFactory.CreateLogger< AnnouncesController >();
+            _context = context;
         }
 
         /// <summary>
