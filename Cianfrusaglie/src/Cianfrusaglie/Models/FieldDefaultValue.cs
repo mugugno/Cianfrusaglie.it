@@ -9,5 +9,6 @@ namespace Cianfrusaglie.Models {
 
         [Required]
         public virtual FormField FormField { get; set; }
+        public virtual int FormFieldId { get; set; }
     }
 }
