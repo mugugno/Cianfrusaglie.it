@@ -35,84 +35,94 @@
 </head>
 <body>
      <div id="wrapper-register">
-          <div id="register">
-                    <h1>
-                        <a href="~/">@CommonStrings.SiteName</a>
-                    </h1>
-                    <h5>Il posto giusto per le tue cianfrusaglie</h5>
-                    <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" class="form-horizontal form-register" id="tabellaForm" method="post" role="form" onsubmit="return onRegisterSubmit()">
+         <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
 
-                        <h2>
-                            <strong>Registrati</strong>
-                        </h2>
-                        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                        <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+             <div id="register" class="form-horizontal form-register" id="tabellaForm">
+                 <h1>
+                     <a href="~/">@CommonStrings.SiteName</a>
+                 </h1>
+                 <h5>Il posto giusto per le tue cianfrusaglie</h5>
+
+                 <h2>
+                     <!--<i class="glyphicon glyphicon-user"></i>--><strong>Registrati</strong>
+                 </h2>
+                 <hr />
+                 <div class="row top-reg">
+                     <span class="btn-warning btn-sm btn-round active"><span >1</span></span> Informazioni personali
+                     <span class="btn-warning btn-sm btn-round"><span>2</span></span> Categorie di interesse
+                     <span class="btn-warning btn-sm btn-round"><span>3</span></span> Informazioni obbligatorie
+
+                 </div>
+                 <hr />
+                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                 <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+                 <!--NOME-->
+                 <h4>Su di te</h4>
+                 <div class="form-group">
+                     <label asp-for="Name" class="control-label">Nome</label><br />
+                     <input asp-for="Name" class="form-control" />
+                     <span asp-validation-for="Name" class="text-danger"></span>
+                 </div>
+                 <!--COGNOME-->
+                 <div class="form-group">
+                     <label asp-for="Surname" class="control-label">Cognome</label><br />
+                     <input asp-for="Surname" class="form-control" />
+                     <span asp-validation-for="Surname" class="text-danger"></span>
+                 </div>
+                 <!--SESSO-->
+                 <div class="form-group">
+                     <label asp-for="Genre" class="control-label">Sesso</label><br />
+                     Uomo <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control" />
+                     Donna  <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control" />
+                     Non specificato <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control" />
+                     <span asp-validation-for="Genre" class="text-danger"></span>
+                 </div>-->
+                 </div>
+             <div id="register" class="form-horizontal form-register" id="tabellaForm">
+    <!-------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label">Username</label><br />
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Indirizzo email</label><br />
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password</label><br />
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
+                <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label">Immagine profilo</label>
+                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+
+            <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+            <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
+            <div id="googleMap" style="width: 500px; height: 380px;"></div>
+            <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+            <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+
+            <div class="form-group">
+                <br /><button class="btn btn-default" type="submit">Crea il tuo account</button>
+            </div>
+            <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
 
 
-                        <!--NOME-->
-                        <h4>Su di te</h4>
-                        <div class="form-group">
-                            <label asp-for="Name" class="control-label">Nome</label><br/>
-                            <input asp-for="Name" class="form-control"/>
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                        <!--COGNOME-->
-                        <div class="form-group">
-                            <label asp-for="Surname" class="control-label">Cognome</label><br/>
-                            <input asp-for="Surname" class="form-control"/>
-                            <span asp-validation-for="Surname" class="text-danger"></span>
-                        </div>
-                        <!--SESSO-->
-                        <div class="form-group">
-                            <label asp-for="Genre" class="control-label">Sesso</label><br />
-                            Uomo <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control"/>
-                            Donna  <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control"/>
-                            Non specificato <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control"/>
-                            <span asp-validation-for="Genre" class="text-danger"></span>
-                        </div>--> 
-                        <!-------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
-                        <div class="form-group">
-                            <label asp-for="UserName" class="control-label">Username</label><br />
-                            <input asp-for="UserName" class="form-control" />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Password" class="control-label">Password</label><br />
-                            <input asp-for="Password" class="form-control" type="password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
-                            <input asp-for="ConfirmPassword" class="form-control" type="password" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Photo" class="control-label">Immagine profilo</label>
-                            <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
-                            <span asp-validation-for="Photo" class="text-danger"></span>
-                        </div>
-
-                        <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-                        <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
-                        <div id="googleMap" style="width: 500px; height: 380px;"></div>
-                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
-                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
-
-                        <div class="form-group">
-                            <br /><button class="btn btn-default" type="submit">Crea il tuo account</button>
-                        </div>
-                        <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
-
-                    </form>
-                </div>
+        </div>
+         </form>
             </div>
 </body>
 </html>
