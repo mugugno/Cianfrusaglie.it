@@ -12,6 +12,7 @@ using Cianfrusaglie.ViewModels.Announce;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Microsoft.Net.Http.Headers;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -27,23 +28,25 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        /// Genera i Gat a partire da un annuncio.
+        ///     Genera i Gat a partire da un annuncio.
         /// </summary>
         /// <param name="announce">L'annuncio appena creato.</param>
         /// <returns>I Gat relativi all'annuncio</returns>
         public IEnumerable< Gat > GenerateGats( Announce announce ) {
             var formFieldsValues = _context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
             foreach( var fieldsValue in formFieldsValues ) {
-                yield return new Gat() {Text = GetStringFromAnnounceFormField( fieldsValue )};
+                yield return new Gat {Text = GetStringFromAnnounceFormField( fieldsValue )};
             }
         }
 
         /// <summary>
-        /// Dato un AnnounceFormField, genera il corrispettivo valore stringa.
+        ///     Dato un AnnounceFormField, genera il corrispettivo valore stringa.
         /// </summary>
         /// <param name="formField">L'announceFormField da trattare.</param>
         /// <returns>Il valore in formato stringa per inserirlo nel DB.</returns>
-        public string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) { return formField.Value; }
+        public string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) {
+            return formField.Value;
+        }
 
         /// <summary>
         ///     Effettua l'upload delle immagini per un determinato annuncio
@@ -76,7 +79,7 @@ namespace Cianfrusaglie.Controllers {
         ///     associate
         ///     ad un FormField.
         /// </summary>
-        private void SetViewData() {
+        private void SetViewDataWithFormFieldCategoryDictionary() {
             var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
             foreach( var formField in _context.FormFields.ToList() ) {
                 var categories =
@@ -85,6 +88,26 @@ namespace Cianfrusaglie.Controllers {
                 formField2CategoriesDictionary.Add( formField.Id, categories );
             }
             ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
+        }
+
+
+        private void SetViewDataForCreate( bool vendita ) {
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "formFields" ] = _context.FormFields.ToList();
+            ViewData[ "formFieldDefaultValue" ] = _context.FormFields.ToList().ToDictionary( field => field.Id,
+                field => ( from defaultValue in _context.FieldDefaultValues.ToList()
+                    where field.Id.Equals( defaultValue.FormFieldId )
+                    select new SelectListItem {Text = defaultValue.Value, Value = defaultValue.Value} ).ToList() );
+            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "isVendita" ] = vendita;
+            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
+            SetViewDataWithFormFieldCategoryDictionary();
         }
 
         /// <summary>
@@ -110,27 +133,29 @@ namespace Cianfrusaglie.Controllers {
             if( id == null ) {
                 return HttpNotFound();
             }
-            var announce = _context.Announces.Include(u=>u.Interested).SingleOrDefault( m => m.Id == id );
+            var announce = _context.Announces.Include( u => u.Interested ).SingleOrDefault( m => m.Id == id );
             if( announce == null ) {
                 return HttpNotFound();
             }
             var announceFormFieldsvalues = _context.AnnounceFormFieldsValues.Where( af => af.AnnounceId == id ).ToList();
-            var dictionary = new Dictionary< FormField, string >();
-            foreach( var f in announceFormFieldsvalues ) {
+            var formFieldsValue = new Dictionary< FormField, string >();
+            foreach ( var f in announceFormFieldsvalues ) {
                 var formField = _context.FormFields.Single( ff => ff.Id.Equals( f.FormFieldId ) );
-                dictionary.Add( formField, f.Value );
+                formFieldsValue.Add( formField, f.Value );
             }
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData[ "formFieldsValue" ] = dictionary;
+            ViewData[ "formFieldsValue" ] = formFieldsValue;
             ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
             ViewData[ "IdAnnounce" ] = id;
             ViewData[ "AuthorId" ] = announce.AuthorId;
             ViewData[ "Autore" ] =
                 _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            if(announce.Interested!=null)
-                ViewData["interested"] = announce.Interested.Where(c => c.UserId.Equals(User.GetUserId())).Select(u=>u.UserId).SingleOrDefault();
+            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
+            if( announce.Interested != null )
+                ViewData[ "interested" ] =
+                    announce.Interested.Where( c => c.UserId.Equals( User.GetUserId() ) ).Select( u => u.UserId )
+                        .SingleOrDefault();
             return View( announce );
         }
 
@@ -140,23 +165,11 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>La pagina contenente i campi per la creazione di un annuncio.</returns>
         // GET: Announces/Create
-        public IActionResult Create(bool vendita=false) {
+        public IActionResult Create( bool vendita = false ) {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData[ "formFields" ] = _context.FormFields.ToList();
-            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
-            ViewData["isVendita"] = vendita;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            //TODO scrivere in maniera più furba ma ora va benissimo così!
-            SetViewData();
+            SetViewDataForCreate( vendita );
             return View();
         }
 
@@ -179,19 +192,19 @@ namespace Cianfrusaglie.Controllers {
                 ModelState.AddModelError( "Photos", "Devi inserire almeno un immagine" );
             }
             foreach( var formFile in model.Photos ) {
-                if (formFile.ContentType != "image/png" && formFile.ContentType != "image/jpeg")
+                if( formFile.ContentType != "image/png" && formFile.ContentType != "image/jpeg" )
                     ModelState.AddModelError( "Photos", "I file devono essere delle immagini!" );
-                if ( formFile.Length > DomainConstraints.AnnouncePhotosMaxLenght ) {
+                if( formFile.Length > DomainConstraints.AnnouncePhotosMaxLenght ) {
                     ModelState.AddModelError( "Photos",
                         "Non puoi inserire immagini superiori a " + DomainConstraints.AnnouncePhotosMaxLenght / 1000000 +
                         " MB" );
                 }
             }
+
             if( ModelState.IsValid ) {
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
-                var newAnnounce = new Announce
-                {
+                var newAnnounce = new Announce {
                     PublishDate = DateTime.Now,
                     Title = model.Title,
                     Description = model.Description,
@@ -204,9 +217,7 @@ namespace Cianfrusaglie.Controllers {
                 _context.Announces.Add( newAnnounce );
                 _context.SaveChanges();
 
-                //Upload delle foto
                 await UploadAnnounceImages( model.Photos, newAnnounce );
-                //Fine upload delle immagini
 
                 if( model.FormFieldDictionary != null )
                     foreach( var kvPair in model.FormFieldDictionary ) {
@@ -218,6 +229,31 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
+
+                if( model.CheckboxFormFieldDictionary != null )
+                    foreach( var kvPair in model.CheckboxFormFieldDictionary ) {
+                        if( !string.IsNullOrEmpty( kvPair.Value.ToString() ) ) {
+                            if( kvPair.Value ) {
+                                _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
+                                    FormFieldId = kvPair.Key,
+                                    Value = "si",
+                                    AnnounceId = newAnnounce.Id
+                                } );
+                            }
+                        }
+                    }
+
+                if( model.SelectFormFieldDictionary != null )
+                    foreach( var kvPair in model.SelectFormFieldDictionary ) {
+                        if( !string.IsNullOrEmpty( kvPair.Value ) ) {
+                            _context.AnnounceFormFieldsValues.Add( new AnnounceFormFieldsValues {
+                                FormFieldId = kvPair.Key,
+                                Value = kvPair.Value,
+                                AnnounceId = newAnnounce.Id
+                            } );
+                        }
+                    }
+
                 if( model.CategoryDictionary != null )
                     foreach( var kvPair in model.CategoryDictionary ) {
                         if( kvPair.Value ) {
@@ -230,97 +266,74 @@ namespace Cianfrusaglie.Controllers {
                 _context.SaveChanges();
 
                 //Inserimento Gat
-                var gats = GenerateGats(newAnnounce).ToList();
-                _context.Gats.AddRange(gats);
+                var gats = GenerateGats( newAnnounce ).ToList();
+                _context.Gats.AddRange( gats );
                 _context.SaveChanges();
-                foreach ( var gat in gats ) {
-                    var announceGat = new AnnounceGat() {Announce = newAnnounce, Gat = gat};
+                foreach( var gat in gats ) {
+                    var announceGat = new AnnounceGat {Announce = newAnnounce, Gat = gat};
                     _context.AnnounceGats.Add( announceGat );
                 }
-               
                 _context.SaveChanges();
-
                 TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["listUsers"] = _context.Users.ToList();
-            ViewData["listAnnounces"] = _context.Announces.OrderBy(u => u.PublishDate).Take(4).ToList();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["formFields"] = _context.FormFields.ToList();
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
-            if( model.Price != 0 ) {
-                ViewData[ "isVendita" ] = true;
-            } else {
-                ViewData[ "isVendita" ] = false;
-            }
-            SetViewData();
+            SetViewDataForCreate( model.Price != 0 );
             return View( model );
-
-            //return Redirect( "Create" );
         }
+
         /// <summary>
-        /// Aggiunge un utente agli interessati di un annuncio
+        ///     Aggiunge un utente agli interessati di un annuncio
         /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="AnnounceId"></param>
+        /// <param name="announceId"></param>
         /// <returns></returns>
-        public bool Interested(int? AnnounceId)
-        {
-            if (AnnounceId == null)
-            {
+        public bool Interested( int? announceId ) {
+            if( announceId == null ) {
                 return false;
             }
-            if (!LoginChecker.HasLoggedUser(this))
+            if( !LoginChecker.HasLoggedUser( this ) )
                 return false;
 
-            var UserTmp = _context.Users.Where(c => c.Id.Equals(User.GetUserId())).SingleOrDefault();
-            var AnnTmp = _context.Announces.Include(u=>u.Interested).Where(c => c.Id == AnnounceId).SingleOrDefault();
-            var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( AnnounceId )).Select( a => a.Gat );
+            var userTmp = _context.Users.SingleOrDefault( c => c.Id.Equals( User.GetUserId() ) );
+            var annTmp = _context.Announces.Include( u => u.Interested ).SingleOrDefault( c => c.Id == announceId );
+            var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( announceId ) ).Select( a => a.Gat );
             var userGats = _context.UserGatHistograms.Where( u => u.UserId.Equals( User.GetUserId() ) );
 
-            if (AnnTmp.Closed) return false;
-            if (AnnTmp.AuthorId.Equals(User.GetUserId()))
+            if( annTmp.Closed )
                 return false;
-            Interested exis2=null;
-            if (AnnTmp.Interested != null)
-                exis2 = AnnTmp.Interested.Where(c => c.ChooseDate!=null).SingleOrDefault();
-            if (exis2 != null) return false;
+            if( annTmp.AuthorId.Equals( User.GetUserId() ) )
+                return false;
+            Interested exis2 = null;
+            if( annTmp.Interested != null )
+                exis2 = annTmp.Interested.SingleOrDefault( c => c.ChooseDate != null );
+            if( exis2 != null )
+                return false;
 
 
             Interested exis = null;
-            if (AnnTmp.Interested != null)
-                exis = AnnTmp.Interested.Where(c => c.UserId.Equals(User.GetUserId())).SingleOrDefault();
-            if (exis == null)
-            {
-                var interestedTmp = new Interested();
-                interestedTmp.User = UserTmp;
-                interestedTmp.Announce = AnnTmp;
-                interestedTmp.DateTime = DateTime.Now;
-                _context.Interested.Add(interestedTmp);
+            if( annTmp.Interested != null )
+                exis = annTmp.Interested.SingleOrDefault( c => c.UserId.Equals( User.GetUserId() ) );
+            if( exis == null ) {
+                var interestedTmp = new Interested {User = userTmp, Announce = annTmp, DateTime = DateTime.Now};
+                _context.Interested.Add( interestedTmp );
 
                 foreach( var gat in announceGats ) {
-                    if( userGats.Select(a => a.Gat).Contains( gat ) ) {
-                        var userGatHistogram = userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) );
+                    if( userGats.Select( a => a.Gat ).Contains( gat ) ) {
+                        var userGatHistogram =
+                            userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) );
                         userGatHistogram.Count++;
                         _context.UserGatHistograms.Update( userGatHistogram );
                     } else {
-                        var newGat = new UserGatHistogram() {Count = 1, Gat=gat, User = UserTmp};
+                        var newGat = new UserGatHistogram {Count = 1, Gat = gat, User = userTmp};
                         _context.UserGatHistograms.Add( newGat );
                     }
                 }
 
                 _context.SaveChanges();
-            }
-            else
-            {
-                foreach (var gat in announceGats)
-                {
-                    if (userGats.Select(a => a.Gat).Contains(gat)) {
-                        var userGatHistogram = userGats.Single(a => a.UserId.Equals(User.GetUserId()) && a.Gat.Equals(gat));
+            } else {
+                foreach( var gat in announceGats ) {
+                    if( userGats.Select( a => a.Gat ).Contains( gat ) ) {
+                        var userGatHistogram =
+                            userGats.Single( a => a.UserId.Equals( User.GetUserId() ) && a.Gat.Equals( gat ) );
                         if( --userGatHistogram.Count <= 0 )
                             _context.UserGatHistograms.Remove( userGatHistogram );
                         else
@@ -331,12 +344,14 @@ namespace Cianfrusaglie.Controllers {
                     //    _context.UserGatHistograms.Add(newGat);
                     //}
                 }
-                _context.Interested.Remove(exis);
+                _context.Interested.Remove( exis );
                 _context.SaveChanges();
             }
 
             return true;
         }
+
+
         // GET: Announces/Edit/5
         public IActionResult Edit( int? id ) {
             if( id == null ) {
@@ -393,7 +408,7 @@ namespace Cianfrusaglie.Controllers {
                 Title = announce.Title,
                 AuthorId = announce.AuthorId
             };
-            SetViewData();
+            SetViewDataWithFormFieldCategoryDictionary();
             return View( editAnnounce );
         }
 
@@ -461,15 +476,15 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Aggiungere i campi della risposta di errore.
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-                var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
-            if (announce == null)
+            var announce = _context.Announces.Include( a => a.Images ).SingleOrDefault( m => m.Id == id );
+            if( announce == null )
                 return HttpNotFound();
-            if (!User.GetUserId().Equals(announce.AuthorId))
+            if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
 
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
+            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
             return View( announce );
         }
 
@@ -492,13 +507,12 @@ namespace Cianfrusaglie.Controllers {
             if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
 
-            var im = _context.ImageUrls.Where(i => i.AnnounceId.Equals(announce.Id));
-            foreach (var imm in im)
-            {
-                _context.ImageUrls.Remove(imm);
+            var im = _context.ImageUrls.Where( i => i.AnnounceId.Equals( announce.Id ) );
+            foreach( var imm in im ) {
+                _context.ImageUrls.Remove( imm );
             }
             _context.Announces.Remove( announce );
-            
+
             _context.SaveChanges();
             return RedirectToAction( nameof( HistoryController.Index ), "History" );
         }

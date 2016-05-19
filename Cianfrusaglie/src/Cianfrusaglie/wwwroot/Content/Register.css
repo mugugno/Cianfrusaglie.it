@@ -1,16 +1,16 @@
 ﻿#wrapper-register {
-    /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient( radial, center center, 0, center center, 460, from( #fff ), to( #EAEAEA ) );
-    /* Safari 5.1+, Chrome 10+ */
+
+    /*background: -webkit-gradient( radial, center center, 0, center center, 460, from( #fff ), to( #EAEAEA ) );
+
     background: -webkit-radial-gradient( circle, #fff, #EAEAEA );
-    /* Firefox 3.6+ */
+
     background: -moz-radial-gradient( circle, #fff, #EAEAEA );
-    /* IE 10 */
-    background: -ms-radial-gradient( circle, #fff, #EAEAEA );
+
+    background: -ms-radial-gradient( circle, #fff, #EAEAEA );*/
     /*Leggero gradiente*/
     background-color: #EAEAEA;
-    background-position: center center;
-    background-repeat: no-repeat;
+    /*background-position: center center;
+    background-repeat: no-repeat;*/
     bottom: 0;
     left: 0;
     margin: 0;
@@ -19,7 +19,15 @@
     right: 0;
     top: 0;
 }
-
+.top-reg span{
+    margin-right: 20px;
+}
+.btn-gr{
+    background-color: lightgrey;
+}
+.btn-warninng{
+    border:0;
+}
 #register {
     margin: auto;
     padding-top: 2em;
@@ -59,13 +67,17 @@
     text-decoration: none;
 }
 
-.form-register input {
+.form-register input[type="text"] {
     font-weight: 100;
     height: 2.2em;
     padding: .2em;
     width: 100%;
 }
-
+.form-register input[type="radio"]{
+    height: 15px;
+    width: 15px;
+    
+}
 #sottoForm h5 {
     margin: 0;
     padding: 0;
