@@ -25,8 +25,8 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "lastAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
-            ViewData[ "listAnnounce" ] = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
-            //TODO QUANDO SI FARANNO I BARATTI
+            ViewData["listAnnounce"] = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
+             //TODO QUANDO SI FARANNO I BARATTI
             //ViewData["listExchange"] = _context.Announces.Where();
             ViewData[ "" +
                       "for" +
