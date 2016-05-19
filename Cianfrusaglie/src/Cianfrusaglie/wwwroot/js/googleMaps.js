@@ -1,6 +1,6 @@
-﻿function initialize() {
+﻿function initialize(radius) {
     navigator.geolocation.getCurrentPosition(function (location) {
-        initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
+        initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude), false, radius);
     }, unableToGeoLocalize);
 }
 
@@ -9,13 +9,15 @@ function unableToGeoLocalize(positionError) {
     initializeGMaps(new google.maps.LatLng(44.40678, 8.93391));
 }
 
-var map, marker;
+var map, marker, cityCircle;
 
 /// inizializza Google Maps alla posizione position
 /// onlyView è true se non si può modificare la posizione del marker (usato con onlyView = true in visualizza annuncio o profilo utente)
 function initializeGMaps(position, onlyView, radius) {
     if( onlyView == null )
         onlyView = false;
+    if( radius == null )
+        radius = 0;
 
     var mapProp = {
         center: position,
@@ -50,26 +52,38 @@ function initializeGMaps(position, onlyView, radius) {
             placeMarker(places[ 0 ].geometry.location, places[ 0 ].title);
         });
 
-        google.maps.event.addListener(map, 'click', function(event) { placeMarker(event.latLng); });
+        if (radius > 0)
+            setCircle(marker.position, 1);
+        google.maps.event.addListener(map, 'click', function(event) {
+            placeMarker(event.latLng);
+            if (radius > 0)
+                setCircle(marker.position, $("#range-input").val());
+        });
     } else if( radius != null && radius > 0 ) {
         //creo un cerchio intorno alla posizione
-        // Add the circle for this city to the map.
-        var cityCircle = new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
-            map: map,
-            center: marker.position,
-            radius: radius * 1000
-        });
+        setCircle(marker.position, radius);
     }
+}
+
+function setCircle(position, radius) {
+    if( cityCircle != null )
+        cityCircle.setMap(null); //eliminare vecchio cerchio
+
+    cityCircle = new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: position,
+        radius: radius * 1000
+    });
 }
 
 function placeMarker(location, title) {
     if (marker != null)
-        marker.setMap(null);
+        marker.setMap(null); //eliminare vecchio marker
 
     marker = new google.maps.Marker({
         position: location,

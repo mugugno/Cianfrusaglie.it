@@ -167,6 +167,10 @@ namespace Cianfrusaglie.Models {
                 ctx.Categories.Add( c );
                 ctx.SaveChanges();
 
+                var mBox = new Category { OverCategory = c, Name = "MisteryBox" };
+                ctx.Categories.Add(c);
+                ctx.SaveChanges();
+
                 c = new Category {Name = "Bambini 0-3 anni"};
                 ctx.Categories.Add( c );
                 ctx.SaveChanges();
@@ -220,6 +224,9 @@ namespace Cianfrusaglie.Models {
 
                 var genereLibri = new FormField {Name = "Genere letterario", Type = FormFieldType.select};
                 ctx.FormFields.Add( genereLibri );
+                ctx.SaveChanges();
+
+                ctx.CategoryFormFields.Add(new CategoryFormField { CategoryId = lmfLibri.Id, FormFieldId = genereLibri.Id });
                 ctx.SaveChanges();
 
                 ctx.FieldDefaultValues.AddRange(
@@ -385,9 +392,18 @@ namespace Cianfrusaglie.Models {
                     new FieldDefaultValue {Value = "Altro", FormField = lingua} );
                 ctx.SaveChanges();
 
-                var anno = new FormField {Name = "Anno", Type = FormFieldType.number};
+                var anno = new FormField {Name = "Anno", Type = FormFieldType.select};
                 ctx.FormFields.Add( anno );
                 ctx.SaveChanges();
+
+                var dataAnno = System.DateTime.Now.Year;
+                for(var an = dataAnno; an>dataAnno-100;an--)
+                {
+                    ctx.FieldDefaultValues.Add(new FieldDefaultValue { Value = an.ToString(), FormField = anno });
+                    ctx.SaveChanges();
+                }
+                ctx.SaveChanges();
+
 
                 ctx.CategoryFormFields.Add( new CategoryFormField {CategoryId = lmfLibri.Id, FormFieldId = anno.Id} );
                 ctx.SaveChanges();
@@ -1317,7 +1333,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var tipoGiocattolo = new FormField {Name = "Tipo Giocattolo", Type = FormFieldType.checkbox};
+                var tipoGiocattolo = new FormField {Name = "Tipo Giocattolo", Type = FormFieldType.select};
                 ctx.FormFields.Add( tipoGiocattolo );
                 ctx.SaveChanges();
 
@@ -1344,7 +1360,7 @@ namespace Cianfrusaglie.Models {
                     new FieldDefaultValue {Value = "Altro", FormField = tipoGiocattolo} );
                 ctx.SaveChanges();
 
-                var etaMinima = new FormField {Name = "Eta Minima", Type = FormFieldType.number};
+                var etaMinima = new FormField {Name = "Eta Minima", Type = FormFieldType.text};
                 ctx.FormFields.Add( etaMinima );
                 ctx.SaveChanges();
 
