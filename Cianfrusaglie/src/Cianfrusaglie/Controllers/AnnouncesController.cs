@@ -250,30 +250,20 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
-                if (model.NumberFormFieldDictionary != null)
-                    foreach (var kvPair in model.NumberFormFieldDictionary)
-                    {
-                        if (!string.IsNullOrEmpty(kvPair.Value.ToString()))
-                        {
-                            _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
-                            {
-                                FormFieldId = kvPair.Key,
-                                Value = kvPair.Value.ToString(),
-                                AnnounceId = newAnnounce.Id
-                            });
-                        }
-                    }
                 if (model.CheckboxFormFieldDictionary != null)
                     foreach (var kvPair in model.CheckboxFormFieldDictionary)
                     {
                         if (!string.IsNullOrEmpty(kvPair.Value.ToString()))
                         {
-                            _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                            if (kvPair.Value)
                             {
-                                FormFieldId = kvPair.Key,
-                                Value = kvPair.Value ? "si" : "no",
-                                AnnounceId = newAnnounce.Id
-                            });
+                                _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                                {
+                                    FormFieldId = kvPair.Key,
+                                    Value = "si",
+                                    AnnounceId = newAnnounce.Id
+                                });
+                            }
                         }
                     }
                 if (model.SelectFormFieldDictionary != null)
@@ -314,6 +304,8 @@ namespace Cianfrusaglie.Controllers {
                 TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
+            var model1 = ModelState.ErrorCount;
+            var model2 = ModelState;
             ViewData["formCategories"] = _context.Categories.ToList();
             ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["listUsers"] = _context.Users.ToList();

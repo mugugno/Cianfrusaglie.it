@@ -124,12 +124,7 @@
                                                             </label>
                                                         </div>
                                                         break;
-                                                    case FormFieldType.number:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="NumberFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                            <input type="number" asp-for="NumberFormFieldDictionary[field.Id]" class="form-control" />
-                                                        </div>
-                                                        break;
+                                      
 
                                                     case FormFieldType.select:
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">

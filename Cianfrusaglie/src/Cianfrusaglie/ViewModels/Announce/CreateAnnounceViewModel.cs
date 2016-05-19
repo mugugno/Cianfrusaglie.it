@@ -27,7 +27,7 @@ namespace Cianfrusaglie.ViewModels.Announce {
         public int Price { get; set; }
 
         public Dictionary<int, bool> CheckboxFormFieldDictionary { get; set; }
-        public Dictionary<int, int> NumberFormFieldDictionary { get; set; }
+        //public Dictionary<int, int> NumberFormFieldDictionary { get; set; }
         public Dictionary<int, string> SelectFormFieldDictionary { get; set; }
         public Dictionary< int, string > FormFieldDictionary { get; set; }
 
