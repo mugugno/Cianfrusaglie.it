@@ -9,6 +9,14 @@ namespace Cianfrusaglie.Models {
     public class User : IdentityUser {
         [DataType( DataType.DateTime )]
         public DateTime BirthDate { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string Surname { get; set; }
+
+        /// <summary>
+        /// 0 -> non specificato; 1 -> donna; 2 -> uomo
+        /// </summary>
+        [Range(DomainConstraints.UserGenreNotSpecified, DomainConstraints.UserGenreMale)]
+        public virtual int Genre { get; set; }
 
         public virtual double Latitude { get; set; }
         public virtual double Longitude { get; set; }
