@@ -222,6 +222,9 @@ namespace Cianfrusaglie.Models {
                 ctx.FormFields.Add( genereLibri );
                 ctx.SaveChanges();
 
+                ctx.CategoryFormFields.Add(new CategoryFormField { CategoryId = lmfLibri.Id, FormFieldId = genereLibri.Id });
+                ctx.SaveChanges();
+
                 ctx.FieldDefaultValues.AddRange(
                     new FieldDefaultValue {Value = "arte, cinema, musica e spettacolo", FormField = genereLibri},
                     new FieldDefaultValue {Value = "attualità e reportage", FormField = genereLibri},

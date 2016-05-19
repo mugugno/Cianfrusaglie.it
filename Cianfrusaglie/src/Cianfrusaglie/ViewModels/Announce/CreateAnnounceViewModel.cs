@@ -26,6 +26,9 @@ namespace Cianfrusaglie.ViewModels.Announce {
         [Display( Name = "Price" )]
         public int Price { get; set; }
 
+        public Dictionary<int, bool> CheckboxFormFieldDictionary { get; set; }
+        public Dictionary<int, int> NumberFormFieldDictionary { get; set; }
+        public Dictionary<int, string> SelectFormFieldDictionary { get; set; }
         public Dictionary< int, string > FormFieldDictionary { get; set; }
 
       [EnsureMinimumElements( 1, ErrorMessage = "Almeno una categoria richiesta!" )]

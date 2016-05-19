@@ -14,6 +14,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNet.Mvc.Rendering;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
@@ -156,28 +157,29 @@ namespace Cianfrusaglie.Controllers {
             var fields = _context.FormFields.ToList();
             var defaultValues = _context.FieldDefaultValues.ToList();
 
-            var dValueString = new List<string>();
-            var dictionary = new Dictionary<FormField, List<FieldDefaultValue>>();
+            var dValueString = new List<SelectListItem>();
+            var dictionary = new Dictionary<int, List<SelectListItem>>();
             foreach(var field in fields)
             {
-                foreach(var defaultValue in defaultValues)
+                var i = 0;
+                dValueString = new List<SelectListItem>();
+                foreach (var defaultValue in defaultValues)
                 {
-
-                    if (field.Equals(defaultValue.FormField))
-                        dValueString.Add(defaultValue.Value);
+                    if (field.Id.Equals(defaultValue.FormFieldId))
+                    {
+                        var selectListItem = new SelectListItem
+                        {
+                            Text = defaultValue.Value,
+                            Value = defaultValue.Value
+                        };
+                        dValueString.Add(selectListItem);
+                    }
                 }
-            }
-                dictionary.Add(field, field.);
-
-            var dictionary2 = new Dictionary<FormField, List<string>>();
-            foreach(var f in dictionary.Values)
-            {
-                dictionary2.Add
+                dictionary.Add(field.Id, dValueString);
             }
             ViewData["formFieldDefaultValue"] = dictionary;
 
-
-
+            
             ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             ViewData["isVendita"] = vendita;
@@ -214,7 +216,10 @@ namespace Cianfrusaglie.Controllers {
                         " MB" );
                 }
             }
-            if( ModelState.IsValid ) {
+
+            /*if (ModelState.IsValid)*/
+
+            if(ModelState.IsValid){
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
                 var newAnnounce = new Announce
@@ -245,7 +250,46 @@ namespace Cianfrusaglie.Controllers {
                             } );
                         }
                     }
-                if( model.CategoryDictionary != null )
+                if (model.NumberFormFieldDictionary != null)
+                    foreach (var kvPair in model.NumberFormFieldDictionary)
+                    {
+                        if (!string.IsNullOrEmpty(kvPair.Value.ToString()))
+                        {
+                            _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                            {
+                                FormFieldId = kvPair.Key,
+                                Value = kvPair.Value.ToString(),
+                                AnnounceId = newAnnounce.Id
+                            });
+                        }
+                    }
+                if (model.CheckboxFormFieldDictionary != null)
+                    foreach (var kvPair in model.CheckboxFormFieldDictionary)
+                    {
+                        if (!string.IsNullOrEmpty(kvPair.Value.ToString()))
+                        {
+                            _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                            {
+                                FormFieldId = kvPair.Key,
+                                Value = kvPair.Value ? "si" : "no",
+                                AnnounceId = newAnnounce.Id
+                            });
+                        }
+                    }
+                if (model.SelectFormFieldDictionary != null)
+                    foreach (var kvPair in model.SelectFormFieldDictionary)
+                    {
+                        if (!string.IsNullOrEmpty(kvPair.Value))
+                        {
+                            _context.AnnounceFormFieldsValues.Add(new AnnounceFormFieldsValues
+                            {
+                                FormFieldId = kvPair.Key,
+                                Value = kvPair.Value,
+                                AnnounceId = newAnnounce.Id
+                            });
+                        }
+                    }
+                if ( model.CategoryDictionary != null )
                     foreach( var kvPair in model.CategoryDictionary ) {
                         if( kvPair.Value ) {
                             _context.AnnounceCategories.Add( new AnnounceCategory {
@@ -284,6 +328,33 @@ namespace Cianfrusaglie.Controllers {
             } else {
                 ViewData[ "isVendita" ] = false;
             }
+            
+
+            var fields = _context.FormFields.ToList();
+            var defaultValues = _context.FieldDefaultValues.ToList();
+
+            var dValueString = new List<SelectListItem>();
+            var dictionary = new Dictionary<int, List<SelectListItem>>();
+            foreach (var field in fields)
+            {
+                var i = 0;
+                dValueString = new List<SelectListItem>();
+                foreach (var defaultValue in defaultValues)
+                {
+                    if (field.Id.Equals(defaultValue.FormFieldId))
+                    {
+                        var selectListItem = new SelectListItem
+                        {
+                            Text = defaultValue.Value,
+                            Value = defaultValue.Value
+                        };
+                        dValueString.Add(selectListItem);
+                    }
+                }
+                dictionary.Add(field.Id, dValueString);
+            }
+            ViewData["formFieldDefaultValue"] = dictionary;
+
             SetViewData();
             return View( model );
 

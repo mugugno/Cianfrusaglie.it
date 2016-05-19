@@ -124,6 +124,10 @@ namespace Cianfrusaglie.Controllers {
             //QUI BISOGNA INSERIRE TUTTI GLI ALTRI CAMPI
             if( ModelState.IsValid ) {
                 var user = new User {
+                   Name = model.Name,
+                   Surname = model.Surname,
+                   BirthDate = model.BirthDate,
+                   Genre = model.Genre,
                    UserName = model.UserName,
                    Email = model.Email,
                    Latitude = double.Parse( model.Latitude ),

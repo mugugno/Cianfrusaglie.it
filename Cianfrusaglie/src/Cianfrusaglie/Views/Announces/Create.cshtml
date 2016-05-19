@@ -110,37 +110,43 @@
                                         <h3 class="panel-title">Informazioni aggiuntive</h3>
                                     </div>
                                     <div class="panel-body">
-                                        @{var fieldDefault = (Dictionary<FormField, List<FieldDefaultValue>>)ViewData["formFieldDefaultValue"];
+                                        @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
                                             foreach (var field in GetFormFields())
                                             {
                                                 switch (field.Type)
                                                 {
                                                     case FormFieldType.checkbox:
-                                                        <div class="checkbox  @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">
-                                                                @field.Name
-                                                            <input asp-for="FormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
+                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
+                                                                
+                                                            <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
                                                             @field.Name
                                                             </label>
                                                         </div>
                                                         break;
                                                     case FormFieldType.number:
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                            <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                            <label asp-for="NumberFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                            <input type="number" asp-for="NumberFormFieldDictionary[field.Id]" class="form-control" />
                                                         </div>
                                                         break;
 
                                                     case FormFieldType.select:
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                            <select asp-for="FormFieldDictionary[field.Id]" class="form-control" asp-items="@fieldDefault.Values">
+                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+
+                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]">
                                                                 <option selected="selected" value=""></option>
-                                                                
                                                             </select>
                                                         </div>
                                                         break;
 
+                                                    case FormFieldType.text:
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                            <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                        </div>
+                                                        break;
 
                                                 }
 

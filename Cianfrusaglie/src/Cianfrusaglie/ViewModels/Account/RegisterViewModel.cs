@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Http;
 
@@ -23,6 +24,16 @@ namespace Cianfrusaglie.ViewModels.Account {
         [DataType( DataType.Password ), Display( Name = "Confirm password" ),
          Compare( "Password", ErrorMessage = "The password and confirmation password do not match." )]
         public string ConfirmPassword { get; set; }
+
+        [Range(DomainConstraints.UserGenreNotSpecified, DomainConstraints.UserGenreMale)]
+        public int Genre { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime BirthDate { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
 
         public IFormFile Photo { get; set; }
 
