@@ -257,14 +257,17 @@
             return;
         }
 
-        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
+        if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
             //aggiungiamo al form la posizione di google maps
             $("#latitudeInput").attr("value", marker.position.lat());
             $("#longitudeInput").attr("value", marker.position.lng());
 
             document.getElementById("forward-button").setAttribute("type", "submit");
-        } else
+        } else {
             document.getElementById("forward-button").innerHTML = "Pubblica";
+            initialize();
+        }
+            
         $('#page1').hide(transitionTime);
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
