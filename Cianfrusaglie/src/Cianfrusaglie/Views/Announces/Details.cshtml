@@ -230,8 +230,8 @@
             var tmp = @ViewData["IdAnnounce"];
 
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
-                .one('click', '#confirm', function (e) {
-                    $.get({cache: false, url: "/Announces/Interested?AnnounceId=" + tmp},
+                .one('click', '#confirm', function (err) {
+                    $.get( "/Announces/Interested?AnnounceId=" + tmp,
                             function() {
                                 if( $('.text-det').text() === "Interessato" )
                                     $('.text-det').html("Non sono pi&ugrave; interessato");
