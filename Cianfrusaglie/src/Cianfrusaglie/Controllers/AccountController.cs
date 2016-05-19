@@ -25,6 +25,7 @@ namespace Cianfrusaglie.Controllers {
         private readonly ISmsSender _smsSender;
         private readonly UserManager< User > _userManager;
         private readonly IHostingEnvironment _environment;
+        private readonly ApplicationDbContext _context;
 
         public AccountController( UserManager< User > userManager, SignInManager< User > signInManager,
             IEmailSender emailSender, ISmsSender smsSender, ILoggerFactory loggerFactory, IHostingEnvironment environment ) {
@@ -120,8 +121,13 @@ namespace Cianfrusaglie.Controllers {
                         " MB" );
                 }
             }
+            //QUI BISOGNA INSERIRE TUTTI GLI ALTRI CAMPI
             if( ModelState.IsValid ) {
                 var user = new User {
+                   Name = model.Name,
+                   Surname = model.Surname,
+                   BirthDate = model.BirthDate,
+                   Genre = model.Genre,
                    UserName = model.UserName,
                    Email = model.Email,
                    Latitude = double.Parse( model.Latitude ),
