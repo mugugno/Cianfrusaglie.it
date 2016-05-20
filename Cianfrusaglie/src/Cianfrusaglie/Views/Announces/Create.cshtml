@@ -262,8 +262,7 @@
 
 <script>
     // TODO spostare tutto in un file js
-    document.getElementById("announce-navbar")
-        .setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
     document.getElementById("range-checkbox").checked = true;
     document.getElementById("range-input").value = 1;
     setFieldsVisibility();
@@ -306,7 +305,13 @@
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
 
-        initialize(1);
+        @{
+           var loggedUser= (User) ViewData[ "loggedUser" ];
+        }
+        var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
+        var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initialize(1, position);
     }
 
                                             function clickBackButton() {

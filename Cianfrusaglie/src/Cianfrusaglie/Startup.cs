@@ -85,12 +85,13 @@ namespace Cianfrusaglie {
             }
 
             try {
-                using(
-                    var serviceScope =
+                using( var serviceScope =
                         app.ApplicationServices.GetRequiredService< IServiceScopeFactory >().CreateScope() ) {
                     serviceScope.ServiceProvider.GetService< ApplicationDbContext >().Database.Migrate();
                     serviceScope.ServiceProvider.GetService< ApplicationDbContext >().EnsureSeedData();
-                }
+                    //TODO togliere in release!!!
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().SeedBaseUserTest();
+               }
             } catch {}
 
             app.UseIISPlatformHandler( options => options.AuthenticationDescriptions.Clear() );

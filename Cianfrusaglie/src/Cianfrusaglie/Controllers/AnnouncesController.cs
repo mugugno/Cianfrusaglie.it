@@ -107,6 +107,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "isVendita" ] = vendita;
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
+            ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
             SetViewDataWithFormFieldCategoryDictionary();
         }
 
