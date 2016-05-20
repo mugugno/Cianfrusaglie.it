@@ -13,6 +13,9 @@ namespace Cianfrusaglie.Models {
         [Required]
         public virtual User User { get; set; }
 
+        public virtual bool Read { get; set; }
+
+
         public virtual int AnnounceId { get; set; }
 
         [Required]

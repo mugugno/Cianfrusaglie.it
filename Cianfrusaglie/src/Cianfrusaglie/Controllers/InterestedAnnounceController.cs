@@ -7,6 +7,8 @@ using Microsoft.Data.Entity;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.InterestedAnnounce;
+using static Cianfrusaglie.Constants.CommonFunctions;
+
 
 namespace Cianfrusaglie.Controllers
 {
@@ -31,7 +33,29 @@ namespace Cianfrusaglie.Controllers
             var interested =
                 _context.Interested.Include( i => i.User ).Where( i => i.AnnounceId.Equals( id ) ).Select( u => u.User ).ToList();
             var interestedViewModel = new InterestedAnnounceViewModel() {Announce = announce, InterestedUsers = interested};
+
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            SetInterestedToReadStatus(id);
+            ViewData["IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+
+
+
             return View(interestedViewModel);
+        }
+
+        public void SetInterestedToReadStatus(int id)
+        {
+            var newInterested = _context.Interested.Where(i => !i.Read && i.AnnounceId.Equals(id));
+            foreach (var interested in newInterested)
+            {
+                interested.Read = true;
+                //_context.SaveChanges();
+            }
+            _context.SaveChanges();
+
         }
 
     }

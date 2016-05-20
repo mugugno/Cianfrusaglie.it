@@ -48,6 +48,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "listImages" ] = _context.ImageUrls.ToList();
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
             return View( result );
         }
 
