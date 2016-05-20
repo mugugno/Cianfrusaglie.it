@@ -52,8 +52,8 @@
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script>
 <script src="/js/googleMaps.js"></script>
 
-<div id="wrap" >
-    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post" role="form" >
+<div>
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
         <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15">
             <div class="panel panel-default" style="margin-left: -15px">
                 <div class="col-md-3">
@@ -73,12 +73,12 @@
 
                             <div class="panel-group" id="panel-423221">
                                 <div class="panel panel-default" id="sceltaCategorie">
-                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</strong></h5>
+                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
                                 </div>
                                 @foreach (var macroCategory in GetMacroCategories())
                                 {
                                     <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id">
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
                                             @macroCategory.Name
                                         </div>
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
@@ -133,7 +133,7 @@
                                                             <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
 
                                                             <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]">
-                                                                <option selected="selected" value=""></option>
+                                                                <option selected="selected" value="">&nbsp;</option>
                                                             </select>
                                                         </div>
                                                         break;
@@ -239,10 +239,10 @@
                 </div>
             </div>
 
-</form>
+    </form>
 </div>
 
-<div class="modal fade" id="myWindow" role="dialog">
+<div class="modal fade" id="createError" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,7 +289,7 @@
 
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
-            $('#myWindow').modal('show');
+            $('#createError').modal('show');
             return;
         }
 
