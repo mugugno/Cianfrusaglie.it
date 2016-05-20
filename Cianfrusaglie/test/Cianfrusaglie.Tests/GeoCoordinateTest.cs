@@ -1,4 +1,5 @@
 ﻿using System;
+using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Xunit;
 
