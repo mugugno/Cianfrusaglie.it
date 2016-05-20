@@ -67,7 +67,7 @@
     border-radius: 100px;
     font-size: 60px;
     height: 100px;
-    line-height: 2;
+    line-height: 2px;
     padding: 6px 6px;
     text-align: center;
     width: 100px;
@@ -84,10 +84,6 @@
 .btn-round.btn-sm.card-img {
     position:absolute;
     top:0;
-    background: #FFC107;
-}
-.btn-round.btn-sm.card-img:hover {
-    background: #FFC107;
 }
 #horizontalMenu {
     box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.19 );
@@ -277,18 +273,3 @@ hr {
     width: 50%;
 }
 
-
-/*#menuProfilo {
-     left: auto; 
-     right: 100%;
-     display: inline-block;
-    position: absolute;
-    top: -1px;
-    visibility: hidden;
-    margin-top: 10px;
-    bottom: 0;
-}
-
-#menuProfilo li:hover .sub-menu {
-    visibility: visible;
-}*/
