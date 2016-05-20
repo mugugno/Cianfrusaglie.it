@@ -44,20 +44,20 @@
                  <h5>Il posto giusto per le tue cianfrusaglie</h5>
 
                  <h2>
-                     <!--<i class="glyphicon glyphicon-user"></i>--><strong>Registrati</strong>
+                     <!--<i class="glyphicon glyphicon-user"></i>-->
                  </h2>
                  <hr />
                  <div class="row top-reg">
-                     <span class="btn-warning btn-sm btn-round active"><span >1</span></span> Informazioni personali
-                     <span class="btn-warning btn-sm btn-round"><span>2</span></span> Categorie di interesse
-                     <span class="btn-warning btn-sm btn-round"><span>3</span></span> Informazioni obbligatorie
+                     <span class="btn-warning btn"><span >1</span>Su di te</span> 
+                     <span class="btn-gr btn"><span>2</span>I tuoi interessi</span> 
+                     <span class="btn-gr btn"><span>3</span>Dati di accesso</span> 
 
                  </div>
                  <hr />
                  <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
                  <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
                  <!--NOME-->
-                 <h4>Su di te</h4>
+                 
                  <div class="form-group">
                      <label asp-for="Name" class="control-label">Nome</label><br />
                      <input asp-for="Name" class="form-control" />
@@ -70,16 +70,30 @@
                      <span asp-validation-for="Surname" class="text-danger"></span>
                  </div>
                  <!--SESSO-->
-                 <div class="form-group">
+                 <div class="form-group row">
                      <label asp-for="Genre" class="control-label">Sesso</label><br />
-                     Uomo <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control" />
-                     Donna  <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control" />
-                     Non specificato <input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control" />
-                     <span asp-validation-for="Genre" class="text-danger"></span>
-                 </div>-->
+
+                     <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control" />Uomo</label><br />
+                     <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control" />Donna</label><br />
+                     <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control" />Non specificato</label>    
+                 <span asp-validation-for="Genre" class="text-danger"></span>
+                 </div>
                  </div>
              <div id="register" class="form-horizontal form-register" id="tabellaForm">
     <!-------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
+            <h1>
+                <a href="~/">@CommonStrings.SiteName</a>
+            </h1>
+            <h5>Il posto giusto per le tue cianfrusaglie</h5>
+
+            <hr />
+            <div class="row top-reg">
+                <span class="btn-gr btn"><span>1</span>Su di te</span>
+                <span class="btn-warning btn"><span>2</span>I tuoi interessi</span>
+                <span class="btn-gr btn"><span>3</span>Dati di accesso</span>
+
+            </div>
+            <hr />
             <div class="form-group">
                 <label asp-for="UserName" class="control-label">Username</label><br />
                 <input asp-for="UserName" class="form-control" />
@@ -119,10 +133,23 @@
                 <br /><button class="btn btn-default" type="submit">Crea il tuo account</button>
             </div>
             <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
-
-
         </div>
-         </form>
+        <div id="register" class="form-horizontal form-register" id="tabellaForm">
+            <h1>
+                <a href="~/">@CommonStrings.SiteName</a>
+            </h1>
+            <h5>Il posto giusto per le tue cianfrusaglie</h5>
+
+            <hr />
+            <div class="row top-reg">
+                <span class="btn-gr btn"><span>1</span>Su di te</span>
+                <span class="btn-gr btn"><span>2</span>I tuoi interessi</span>
+                <span class="btn-warning btn"><span>3</span>Dati di accesso</span>
+
+            </div>
+            <hr />
+        </div>
+</form>
             </div>
 </body>
 </html>

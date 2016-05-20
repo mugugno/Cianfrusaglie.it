@@ -1,0 +1,17 @@
+@model Cianfrusaglie.ViewModels.InterestedAnnounce.InterestedAnnounceViewModel
+
+@{
+    ViewData["Title"] = "Gli Interessati ad un mio Annuncio";
+}
+
+<div class="panel-body" >
+    <div class="panel-heading" id="my-conversations" >
+        <h3>@ViewData[ "Title" ]</h3>
+    </div>
+
+    @foreach( var u in Model.InterestedUsers ) {
+        <div class="form-group" >
+            <label>@u.UserName</label>
+        </div>
+    }
+</div>

@@ -107,7 +107,7 @@ namespace Cianfrusaglie.Tests {
 
         protected AccountController CreateAccountController( string userId ) {
             return new AccountController( UserManager, _mockSignInManager.Object, _emailSender, _smsSender,
-                new LoggerFactory(), HostingEnvironment) {
+                new LoggerFactory(), HostingEnvironment, Context) {
                     Url = new Mock< IUrlHelper >().Object,
                     ActionContext = MockActionContextForLogin( userId )
                 };
