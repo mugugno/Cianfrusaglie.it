@@ -50,3 +50,12 @@ button { padding: 0; }
     height: 40px;
     text-align: center;
 }
+
+#newNotification {
+    color: red;
+    font-size: 2em;
+}
+
+#notificationMenu {
+    font-size: 2em;
+}
