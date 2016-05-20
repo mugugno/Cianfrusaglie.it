@@ -1,7 +1,10 @@
-﻿function initialize(radius) {
-    navigator.geolocation.getCurrentPosition(function (location) {
-        initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude), false, radius);
-    }, unableToGeoLocalize);
+﻿function initialize(radius, position) {
+    if( position == null )
+        navigator.geolocation.getCurrentPosition(function(location) {
+            initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude), false, radius);
+        }, unableToGeoLocalize);
+    else
+        initializeGMaps(position, false, radius);
 }
 
 function unableToGeoLocalize(positionError) {

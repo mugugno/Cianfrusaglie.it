@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Mvc;
@@ -48,6 +49,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "listImages" ] = _context.ImageUrls.ToList();
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
             return View( result );
         }
 

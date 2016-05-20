@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cianfrusaglie {
+namespace Cianfrusaglie.GeoPosition {
     public class GeoCoordinate {
         public GeoCoordinate() { }
 

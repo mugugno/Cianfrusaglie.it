@@ -1,10 +1,12 @@
 @using System.Collections.Generic
+@using System.Net.Mime
 @using System.Threading.Tasks
 @using Microsoft.AspNet.JsonPatch.Helpers
+@using Microsoft.AspNet.Mvc.Rendering
 @model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
-    ViewData[ "Title" ] = "Inserzione Annuncio";
+    ViewData["Title"] = "Inserzione Annuncio";
 }
 
 @functions
@@ -50,8 +52,8 @@
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script>
 <script src="/js/googleMaps.js"></script>
 
-<div id="wrap" >
-    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post" role="form" >
+<div>
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
         <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15">
             <div class="panel panel-default" style="margin-left: -15px">
                 <div class="col-md-3">
@@ -71,12 +73,12 @@
 
                             <div class="panel-group" id="panel-423221">
                                 <div class="panel panel-default" id="sceltaCategorie">
-                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</strong></h5>
+                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
                                 </div>
                                 @foreach (var macroCategory in GetMacroCategories())
                                 {
                                     <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id">
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
                                             @macroCategory.Name
                                         </div>
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
@@ -87,8 +89,8 @@
                                                         @foreach (var category in GetCategories(macroCategory))
                                                         {
                                                             <div class="checkbox">
-                                                                <label asp-for="CategoryDictionary [ category.Id ]" for="@category.Id">
-                                                                    <input asp-for="CategoryDictionary [ category.Id ]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
+                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                    <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
                                                                     @category.Name
                                                                 </label>
                                                             </div>
@@ -110,13 +112,47 @@
                                         <h3 class="panel-title">Informazioni aggiuntive</h3>
                                     </div>
                                     <div class="panel-body">
+                                        @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
+                                            foreach (var field in GetFormFields())
+                                            {
+                                                switch (field.Type)
+                                                {
+                                                    case FormFieldType.checkbox:
+                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
+                                                                
+                                                            <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
+                                                            @field.Name
+                                                            </label>
+                                                        </div>
+                                                        break;
+                                      
 
-                                        @foreach (var field in GetFormFields())
-                                        {
-                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                <label asp-for="FormFieldDictionary[ field.Id ]" class="control-label">@field.Name</label>
-                                                <input asp-for="FormFieldDictionary[ field.Id ]" class="form-control"/>
-                                            </div>
+                                                    case FormFieldType.select:
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+
+                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]">
+                                                                <option selected="selected" value="">&nbsp;</option>
+                                                            </select>
+                                                        </div>
+                                                        break;
+
+                                                    case FormFieldType.text:
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                            <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                        </div>
+                                                        break;
+
+                                                }
+
+                                                /*
+                                                <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                                    <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                    <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
+                                                </div>**/
+                                            }
                                         }
 
                                     </div>
@@ -134,7 +170,7 @@
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
-                                        <!-- Text input-->
+                                        <!-- MediaTypeNames.Text input-->
                                         <div class="form-group">
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
                                             <div class="col-md-7">
@@ -154,7 +190,7 @@
 
                                         <!-- Prezzo -->
                                         @if (ViewData["isVendita"] as bool? ?? false)
-                                        {
+                                                    {
                                             <div class="form-group">
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
                                                 <div class="col-md-7" >
@@ -203,10 +239,10 @@
                 </div>
             </div>
 
-</form>
+    </form>
 </div>
 
-<div class="modal fade" id="myWindow" role="dialog">
+<div class="modal fade" id="createError" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -226,8 +262,7 @@
 
 <script>
     // TODO spostare tutto in un file js
-    document.getElementById("announce-navbar")
-        .setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
     document.getElementById("range-checkbox").checked = true;
     document.getElementById("range-input").value = 1;
     setFieldsVisibility();
@@ -245,7 +280,7 @@
                     categoryFormFieldsArray[ j ].style.display = "block";
             }
         }
-    }
+     }
 
 
     // 500 sono i millisecondi di durata della transizione
@@ -253,30 +288,37 @@
 
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
-            $('#myWindow').modal('show');
+            $('#createError').modal('show');
             return;
         }
 
-        if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
+        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
             //aggiungiamo al form la posizione di google maps
             $("#latitudeInput").attr("value", marker.position.lat());
             $("#longitudeInput").attr("value", marker.position.lng());
 
             document.getElementById("forward-button").setAttribute("type", "submit");
-        } else {
+        } else
             document.getElementById("forward-button").innerHTML = "Pubblica";
-            initialize();
-        }
-            
+
         $('#page1').hide(transitionTime);
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
+
+        @{
+           var loggedUser= (User) ViewData[ "loggedUser" ];
+        }
+        var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
+        var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initialize(1, position);
     }
 
-    function clickBackButton() {
+                                            function clickBackButton() {
         $('#page1').show(transitionTime);
         $('#page2').hide(transitionTime);
         $('#back-button').hide(0);
+
         document.getElementById("forward-button").innerHTML = "Avanti";
         document.getElementById("forward-button").setAttribute("type", "button");
     }
@@ -287,9 +329,11 @@
         if( checkbox.checked ) {
             rangeInput.removeAttribute("disabled");
             rangeInput.value = 1;
+            setCircle(marker.position, 1);
         } else {
             rangeInput.setAttribute("disabled", "");
             rangeInput.value = 0;
+            cityCircle.setMap(null);
         }
     }
 
@@ -299,8 +343,11 @@
             if( categoriesCheckBoxes[ i ].checked )
                 return true;
         return false;
-    }
+     }
 
     //google maps
-    google.maps.event.addDomListener(window, 'load', initialize);
+    $("#range-input").change(function () {
+        setCircle(marker.position, $("#range-input").val());
+    });
+
 </script>
