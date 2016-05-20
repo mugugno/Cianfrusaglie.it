@@ -107,6 +107,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "isVendita" ] = vendita;
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
             SetViewDataWithFormFieldCategoryDictionary();
         }
 
@@ -152,7 +154,9 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "Autore" ] =
                 _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-            if( announce.Interested != null )
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            if ( announce.Interested != null )
                 ViewData[ "interested" ] =
                     announce.Interested.Where( c => c.UserId.Equals( User.GetUserId() ) ).Select( u => u.UserId )
                         .SingleOrDefault();
@@ -170,6 +174,7 @@ namespace Cianfrusaglie.Controllers {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
             SetViewDataForCreate( vendita );
+            ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             return View();
         }
 
@@ -485,6 +490,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
             return View( announce );
         }
 

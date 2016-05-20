@@ -1,7 +1,10 @@
-﻿function initialize(radius) {
-    navigator.geolocation.getCurrentPosition(function (location) {
-        initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude), false, radius);
-    }, unableToGeoLocalize);
+﻿function initialize(radius, position) {
+    if( position == null )
+        navigator.geolocation.getCurrentPosition(function(location) {
+            initializeGMaps(new google.maps.LatLng(location.coords.latitude, location.coords.longitude), false, radius);
+        }, unableToGeoLocalize);
+    else
+        initializeGMaps(position, false, radius);
 }
 
 function unableToGeoLocalize(positionError) {
@@ -49,7 +52,11 @@ function initializeGMaps(position, onlyView, radius) {
             }
             map.fitBounds(bounds);
 
-            placeMarker(places[ 0 ].geometry.location, places[ 0 ].title);
+            placeMarker(places[0].geometry.location, places[0].title);
+
+            var range = $("#range-input").val();
+            if( range > 0 )
+                setCircle(marker.position, range);
         });
 
         if (radius > 0)

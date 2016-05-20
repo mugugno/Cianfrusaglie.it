@@ -45,11 +45,11 @@ namespace Cianfrusaglie {
             services.AddIdentity< User, IdentityRole >( options => 
             {
                 options.User.RequireUniqueEmail = true ;
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonLetterOrDigit = false;
-                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonLetterOrDigit = true;
+                options.Password.RequireUppercase = true;
             })
             .AddEntityFrameworkStores< ApplicationDbContext >().AddDefaultTokenProviders();
 
@@ -85,12 +85,13 @@ namespace Cianfrusaglie {
             }
 
             try {
-                using(
-                    var serviceScope =
+                using( var serviceScope =
                         app.ApplicationServices.GetRequiredService< IServiceScopeFactory >().CreateScope() ) {
                     serviceScope.ServiceProvider.GetService< ApplicationDbContext >().Database.Migrate();
                     serviceScope.ServiceProvider.GetService< ApplicationDbContext >().EnsureSeedData();
-                }
+                    //TODO togliere in release!!!
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().SeedBaseUserTest();
+               }
             } catch {}
 
             app.UseIISPlatformHandler( options => options.AuthenticationDescriptions.Clear() );
