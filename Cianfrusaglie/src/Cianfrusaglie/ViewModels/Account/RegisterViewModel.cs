@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Http;
@@ -39,5 +40,7 @@ namespace Cianfrusaglie.ViewModels.Account {
 
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+
+        public List<int> CategoryIdPreferencesUser { get; set; }
     }
 }
