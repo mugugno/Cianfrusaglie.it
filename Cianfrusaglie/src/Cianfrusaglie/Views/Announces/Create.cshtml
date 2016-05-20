@@ -78,7 +78,7 @@
                                 @foreach (var macroCategory in GetMacroCategories())
                                 {
                                     <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
                                             @macroCategory.Name
                                         </div>
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
@@ -208,7 +208,7 @@
                                             <div class="col-md-7">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
-                                                        <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
+                                                        <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
                                                     <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                                     <span class="input-group-addon">Km</span>
@@ -262,9 +262,8 @@
 
 <script>
     // TODO spostare tutto in un file js
-    document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
-    document.getElementById("range-checkbox").checked = true;
-    document.getElementById("range-input").value = 1;
+    $("#announce-navbar").attr("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    $("#range-input").val(1);
     setFieldsVisibility();
 
     var mapLoaded= false;
