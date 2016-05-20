@@ -31,6 +31,9 @@ namespace Cianfrusaglie.Controllers
             var interested =
                 _context.Interested.Include( i => i.User ).Where( i => i.AnnounceId.Equals( id ) ).Select( u => u.User ).ToList();
             var interestedViewModel = new InterestedAnnounceViewModel() {Announce = announce, InterestedUsers = interested};
+
+            //TODO: aggiungere i ViewData necessari!
+
             return View(interestedViewModel);
         }
 
