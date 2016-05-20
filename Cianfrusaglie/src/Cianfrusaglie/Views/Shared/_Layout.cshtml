@@ -139,7 +139,7 @@
                         @if( ViewData[ "IsThereAnyNotification" ] as bool? ?? false ) {
                             <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;" ><b class="caret" ></b></a>
                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
-                                @*@if (ViewData["IsThereNewMessage"] as bool? ?? false)
+                                @if (ViewData["IsThereNewMessage"] as bool? ?? false)
                                 {
 
                                 <li class="dropdown-header">
@@ -148,13 +148,15 @@
                                 </li>
 
 
-                                }*@
-                                @if (ViewData["IsThereNewInterested"] as bool? ?? false)
-                                {
-                                    <li class="dropdown-header">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                        <span><a href="~/History/Index"> Hai nuovi Interessati ai tuoi annunci!</a></span>
-                                    </li>
+                                }
+                                @{
+                                    if (ViewData[" IsThereNewInterested"] as bool? ?? false)
+                                    {
+                                        <li class="dropdown-header">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                            <span><a href="~/History/Index"> Hai nuovi Interessati ai tuoi annunci!</a></span>
+                                        </li>
+                                    }
                                 }
                             </ul>
                         }

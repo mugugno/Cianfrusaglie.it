@@ -20,6 +20,20 @@ namespace Cianfrusaglie.Controllers {
          var myAnnounces = _context.Announces.Include( p => p.Images ).Where( a => a.AuthorId == User.GetUserId() );
          return myAnnounces;
       } 
+
+      public Dictionary<int,List<int>> GetInterestedToAnnounces(){
+            var announces = GetLoggedUserPublishedAnnounces();
+            var dictionary = new Dictionary<int, List<int>>();
+            foreach(var announce in announces)
+            {
+                var interessati = new List<int>();
+                interessati.Add(_context.Interested.Where(i => i.AnnounceId.Equals(announce.Id)).ToList().Count);
+                interessati.Add(_context.Interested.Where(i => i.AnnounceId.Equals(announce.Id) && !i.Read).ToList().Count);
+                dictionary.Add(announce.Id, interessati);
+            }
+            return dictionary;
+        
+      }
       /// <summary>
       /// Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro)
       /// </summary>
@@ -33,6 +47,7 @@ namespace Cianfrusaglie.Controllers {
         ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
         ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
         ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+        ViewData["Interested"] = GetInterestedToAnnounces();
         return View( GetLoggedUserPublishedAnnounces().ToList() );
       }
       
