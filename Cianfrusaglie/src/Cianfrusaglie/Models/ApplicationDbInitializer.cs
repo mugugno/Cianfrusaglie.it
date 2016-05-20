@@ -168,7 +168,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
                 var mBox = new Category { OverCategory = c, Name = "MisteryBox" };
-                ctx.Categories.Add(c);
+                ctx.Categories.Add(mBox);
                 ctx.SaveChanges();
 
                 c = new Category {Name = "Bambini 0-3 anni"};
@@ -236,7 +236,8 @@ namespace Cianfrusaglie.Models {
                     new FieldDefaultValue {Value = "biografia", FormField = genereLibri},
                     new FieldDefaultValue {Value = "classici", FormField = genereLibri},
                     new FieldDefaultValue {Value = "cucina", FormField = genereLibri},
-                    new FieldDefaultValue {Value = "fantasy", FormField = genereLibri},
+                    new FieldDefaultValue { Value = "fantasy", FormField = genereLibri },
+                    new FieldDefaultValue { Value = "fantascienza", FormField = genereLibri },
                     new FieldDefaultValue {Value = "gialli e thriller", FormField = genereLibri},
                     new FieldDefaultValue {Value = "grafic novel e fumetti", FormField = genereLibri},
                     new FieldDefaultValue {Value = "hobby e tempo libero", FormField = genereLibri},
