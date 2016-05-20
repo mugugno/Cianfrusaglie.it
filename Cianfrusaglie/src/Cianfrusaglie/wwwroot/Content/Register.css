@@ -29,7 +29,6 @@
 #register {
     margin: auto;
     padding-top: 2em;
-    width: 600px;
 }
 
 #tabellaForm { margin-top: 10px; }
@@ -53,6 +52,7 @@
     margin-left: auto;
     margin-right: auto;
     top: 40px;
+    width: 40em;
 
 }
 
@@ -98,6 +98,7 @@
     margin: 0;
     padding: 0;
     text-align: right;
+    color: black;
 }
 .btn-next, .btn-back{
     background-color:#f0ad4e !important;
