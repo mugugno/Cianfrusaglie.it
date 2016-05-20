@@ -34,66 +34,106 @@
 
 </head>
 <body>
-     <div id="wrapper-register">
-         <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
+    <div id="wrapper-register">
+        <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
 
-             <div id="register" class="form-horizontal form-register" id="tabellaForm">
-                 <h1>
-                     <a href="~/">@CommonStrings.SiteName</a>
-                 </h1>
-                 <h5>Il posto giusto per le tue cianfrusaglie</h5>
+            <div id="register" class="form-horizontal form-register form-register1" id="tabellaForm">
+                <h1>
+                    <a href="~/">@CommonStrings.SiteName</a>
+                </h1>
+                <h5>Il posto giusto per le tue cianfrusaglie</h5>
 
-                 <h2>
-                     <!--<i class="glyphicon glyphicon-user"></i>-->
-                 </h2>
-                 <hr />
-                 <div class="row top-reg">
-                     <span class="btn-warning btn"><span >1</span>Su di te</span> 
-                     <span class="btn-gr btn"><span>2</span>I tuoi interessi</span> 
-                     <span class="btn-gr btn"><span>3</span>Dati di accesso</span> 
+                <h2>
+                    <!--<i class="glyphicon glyphicon-user"></i>-->
+                </h2>
+                <hr />
+                <div class="row top-reg">
+                    <span class="btn-warning btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
+                    <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
+                    <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
 
-                 </div>
-                 <hr />
-                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                 <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
-                 <!--NOME-->
-                 
-                 <div class="form-group">
-                     <label asp-for="Name" class="control-label">Nome</label><br />
-                     <input asp-for="Name" class="form-control" />
-                     <span asp-validation-for="Name" class="text-danger"></span>
-                 </div>
-                 <!--COGNOME-->
-                 <div class="form-group">
-                     <label asp-for="Surname" class="control-label">Cognome</label><br />
-                     <input asp-for="Surname" class="form-control" />
-                     <span asp-validation-for="Surname" class="text-danger"></span>
-                 </div>
-                 <!--SESSO-->
-                 <div class="form-group row">
-                     <label asp-for="Genre" class="control-label">Sesso</label><br />
+                </div>
+                <hr />
+                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+                <!--NOME-->
+                <div >
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label">Nome</label><br />
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <!--COGNOME-->
+                    <div class="form-group">
+                        <label asp-for="Surname" class="control-label">Cognome</label><br />
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    <!--SESSO-->
+                    <div class="form-group row">
+                        <label asp-for="Genre" class="control-label">Sesso</label><br />
 
-                     <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control" />Uomo</label><br />
-                     <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control" />Donna</label><br />
-                     <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control" />Non specificato</label>    
-                 <span asp-validation-for="Genre" class="text-danger"></span>
-                 </div>
-                 </div>
-             <div id="register" class="form-horizontal form-register" id="tabellaForm">
-    <!-------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
-            <h1>
-                <a href="~/">@CommonStrings.SiteName</a>
-            </h1>
-            <h5>Il posto giusto per le tue cianfrusaglie</h5>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreMale" class="form-control" />Uomo</label><br />
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreFemale" class="form-control" />Donna</label><br />
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@DomainConstraints.UserGenreNotSpecified" class="form-control" />Non specificato</label>
+                        <span asp-validation-for="Genre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
+                        <input id="pac-input" class="form-control" type="text" placeholder="">
+                        <div id="googleMap" style="display:none;"></div>
+                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Photo" class="control-label">Immagine profilo</label>
+                        <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+                        <span asp-validation-for="Photo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <br />
+                    <span class="btn btn-default col-md-8 btn-next" onclick="clickNextButton(1)">Avanti</span>
+                </div>
+                <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
+    </div>
+            <div id="register" class="form-horizontal form-register form-register2" id="tabellaForm">
+                <h1>
+                    <a href="~/">@CommonStrings.SiteName</a>
+                </h1>
+                <h5>Il posto giusto per le tue cianfrusaglie</h5>
 
-            <hr />
-            <div class="row top-reg">
-                <span class="btn-gr btn"><span>1</span>Su di te</span>
-                <span class="btn-warning btn"><span>2</span>I tuoi interessi</span>
-                <span class="btn-gr btn"><span>3</span>Dati di accesso</span>
+                <hr />
+                <div class="row top-reg">
+                    <span class="btn-gr btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
+                    <span class="btn-warning btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
+                    <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
 
+                </div>
+                <hr />
+                <div class="form-group">
+                    <br />
+                    <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(2)">Indietro</span>
+                    <span class="btn btn-default col-md-5 btn-next" onclick="clickNextButton(2)">Avanti</span>
+                </div>
+                <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
             </div>
-            <hr />
+    <div id="register" class="form-horizontal form-register form-register3" id="tabellaForm">
+        <!-------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
+        <h1>
+            <a href="~/">@CommonStrings.SiteName</a>
+        </h1>
+        <h5>Il posto giusto per le tue cianfrusaglie</h5>
+
+        <hr />
+        <div class="row top-reg">
+            <span class="btn-gr btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
+            <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
+            <span class="btn-warning btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
+
+        </div>
+        <hr />
+       
             <div class="form-group">
                 <label asp-for="UserName" class="control-label">Username</label><br />
                 <input asp-for="UserName" class="form-control" />
@@ -108,6 +148,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label">Password</label><br />
+                <h6 class="">
+                    La password deve contenere almeno:
+                    <ul>
+                        <li>
+                            8 cartteri
+                        </li>
+                        <li>
+                            1 maiuscola
+                        </li>
+                        <li>
+                            1 minuscola
+                        </li>
+                        <li>
+                            1 carattere speciale
+                        </li>
+                    </ul>
+                </h6>
                 <input asp-for="Password" class="form-control" type="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -117,39 +174,47 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
             </div>
-            <div class="form-group">
-                <label asp-for="Photo" class="control-label">Immagine profilo</label>
-                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
-                <span asp-validation-for="Photo" class="text-danger"></span>
-            </div>
+            
 
             <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-            <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
-            <div id="googleMap" style="width: 500px; height: 380px;"></div>
-            <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
-            <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
-
+       
             <div class="form-group">
-                <br /><button class="btn btn-default" type="submit">Crea il tuo account</button>
+                <br />
+                <span class="btn btn-default col-md-5 btn-back"onclick="clickBackButton(3)">Indietro</span>
+                <button class="btn btn-default col-md-5 btn-next" type="submit">Crea il tuo account</button>
             </div>
             <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
         </div>
-        <div id="register" class="form-horizontal form-register" id="tabellaForm">
-            <h1>
-                <a href="~/">@CommonStrings.SiteName</a>
-            </h1>
-            <h5>Il posto giusto per le tue cianfrusaglie</h5>
+        
+        </form>
+    </div>
 
-            <hr />
-            <div class="row top-reg">
-                <span class="btn-gr btn"><span>1</span>Su di te</span>
-                <span class="btn-gr btn"><span>2</span>I tuoi interessi</span>
-                <span class="btn-warning btn"><span>3</span>Dati di accesso</span>
-
-            </div>
-            <hr />
-        </div>
-</form>
-            </div>
+    <script type="text/javascript">
+        
+        function clickNextButton(tmp) {
+            if (tmp === 1) {
+                $('.form-register1').hide();
+                $('.form-register3').hide();
+                $('.form-register2').show();
+            }
+            else if (tmp === 2) {
+                $('.form-register2').hide();
+                $('.form-register1').hide();
+                $('.form-register3').show();
+            } 
+        }
+        function clickBackButton(tmp) {
+            if (tmp === 2) {
+                $('.form-register1').show();
+                $('.form-register2').hide();
+                $('.form-register3').hide();
+            }
+            else if (tmp === 3) {
+                $('.form-register2').show();
+                $('.form-register1').hide();
+                $('.form-register3').hide();
+            }
+        }
+    </script>
 </body>
 </html>

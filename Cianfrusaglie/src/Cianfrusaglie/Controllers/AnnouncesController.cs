@@ -109,6 +109,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             SetViewDataWithFormFieldCategoryDictionary();
         }
 
@@ -156,6 +157,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
                 ViewData[ "interested" ] =
                     announce.Interested.Where( c => c.UserId.Equals( User.GetUserId() ) ).Select( u => u.UserId )
