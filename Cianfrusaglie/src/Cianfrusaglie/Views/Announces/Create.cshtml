@@ -59,7 +59,7 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-6">
-                    <button class="btn btn-default navbar-btn navbar-left" id="back-button" onclick="clickBackButton()" style="display: none" type="button">Indietro</button>
+                    <button class="btn btn-default navbar-btn navbar-left" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
                     <button class="btn btn-default navbar-btn navbar-right" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                                 @foreach (var macroCategory in GetMacroCategories())
                                 {
                                     <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
                                             @macroCategory.Name
                                         </div>
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="page2" style="display: none">
+                    <div class="row" id="page2" style="display: none;">
                         <div class="col-md-3">
                         </div>
                         <div class="col-md-6">
@@ -208,7 +208,7 @@
                                             <div class="col-md-7">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
-                                                        <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox">
+                                                        <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
                                                     <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                                     <span class="input-group-addon">Km</span>
@@ -262,16 +262,15 @@
 
 <script>
     // TODO spostare tutto in un file js
-    document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
-    document.getElementById("range-checkbox").checked = true;
-    document.getElementById("range-input").value = 1;
+    $("#announce-navbar").attr("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    $("#range-input").val(1);
     setFieldsVisibility();
 
+    var mapLoaded= false;
+
     function setFieldsVisibility() {
+        $(".category-form-fields").hide(0);
         var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-        var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
-        for( var i = 0; i < allFormFieldsArray.length; i++ )
-            allFormFieldsArray[ i ].style.display = "none";
         for( var i = 0; i < checkboxesArray.length; i++ ) {
             var checkbox = checkboxesArray[ i ];
             if( checkbox.checked ) {
@@ -288,14 +287,14 @@
 
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
-            $('#createError').modal('show');
+            $('#createError').show(0);
             return;
         }
 
         if (document.getElementById("forward-button").innerHTML === "Pubblica") {
             //aggiungiamo al form la posizione di google maps
-            $("#latitudeInput").attr("value", marker.position.lat());
-            $("#longitudeInput").attr("value", marker.position.lng());
+            $("#latitudeInput").val( marker.position.lat() );
+            $("#longitudeInput").val( marker.position.lng() );
 
             document.getElementById("forward-button").setAttribute("type", "submit");
         } else
@@ -305,6 +304,8 @@
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
 
+        if (mapLoaded)
+            return;
         @{
            var loggedUser= (User) ViewData[ "loggedUser" ];
         }
@@ -312,6 +313,7 @@
         var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
         var position = new google.maps.LatLng(latitude, longitude);
         initialize(1, position);
+        mapLoaded= true;
     }
 
                                             function clickBackButton() {

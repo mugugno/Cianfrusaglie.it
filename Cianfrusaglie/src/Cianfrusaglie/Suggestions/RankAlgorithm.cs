@@ -25,19 +25,8 @@ namespace Cianfrusaglie.Suggestions
 
         public RankAlgorithm(ApplicationDbContext context) { _context = context; }
 
-
-        /*         
-                     if( !LoginChecker.HasLoggedUser( this ) ){
-                            ViewData[ "listAnnounces" ] = _context.Announces.OrderByDescending( u => u.PublishDate ).Take( 4 ).ToList();
-                     }else{
-                            var user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
-                            ViewData[ "listAnnounces" ] = _context.Announces.OrderByDescending( a => calculateRank(a, user) ).Take( 4 ).ToList();
-                     }
-         */
-
         public int calculateRank(Announce announce, User user) {
-            int score = calculateDistanceScore( announce, user ) + calculateMatchedCategoriesScore( announce, user ) +
-                        calculateMatchedGatsScore( announce, user );
+            int score = calculateDistanceScore( announce, user ) + calculateMatchedCategoriesScore( announce, user ) + calculateMatchedGatsScore( announce, user );
             int rank = score * calculateFeedbackMultiplier( announce );
             return rank;
         }
@@ -46,7 +35,7 @@ namespace Cianfrusaglie.Suggestions
         {
             var userFeedbackVotes = _context.FeedBacks.Where(a => a.Receiver.Equals( announce.Author ));
             int userFeedbackSum = userFeedbackVotes.Sum( f => f.Vote );
-            var userFeedbackMean = userFeedbackSum / userFeedbackVotes.Count();
+            var userFeedbackMean = userFeedbackSum / Math.Max(userFeedbackVotes.Count(), 1);
             return (int) (userFeedbackMean * Math.Sqrt( userFeedbackSum));
         }
 
@@ -69,14 +58,16 @@ namespace Cianfrusaglie.Suggestions
         }
 
         public int calculateMatchedCategoriesScore( Announce announce, User user ) {
-            var announceCategories = _context.Announces.Single( a => a.Id.Equals( announce.Id ) ).AnnounceCategories;
+            var announceCategories = _context.AnnounceCategories.Where( a => a.Category.Equals( announce ) ).Select( a=> a.Category );
             var userPreferredCategories = _context.UserCategoryPreferenceses.Where( p => p.UserId.Equals( user.Id ) );
             int score = 0;
-            foreach( var category in announceCategories ) {
-                if( userPreferredCategories.Select( a=> a.Category ).Contains( category.Category ) ) {
+            foreach (var category in announceCategories)
+            {
+                if (userPreferredCategories.Select(a => a.Category).Contains(category))
+                {
                     score += 20;
                 }
-                
+
             }
             return Math.Min( 100, score );
         }
