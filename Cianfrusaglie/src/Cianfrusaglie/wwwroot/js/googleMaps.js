@@ -52,7 +52,11 @@ function initializeGMaps(position, onlyView, radius) {
             }
             map.fitBounds(bounds);
 
-            placeMarker(places[ 0 ].geometry.location, places[ 0 ].title);
+            placeMarker(places[0].geometry.location, places[0].title);
+
+            var range = $("#range-input").val();
+            if( range > 0 )
+                setCircle(marker.position, range);
         });
 
         if (radius > 0)
