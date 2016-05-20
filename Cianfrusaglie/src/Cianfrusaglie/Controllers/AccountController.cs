@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -135,8 +136,8 @@ namespace Cianfrusaglie.Controllers {
                    Genre = model.Genre,
                    UserName = model.UserName,
                    Email = model.Email,
-                   Latitude = double.Parse( model.Latitude ),
-                   Longitude = double.Parse( model.Longitude )
+                   Latitude = double.Parse( model.Latitude, CultureInfo.InvariantCulture ),
+                   Longitude = double.Parse( model.Longitude, CultureInfo.InvariantCulture )
                 };
                 string imageUrl = "";
                 if ( model.Photo != null ) {

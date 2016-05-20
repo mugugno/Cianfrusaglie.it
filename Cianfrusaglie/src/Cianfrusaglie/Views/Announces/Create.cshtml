@@ -1,6 +1,8 @@
 @using System.Collections.Generic
+@using System.Net.Mime
 @using System.Threading.Tasks
 @using Microsoft.AspNet.JsonPatch.Helpers
+@using Microsoft.AspNet.Mvc.Rendering
 @model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
 
 @{
@@ -50,8 +52,8 @@
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script>
 <script src="/js/googleMaps.js"></script>
 
-<div id="wrap" >
-    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post" role="form" >
+<div>
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
         <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15">
             <div class="panel panel-default" style="margin-left: -15px">
                 <div class="col-md-3">
@@ -71,12 +73,12 @@
 
                             <div class="panel-group" id="panel-423221">
                                 <div class="panel panel-default" id="sceltaCategorie">
-                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave categorie appartenenti al tuo oggetto:</strong></h5>
+                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
                                 </div>
                                 @foreach (var macroCategory in GetMacroCategories())
                                 {
                                     <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id">
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
                                             @macroCategory.Name
                                         </div>
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
@@ -131,7 +133,7 @@
                                                             <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
 
                                                             <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]">
-                                                                <option selected="selected" value=""></option>
+                                                                <option selected="selected" value="">&nbsp;</option>
                                                             </select>
                                                         </div>
                                                         break;
@@ -168,7 +170,7 @@
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
-                                        <!-- Text input-->
+                                        <!-- MediaTypeNames.Text input-->
                                         <div class="form-group">
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
                                             <div class="col-md-7">
@@ -237,10 +239,10 @@
                 </div>
             </div>
 
-</form>
+    </form>
 </div>
 
-<div class="modal fade" id="myWindow" role="dialog">
+<div class="modal fade" id="createError" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -260,49 +262,57 @@
 
 <script>
     // TODO spostare tutto in un file js
-    document.getElementById("announce-navbar")
-        .setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
+    document.getElementById("announce-navbar").setAttribute("data-offset-top", document.getElementById("pageHeader").offsetHeight);
     document.getElementById("range-checkbox").checked = true;
     document.getElementById("range-input").value = 1;
     setFieldsVisibility();
 
-                                                function setFieldsVisibility() {
-                                                    var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-                                                    var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
-                                                    for( var i = 0; i < allFormFieldsArray.length; i++ )
-                                                        allFormFieldsArray[ i ].style.display = "none";
-                                                    for( var i = 0; i < checkboxesArray.length; i++ ) {
-                                                        var checkbox = checkboxesArray[ i ];
-                                                        if( checkbox.checked ) {
-                                                        var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
-                                                        for( var j = 0; j < categoryFormFieldsArray.length; j++ )
-                                                            categoryFormFieldsArray[ j ].style.display = "block";
-                                                    }
-                                                }
-                                            }
+    function setFieldsVisibility() {
+        var checkboxesArray = document.getElementsByClassName("category-checkboxes");
+        var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
+        for( var i = 0; i < allFormFieldsArray.length; i++ )
+            allFormFieldsArray[ i ].style.display = "none";
+        for( var i = 0; i < checkboxesArray.length; i++ ) {
+            var checkbox = checkboxesArray[ i ];
+            if( checkbox.checked ) {
+                var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
+                for( var j = 0; j < categoryFormFieldsArray.length; j++ )
+                    categoryFormFieldsArray[ j ].style.display = "block";
+            }
+        }
+     }
 
 
-                                            // 500 sono i millisecondi di durata della transizione
-                                            var transitionTime = 350;
+    // 500 sono i millisecondi di durata della transizione
+    var transitionTime = 350;
 
-                                            function clickForwardButton() {
-                                                if( !atLeastOneCategorySelected() ) {
-            $('#myWindow').modal('show');
-                                                    return;
-                                                }
+    function clickForwardButton() {
+        if( !atLeastOneCategorySelected() ) {
+            $('#createError').modal('show');
+            return;
+        }
 
-                                                if (document.getElementById("forward-button").innerHTML === "Pubblica") {
+        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
             //aggiungiamo al form la posizione di google maps
             $("#latitudeInput").attr("value", marker.position.lat());
             $("#longitudeInput").attr("value", marker.position.lng());
 
-                                                    document.getElementById("forward-button").setAttribute("type", "submit");
-                                                } else
-                                                    document.getElementById("forward-button").innerHTML = "Pubblica";
+            document.getElementById("forward-button").setAttribute("type", "submit");
+        } else
+            document.getElementById("forward-button").innerHTML = "Pubblica";
+
         $('#page1').hide(transitionTime);
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
-                                            }
+
+        @{
+           var loggedUser= (User) ViewData[ "loggedUser" ];
+        }
+        var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
+        var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initialize(1, position);
+    }
 
                                             function clickBackButton() {
         $('#page1').show(transitionTime);
@@ -336,7 +346,6 @@
      }
 
     //google maps
-    $(document).ready(function() { initialize(1); });
     $("#range-input").change(function () {
         setCircle(marker.position, $("#range-input").val());
     });
