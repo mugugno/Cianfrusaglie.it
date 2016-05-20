@@ -29,14 +29,12 @@
 
 }
 
-<!DOCTYPE html>
 <html>
 <head>
-    <title>CianfrusApp.net</title>
-    <meta charset="UTF-8">
+
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
-    <script src="~/js/site.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
@@ -134,47 +132,31 @@
                 else
                 {
                     @* Pulsante Notifiche *@
-                    <li class="dropdown dropdown-large" >
+                    <li class="dropdown dropdown-large">
                         @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
-                        @if( ViewData[ "IsThereAnyNotification" ] as bool? ?? false ) {
-                            <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;" ><b class="caret" ></b></a>
-                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
-                                @*@if (ViewData["IsThereNewMessage"] as bool? ?? false)
-                                {
-
-                                <li class="dropdown-header">
-                                    <span class="glyphicon glyphicon-envelope"></span>
-                                    <span><a href="~/Messages"> Hai nuovi Messaggi da leggere!</a></span>
-                                </li>
-
-
-                                }*@
-                                @if (ViewData["IsThereNewInterested"] as bool? ?? false)
-                                {
-                                    <li class="dropdown-header">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                        <span><a href="~/History/Index"> Hai nuovi Interessati ai tuoi annunci!</a></span>
-                                    </li>
-                                }
-                            </ul>
+                        @if (ViewData["IsThereNewMessage"] as bool? ?? false)
+                        {
+                            <a href="#" id="newNotification" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown"><b class="caret"></b></a>
                         }
                         else
                         {
-                            <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em" ><b class="caret" ></b></a>
-                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
-                                <li style="text-align: center">
-                                    <span>Nessuna notifica</span>
-                                </li>
-                            </ul>
+                            <a href="#" id="notificationMenu" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown"><b class="caret"></b></a>
                         }
 
-                        
-                        
+                        <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
+                            @if (ViewData["IsThereNewMessage"] as bool? ?? false)
+                            {
 
+                                <li class="dropdown-header"><a href="~/Messages"><span class="glyphicon glyphicon-envelope" style="color: #FFC107;"></span> Hai nuovi Messaggi da leggere!</a></li>
 
-
-
+                            }
+                            else
+                            {
+                                <li><a href="#">Nessuna notifica</a></li>
+                            }
+                        </ul>
                     </li>
+
                 @* Menù profilo *@
                     <li class="dropdown dropdown-large">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
@@ -191,7 +173,6 @@
                             <li><a href="">Vendi</a></li>
                             <li><a href="">Baratta</a></li>
                             <li><a href="">Stai cercando un oggetto in particolare?</a></li>
-                          
                         </ul>
                     </li>
                 }
@@ -240,7 +221,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmbtn">Conferma</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm">Conferma</button>
                     <button type="button" data-dismiss="modal" class="btn">Cancel</button>
                 </div>
             </div>

@@ -1,23 +1,42 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Models;
+using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using static Cianfrusaglie.Constants.CommonFunctions;
+using Cianfrusaglie.Suggestions;
 
-namespace Cianfrusaglie.Controllers {
-    public class HomeController : Controller {
+namespace Cianfrusaglie.Controllers
+{
+    public class HomeController : Controller
+    {
         private readonly ApplicationDbContext _context;
-        public UserManager< User > UserManager;
+        public UserManager<User> UserManager;
+        public RankAlgorithm rankAlgorithm;
 
-        public HomeController( ApplicationDbContext context ) { _context = context; }
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+            rankAlgorithm = new RankAlgorithm(context);
+        }
 
-        public IActionResult Index() {
-            ViewData[ "listImages" ] = _context.ImageUrls.ToList();
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.OrderByDescending( u => u.PublishDate ).Take( 4 ).ToList();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+        public IActionResult Index()
+        {
+            ViewData["listImages"] = _context.ImageUrls.ToList();
+            ViewData["listUsers"] = _context.Users.ToList();
+
+            if (!LoginChecker.HasLoggedUser(this))
+            {
+                ViewData["listAnnounces"] = _context.Announces.OrderByDescending(u => u.PublishDate).Take(4).ToList();
+            }
+            else
+            {
+                var user = _context.Users.Single(u => User.GetUserId().Equals(u.Id));
+                ViewData["listAnnounces"] = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).Take(4).ToList();
+            }
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
@@ -26,7 +45,8 @@ namespace Cianfrusaglie.Controllers {
             return View();
         }
 
-        private void CreateUsers() {
+        private void CreateUsers()
+        {
             // _context.Users.Add(new User() { UserName = "pippopaolo", Email = "pippopaolo@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
             //_context.Users.Add(new User() { UserName = "pippopaolo2", Email = "pippopaolo2@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
             //Context.Users.Add(new User() { UserName = "pippopaolo3", Email = "pippopaolo3@gmail.com", PasswordHash = "fuewvuw4y75w94ywif" });
@@ -131,14 +151,16 @@ namespace Cianfrusaglie.Controllers {
             context.SaveChanges();
         }*/
 
-        public IActionResult About() {
-            ViewData[ "Message" ] = "Your application description page.";
+        public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
 
             return View();
         }
 
-        public IActionResult Contact() {
-            ViewData[ "Message" ] = "Your contact page.";
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
 
             return View();
         }
