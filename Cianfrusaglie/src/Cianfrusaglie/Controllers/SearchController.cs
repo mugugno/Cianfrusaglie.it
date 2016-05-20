@@ -97,7 +97,7 @@ namespace Cianfrusaglie.Controllers {
        public IEnumerable< Announce > DistanceSearch( IEnumerable<Announce> announces, double latitude, double longitude, int range ) {
           return
              announces.Where(
-                a => GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
+                a => GeoCoordinate.GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
        } 
 
        protected bool AreSimilar( string firstString, string secondString ) {
