@@ -147,12 +147,12 @@
                             @if (ViewData["IsThereNewMessage"] as bool? ?? false)
                             {
 
-                                <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span><a href="~/Messages"> Hai nuovi Messaggi da leggere!</a></li>
+                                <li class="dropdown-header"><a href="~/Messages"><span class="glyphicon glyphicon-envelope" style="color: #FFC107;"></span> Hai nuovi Messaggi da leggere!</a></li>
 
                             }
                             else
                             {
-                                <li class="dropdown-header">Nessuna notifica</li>
+                                <li><a href="#">Nessuna notifica</a></li>
                             }
                         </ul>
                     </li>

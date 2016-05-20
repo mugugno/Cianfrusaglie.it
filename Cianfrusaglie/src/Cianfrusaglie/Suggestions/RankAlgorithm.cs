@@ -28,7 +28,7 @@ namespace Cianfrusaglie.Suggestions
         public int calculateRank(Announce announce, User user) {
             int score = calculateDistanceScore( announce, user ) + calculateMatchedCategoriesScore( announce, user ) + calculateMatchedGatsScore( announce, user );
             int rank = score * calculateFeedbackMultiplier( announce );
-            return 3;
+            return rank;
         }
 
         public int calculateFeedbackMultiplier(Announce announce)
