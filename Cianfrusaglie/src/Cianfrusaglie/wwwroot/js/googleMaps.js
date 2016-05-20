@@ -35,7 +35,7 @@ function initializeGMaps(position, onlyView, radius) {
     if( !onlyView ) { //parte di input della posizione e click utente per riposizionare il marker
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[ google.maps.ControlPosition.TOP_LEFT ].push(input);
+       // map.controls[ google.maps.ControlPosition.TOP_LEFT ].push(input);
 
         searchBox.addListener('places_changed', function() {
             var places = searchBox.getPlaces();
