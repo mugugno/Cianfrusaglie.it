@@ -174,6 +174,7 @@ namespace Cianfrusaglie.Controllers {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
             SetViewDataForCreate( vendita );
+            ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             return View();
         }
 
