@@ -267,11 +267,11 @@
     document.getElementById("range-input").value = 1;
     setFieldsVisibility();
 
+    var mapLoaded= false;
+
     function setFieldsVisibility() {
+        $(".category-form-fields").hide(0);
         var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-        var allFormFieldsArray = document.getElementsByClassName("category-form-fields");
-        for( var i = 0; i < allFormFieldsArray.length; i++ )
-            allFormFieldsArray[ i ].style.display = "none";
         for( var i = 0; i < checkboxesArray.length; i++ ) {
             var checkbox = checkboxesArray[ i ];
             if( checkbox.checked ) {
@@ -288,14 +288,14 @@
 
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
-            $('#createError').modal('show');
+            $('#createError').show(0);
             return;
         }
 
         if (document.getElementById("forward-button").innerHTML === "Pubblica") {
             //aggiungiamo al form la posizione di google maps
-            $("#latitudeInput").attr("value", marker.position.lat());
-            $("#longitudeInput").attr("value", marker.position.lng());
+            $("#latitudeInput").val( marker.position.lat() );
+            $("#longitudeInput").val( marker.position.lng() );
 
             document.getElementById("forward-button").setAttribute("type", "submit");
         } else
@@ -305,6 +305,8 @@
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
 
+        if (mapLoaded)
+            return;
         @{
            var loggedUser= (User) ViewData[ "loggedUser" ];
         }
@@ -312,6 +314,7 @@
         var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
         var position = new google.maps.LatLng(latitude, longitude);
         initialize(1, position);
+        mapLoaded= true;
     }
 
                                             function clickBackButton() {
