@@ -41,7 +41,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <link href="~/Content/Home.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Register.css" rel="stylesheet" type="text/css" />
+    
     <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/Create.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/SubmitAnnounce.css" rel="stylesheet" type="text/css"/>
@@ -66,10 +66,12 @@
                     <h5>Il posto giusto per le tue cianfrusaglie</h5>
                 </a>
             </div>
-            <div id="barraRicerca" class="form-group">
-                <input name="title" type="text" class="form-control" placeholder="Cerca" size="75">
-                <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-search"></span></button>
-                <br/><a href="#">Ricerca Avanzata</a>
+            <div id="barraRicerca" class="form-group row input-search">
+                <div class="input-block">
+                    <input name="title" type="text" class="form-control" placeholder="Cerca" size="55">
+                    <button type="submit" class="btn btn-warning btn-search"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+                <a href="#">Ricerca Avanzata</a>
             </div>
         </form>
     </div>

@@ -3,17 +3,7 @@
     padding-right: 0px;
 }
 
-#title {
-    float: left;
-    padding-left: 0;
-    padding-right: 0;
-}
 
-#title a {
-    color: #FFC107;
-    text-align: center;
-    text-decoration: none;
-}
 
 .affix {
     top: 0;
@@ -53,6 +43,9 @@
     top: 50%;
     transform: translateY( -50% );
 }
+#linkVendi span, #linkBaratta span {
+    left: -4px;
+}
 
 #linkRegala, #LinkVendi, #linkBaratta {
     color: #333333;
@@ -83,10 +76,6 @@
 .btn-round.btn-sm.card-img {
     position:absolute;
     top:0;
-}
-#horizontalMenu {
-    box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.19 );
-    z-index: 20;
 }
 
 
