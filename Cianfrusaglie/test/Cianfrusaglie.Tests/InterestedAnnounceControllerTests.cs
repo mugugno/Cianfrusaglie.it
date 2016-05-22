@@ -47,5 +47,15 @@ namespace Cianfrusaglie.Tests
             var result = interestedController.Index(announceId);
             Assert.IsType<BadRequestResult>(result);
         }
+
+        [Fact]
+        public void UserChoseInterestedAsChosenOneAndItsOk() {
+            var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+            var interestedController = CreateInterestedAnnounceController(user.Id);
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( SecondUserName ) );
+            
+            interestedController.ChooseUserAsReceiverForAnnounce( user.Id, announce.Id );
+
+        }
     }
 }
