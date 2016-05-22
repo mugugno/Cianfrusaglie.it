@@ -41,6 +41,6 @@ namespace Cianfrusaglie.ViewModels.Account {
         public string Latitude { get; set; }
         public string Longitude { get; set; }
 
-        public List<int> CategoryIdPreferencesUser { get; set; }
+        public Dictionary< int,bool > CategoryDictionary { get; set; }
     }
 }

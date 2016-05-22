@@ -143,14 +143,14 @@
                     <div class="panel-body">
                         <h6>Scegli le tue categorie preferite per avere suggerimenti personalizzati</h6>
                         <br />
-                        <div class="panel-group" id="panel-423221">
+                        <div class="panel-group" id="panel-423221" role="tablist" aria-multiselectable="true">
                 
                             @foreach (var macroCategory in GetMacroCategories())
                             {
                                 <div class="panel panel-default">
-                                    <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
+                                    <div class="panel-heading collapsed" role="tab" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()' >
                                         @macroCategory.Name
-
+                                    </div>
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
                                             <div class="panel-body">
                                                 <div class="form-group">
@@ -159,8 +159,8 @@
                                                         @foreach (var category in GetCategories(macroCategory))
                                                         {
                                                             <div class="checkbox">
-                                                                <label for="@category.Id">
-                                                                    <input class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
+                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                    <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
                                                                     @category.Name
                                                                 </label>
                                                             </div>
@@ -170,7 +170,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                
                             }
 
 

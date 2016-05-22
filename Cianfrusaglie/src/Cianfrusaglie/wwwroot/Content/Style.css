@@ -93,3 +93,7 @@ button { padding: 0; }
 #notificationMenu {
     font-size: 2em;
 }
+
+.inputMargin {
+    margin-bottom: 1em;
+}
