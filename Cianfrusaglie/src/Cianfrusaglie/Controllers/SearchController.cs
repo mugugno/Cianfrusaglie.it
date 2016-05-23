@@ -124,14 +124,15 @@ namespace Cianfrusaglie.Controllers {
       /// confronta 2 stringhe, sono simili se hanno in comune almeno una parola
       /// TODO da migliorare
       /// </summary>
-      /// <param name="firstString"></param>
-      /// <param name="secondString"></param>
+      /// <param name="firstString">stringa sul db</param>
+      /// <param name="secondString">stringa che si stà cercando</param>
       /// <returns></returns>
       protected bool AreSimilar( string firstString, string secondString ) {
          var first = firstString.ToLower().Split( ' ' );
          var second = secondString.ToLower().Split( ' ' );
-         var common = first.Where( s => second.Contains( s ) );
-         return common.Any();
+
+         // meglio StartWith ?
+         return first.Any( f => second.Any( s => f.Contains( s ) ) );
       }
 
       protected override void Dispose( bool disposing ) {
