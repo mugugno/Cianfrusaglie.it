@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.Suggestions;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Internal;
@@ -14,8 +15,12 @@ using static Cianfrusaglie.Constants.CommonFunctions;
 namespace Cianfrusaglie.Controllers {
     public class SearchController : Controller {
         private readonly ApplicationDbContext _context;
+        public RankAlgorithm rankAlgorithm;
 
-        public SearchController( ApplicationDbContext context ) { _context = context; }
+        public SearchController( ApplicationDbContext context ) {
+            _context = context;
+            rankAlgorithm = new RankAlgorithm(context);
+        }
 
         /// <summary>
         /// Restituisce la pagina con i risultati della ricerca.
@@ -25,32 +30,44 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>La View con i risultati della ricerca</returns>
         public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
             ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "lastAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
-            ViewData["listAnnounce"] = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
+            User user = null;
+            if (LoginChecker.HasLoggedUser(this))
+                user = _context.Users.Single(u => User.GetUserId().Equals(u.Id));
+            
+
+
              //TODO QUANDO SI FARANNO I BARATTI
             //ViewData["listExchange"] = _context.Announces.Where();
-            ViewData[ "" +
-                      "for" +
-                      "" +
-                      "mCategories" ] = _context.Categories.ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            if( title == null )
-                title = "";
-            if( categories == null )
+            ViewData["listUsers"] = _context.Users.ToList();
+            ViewData["listImages"] = _context.ImageUrls.ToList();
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            if ( string.IsNullOrEmpty( title ))
+                if (user != null)
+                {
+                    var res = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
+                    return View(res);
+                }
+                else
+                {
+                    var res = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
+                    return View(res);
+
+                }
+            if ( categories == null )
                 categories = new List< int >();
 
             var result = SearchAnnounces( title, categories ).ToList();
 
-           if( LoginChecker.HasLoggedUser(this) && range > 0 ) {
+           if( user != null && range > 0 ) {
               var loggedUser = _context.Users.Single(u => u.Id.Equals( User.GetUserId() ));
-              result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).ToList();
+              result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
            }
 
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listImages" ] = _context.ImageUrls.ToList();
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+
             return View( result );
         }
 
