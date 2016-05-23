@@ -9,7 +9,6 @@ using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Internal;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
@@ -60,7 +59,7 @@ namespace Cianfrusaglie.Controllers {
             if ( categories == null )
                 categories = new List< int >();
 
-            var result = SearchAnnounces( title, categories ).ToList();
+         var result = SearchAnnounces( title, categories ).ToList();
 
            if( user != null && range > 0 ) {
               var loggedUser = _context.Users.Single(u => u.Id.Equals( User.GetUserId() ));
@@ -71,66 +70,93 @@ namespace Cianfrusaglie.Controllers {
             return View( result );
         }
 
-        public IActionResult SearchRedirect( string title, IEnumerable< int > categories ) {
-            return RedirectToAction( "Index", new {title, categories} );
-        }
+      public IActionResult SearchRedirect( string title, IEnumerable< int > categories ) {
+         return RedirectToAction( "Index", new {title, categories} );
+      }
 
 
-        public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
-            Task< IEnumerable< Announce > > categoryTask = null;
-           var catEnum = categories as IList< int > ?? categories.ToList();
-           if( catEnum.Any() )
-                categoryTask = Task.Run( () => CategoryBySearch( catEnum ) );
-            Task< IEnumerable< Announce > > textTask = null;
-            if( title != "" )
-                textTask = Task.Run( () => TitleBasedSearch( title ) );
+      /// <summary>
+      /// Data una stringa titolo e una lista di Id di categorie, ritorna i risultati della ricerca.
+      /// Se titolo == null allora la ricerca è effettuata solo per categoria (e viceversa).
+      /// </summary>
+      /// <param name="title">Titolo che si vuole cercare</param>
+      /// <param name="categories">Lista di Id di categorie da utilizzare nella ricerca</param>
+      /// <returns>Un IEnumerable di Annunci contenenti i risultati della ricerca.</returns>
+      public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
+         Task< IEnumerable< Announce > > categoryTask = null;
+         var catEnum = categories as IList< int > ?? categories.ToList();
+         if( catEnum.Any() )
+            categoryTask = Task.Run( () => CategoryBySearch( catEnum ) );
+         Task< IEnumerable< Announce > > textTask = null;
+         if( title != "" )
+            textTask = Task.Run( () => TitleBasedSearch( title ) );
 
-            var catResults = categoryTask == null ? new List< Announce >() : categoryTask.Result;
-            var textResults = textTask == null ? new List< Announce >() : textTask.Result;
+         var catResults = categoryTask == null ? new List< Announce >() : categoryTask.Result;
+         var textResults = textTask == null ? new List< Announce >() : textTask.Result;
 
-            if( textTask == null || categoryTask == null )
-                return catResults.Union( textResults );
-            return catResults.Intersect( textResults );
-        }
+         if( textTask == null || categoryTask == null )
+            return catResults.Union( textResults );
+         return catResults.Intersect( textResults );
+      }
 
-        public IEnumerable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
-            var catLeafs = new List< int >();
-            foreach( int ci in categories ) {
-                var cat = _context.Categories.Include( p => p.SubCategories ).Single( c => c.Id == ci );
-                if( !cat.SubCategories.Any() )
-                    catLeafs.Add( cat.Id );
-                else
-                    catLeafs.AddRange( cat.SubCategories.Select( c => c.Id ).ToList() );
-            }
+      /// <summary>
+      /// Dato un IEnumerable di Id di Annunci, ritorna i risultati della ricerca per sole categorie.
+      /// In caso una delle categorie sia una Macro, allora la ricerca sarà eseguita anche rispetto alle sue sottocategorie.
+      /// </summary>
+      /// <param name="categories">IEnumerable di Id di categorie</param>
+      /// <returns>IEnumerable di Annunci contenente il risultato della ricerca</returns>
+      public IEnumerable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
+         var catLeafs = new List< int >();
+         foreach( int ci in categories ) {
+            var cat = _context.Categories.Include( p => p.SubCategories ).Single( c => c.Id == ci );
+            if( !cat.SubCategories.Any() )
+               catLeafs.Add( cat.Id );
+            else
+               catLeafs.AddRange( cat.SubCategories.Select( c => c.Id ).ToList() );
+         }
 
-            var announcesCategories = _context.AnnounceCategories.Where( a => catLeafs.Contains( a.CategoryId ) );
-            return announcesCategories.Select( ac => ac.Announce )
-               .Where( announce => !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) ).ToList();
-        }
+         var announcesCategories = _context.AnnounceCategories.Where( a => catLeafs.Contains( a.CategoryId ) );
+         return
+            announcesCategories.Select( ac => ac.Announce ).Where(
+               announce => !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) )
+               .ToList();
+      }
 
+      /// <summary>
+      /// Data una stringa, ritorna i risultati della ricerca basati esclusivamente su tale campo.
+      /// </summary>
+      /// <param name="title">La stringa da utilizzare come confronto</param>
+      /// <returns>IEnumerable di Annunci contenente i risultati della ricerca</returns>
+      public IEnumerable< Announce > TitleBasedSearch( string title ) {
+         return
+            _context.Announces.Where(
+               announce =>
+                  !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) &&
+                  AreSimilar( announce.Title, title ) );
+      }
 
-        public IEnumerable< Announce > TitleBasedSearch( string title ) {
-           return _context.Announces.Where( announce => 
-               !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) && AreSimilar( announce.Title, title ) );
-        }
+      public IEnumerable< Announce > DistanceSearch( IEnumerable< Announce > announces, double latitude,
+         double longitude, int range ) {
+         return announces.Where( a => GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
+      }
 
-       public IEnumerable< Announce > DistanceSearch( IEnumerable<Announce> announces, double latitude, double longitude, int range ) {
-          return
-             announces.Where(
-                a => GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
-       } 
+      /// <summary>
+      /// Date due stringa, esegue dei confronti di tipo inclusivo e ritorna un booleano per indicare se siano o meno simili.
+      /// </summary>
+      /// <param name="firstString">Prima stringa da passare per il confronto</param>
+      /// <param name="secondString">Seconda stringa da passare per il confronto</param>
+      /// <returns>Ritorna vero se le stringhe sono simili, falso al contrario.</returns>
+      protected bool AreSimilar( string firstString, string secondString ) {
+         var first = firstString.ToLower().Split( ' ' );
+         var second = secondString.ToLower().Split( ' ' );
+         var common = first.Where( s => second.Contains( s ) );
+         return common.Any();
+      }
 
-       protected bool AreSimilar( string firstString, string secondString ) {
-            var first = firstString.ToLower().Split( ' ' );
-            var second = secondString.ToLower().Split( ' ' );
-            var common = first.Where( s => second.Contains( s ) );
-            return common.Any();
-        }
-
-        protected override void Dispose( bool disposing ) {
-            if( disposing )
-                _context.Dispose();
-            base.Dispose( disposing );
-        }
-    }
+      protected override void Dispose( bool disposing ) {
+         if( disposing )
+            _context.Dispose();
+         base.Dispose( disposing );
+      }
+   }
 }

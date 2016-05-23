@@ -9,7 +9,7 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+@Html.AntiForgeryToken()
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script src="/js/googleMaps.js" ></script>
 <script>
@@ -218,7 +218,7 @@
 
     <script type="text/javascript">
         
-
+        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
         $('a[name="confirm_levels"]').on('click', function (e) {
             var $form = $(this).closest('form');
             e.preventDefault();
@@ -226,7 +226,10 @@
 
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#confirmbtn', function (err) {
-                    $.get( "/Announces/Interested?AnnounceId=" + tmp,
+                    $.post( "/Announces/Interested", { 
+                        AnnounceId: tmp,
+                        __RequestVerificationToken: antiForgeryToken
+                    },
                             function() {
                                 if( $('.text-det').text() === "Interessato" )
                                     $('.text-det').html("Non sono pi&ugrave; interessato");

@@ -292,6 +292,7 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <param name="announceId"></param>
         /// <returns></returns>
+        [HttpPost, ValidateAntiForgeryToken]
         public bool Interested( int? announceId ) {
             if( announceId == null ) {
                 return false;
