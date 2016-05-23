@@ -234,23 +234,6 @@
     </form>
 </div>
 
-<div class="modal fade" id="createError" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Scegli almeno una categoria!</h4>
-            </div>
-            <div class="modal-body">
-                <p>Devi scegliere almeno una categoria!</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     // TODO spostare tutto in un file js
     $("#announce-navbar").attr("data-offset-top", document.getElementById("pageHeader").offsetHeight);
@@ -278,7 +261,8 @@
 
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
-            $('#createError').show(0);
+            //$('#createError').show(0);
+            //TODO mostrare errore nessuna categoria scelta
             return;
         }
 
