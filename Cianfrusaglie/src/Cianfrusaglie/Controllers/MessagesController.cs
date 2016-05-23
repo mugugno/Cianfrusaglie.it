@@ -80,15 +80,15 @@ namespace Cianfrusaglie.Controllers {
 
         // Redirect dei link "Contatta" negli annunci
         public IActionResult Details( string id = "" ) { return RedirectToAction( "Create", new {id} ); }
- 
-		/// <summary>
-		/// Dato l'Id di un utente, ritorna la View per la creazione di un nuovo messaggio che come destinatario
-		/// ha quell'utente.
-		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun utente, ritorna
-		/// una Http not Found.
-		/// </summary>
-		/// <param>L'id dell'utente al quale mandare un messaggio</param>
-		/// <returns>La view della creazione</returns>
+
+        /// <summary>
+        /// Dato l'Id di un utente, ritorna la View per la creazione di un nuovo messaggio che come destinatario
+        /// ha quell'utente.
+        /// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun utente, ritorna
+        /// una Http not Found.
+        /// </summary>
+        /// <param name="id">L'id dell'utente al quale mandare un messaggio</param>
+        /// <returns>La view della creazione</returns>
         // GET: Messages/Create
         public IActionResult Create( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
@@ -114,7 +114,7 @@ namespace Cianfrusaglie.Controllers {
 		/// Dato un MessageCreateViewModel, crea il messaggio compilando tutti i campi opportuni.
 		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se il modello non è valido, ritorna la View di creazione.
 		/// </summary>
-		/// <param>Il modello con il quale compilare il messaggio</param>
+		/// <param name="messageCreate">Il modello con il quale compilare il messaggio</param>
 		/// <returns>Un redirect alla conversazione con l'utente destinatario'</returns>
         // POST: Messages/Create
         [HttpPost, ValidateAntiForgeryToken]
@@ -149,7 +149,7 @@ namespace Cianfrusaglie.Controllers {
 		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun messaggio, ritorna
 		/// una Http not Found. Se il messaggio da cancellare appartiene ad un altro utente, ritorna una BadRequest.
 		/// </summary>
-		/// <param>L'id del messaggio da cancellare</param>
+		/// <param name="id">L'id del messaggio da cancellare</param>
 		/// <returns>La view della cancellazione</returns>
         // GET: Messages/Delete/5
         [ActionName( "Delete" )]
@@ -162,6 +162,8 @@ namespace Cianfrusaglie.Controllers {
             var message = _context.Messages.SingleOrDefault( m => m.Id == id );
             if( message == null )
                 return HttpNotFound();
+		    if( !message.Sender.Id.Equals( User.GetUserId() ) )
+		        return HttpBadRequest();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
@@ -175,7 +177,7 @@ namespace Cianfrusaglie.Controllers {
 		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun messaggio, ritorna
 		/// una Http not Found.Se il messaggio da cancellare appartiene ad un altro utente, ritorna una BadRequest.
 		/// </summary>
-		/// <param>L'id del messaggio da cancellare</param>
+		/// <param name="id">L'id del messaggio da cancellare</param>
 		/// <returns>La view con la conversazione</returns>
         // POST: Messages/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
@@ -187,6 +189,8 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Gestire qui la HTTP not found
             if( message == null )
                 return HttpNotFound();
+            if (!message.Sender.Id.Equals(User.GetUserId()))
+                return HttpBadRequest();
             _context.Messages.Remove( message );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
