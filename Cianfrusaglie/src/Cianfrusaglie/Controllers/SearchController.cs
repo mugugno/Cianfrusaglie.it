@@ -45,7 +45,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
             if ( string.IsNullOrEmpty( title ))
-                if (user != null)
+                if (user == null)
                 {
                     var res = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
                     return View(res);
