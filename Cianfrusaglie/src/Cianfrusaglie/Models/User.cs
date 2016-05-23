@@ -33,5 +33,6 @@ namespace Cianfrusaglie.Models {
         public virtual ICollection< Message > ReceivedMessages { get; set; }
         public virtual ICollection< FeedBack > SentFeedBacks { get; set; }
         public virtual ICollection< FeedBack > ReceivedFeedBacks { get; set; }
+        public virtual ICollection< AnnounceChosen > ChosenUsers { get; set; }
     }
 }
