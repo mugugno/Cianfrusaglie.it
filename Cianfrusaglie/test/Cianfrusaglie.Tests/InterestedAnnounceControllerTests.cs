@@ -47,5 +47,10 @@ namespace Cianfrusaglie.Tests
             var result = interestedController.Index(announceId);
             Assert.IsType<BadRequestResult>(result);
         }
+
+        [Fact]
+        public void UserChooseInterestedAsChoosenOneAndItsOk() {
+            
+        }
     }
 }

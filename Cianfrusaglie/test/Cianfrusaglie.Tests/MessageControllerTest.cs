@@ -2,13 +2,11 @@
 using System.Linq;
 using Castle.Core.Internal;
 using Cianfrusaglie.Controllers;
-using Cianfrusaglie.Migrations;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels;
 using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
-using static Cianfrusaglie.Tests.BaseTestSetup;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Tests {
@@ -266,8 +264,8 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void UserReceivesMessageAndReceivesNotification() {
             CreateMessages();
-            var userId = Context.Users.SingleOrDefault( u => u.UserName.Equals( SecondUserName ) ).Id;
-            var result = IsThereNewMessage( userId, Context );
+            string userId = Context.Users.SingleOrDefault( u => u.UserName.Equals( SecondUserName ) ).Id;
+            bool result = IsThereNewMessage( userId, Context );
             Assert.True(result);
         }
 
@@ -275,9 +273,9 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void UserVisualizesNewMessageAndNotificationDisappears() {
             CreateMessages();
-            var userId = Context.Users.SingleOrDefault(u => u.UserName.Equals(SecondUserName)).Id;
+            string userId = Context.Users.SingleOrDefault(u => u.UserName.Equals(SecondUserName)).Id;
             var conversations = CreateMessageController( userId ).Index( userId );
-            var result = IsThereNewMessage( userId, Context );
+            bool result = IsThereNewMessage( userId, Context );
             Assert.False( result );
         }
 
