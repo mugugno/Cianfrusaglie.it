@@ -148,7 +148,7 @@
                             @foreach (var macroCategory in GetMacroCategories())
                             {
                                 <div class="panel panel-default">
-                                    <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").show()'>
+                                    <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" href="#category-@macroCategory.Id">
                                         @macroCategory.Name
 
                                         <div id="category-@macroCategory.Id" class="panel-collapse collapse">
