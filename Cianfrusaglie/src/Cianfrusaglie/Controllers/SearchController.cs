@@ -12,8 +12,8 @@ using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
-    public class SearchController : Controller {
-        private readonly ApplicationDbContext _context;
+   public class SearchController : Controller {
+      private readonly ApplicationDbContext _context;
         public RankAlgorithm rankAlgorithm;
 
         public SearchController( ApplicationDbContext context ) {
@@ -21,24 +21,24 @@ namespace Cianfrusaglie.Controllers {
             rankAlgorithm = new RankAlgorithm(context);
         }
 
-        /// <summary>
-        /// Restituisce la pagina con i risultati della ricerca.
-        /// </summary>
-        /// <param name="title">La stringa scritta nella barra di ricerca</param>
-        /// <param name="categories">Le categorie selezionate</param>
-        /// <returns>La View con i risultati della ricerca</returns>
-        public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
-            ViewData[ "listUsers" ] = _context.Users.ToList();
+      /// <summary>
+      /// Restituisce la pagina con i risultati della ricerca.
+      /// </summary>
+      /// <param name="title">La stringa scritta nella barra di ricerca</param>
+      /// <param name="categories">Le categorie selezionate</param>
+      /// <returns>La View con i risultati della ricerca</returns>
+      public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
+         ViewData[ "listUsers" ] = _context.Users.ToList();
             User user = null;
             if (LoginChecker.HasLoggedUser(this))
                 user = _context.Users.Single(u => User.GetUserId().Equals(u.Id));
             
 
 
-             //TODO QUANDO SI FARANNO I BARATTI
-            //ViewData["listExchange"] = _context.Announces.Where();
+         //TODO QUANDO SI FARANNO I BARATTI
+         //ViewData["listExchange"] = _context.Announces.Where();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+         ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData["listUsers"] = _context.Users.ToList();
             ViewData["listImages"] = _context.ImageUrls.ToList();
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
@@ -57,18 +57,18 @@ namespace Cianfrusaglie.Controllers {
 
                 }
             if ( categories == null )
-                categories = new List< int >();
+            categories = new List< int >();
 
          var result = SearchAnnounces( title, categories ).ToList();
 
            if( user != null && range > 0 ) {
               var loggedUser = _context.Users.Single(u => u.Id.Equals( User.GetUserId() ));
               result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
-           }
+         }
 
 
-            return View( result );
-        }
+         return View( result );
+      }
 
       public IActionResult SearchRedirect( string title, IEnumerable< int > categories ) {
          return RedirectToAction( "Index", new {title, categories} );
@@ -143,14 +143,15 @@ namespace Cianfrusaglie.Controllers {
       /// <summary>
       /// Date due stringa, esegue dei confronti di tipo inclusivo e ritorna un booleano per indicare se siano o meno simili.
       /// </summary>
-      /// <param name="firstString">Prima stringa da passare per il confronto</param>
+      /// <param name="firstString">Prima stringa da passare per il confronto (sul db)</param>
       /// <param name="secondString">Seconda stringa da passare per il confronto</param>
       /// <returns>Ritorna vero se le stringhe sono simili, falso al contrario.</returns>
       protected bool AreSimilar( string firstString, string secondString ) {
          var first = firstString.ToLower().Split( ' ' );
          var second = secondString.ToLower().Split( ' ' );
-         var common = first.Where( s => second.Contains( s ) );
-         return common.Any();
+
+         // meglio StartWith ?
+         return first.Any( f => second.Any( s => f.Contains( s ) ) );
       }
 
       protected override void Dispose( bool disposing ) {
