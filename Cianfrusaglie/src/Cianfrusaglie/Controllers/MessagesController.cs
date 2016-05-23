@@ -14,7 +14,11 @@ namespace Cianfrusaglie.Controllers {
 
         public MessagesController( ApplicationDbContext context ) { _context = context; }
 
-        // Dizionario di tutti messaggi, con relativo ricevente, con un dato utente
+        /// <summary>
+        /// ottenere tutte le conversazioni con un utente
+        /// </summary>
+        /// <param name="id">id dell'utente per cui voglio le conversazioni</param>
+        /// <returns>Dizionario di tutti messaggi, con relativo ricevente, con un dato utente</returns>
         public Dictionary< Message, User > GetConversationWithUser( string id ) {
             var dictionary =
                 _context.Messages.Where(
@@ -25,7 +29,9 @@ namespace Cianfrusaglie.Controllers {
             return dictionary.ToDictionary( x => x.m, x => x.m.Receiver );
         }
 
-        // Dizionario di tutte le conversazioni dell'utente loggato
+        /// <summary>
+        /// </summary>
+        /// <returns>Dizionario di tutte le conversazioni dell'utente loggato</returns>
         public Dictionary< User, Dictionary< Message, User > > GetAllConversations() {
             var dictionary =
                 _context.Messages.Where(
