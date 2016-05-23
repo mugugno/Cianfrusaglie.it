@@ -46,7 +46,7 @@ namespace Cianfrusaglie.Controllers
             return View(interestedViewModel);
         }
         //  GET: InterestedAnnounce/?id,announce
-        public void ChooseUserAsReceiverForAnnounce(int user, int announce) {
+        public void ChooseUserAsReceiverForAnnounce(string userId, int announceId) {
             
         }
 
