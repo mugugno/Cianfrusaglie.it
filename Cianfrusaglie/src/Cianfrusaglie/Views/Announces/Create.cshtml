@@ -3,15 +3,14 @@
 @using System.Threading.Tasks
 @using Microsoft.AspNet.JsonPatch.Helpers
 @using Microsoft.AspNet.Mvc.Rendering
-@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
+@using Cianfrusaglie.Models
+@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel
 
 @{
     ViewData["Title"] = "Inserzione Annuncio";
 }
 
-@functions
-{
-
+@functions {
     private IEnumerable< Category > GetMacroCategories() {
         for( int i = 0; i < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); i++ ) {
             var categories = ViewData[ "formMacroCategories" ] as List< Category >;
@@ -30,9 +29,7 @@
     }
 
     private IEnumerable< FormField > GetFormFields() {
-        foreach( var field in (List< FormField >) ViewData[ "formFields" ] ) {
-            yield return field;
-        }
+        return (IEnumerable< FormField >) ViewData[ "formFields" ];
     }
 
     private string StringifyCategoriesFromFormField( int formFieldId ) {
@@ -75,8 +72,7 @@
                                 <div class="panel panel-default" id="sceltaCategorie">
                                     <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
                                 </div>
-                                @foreach (var macroCategory in GetMacroCategories())
-                                {
+                                @foreach (var macroCategory in GetMacroCategories()) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
                                             @macroCategory.Name
@@ -86,8 +82,7 @@
                                                 <div class="form-group">
 
                                                     <div class="col-md-12">
-                                                        @foreach (var category in GetCategories(macroCategory))
-                                                        {
+                                                        @foreach (var category in GetCategories(macroCategory)) {
                                                             <div class="checkbox">
                                                                 <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
                                                                     <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
@@ -113,10 +108,8 @@
                                     </div>
                                     <div class="panel-body">
                                         @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
-                                            foreach (var field in GetFormFields())
-                                            {
-                                                switch (field.Type)
-                                                {
+                                            foreach (var field in GetFormFields()) {
+                                                switch (field.Type) {
                                                     case FormFieldType.checkbox:
                                                         <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                             <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
@@ -147,11 +140,12 @@
 
                                                 }
 
-                                                /*
+                                                @*
                                                 <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                     <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
                                                     <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
-                                                </div>**/
+                                                </div>
+                                                *@
                                             }
                                         }
 
@@ -174,7 +168,7 @@
                                         <div class="form-group">
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
                                             <div class="col-md-7">
-                                                <input asp-for="Title" class="form-control" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text">
+                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text">
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -183,20 +177,18 @@
                                         <div class="form-group">
                                             <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
                                             <div class="col-md-7">
-                                                <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
-
+                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description"></textarea>
                                             </div>
                                         </div>
 
                                         <!-- Prezzo -->
-                                        @if (ViewData["isVendita"] as bool? ?? false)
-                                                    {
+                                        @if (ViewData["isVendita"] as bool? ?? false) {
                                             <div class="form-group">
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
                                                 <div class="col-md-7" >
                                                     <div class="input-group">
 
-                                                        <input type="number" asp-for="Price" class="form-control" id="price" name="Price" />
+                                                        <input type="number" asp-for="Price" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
                                                     </div>
                                                 </div>
@@ -210,7 +202,7 @@
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
-                                                    <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
+                                                    <input asp-for="Range" class="form-control inputMargin" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                                     <span class="input-group-addon">Km</span>
                                                 </div>
                                             </div>
@@ -256,7 +248,6 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
 
