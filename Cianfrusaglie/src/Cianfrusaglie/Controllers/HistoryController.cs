@@ -16,11 +16,19 @@ namespace Cianfrusaglie.Controllers {
          _context = context;
       }
 
+      /// <summary>
+      /// annunci pubblicati dall'utente loggato
+      /// </summary>
+      /// <returns>restituisce annunci pubblicati dall'utente loggato</returns>
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
          var myAnnounces = _context.Announces.Include( p => p.Images ).Where( a => a.AuthorId == User.GetUserId() );
          return myAnnounces;
       } 
 
+      /// <summary>
+      /// per ogni annuncio si ottiene lista id utente interessati
+      /// </summary>
+      /// <returns>Dizionario la cui chiave è l'id dell'annuncio e il valore è la lista degli id degli utenti interessati</returns>
       public Dictionary<int,List<int>> GetInterestedToAnnounces(){
             var announces = GetLoggedUserPublishedAnnounces();
             var dictionary = new Dictionary<int, List<int>>();
@@ -34,6 +42,7 @@ namespace Cianfrusaglie.Controllers {
             return dictionary;
         
       }
+
       /// <summary>
       /// Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro)
       /// </summary>
