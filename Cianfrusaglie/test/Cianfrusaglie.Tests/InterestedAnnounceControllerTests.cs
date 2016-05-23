@@ -49,8 +49,13 @@ namespace Cianfrusaglie.Tests
         }
 
         [Fact]
-        public void UserChooseInterestedAsChoosenOneAndItsOk() {
+        public void UserChoseInterestedAsChosenOneAndItsOk() {
+            var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+            var interestedController = CreateInterestedAnnounceController(user.Id);
+            var announce = Context.Announces.First( a => a.Author.UserName.Equals( SecondUserName ) );
             
+            interestedController.ChooseUserAsReceiverForAnnounce( user.Id, announce.Id );
+
         }
     }
 }
