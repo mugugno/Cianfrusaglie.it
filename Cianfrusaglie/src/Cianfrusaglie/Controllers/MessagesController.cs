@@ -15,9 +15,9 @@ namespace Cianfrusaglie.Controllers {
         public MessagesController( ApplicationDbContext context ) { _context = context; }
 
         /// <summary>
-        /// ottenere tutte le conversazioni con un utente
+        /// Dato un Id di un Utente, restituisce la la conversazione che ha effettuato con l'utente loggato.
         /// </summary>
-        /// <param name="id">id dell'utente per cui voglio le conversazioni</param>
+        /// <param name="id">Id dell'utente per cui voglio le conversazioni</param>
         /// <returns>Dizionario di tutti messaggi, con relativo ricevente, con un dato utente</returns>
         public Dictionary< Message, User > GetConversationWithUser( string id ) {
             var dictionary =
@@ -30,6 +30,8 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
+		/// Ritorna un Dizionario con chiave Utente e valore Dizionario di Messaggio, Utente contenente tutte le conversazioni
+		/// che l'utente loggato ha effettuato.
         /// </summary>
         /// <returns>Dizionario di tutte le conversazioni dell'utente loggato</returns>
         public Dictionary< User, Dictionary< Message, User > > GetAllConversations() {
@@ -42,7 +44,9 @@ namespace Cianfrusaglie.Controllers {
             return dictionary.ToDictionary( x => x.u, x => GetConversationWithUser( x.u.Id ) );
         }
 
-        // Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
+		/// <summary>
+		/// Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
+		/// </summary>
         public void SetMessagesToReadStatus() {
             var unreadMessages =_context.Messages.Where( m => m.Receiver.Id.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
             foreach( var message in unreadMessages ) {
@@ -52,8 +56,14 @@ namespace Cianfrusaglie.Controllers {
             _context.SaveChanges();
 
         }
-
-        // Pagina della chat, con tutte le conversazioni e relativi messaggi
+		
+		/// <summary>
+		/// Dato l'Id di un Utente, ritorna la pagina della chat, con tutte le conversazioni 
+		/// e relativi messaggi con quell'utente
+		/// In caso l'utente non sia loggato, allora ritorna una BadRequest
+		/// </summary>
+		/// <param name="id">Id dell'utente per cui voglio le conversazioni</param>
+		
         // GET: Messages
         public IActionResult Index( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )

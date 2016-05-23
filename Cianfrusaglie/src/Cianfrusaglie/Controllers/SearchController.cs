@@ -56,12 +56,12 @@ namespace Cianfrusaglie.Controllers {
 
 
       /// <summary>
-      /// ricerca per titolo e categoria (compone le varie ricerche)
-      /// se titolo == null allora solo ricerca per categoria e viceversa
+      /// Data una stringa titolo e una lista di Id di categorie, ritorna i risultati della ricerca.
+      /// Se titolo == null allora la ricerca è effettuata solo per categoria (e viceversa).
       /// </summary>
-      /// <param name="title">titolo annuncio</param>
-      /// <param name="categories">lista di categorie</param>
-      /// <returns></returns>
+      /// <param name="title">Titolo che si vuole cercare</param>
+      /// <param name="categories">Lista di Id di categorie da utilizzare nella ricerca</param>
+      /// <returns>Un IEnumerable di Annunci contenenti i risultati della ricerca.</returns>
       public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
          Task< IEnumerable< Announce > > categoryTask = null;
          var catEnum = categories as IList< int > ?? categories.ToList();
@@ -80,11 +80,11 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// ricerca per annunci le cui categorie sono contenute in categories
-      /// se c'è una macro categoria in categories viene espansa con le sue sotto categorie
+      /// Dato un IEnumerable di Id di Annunci, ritorna i risultati della ricerca per sole categorie.
+      /// In caso una delle categorie sia una Macro, allora la ricerca sarà eseguita anche rispetto alle sue sottocategorie.
       /// </summary>
-      /// <param name="categories">lista id delle categorie</param>
-      /// <returns></returns>
+      /// <param name="categories">IEnumerable di Id di categorie</param>
+      /// <returns>IEnumerable di Annunci contenente il risultato della ricerca</returns>
       public IEnumerable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
          var catLeafs = new List< int >();
          foreach( int ci in categories ) {
@@ -103,10 +103,10 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// ricerca per titolo non ancora "furba"
+      /// Data una stringa, ritorna i risultati della ricerca basati esclusivamente su tale campo.
       /// </summary>
-      /// <param name="title"></param>
-      /// <returns></returns>
+      /// <param name="title">La stringa da utilizzare come confronto</param>
+      /// <returns>IEnumerable di Annunci contenente i risultati della ricerca</returns>
       public IEnumerable< Announce > TitleBasedSearch( string title ) {
          return
             _context.Announces.Where(
@@ -121,12 +121,11 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// confronta 2 stringhe, sono simili se hanno in comune almeno una parola
-      /// TODO da migliorare
+      /// Date due stringa, esegue dei confronti di tipo inclusivo e ritorna un booleano per indicare se siano o meno simili.
       /// </summary>
-      /// <param name="firstString"></param>
-      /// <param name="secondString"></param>
-      /// <returns></returns>
+      /// <param name="firstString">Prima stringa da passare per il confronto</param>
+      /// <param name="secondString">Seconda stringa da passare per il confronto</param>
+      /// <returns>Ritorna vero se le stringhe sono simili, falso al contrario.</returns>
       protected bool AreSimilar( string firstString, string secondString ) {
          var first = firstString.ToLower().Split( ' ' );
          var second = secondString.ToLower().Split( ' ' );
