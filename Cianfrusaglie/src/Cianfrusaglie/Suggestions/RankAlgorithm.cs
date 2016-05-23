@@ -27,16 +27,17 @@ namespace Cianfrusaglie.Suggestions
 
         public int calculateRank(Announce announce, User user) {
             int score = calculateDistanceScore( announce, user ) + calculateMatchedCategoriesScore( announce, user ) + calculateMatchedGatsScore( announce, user );
-            int rank = score * calculateFeedbackMultiplier( announce );
-            return rank;
+            double multiplier = calculateFeedbackMultiplier( announce );
+            double rank = score * (multiplier <= 0.01 ? 1 : multiplier);
+            return (int) rank;
         }
 
-        public int calculateFeedbackMultiplier(Announce announce)
+        public double calculateFeedbackMultiplier(Announce announce)
         {
             var userFeedbackVotes = _context.FeedBacks.Where(a => a.Receiver.Equals( announce.Author ));
             int userFeedbackSum = userFeedbackVotes.Sum( f => f.Vote );
             var userFeedbackMean = userFeedbackSum / Math.Max(userFeedbackVotes.Count(), 1);
-            return (int) (userFeedbackMean * Math.Sqrt( userFeedbackSum));
+            return userFeedbackMean * Math.Sqrt( userFeedbackSum);
         }
 
         public int calculateDistanceScore( Announce announce, User user ) {

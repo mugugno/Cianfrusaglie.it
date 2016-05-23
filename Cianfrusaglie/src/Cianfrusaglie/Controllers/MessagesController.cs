@@ -15,9 +15,9 @@ namespace Cianfrusaglie.Controllers {
         public MessagesController( ApplicationDbContext context ) { _context = context; }
 
         /// <summary>
-        /// ottenere tutte le conversazioni con un utente
+        /// Dato un Id di un Utente, restituisce la la conversazione che ha effettuato con l'utente loggato.
         /// </summary>
-        /// <param name="id">id dell'utente per cui voglio le conversazioni</param>
+        /// <param name="id">Id dell'utente per cui voglio le conversazioni</param>
         /// <returns>Dizionario di tutti messaggi, con relativo ricevente, con un dato utente</returns>
         public Dictionary< Message, User > GetConversationWithUser( string id ) {
             var dictionary =
@@ -30,6 +30,8 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
+		/// Ritorna un Dizionario con chiave Utente e valore Dizionario di Messaggio, Utente contenente tutte le conversazioni
+		/// che l'utente loggato ha effettuato.
         /// </summary>
         /// <returns>Dizionario di tutte le conversazioni dell'utente loggato</returns>
         public Dictionary< User, Dictionary< Message, User > > GetAllConversations() {
@@ -42,7 +44,9 @@ namespace Cianfrusaglie.Controllers {
             return dictionary.ToDictionary( x => x.u, x => GetConversationWithUser( x.u.Id ) );
         }
 
-        // Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
+		/// <summary>
+		/// Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
+		/// </summary>
         public void SetMessagesToReadStatus() {
             var unreadMessages =_context.Messages.Where( m => m.Receiver.Id.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
             foreach( var message in unreadMessages ) {
@@ -52,8 +56,13 @@ namespace Cianfrusaglie.Controllers {
             _context.SaveChanges();
 
         }
-
-        // Pagina della chat, con tutte le conversazioni e relativi messaggi
+		
+		/// <summary>
+		/// Dato l'Id di un Utente, ritorna la pagina della chat, con tutte le conversazioni 
+		/// e relativi messaggi con quell'utente
+		/// In caso l'utente non sia loggato, allora ritorna una BadRequest
+		/// </summary>
+		/// <param name="id">Id dell'utente per cui voglio le conversazioni</param>
         // GET: Messages
         public IActionResult Index( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
@@ -72,7 +81,14 @@ namespace Cianfrusaglie.Controllers {
         // Redirect dei link "Contatta" negli annunci
         public IActionResult Details( string id = "" ) { return RedirectToAction( "Create", new {id} ); }
 
-        // Pagina di invio di un messaggio a un dato utente
+        /// <summary>
+        /// Dato l'Id di un utente, ritorna la View per la creazione di un nuovo messaggio che come destinatario
+        /// ha quell'utente.
+        /// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun utente, ritorna
+        /// una Http not Found.
+        /// </summary>
+        /// <param name="id">L'id dell'utente al quale mandare un messaggio</param>
+        /// <returns>La view della creazione</returns>
         // GET: Messages/Create
         public IActionResult Create( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
@@ -94,6 +110,12 @@ namespace Cianfrusaglie.Controllers {
             return View();
         }
 
+		/// <summary>
+		/// Dato un MessageCreateViewModel, crea il messaggio compilando tutti i campi opportuni.
+		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se il modello non è valido, ritorna la View di creazione.
+		/// </summary>
+		/// <param name="messageCreate">Il modello con il quale compilare il messaggio</param>
+		/// <returns>Un redirect alla conversazione con l'utente destinatario'</returns>
         // POST: Messages/Create
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create( MessageCreateViewModel messageCreate ) {
@@ -122,6 +144,13 @@ namespace Cianfrusaglie.Controllers {
             return View( messageCreate );
         }
 
+		/// <summary>
+		/// Dato l'Id di un messaggio, ritorna la View per la cancellazione di un messaggio.
+		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun messaggio, ritorna
+		/// una Http not Found. Se il messaggio da cancellare appartiene ad un altro utente, ritorna una BadRequest.
+		/// </summary>
+		/// <param name="id">L'id del messaggio da cancellare</param>
+		/// <returns>La view della cancellazione</returns>
         // GET: Messages/Delete/5
         [ActionName( "Delete" )]
         public IActionResult Delete( int? id ) {
@@ -133,6 +162,8 @@ namespace Cianfrusaglie.Controllers {
             var message = _context.Messages.SingleOrDefault( m => m.Id == id );
             if( message == null )
                 return HttpNotFound();
+		    if( !message.Sender.Id.Equals( User.GetUserId() ) )
+		        return HttpBadRequest();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
             ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
@@ -141,6 +172,13 @@ namespace Cianfrusaglie.Controllers {
             return View( message );
         }
 
+		/// <summary>
+		/// Dato l'Id di un messaggio, ritorna la View con la conversazione dopo che il messaggio in questione è stato cancellato.
+		/// Se non c'è alcun utente loggato, ritorna una BadRequest. Se l'Id non corrisponde ad alcun messaggio, ritorna
+		/// una Http not Found.Se il messaggio da cancellare appartiene ad un altro utente, ritorna una BadRequest.
+		/// </summary>
+		/// <param name="id">L'id del messaggio da cancellare</param>
+		/// <returns>La view con la conversazione</returns>
         // POST: Messages/Delete/5
         [HttpPost, ActionName( "Delete" ), ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed( int id ) {
@@ -151,6 +189,8 @@ namespace Cianfrusaglie.Controllers {
             //TODO: Gestire qui la HTTP not found
             if( message == null )
                 return HttpNotFound();
+            if (!message.Sender.Id.Equals(User.GetUserId()))
+                return HttpBadRequest();
             _context.Messages.Remove( message );
             _context.SaveChanges();
             return RedirectToAction( "Index" );
