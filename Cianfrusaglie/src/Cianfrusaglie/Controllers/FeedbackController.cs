@@ -24,14 +24,9 @@ namespace Cianfrusaglie.Controllers
             return announce != null && announce.Interested.Any( interested => interested.UserId == userId );
         }
 
-        private bool IsUserTheLastChoosenForTheAnnounce( int announceId, string userId ) {
+        private bool IsUserChoosenForTheAnnounce( int announceId, string userId ) {
             var announce = _context.Announces.Include( a => a.ChosenUsers ).SingleOrDefault(a => a.Id == announceId);
-            if( announce == null )
-                return false;
-            {
-                var lastChoosenUser = announce.ChosenUsers.OrderByDescending( a => a.ChosenDateTime ).FirstOrDefault();
-                return lastChoosenUser != null && lastChoosenUser.ChosenUser.Id == userId;
-            }
+            return announce != null && announce.ChosenUsers.Any( chosen => chosen.ChosenUserId == userId );
         }
 
         // GET: Feedback
@@ -77,26 +72,24 @@ namespace Cianfrusaglie.Controllers
                 if (!LoginChecker.HasLoggedUser(this))
                     return HttpBadRequest();
                 var announce = feedBack.Announce;
-                if( announce != null ) {
-                    if( feedBack.Author.Id == announce.AuthorId ) {
-                        //autore da feedback a prescelto
-                        if( IsUserTheLastChoosenForTheAnnounce( announce.Id, feedBack.Receiver.Id ) ) {
-                            _context.FeedBacks.Add(feedBack);
-                            _context.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                    }
-                    if( IsUserInterestedToAnnounce( announce.Id, feedBack.Author.Id ) ) {
-                        //interessato da feedback ad annuncio (autore dell'annuncio)
-                        if( announce.AuthorId == feedBack.Receiver.Id ) {
-                            _context.FeedBacks.Add(feedBack);
-                            _context.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                    }
+                if( announce == null )
                     return new BadRequestResult();
+                if( feedBack.Author.Id == announce.AuthorId ) {
+                    //autore da feedback a prescelto
+                    if( IsUserChoosenForTheAnnounce( announce.Id, feedBack.Receiver.Id ) ) {
+                        _context.FeedBacks.Add(feedBack);
+                        _context.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
-                return new BadRequestResult();
+                if( !IsUserInterestedToAnnounce( announce.Id, feedBack.Author.Id ) )
+                    return new BadRequestResult();
+                //interessato da feedback ad annuncio (autore dell'annuncio)
+                if( announce.AuthorId != feedBack.Receiver.Id )
+                    return new BadRequestResult();
+                _context.FeedBacks.Add(feedBack);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
             ViewData["AnnounceId"] = new SelectList(_context.Announces, "Id", "Announce", feedBack.AnnounceId);
             return View(feedBack);
