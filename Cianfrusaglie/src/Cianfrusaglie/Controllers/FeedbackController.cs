@@ -70,7 +70,7 @@ namespace Cianfrusaglie.Controllers
                     {
                         _context.FeedBacks.Add(feedBack);
                         _context.SaveChanges();
-                        return RedirectToAction("Index");
+                        return RedirectToAction("InterestedAnnounce",new {id=announce.Id});
                     }
                 }
                 if (!IsUserInterestedToAnnounce(announce.Id, feedBack.Author.Id))
@@ -80,7 +80,7 @@ namespace Cianfrusaglie.Controllers
                     return new BadRequestResult();
                 _context.FeedBacks.Add(feedBack);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("InterestedAnnounce", new { id = announce.Id });
             }
             CommonFunctions.SetRootLayoutViewData(this, _context);
             return RedirectToAction("Create", new { announceId = feedBack.AnnounceId, receiverId = feedBack.ReceiverId });
