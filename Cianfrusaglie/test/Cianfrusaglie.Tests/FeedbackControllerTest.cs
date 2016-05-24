@@ -34,10 +34,14 @@ namespace Cianfrusaglie.Tests
             Context.SaveChanges();
         }
 
-        private void SetUserInterestedToAnnounceAndChoosen( Announce announce, User user ) {
+        private void SetUserInterestedToAnnounceAndChoosen( Announce announce, User user, int daysToSubstractToChoosenDateTime ) {
             SetUserInterestedToAnnounce( announce, user );
             var interestedUser = Context.Interested.Single( i => i.User.Equals( user ) );
-            interestedUser.ChooseDate = DateTime.Now;
+            Context.AnnounceChosenUsers.Add( new AnnounceChosen {
+                Announce = announce,
+                ChosenDateTime = DateTime.Now - new TimeSpan(daysToSubstractToChoosenDateTime, 0, 0, 0),
+                ChosenUser = interestedUser.User
+            } );
             Context.SaveChanges();
         }
 
@@ -53,14 +57,28 @@ namespace Cianfrusaglie.Tests
         }
 
         [Fact]
-        public void AuthorGivesFeedbackToChoosenUserAndIsOk() {
+        public void AuthorGivesFeedbackToLastChoosenUserAndIsOk() {
             var announce = Context.Announces.Include(a => a.Interested).First(a => a.Closed == false && a.DeadLine == null && a.Author.UserName.Equals(FirstUserName));
             var author = announce.Author;
-            var interestedUser = Context.Users.First(u => !u.UserName.Equals(FirstUserName));
-            SetUserInterestedToAnnounceAndChoosen( announce, interestedUser );
+            var choosenUser = Context.Users.First(u => !u.UserName.Equals(FirstUserName));
+            SetUserInterestedToAnnounceAndChoosen( announce, choosenUser, 0 );
             var feedbackController = CreateFeedbackController( author.Id );
-            var actionResult = feedbackController.Create( CreateNewFeedback( announce, author, interestedUser ) );
+            var actionResult = feedbackController.Create( CreateNewFeedback( announce, author, choosenUser ) );
             Assert.IsType< RedirectToActionResult >( actionResult );
+        }
+
+        [Fact]
+        public void AuthorGivesFeedbackToNotLastChoosenUserAndFails()
+        {
+            var announce = Context.Announces.Include(a => a.Interested).First(a => a.Closed == false && a.DeadLine == null && a.Author.UserName.Equals(FirstUserName));
+            var author = announce.Author;
+            var choosenUser = Context.Users.First(u => !u.UserName.Equals(FirstUserName));
+            SetUserInterestedToAnnounceAndChoosen(announce, choosenUser, 0);
+            var notChoosenUser = Context.Users.First(u => !u.UserName.Equals(FirstUserName) && !u.UserName.Equals( choosenUser.UserName ));
+            SetUserInterestedToAnnounceAndChoosen(announce, notChoosenUser, 1);
+            var feedbackController = CreateFeedbackController(author.Id);
+            var actionResult = feedbackController.Create(CreateNewFeedback(announce, author, notChoosenUser));
+            Assert.IsType<BadRequestResult>(actionResult);
         }
 
         [Fact]
