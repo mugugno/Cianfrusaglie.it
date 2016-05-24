@@ -59,10 +59,11 @@ namespace Cianfrusaglie.Controllers
         }
 
         // GET: Feedback/Create
-        public IActionResult Create(int announceId, string receiverId)
-        {
-            ViewData["AnnounceId"] = announceId;
-            ViewData["ReceiverId"] = receiverId;
+        public IActionResult Create(int announceId, string receiverId) {
+            var announce = _context.Announces.Single( a => a.Id.Equals( announceId ) );
+            var user = _context.Users.Single( u => u.Id.Equals( receiverId ) );
+            ViewData["announce"] = announce;
+            ViewData["receiver"] = user;
             return View();
         }
 
