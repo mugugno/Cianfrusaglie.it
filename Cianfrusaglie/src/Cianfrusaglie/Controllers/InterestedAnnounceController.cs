@@ -24,7 +24,7 @@ namespace Cianfrusaglie.Controllers
 
         // GET: InterestedAnnounce
         public IActionResult Index(int id) {
-            var announce = _context.Announces.SingleOrDefault( a => a.Id == id );
+            var announce = _context.Announces.Include( a=>a.ChosenUsers ).SingleOrDefault( a => a.Id == id );
             if( announce == null )
                 return HttpNotFound();
             if( !LoginChecker.HasLoggedUser( this ) )
@@ -42,8 +42,13 @@ namespace Cianfrusaglie.Controllers
             ViewData["IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
 
-
-
+            var chosen = announce.ChosenUsers.OrderByDescending( u => u.ChosenDateTime ).FirstOrDefault();
+            if( chosen != null ) {
+                ViewData["chosenUserId"] = chosen.ChosenUserId;
+                ViewData["allOthersChosenUserId"] = announce.ChosenUsers.Where(u => !u.ChosenUserId.Equals(chosen.ChosenUserId)).Select(u => u.Id);
+            }
+               
+           
             return View(interestedViewModel);
         }
         //  GET: InterestedAnnounce/?userId,announceId
