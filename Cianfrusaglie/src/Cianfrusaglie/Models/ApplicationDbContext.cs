@@ -105,9 +105,9 @@ namespace Cianfrusaglie.Models {
             builder.Entity< User >().HasIndex( u => u.UserName ).IsUnique( true );
             builder.Entity< User >().HasIndex( u => u.Email ).IsUnique( true );
 
-            
-            
 
-        }
+           builder.Entity< UserCategoryPreferences >().HasOne( uc => uc.User ).WithMany( u => u.CategoryPreferenceses ).OnDelete(
+                DeleteBehavior.Restrict );
+      }
     }
 }

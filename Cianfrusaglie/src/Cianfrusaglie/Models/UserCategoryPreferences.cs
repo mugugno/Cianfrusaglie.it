@@ -5,22 +5,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cianfrusaglie.Models
-{
-    public class UserCategoryPreferences
-    {
+namespace Cianfrusaglie.Models {
+    public class UserCategoryPreferences {
         public virtual int Id { get; set; }
     
-        [ForeignKey("User")]
-        [Required]
+        [Required, ForeignKey( "User")]
         public virtual string UserId { get; set; }
 
+        [Required]
         public virtual User User { get; set; }
         
         [ForeignKey("Category")]
-        [Required]
         public virtual int CategoryId { get; set; }
 
+        [Required]
         public virtual Category Category { get; set; }
     }
 }
