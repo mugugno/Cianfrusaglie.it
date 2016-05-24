@@ -14,6 +14,14 @@
         }
     }
 
+    public IEnumerable<Announce> GetSuggestedAnnounce()
+    {
+        foreach (var announce in ViewData["listSuggestedAnnounces"] as List<Announce>)
+        {
+            yield return announce;
+        }
+    }
+
     /*public IEnumerable<Category> GetAnnounceCategories(int announceId)
     {
         foreach (var cat in ViewData["listCategory"] as List<Category>)
@@ -125,76 +133,126 @@
 
         <hr/>
 
-        <div class="container">
-            <!-- Carousel 4 annunci presi dal DB  -->
-            <div class="row">
-                <br /><br />
-                @foreach (var annuncio in GetAnnounce())
-            {
-                    <div class="col-sm-5 col-md-4">
-                        
-                        <div class="col-item" >
-                            
-                            <div class="photo">
-                                <img src="@GetImages(@annuncio.Id)" class="img-responsive" />
+    <div class="container" >
+        <h3>Annunci Recenti</h3>
+        <!-- Mostra i 3 annunci più recenti -->
+        <div class="row" >
+            <br /><br />
+            @foreach( var annuncio in GetAnnounce() ) {
+                <div class="col-sm-5 col-md-4" >
+
+                    <div class="col-item" >
+
+                        <div class="photo" >
+                            <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                        </div>
+
+                        <div class="info" >
+
+
+                            <h3>
+                                @annuncio.Title
+                            </h3>
+                            @if( @annuncio.Price == 0 ) {
+                                <h5 class="price-text-color" >IN REGALO</h5>
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                            } else {
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                            }
+
+
+                            <div class="price" >
+                                <h5>Autore: @GetAutore( @annuncio.AuthorId ).UserName</h5>
+                                <br />
                             </div>
-
-                            <div class="info">
-
-
-                                <h3>
-                                    @annuncio.Title
-                                </h3>
-                                @if (@annuncio.Price == 0)
-                                {
-                                   <h5 class="price-text-color">IN REGALO</h5>
-                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                                }
-                                else
-                                {
-                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                    <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
-                                }
-
-
-                                <div class="price">
-                                    <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
-                                    <br />
-                                </div>
-                                <div class="separator clear-left">
-                                    @if (!User.Identity.IsAuthenticated)
-                                    {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
+                            <div class="separator clear-left" >
+                                @if( !User.Identity.IsAuthenticated ) {
+                                    <p class="btn-add" >
+                                        <i class="fa fa-shopping-cart" ></i>
+                                        <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
+                                    </p>
+                                    <p class="btn-details" >
+                                        <i class="fa fa-list" ></i><a href="#" data-toggle="modal" data-target="#myWindow" class="" >Contatta</a>
+                                    </p>
+                                } else {
+                                    <p class="btn-add" >
+                                        <i class="fa fa-shopping-cart" ></i>
+                                        <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
+                                    </p>
+                                    if( annuncio.AuthorId != User.GetUserId() ) {
+                                        <p class="btn-details" >
+                                            <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
                                         </p>
-                                            <p class="btn-details">
-                                                <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
-                                            </p>
                                     }
-                                    else
-                                    {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="~/Announces/Details/?id=@annuncio.Id" class="">Dettagli</a>
-                                        </p>
-                                        if (annuncio.AuthorId != User.GetUserId())
-                                        {
-                                            <p class="btn-details">
-                                                <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
-                                            </p>
-                                        }
-                                    }
-                                </div>
-                                <div class="clearfix"></div>
+                                }
                             </div>
+                            <div class="clearfix" ></div>
                         </div>
                     </div>
-                }
+                </div>
+            }
 
-            </div>
+            <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
+            <h3>Annunci Suggeriti</h3>
+            @foreach( var annuncio in GetSuggestedAnnounce() ) {
+                <div class="col-sm-5 col-md-4" >
+
+                    <div class="col-item" >
+
+                        <div class="photo" >
+                            <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                        </div>
+
+                        <div class="info" >
+
+
+                            <h3>
+                                @annuncio.Title
+                            </h3>
+                            @if( @annuncio.Price == 0 ) {
+                                <h5 class="price-text-color" >IN REGALO</h5>
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                            } else {
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                            }
+
+
+                            <div class="price" >
+                                <h5>Autore: @GetAutore( @annuncio.AuthorId ).UserName</h5>
+                                <br />
+                            </div>
+                            <div class="separator clear-left" >
+                                @if( !User.Identity.IsAuthenticated ) {
+                                    <p class="btn-add" >
+                                        <i class="fa fa-shopping-cart" ></i>
+                                        <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
+                                    </p>
+                                    <p class="btn-details" >
+                                        <i class="fa fa-list" ></i><a href="#" data-toggle="modal" data-target="#myWindow" class="" >Contatta</a>
+                                    </p>
+                                } else {
+                                    <p class="btn-add" >
+                                        <i class="fa fa-shopping-cart" ></i>
+                                        <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
+                                    </p>
+                                    if( annuncio.AuthorId != User.GetUserId() ) {
+                                        <p class="btn-details" >
+                                            <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
+                                        </p>
+                                    }
+                                }
+                            </div>
+                            <div class="clearfix" ></div>
+                        </div>
+                    </div>
+                </div>
+            }
 
         </div>
+
+    </div>
 
         
 

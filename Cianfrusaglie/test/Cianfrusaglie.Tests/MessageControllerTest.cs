@@ -2,13 +2,11 @@
 using System.Linq;
 using Castle.Core.Internal;
 using Cianfrusaglie.Controllers;
-using Cianfrusaglie.Migrations;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels;
 using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
-using static Cianfrusaglie.Tests.BaseTestSetup;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Tests {
@@ -117,7 +115,6 @@ namespace Cianfrusaglie.Tests {
             var userTest1 = Context.Users.Single( u => u.UserName == FirstUserName );
             var userTest2 = Context.Users.Single( u => u.UserName == SecondUserName );
             var userTest3 = Context.Users.Single( u => u.UserName == ThirdUserName );
-            ;
 
             //creo messaggio tra user 1 e user 2
             var messageTest1 = new Message {Receiver = userTest2, Sender = userTest1, Text = "Sono bellissimo e tu no"};
@@ -267,8 +264,8 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void UserReceivesMessageAndReceivesNotification() {
             CreateMessages();
-            var userId = Context.Users.SingleOrDefault( u => u.UserName.Equals( SecondUserName ) ).Id;
-            var result = IsThereNewMessage( userId, Context );
+            string userId = Context.Users.SingleOrDefault( u => u.UserName.Equals( SecondUserName ) ).Id;
+            bool result = IsThereNewMessage( userId, Context );
             Assert.True(result);
         }
 
@@ -276,10 +273,33 @@ namespace Cianfrusaglie.Tests {
         [Fact]
         public void UserVisualizesNewMessageAndNotificationDisappears() {
             CreateMessages();
-            var userId = Context.Users.SingleOrDefault(u => u.UserName.Equals(SecondUserName)).Id;
+            string userId = Context.Users.SingleOrDefault(u => u.UserName.Equals(SecondUserName)).Id;
             var conversations = CreateMessageController( userId ).Index( userId );
-            var result = IsThereNewMessage( userId, Context );
+            bool result = IsThereNewMessage( userId, Context );
             Assert.False( result );
+        }
+
+        [Fact]
+        public void UserTriesToViewDeletionPageOfMessageOfOthersAndFails() {
+            CreateMessages();
+            var user = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+            var message = Context.Messages.First( u => u.Sender.UserName.Equals( FirstUserName ) );
+            var msgController = CreateMessageController( user.Id );
+            var result = msgController.Delete( message.Id );
+            Assert.IsType<BadRequestResult>( result );
+
+        }
+
+        [Fact]
+        public void UserTriesToConfirmDeletionPageOfMessageOfOthersAndFails()
+        {
+            CreateMessages();
+            var user = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+            var message = Context.Messages.First(u => u.Sender.UserName.Equals(FirstUserName));
+            var msgController = CreateMessageController(user.Id);
+            var result = msgController.DeleteConfirmed(message.Id);
+            Assert.IsType<BadRequestResult>(result);
+
         }
     }
 }

@@ -17,16 +17,16 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// annunci pubblicati dall'utente loggato
+      /// Ritorna un IEnumerable contenente gli annunci dell'utente loggato.
       /// </summary>
-      /// <returns>restituisce annunci pubblicati dall'utente loggato</returns>
+      /// <returns>Restituisce annunci pubblicati dall'utente loggato</returns>
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
          var myAnnounces = _context.Announces.Include( p => p.Images ).Where( a => a.AuthorId == User.GetUserId() );
          return myAnnounces;
       } 
 
       /// <summary>
-      /// per ogni annuncio si ottiene lista id utente interessati
+      /// Ritorna una dizionario contenente gli utenti interessati ad un mio annuncio.
       /// </summary>
       /// <returns>Dizionario la cui chiave è l'id dell'annuncio e il valore è la lista degli id degli utenti interessati</returns>
       public Dictionary<int,List<int>> GetInterestedToAnnounces(){

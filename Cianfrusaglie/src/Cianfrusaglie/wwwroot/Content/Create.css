@@ -22,6 +22,22 @@
     text-align: center;
 }
 
+.nextprev{
+  position:relative;
+  margin-left:25%;
+  margin-right:25%;
+}
+#page1 .col-md-6{
+    padding:0;
+}
+
+#panel-423221{
+    padding-right:1em;
+}
+button .disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
 #create h1 a {
     color: #FFC107;
     text-decoration: none;
@@ -66,6 +82,11 @@
 
 .panel-group { margin-top: 15px; }
 
+#page1, #page2{
+  position:relative;
+  margin-left:25%;
+  margin-right:25%;
+}
 h5 {
     margin-left: 1em;
       /*  font-weight: bold;*/
@@ -84,4 +105,16 @@ h5 {
  padding-right: 2em;*/
  /*border-left: 5px solid black;
  border-right: 5px solid black;*/
+}
+
+
+#forward-button{
+    width:40%;
+    margin-left:2em;
+    float:right;
+}
+
+#back-button{
+    width:40%;
+    float:left;
 }

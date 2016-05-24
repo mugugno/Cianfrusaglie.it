@@ -50,5 +50,7 @@ namespace Cianfrusaglie.Models {
         public virtual ICollection< AnnounceFormFieldsValues > AnnouncesFormFields { get; set; }
 
         public virtual ICollection< FeedBack > FeedBacks { get; set; }
+
+        public virtual ICollection< AnnounceChosen > ChosenUsers { get; set; }
     }
 }

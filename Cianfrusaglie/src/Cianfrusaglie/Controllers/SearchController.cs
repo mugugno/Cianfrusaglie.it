@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.Suggestions;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -13,8 +14,12 @@ using static Cianfrusaglie.Constants.CommonFunctions;
 namespace Cianfrusaglie.Controllers {
    public class SearchController : Controller {
       private readonly ApplicationDbContext _context;
+        public RankAlgorithm rankAlgorithm;
 
-      public SearchController( ApplicationDbContext context ) { _context = context; }
+        public SearchController( ApplicationDbContext context ) {
+            _context = context;
+            rankAlgorithm = new RankAlgorithm(context);
+        }
 
       /// <summary>
       /// Restituisce la pagina con i risultati della ricerca.
@@ -24,29 +29,44 @@ namespace Cianfrusaglie.Controllers {
       /// <returns>La View con i risultati della ricerca</returns>
       public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
          ViewData[ "listUsers" ] = _context.Users.ToList();
-         ViewData[ "lastAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
-         ViewData[ "listAnnounce" ] = _context.Announces.OrderByDescending( u => u.PublishDate ).ToList();
+            User user = null;
+            if (LoginChecker.HasLoggedUser(this))
+                user = _context.Users.Single(u => User.GetUserId().Equals(u.Id));
+            
+
+
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
-         ViewData[ "" + "for" + "" + "mCategories" ] = _context.Categories.ToList();
+            ViewData[ "formCategories" ] = _context.Categories.ToList();
          ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-         if( title == null )
-            title = "";
-         if( categories == null )
+            ViewData["listUsers"] = _context.Users.ToList();
+            ViewData["listImages"] = _context.ImageUrls.ToList();
+            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
+            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
+            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            if ( string.IsNullOrEmpty( title ))
+                if (user == null)
+                {
+                    var res = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
+                    return View(res);
+                }
+                else
+                {
+                    var res = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
+                    return View(res);
+
+                }
+            if ( categories == null )
             categories = new List< int >();
 
          var result = SearchAnnounces( title, categories ).ToList();
 
-         if( LoginChecker.HasLoggedUser( this ) && range > 0 ) {
-            var loggedUser = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
-            result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).ToList();
+           if( user != null && range > 0 ) {
+              var loggedUser = _context.Users.Single(u => u.Id.Equals( User.GetUserId() ));
+              result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
          }
 
-         ViewData[ "listUsers" ] = _context.Users.ToList();
-         ViewData[ "listImages" ] = _context.ImageUrls.ToList();
-         ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-         ViewData[ " IsThereNewInterested" ] = IsThereNewInterested( User.GetUserId(), _context );
-         ViewData[ "IsThereAnyNotification" ] = IsThereAnyNotification( User.GetUserId(), _context );
+
          return View( result );
       }
 
@@ -56,12 +76,12 @@ namespace Cianfrusaglie.Controllers {
 
 
       /// <summary>
-      /// ricerca per titolo e categoria (compone le varie ricerche)
-      /// se titolo == null allora solo ricerca per categoria e viceversa
+      /// Data una stringa titolo e una lista di Id di categorie, ritorna i risultati della ricerca.
+      /// Se titolo == null allora la ricerca è effettuata solo per categoria (e viceversa).
       /// </summary>
-      /// <param name="title">titolo annuncio</param>
-      /// <param name="categories">lista di categorie</param>
-      /// <returns></returns>
+      /// <param name="title">Titolo che si vuole cercare</param>
+      /// <param name="categories">Lista di Id di categorie da utilizzare nella ricerca</param>
+      /// <returns>Un IEnumerable di Annunci contenenti i risultati della ricerca.</returns>
       public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
          Task< IEnumerable< Announce > > categoryTask = null;
          var catEnum = categories as IList< int > ?? categories.ToList();
@@ -80,11 +100,11 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// ricerca per annunci le cui categorie sono contenute in categories
-      /// se c'è una macro categoria in categories viene espansa con le sue sotto categorie
+      /// Dato un IEnumerable di Id di Annunci, ritorna i risultati della ricerca per sole categorie.
+      /// In caso una delle categorie sia una Macro, allora la ricerca sarà eseguita anche rispetto alle sue sottocategorie.
       /// </summary>
-      /// <param name="categories">lista id delle categorie</param>
-      /// <returns></returns>
+      /// <param name="categories">IEnumerable di Id di categorie</param>
+      /// <returns>IEnumerable di Annunci contenente il risultato della ricerca</returns>
       public IEnumerable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
          var catLeafs = new List< int >();
          foreach( int ci in categories ) {
@@ -103,10 +123,10 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// ricerca per titolo non ancora "furba"
+      /// Data una stringa, ritorna i risultati della ricerca basati esclusivamente su tale campo.
       /// </summary>
-      /// <param name="title"></param>
-      /// <returns></returns>
+      /// <param name="title">La stringa da utilizzare come confronto</param>
+      /// <returns>IEnumerable di Annunci contenente i risultati della ricerca</returns>
       public IEnumerable< Announce > TitleBasedSearch( string title ) {
          return
             _context.Announces.Where(
@@ -121,17 +141,17 @@ namespace Cianfrusaglie.Controllers {
       }
 
       /// <summary>
-      /// confronta 2 stringhe, sono simili se hanno in comune almeno una parola
-      /// TODO da migliorare
+      /// Date due stringa, esegue dei confronti di tipo inclusivo e ritorna un booleano per indicare se siano o meno simili.
       /// </summary>
-      /// <param name="firstString"></param>
-      /// <param name="secondString"></param>
-      /// <returns></returns>
+      /// <param name="firstString">Prima stringa da passare per il confronto (sul db)</param>
+      /// <param name="secondString">Seconda stringa da passare per il confronto</param>
+      /// <returns>Ritorna vero se le stringhe sono simili, falso al contrario.</returns>
       protected bool AreSimilar( string firstString, string secondString ) {
          var first = firstString.ToLower().Split( ' ' );
          var second = secondString.ToLower().Split( ' ' );
-         var common = first.Where( s => second.Contains( s ) );
-         return common.Any();
+
+         // meglio StartWith ?
+         return first.Any( f => second.Any( s => f.Contains( s ) ) );
       }
 
       protected override void Dispose( bool disposing ) {

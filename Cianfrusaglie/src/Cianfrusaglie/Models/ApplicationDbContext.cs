@@ -23,6 +23,7 @@ namespace Cianfrusaglie.Models {
         public DbSet< ImageUrl > ImageUrls { get; set; }
         public DbSet< UserGatHistogram > UserGatHistograms { get; set; }
         public DbSet< UserCategoryPreferences > UserCategoryPreferenceses { get; set; }
+        public DbSet< AnnounceChosen > AnnounceChosenUsers { get; set; }
 
         protected override void OnModelCreating( ModelBuilder builder ) {
             base.OnModelCreating( builder );
@@ -105,6 +106,8 @@ namespace Cianfrusaglie.Models {
             builder.Entity< User >().HasIndex( u => u.Email ).IsUnique( true );
 
             
+            
+
         }
     }
 }

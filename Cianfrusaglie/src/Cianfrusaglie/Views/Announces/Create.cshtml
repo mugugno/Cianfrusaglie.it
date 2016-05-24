@@ -3,15 +3,14 @@
 @using System.Threading.Tasks
 @using Microsoft.AspNet.JsonPatch.Helpers
 @using Microsoft.AspNet.Mvc.Rendering
-@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel 
+@using Cianfrusaglie.Models
+@model Cianfrusaglie.ViewModels.Announce.CreateAnnounceViewModel
 
 @{
     ViewData["Title"] = "Inserzione Annuncio";
 }
 
-@functions
-{
-
+@functions {
     private IEnumerable< Category > GetMacroCategories() {
         for( int i = 0; i < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); i++ ) {
             var categories = ViewData[ "formMacroCategories" ] as List< Category >;
@@ -30,9 +29,7 @@
     }
 
     private IEnumerable< FormField > GetFormFields() {
-        foreach( var field in (List< FormField >) ViewData[ "formFields" ] ) {
-            yield return field;
-        }
+        return (IEnumerable< FormField >) ViewData[ "formFields" ];
     }
 
     private string StringifyCategoriesFromFormField( int formFieldId ) {
@@ -54,29 +51,19 @@
 
 <div>
     <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
-        <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15">
-            <div class="panel panel-default" style="margin-left: -15px">
-                <div class="col-md-3">
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-default navbar-btn navbar-left" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
-                    <button class="btn btn-default navbar-btn navbar-right" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
-                </div>
-            </div>
-        </nav>
+        
         
         <div class="panel">
-                <div class="panel-body">
-                 
-                    <div class="row" id="page1">
+                <div class="panel-body"> 
+                    <div  class="row" id="page1">
+                        <div class="panel panel-default" id="sceltaCategorie">
+                            <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
+                        </div>
                         <div class="col-md-6">
 
                             <div class="panel-group" id="panel-423221">
-                                <div class="panel panel-default" id="sceltaCategorie">
-                                    <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
-                                </div>
-                                @foreach (var macroCategory in GetMacroCategories())
-                                {
+                               
+                                @foreach (var macroCategory in GetMacroCategories()) {
                                     <div class="panel panel-default">
                                         <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
                                             @macroCategory.Name
@@ -86,8 +73,7 @@
                                                 <div class="form-group">
 
                                                     <div class="col-md-12">
-                                                        @foreach (var category in GetCategories(macroCategory))
-                                                        {
+                                                        @foreach (var category in GetCategories(macroCategory)) {
                                                             <div class="checkbox">
                                                                 <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
                                                                     <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
@@ -113,10 +99,8 @@
                                     </div>
                                     <div class="panel-body">
                                         @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
-                                            foreach (var field in GetFormFields())
-                                            {
-                                                switch (field.Type)
-                                                {
+                                            foreach (var field in GetFormFields()) {
+                                                switch (field.Type) {
                                                     case FormFieldType.checkbox:
                                                         <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                             <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
@@ -147,11 +131,12 @@
 
                                                 }
 
-                                                /*
+                                                @*
                                                 <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                     <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
                                                     <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
-                                                </div>**/
+                                                </div>
+                                                *@
                                             }
                                         }
 
@@ -159,11 +144,12 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
+                   
                     <div class="row" id="page2" style="display: none;">
-                        <div class="col-md-3">
-                        </div>
-                        <div class="col-md-6">
+
+                        <div class="">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <fieldset>
@@ -174,7 +160,7 @@
                                         <div class="form-group">
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
                                             <div class="col-md-7">
-                                                <input asp-for="Title" class="form-control" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text">
+                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text">
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -183,20 +169,18 @@
                                         <div class="form-group">
                                             <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
                                             <div class="col-md-7">
-                                                <textarea asp-for="Description" class="form-control" id="description" name="description"></textarea>
-
+                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description"></textarea>
                                             </div>
                                         </div>
 
                                         <!-- Prezzo -->
-                                        @if (ViewData["isVendita"] as bool? ?? false)
-                                                    {
+                                        @if (ViewData["isVendita"] as bool? ?? false) {
                                             <div class="form-group">
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
                                                 <div class="col-md-7" >
                                                     <div class="input-group">
 
-                                                        <input type="number" asp-for="Price" class="form-control" id="price" name="Price" />
+                                                        <input type="number" asp-for="Price" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
                                                     </div>
                                                 </div>
@@ -210,7 +194,7 @@
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
-                                                    <input asp-for="Range" class="form-control" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
+                                                    <input asp-for="Range" class="form-control inputMargin" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
                                                     <span class="input-group-addon">Km</span>
                                                 </div>
                                             </div>
@@ -236,28 +220,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="nextprev">
+                        <button class="btn btn-warning" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
+
+                        <button class="btn btn-warning disabled" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
+                    </div>
                 </div>
             </div>
 
     </form>
-</div>
-
-<div class="modal fade" id="createError" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Scegli almeno una categoria!</h4>
-            </div>
-            <div class="modal-body">
-                <p>Devi scegliere almeno una categoria!</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
 </div>
 
 <script>
@@ -284,10 +255,17 @@
 
     // 500 sono i millisecondi di durata della transizione
     var transitionTime = 350;
-
+    $(".category-checkboxes").change(function () {
+        if (!atLeastOneCategorySelected()) {
+            $("#forward-button").addClass("disabled");
+        } else {
+            $("#forward-button").removeClass("disabled");
+        }
+    });
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
-            $('#createError').show(0);
+            //$('#createError').show(0);
+            //TODO mostrare errore nessuna categoria scelta
             return;
         }
 
