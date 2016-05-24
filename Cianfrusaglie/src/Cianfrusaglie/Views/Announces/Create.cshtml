@@ -51,16 +51,7 @@
 
 <div>
     <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
-        <nav class="navbar navbar-default" data-offset-top="60" data-spy="affix" id="announce-navbar" style="z-index: 15">
-            <div class="panel panel-default" style="margin-left: -15px">
-                <div class="col-md-3">
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-default navbar-btn navbar-left" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
-                    <button class="btn btn-default navbar-btn navbar-right" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
-                </div>
-            </div>
-        </nav>
+        
         
         <div class="panel">
                 <div class="panel-body"> 
@@ -153,7 +144,9 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
+                   
                     <div class="row" id="page2" style="display: none;">
 
                         <div class="">
@@ -227,6 +220,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="nextprev">
+                        <button class="btn btn-warning" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
+
+                        <button class="btn btn-warning disabled" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
+                    </div>
                 </div>
             </div>
 
@@ -257,7 +255,13 @@
 
     // 500 sono i millisecondi di durata della transizione
     var transitionTime = 350;
-
+    $(".category-checkboxes").change(function () {
+        if (!atLeastOneCategorySelected()) {
+            $("#forward-button").addClass("disabled");
+        } else {
+            $("#forward-button").removeClass("disabled");
+        }
+    });
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
             //$('#createError').show(0);

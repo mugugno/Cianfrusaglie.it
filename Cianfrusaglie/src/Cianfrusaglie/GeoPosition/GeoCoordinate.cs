@@ -12,10 +12,23 @@ namespace Cianfrusaglie.GeoPosition {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public static double Distance( double Lat1, double Long1, double Lat2, double Long2 ) {
-            return new GeoCoordinate( Lat1, Lat2 ).Distance( new GeoCoordinate( Lat2, Long2 ) );
+        /// <summary>
+        /// Dati latititudine e longitudine di due punti, calcola la distanza tra punti GPS.
+        /// </summary>
+        /// <param name="lat1">Latitudine del primo punto</param>
+        /// <param name="long1">Longitudine del primo punto</param>
+        /// <param name="lat2">Latitudine del secondo punto</param>
+        /// <param name="long2">Longitudine del secondo punto</param>
+        /// <returns></returns>
+        public static double Distance( double lat1, double long1, double lat2, double long2 ) {
+            return new GeoCoordinate( lat1, lat2 ).Distance( new GeoCoordinate( lat2, long2 ) );
         }
 
+        /// <summary>
+        /// Dato un punto GPS, ritorna la distanza in KM.
+        /// </summary>
+        /// <param name="gc">Il punto GPS</param>
+        /// <returns>La distanza in KM</returns>
         public double Distance( GeoCoordinate gc ) {
             if( gc == null )
                 throw new ArgumentNullException();
@@ -31,7 +44,7 @@ namespace Cianfrusaglie.GeoPosition {
             double a = Math.Pow( Math.Sin( dLat / 2 ), 2 ) +
                        Math.Pow( Math.Sin( dLon / 2 ), 2 ) * Math.Cos( lat1 ) * Math.Cos( lat2 );
             double c = 2 * Math.Atan2( Math.Sqrt( a ), Math.Sqrt( 1 - a ) );
-            return 6371 * c;
+            return 6.371 * c;
         }
     }
 }
