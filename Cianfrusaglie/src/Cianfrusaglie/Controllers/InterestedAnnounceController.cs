@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -45,8 +46,27 @@ namespace Cianfrusaglie.Controllers
 
             return View(interestedViewModel);
         }
-        //  GET: InterestedAnnounce/?id,announce
-        public IActionResult ChooseUserAsReceiverForAnnounce(string userId, int announceId) { return null; }
+        //  GET: InterestedAnnounce/?userId,announceId
+        public IActionResult ChooseUserAsReceiverForAnnounce(string userId, int announceId) {
+            var announce = _context.Announces.SingleOrDefault(a => a.Id == announceId);
+            if (announce == null)
+                return HttpNotFound();
+            if ( string.IsNullOrEmpty( userId )) {
+                return HttpBadRequest();
+            }
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
+            if (!announce.AuthorId.Equals(User.GetUserId()))
+                return HttpBadRequest();
+            AnnounceChosen IChooseYou = new AnnounceChosen() {
+                ChosenUserId = userId,
+                AnnounceId = announceId,
+                ChosenDateTime = DateTime.Now,
+            };
+            _context.AnnounceChosenUsers.Add( IChooseYou );
+            _context.SaveChanges();
+            return RedirectToAction( "Index" , new { id=announceId } );
+        }
 
         public void SetInterestedToReadStatus(int id)
         {
