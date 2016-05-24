@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -22,15 +23,16 @@ namespace Cianfrusaglie.Controllers
             var announce = _context.Announces.SingleOrDefault( a => a.Id == announceId );
             return announce != null && announce.Interested.Any( interested => interested.UserId == userId );
         }
-        /*private IEnumerable< Announce > GetUserAnnounces( string userId ) {
-            return _context.Announces.Where( announce => announce.Author.Id.Equals( userId ) );
-        }
 
-        private IEnumerable< Announce > GetUserInterestedAnnounces( string userId ) {
-            return from interested in _context.Interested
-                where interested.UserId == userId
-                select interested.Announce;
-        }*/
+        private bool IsUserTheLastChoosenForTheAnnounce( int announceId, string userId ) {
+            var announce = _context.Announces.Include( a => a.ChosenUsers ).SingleOrDefault(a => a.Id == announceId);
+            if( announce == null )
+                return false;
+            {
+                var lastChoosenUser = announce.ChosenUsers.OrderByDescending( a => a.ChosenDateTime ).FirstOrDefault();
+                return lastChoosenUser != null && lastChoosenUser.ChosenUser.Id == userId;
+            }
+        }
 
         // GET: Feedback
         public IActionResult Index()
@@ -57,9 +59,10 @@ namespace Cianfrusaglie.Controllers
         }
 
         // GET: Feedback/Create
-        public IActionResult Create()
+        public IActionResult Create(int announceId, string receiverId)
         {
-            ViewData["AnnounceId"] = new SelectList(_context.Announces, "Id", "Announce");
+            ViewData["AnnounceId"] = announceId;
+            ViewData["ReceiverId"] = receiverId;
             return View();
         }
 
@@ -75,10 +78,15 @@ namespace Cianfrusaglie.Controllers
                 var announce = feedBack.Announce;
                 if( announce != null ) {
                     if( feedBack.Author.Id == announce.AuthorId ) {
-                        //TODO autore da feedback a prescelto
+                        //autore da feedback a prescelto
+                        if( IsUserTheLastChoosenForTheAnnounce( announce.Id, feedBack.Receiver.Id ) ) {
+                            _context.FeedBacks.Add(feedBack);
+                            _context.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
                     }
                     if( IsUserInterestedToAnnounce( announce.Id, feedBack.Author.Id ) ) {
-                        //caso interessato da feedback ad annuncio (autore dell'annuncio)
+                        //interessato da feedback ad annuncio (autore dell'annuncio)
                         if( announce.AuthorId == feedBack.Receiver.Id ) {
                             _context.FeedBacks.Add(feedBack);
                             _context.SaveChanges();
