@@ -13,9 +13,9 @@
         <dt>Password:</dt>
         <dd>
             @if( Model.HasPassword ) {
-                <text>[&nbsp;&nbsp;<a asp-action="ChangePassword" asp-controller="Manage" >Change</a>&nbsp;&nbsp;]</text>
+                <Text>[&nbsp;&nbsp;<a asp-action="ChangePassword" asp-controller="Manage" >Change</a>&nbsp;&nbsp;]</Text>
             } else {
-                <text>[&nbsp;&nbsp;<a asp-action="SetPassword" asp-controller="Manage" >Create</a>&nbsp;&nbsp;]</text>
+                <Text>[&nbsp;&nbsp;<a asp-action="SetPassword" asp-controller="Manage" >Create</a>&nbsp;&nbsp;]</Text>
             }
         </dd>
         <dt>External Logins:</dt>
@@ -33,14 +33,14 @@
                 @if (Model.PhoneNumber != null)
                 {
                     <br />
-                    <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="AddPhoneNumber">Change</a>&nbsp;&nbsp;]</text>
+                    <Text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="AddPhoneNumber">Change</a>&nbsp;&nbsp;]</Text>
                     <form asp-controller="Manage" asp-action="RemovePhoneNumber" method="post" role="form">
                         [<button type="submit" class="btn-link">Remove</button>]
                     </form>
                 }
                 else
                 {
-                    <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="AddPhoneNumber">Add</a>&nbsp;&nbsp;]</text>
+                    <Text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="AddPhoneNumber">Add</a>&nbsp;&nbsp;]</Text>
                 }*@
         </dd>
 

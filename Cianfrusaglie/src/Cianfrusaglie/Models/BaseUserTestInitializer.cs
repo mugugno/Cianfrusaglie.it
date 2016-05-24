@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Models {
    public static class BaseUserTestInitializer {
@@ -13,7 +14,7 @@ namespace Cianfrusaglie.Models {
             UserName = "MarioRed",
             BirthDate = new DateTime(1970,1,1),
             PhoneNumber = "123456789",
-            Genre = 2,
+            Genre = Genre.Male,
             PasswordHash = "cipolla!",
             Latitude = 44.40678,
             Longitude = 8.93391
@@ -25,7 +26,7 @@ namespace Cianfrusaglie.Models {
             UserName = "Giogio",
             BirthDate = new DateTime( 1980, 7, 7 ),
             PhoneNumber = "123456789",
-            Genre = 1,
+            Genre = Genre.Female,
             PasswordHash = "cipolla!",
             Latitude = 44.40678,
             Longitude = 8.93391

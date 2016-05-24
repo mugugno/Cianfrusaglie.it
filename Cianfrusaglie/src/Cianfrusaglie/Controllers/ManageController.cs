@@ -40,8 +40,8 @@ namespace Cianfrusaglie.Controllers {
                         : message == ManageMessageId.Error
                             ? "An error has occurred."
                             : message == ManageMessageId.AddPhoneSuccess
-                                ? "Your phone number was added."
-                                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed." : "";
+                                ? "Your phone Number was added."
+                                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone Number was removed." : "";
 
             var user = await GetCurrentUserAsync();
             var model = new IndexViewModel {
@@ -120,7 +120,7 @@ namespace Cianfrusaglie.Controllers {
         public async Task< IActionResult > VerifyPhoneNumber( string phoneNumber ) {
             string code =
                 await _userManager.GenerateChangePhoneNumberTokenAsync( await GetCurrentUserAsync(), phoneNumber );
-            // Send an SMS to verify the phone number
+            // Send an SMS to verify the phone Number
             return phoneNumber == null
                 ? View( "Error" ) : View( new VerifyPhoneNumberViewModel {PhoneNumber = phoneNumber} );
         }
@@ -141,7 +141,7 @@ namespace Cianfrusaglie.Controllers {
                 }
             }
             // If we got this far, something failed, redisplay the form
-            ModelState.AddModelError( string.Empty, "Failed to verify phone number" );
+            ModelState.AddModelError( string.Empty, "Failed to verify phone Number" );
             return View( model );
         }
 

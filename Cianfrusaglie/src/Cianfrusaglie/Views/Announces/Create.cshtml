@@ -1,6 +1,7 @@
 @using System.Collections.Generic
 @using System.Net.Mime
 @using System.Threading.Tasks
+@using Cianfrusaglie.Constants
 @using Microsoft.AspNet.JsonPatch.Helpers
 @using Microsoft.AspNet.Mvc.Rendering
 @using Cianfrusaglie.Models
@@ -101,7 +102,7 @@
                                         @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
                                             foreach (var field in GetFormFields()) {
                                                 switch (field.Type) {
-                                                    case FormFieldType.checkbox:
+                                                    case FormFieldType.Checkbox:
                                                         <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                             <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
                                                                 
@@ -112,7 +113,7 @@
                                                         break;
                                       
 
-                                                    case FormFieldType.select:
+                                                    case FormFieldType.Select:
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                             <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
 
@@ -122,7 +123,7 @@
                                                         </div>
                                                         break;
 
-                                                    case FormFieldType.text:
+                                                    case FormFieldType.Text:
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
                                                             <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
                                                             <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
@@ -154,7 +155,7 @@
                                 <div class="panel-body">
                                     <fieldset>
 
-                                        @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
+                                        @*<div asp-validation-summary="ValidationSummary.All" class="Text-danger"></div>*@
 
                                         <!-- MediaTypeNames.Text input-->
                                         <div class="form-group">

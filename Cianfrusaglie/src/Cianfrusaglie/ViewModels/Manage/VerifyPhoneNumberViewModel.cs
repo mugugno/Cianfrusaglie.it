@@ -5,7 +5,7 @@ namespace Cianfrusaglie.ViewModels.Manage {
         [Required]
         public string Code { get; set; }
 
-        [Required, Phone, Display( Name = "Phone number" )]
+        [Required, Phone, Display( Name = "Phone Number" )]
         public string PhoneNumber { get; set; }
     }
 }

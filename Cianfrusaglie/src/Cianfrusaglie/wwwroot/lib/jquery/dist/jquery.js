@@ -264,7 +264,7 @@ jQuery.extend({
 
 	isNumeric: function( obj ) {
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
-		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
+		// ...but misinterprets leading-Number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
 		// adding 1 corrects loss of precision from parseFloat (#15100)
 		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
@@ -548,7 +548,7 @@ function isArraylike( obj ) {
 	}
 
 	return type === "array" || length === 0 ||
-		typeof length === "number" && length > 0 && ( length - 1 ) in obj;
+		typeof length === "Number" && length > 0 && ( length - 1 ) in obj;
 }
 var Sizzle =
 /*!
@@ -646,7 +646,7 @@ var i,
 		"*\\]",
 
 	pseudos = ":(" + characterEncoding + ")(?:\\((" +
-		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
+		// To reduce the Number of selectors needing tokenize in the preFilter, prefer arguments:
 		// 1. quoted (capture 3; capture 4 or capture 5)
 		"('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
 		// 2. simple (capture 6)
@@ -678,7 +678,7 @@ var i,
 			"*(\\d+)|))" + whitespace + "*\\)|)", "i" ),
 		"bool": new RegExp( "^(?:" + booleans + ")$", "i" ),
 		// For use in libraries implementing .is()
-		// We use this for POS matching in `select`
+		// We use this for POS matching in `Select`
 		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" +
 			whitespace + "*((?:-\\d)?\\d*)" + whitespace + "*\\)|)(?=[^-]|$)", "i" )
 	},
@@ -1178,8 +1178,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
 			docElem.appendChild( div ).innerHTML = "<a id='" + expando + "'></a>" +
-				"<select id='" + expando + "-\f]' msallowcapture=''>" +
-				"<option selected=''></option></select>";
+				"<Select id='" + expando + "-\f]' msallowcapture=''>" +
+				"<option selected=''></option></Select>";
 
 			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
@@ -1492,7 +1492,7 @@ Sizzle.uniqueSort = function( results ) {
 };
 
 /**
- * Utility function for retrieving the text value of an array of DOM nodes
+ * Utility function for retrieving the Text value of an array of DOM nodes
  * @param {Array|Element} elem
  */
 getText = Sizzle.getText = function( elem ) {
@@ -1909,7 +1909,7 @@ Expr = Sizzle.selectors = {
 		// Contents
 		"empty": function( elem ) {
 			// http://www.w3.org/TR/selectors/#empty-pseudo
-			// :empty is negated by element (1) or content nodes (text: 3; cdata: 4; entity ref: 5),
+			// :empty is negated by element (1) or content nodes (Text: 3; cdata: 4; entity ref: 5),
 			//   but not by others (comment: 8; processing instruction: 7; etc.)
 			// nodeType < 6 works because attributes (2) do not appear as children
 			for ( elem = elem.firstChild; elem; elem = elem.nextSibling ) {
@@ -1941,11 +1941,11 @@ Expr = Sizzle.selectors = {
 		"text": function( elem ) {
 			var attr;
 			return elem.nodeName.toLowerCase() === "input" &&
-				elem.type === "text" &&
+				elem.type === "Text" &&
 
 				// Support: IE<8
-				// New HTML5 attribute values (e.g., "search") appear with elem.type === "text"
-				( (attr = elem.getAttribute("type")) == null || attr.toLowerCase() === "text" );
+				// New HTML5 attribute values (e.g., "search") appear with elem.type === "Text"
+				( (attr = elem.getAttribute("type")) == null || attr.toLowerCase() === "Text" );
 		},
 
 		// Position-in-collection
@@ -2358,7 +2358,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			// Add elements passing elementMatchers directly to results
 			// Keep `i` a string if there are no elements so `matchedCount` will be "00" below
 			// Support: IE<9, Safari
-			// Tolerate NodeList properties (IE: "length"; Safari: <number>) matching elements by id
+			// Tolerate NodeList properties (IE: "length"; Safari: <Number>) matching elements by id
 			for ( ; i !== len && (elem = elems[i]) != null; i++ ) {
 				if ( byElement && elem ) {
 					j = 0;
@@ -3737,7 +3737,7 @@ function dataAttr( elem, key, data ) {
 				data = data === "true" ? true :
 					data === "false" ? false :
 					data === "null" ? null :
-					// Only convert to a number if it doesn't change the string
+					// Only convert to a Number if it doesn't change the string
 					+data + "" === data ? +data :
 					rbrace.test( data ) ? jQuery.parseJSON( data ) :
 					data;
@@ -4046,7 +4046,7 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 	support.checkClone = div.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
 	// Support: IE<=11+
-	// Make sure textarea (and checkbox) defaultValue is properly cloned
+	// Make sure textarea (and Checkbox) defaultValue is properly cloned
 	div.innerHTML = "<textarea>x</textarea>";
 	support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 })();
@@ -4092,7 +4092,7 @@ jQuery.event = {
 			special, handlers, type, namespaces, origType,
 			elemData = data_priv.get( elem );
 
-		// Don't attach events to noData or text/comment nodes (but allow plain objects)
+		// Don't attach events to noData or Text/comment nodes (but allow plain objects)
 		if ( !elemData ) {
 			return;
 		}
@@ -4270,7 +4270,7 @@ jQuery.event = {
 
 		cur = tmp = elem = elem || document;
 
-		// Don't do events on text and comment nodes
+		// Don't do events on Text and comment nodes
 		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
 			return;
 		}
@@ -4576,7 +4576,7 @@ jQuery.event = {
 		}
 
 		// Support: Safari 6.0+, Chrome<28
-		// Target should not be a text node (#504, #13143)
+		// Target should not be a Text node (#504, #13143)
 		if ( event.target.nodeType === 3 ) {
 			event.target = event.target.parentNode;
 		}
@@ -4609,9 +4609,9 @@ jQuery.event = {
 			delegateType: "focusout"
 		},
 		click: {
-			// For checkbox, fire native event so checked state will be right
+			// For Checkbox, fire native event so checked state will be right
 			trigger: function() {
-				if ( this.type === "checkbox" && this.click && jQuery.nodeName( this, "input" ) ) {
+				if ( this.type === "Checkbox" && this.click && jQuery.nodeName( this, "input" ) ) {
 					this.click();
 					return false;
 				}
@@ -4925,7 +4925,7 @@ var
 	wrapMap = {
 
 		// Support: IE9
-		option: [ 1, "<select multiple='multiple'>", "</select>" ],
+		option: [ 1, "<Select multiple='multiple'>", "</Select>" ],
 
 		thead: [ 1, "<table>", "</table>" ],
 		col: [ 2, "<table><colgroup>", "</colgroup></table>" ],
@@ -5029,7 +5029,7 @@ function getAll( context, tag ) {
 function fixInput( src, dest ) {
 	var nodeName = dest.nodeName.toLowerCase();
 
-	// Fails to persist the checked state of a cloned checkbox or radio button.
+	// Fails to persist the checked state of a cloned Checkbox or radio button.
 	if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
 		dest.checked = src.checked;
 
@@ -5100,7 +5100,7 @@ jQuery.extend({
 					// push.apply(_, arraylike) throws on ancient WebKit
 					jQuery.merge( nodes, elem.nodeType ? [ elem ] : elem );
 
-				// Convert non-html into a text node
+				// Convert non-html into a Text node
 				} else if ( !rhtml.test( elem ) ) {
 					nodes.push( context.createTextNode( elem ) );
 
@@ -5916,7 +5916,7 @@ jQuery.extend({
 			get: function( elem, computed ) {
 				if ( computed ) {
 
-					// We should always get a number back from opacity
+					// We should always get a Number back from opacity
 					var ret = curCSS( elem, "opacity" );
 					return ret === "" ? "1" : ret;
 				}
@@ -5949,7 +5949,7 @@ jQuery.extend({
 	// Get and set the style property on a DOM Node
 	style: function( elem, name, value, extra ) {
 
-		// Don't set styles on text and comment nodes
+		// Don't set styles on Text and comment nodes
 		if ( !elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style ) {
 			return;
 		}
@@ -5972,7 +5972,7 @@ jQuery.extend({
 			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
 				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );
 				// Fixes bug #9237
-				type = "number";
+				type = "Number";
 			}
 
 			// Make sure that null and NaN values aren't set (#7116)
@@ -5980,8 +5980,8 @@ jQuery.extend({
 				return;
 			}
 
-			// If a number, add 'px' to the (except for certain CSS properties)
-			if ( type === "number" && !jQuery.cssNumber[ origName ] ) {
+			// If a Number, add 'px' to the (except for certain CSS properties)
+			if ( type === "Number" && !jQuery.cssNumber[ origName ] ) {
 				value += "px";
 			}
 
@@ -6092,7 +6092,7 @@ jQuery.each({
 			var i = 0,
 				expanded = {},
 
-				// Assumes a single number if not a string
+				// Assumes a single Number if not a string
 				parts = typeof value === "string" ? value.split(" ") : [ value ];
 
 			for ( ; i < 4; i++ ) {
@@ -6677,7 +6677,7 @@ jQuery.speed = function( speed, easing, fn ) {
 		easing: fn && easing || easing && !jQuery.isFunction( easing ) && easing
 	};
 
-	opt.duration = jQuery.fx.off ? 0 : typeof opt.duration === "number" ? opt.duration :
+	opt.duration = jQuery.fx.off ? 0 : typeof opt.duration === "Number" ? opt.duration :
 		opt.duration in jQuery.fx.speeds ? jQuery.fx.speeds[ opt.duration ] : jQuery.fx.speeds._default;
 
 	// Normalize opt.queue - true/undefined/null -> "fx"
@@ -6913,17 +6913,17 @@ jQuery.fn.delay = function( time, type ) {
 
 (function() {
 	var input = document.createElement( "input" ),
-		select = document.createElement( "select" ),
+		select = document.createElement( "Select" ),
 		opt = select.appendChild( document.createElement( "option" ) );
 
-	input.type = "checkbox";
+	input.type = "Checkbox";
 
 	// Support: iOS<=5.1, Android<=4.2+
-	// Default value for a checkbox should be "on"
+	// Default value for a Checkbox should be "on"
 	support.checkOn = input.value !== "";
 
 	// Support: IE<=11+
-	// Must access selectedIndex to make default options select
+	// Must access selectedIndex to make default options Select
 	support.optSelected = opt.selected;
 
 	// Support: Android<=2.3
@@ -6960,7 +6960,7 @@ jQuery.extend({
 		var hooks, ret,
 			nType = elem.nodeType;
 
-		// don't get/set attributes on text, comment and attribute nodes
+		// don't get/set attributes on Text, comment and attribute nodes
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
@@ -7098,7 +7098,7 @@ jQuery.extend({
 		var ret, hooks, notxml,
 			nType = elem.nodeType;
 
-		// Don't get/set properties on text, comment and attribute nodes
+		// Don't get/set properties on Text, comment and attribute nodes
 		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
 			return;
 		}
@@ -7336,7 +7336,7 @@ jQuery.fn.extend({
 				return typeof ret === "string" ?
 					// Handle most common string cases
 					ret.replace(rreturn, "") :
-					// Handle cases where value is null/undef or number
+					// Handle cases where value is null/undef or Number
 					ret == null ? "" : ret;
 			}
 
@@ -7362,7 +7362,7 @@ jQuery.fn.extend({
 			if ( val == null ) {
 				val = "";
 
-			} else if ( typeof val === "number" ) {
+			} else if ( typeof val === "Number" ) {
 				val += "";
 
 			} else if ( jQuery.isArray( val ) ) {
@@ -7389,7 +7389,7 @@ jQuery.extend({
 				return val != null ?
 					val :
 					// Support: IE10-11+
-					// option.text throws exceptions (#14686, #14858)
+					// option.Text throws exceptions (#14686, #14858)
 					jQuery.trim( jQuery.text( elem ) );
 			}
 		},
@@ -7398,7 +7398,7 @@ jQuery.extend({
 				var value, option,
 					options = elem.options,
 					index = elem.selectedIndex,
-					one = elem.type === "select-one" || index < 0,
+					one = elem.type === "Select-one" || index < 0,
 					values = one ? null : [],
 					max = one ? index + 1 : options.length,
 					i = index < 0 ?
@@ -7455,7 +7455,7 @@ jQuery.extend({
 });
 
 // Radios and checkboxes getter/setter
-jQuery.each([ "radio", "checkbox" ], function() {
+jQuery.each([ "radio", "Checkbox" ], function() {
 	jQuery.valHooks[ this ] = {
 		set: function( elem, value ) {
 			if ( jQuery.isArray( value ) ) {
@@ -7478,7 +7478,7 @@ jQuery.each([ "radio", "checkbox" ], function() {
 
 jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblclick " +
 	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-	"change select submit keydown keypress keyup error contextmenu").split(" "), function( i, name ) {
+	"change Select submit keydown keypress keyup error contextmenu").split(" "), function( i, name ) {
 
 	// Handle event binding
 	jQuery.fn[ name ] = function( data, fn ) {
@@ -7533,7 +7533,7 @@ jQuery.parseXML = function( data ) {
 	// Support: IE9
 	try {
 		tmp = new DOMParser();
-		xml = tmp.parseFromString( data, "text/xml" );
+		xml = tmp.parseFromString( data, "Text/xml" );
 	} catch ( e ) {
 		xml = undefined;
 	}
@@ -7811,7 +7811,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 
 jQuery.extend({
 
-	// Counter for holding the number of active queries
+	// Counter for holding the Number of active queries
 	active: 0,
 
 	// Last-Modified header cache for next request
@@ -7840,10 +7840,10 @@ jQuery.extend({
 
 		accepts: {
 			"*": allTypes,
-			text: "text/plain",
-			html: "text/html",
-			xml: "application/xml, text/xml",
-			json: "application/json, text/javascript"
+			text: "Text/plain",
+			html: "Text/html",
+			xml: "application/xml, Text/xml",
+			json: "application/json, Text/javascript"
 		},
 
 		contents: {
@@ -7862,16 +7862,16 @@ jQuery.extend({
 		// Keys separate source (or catchall "*") and destination types with a single space
 		converters: {
 
-			// Convert anything to text
+			// Convert anything to Text
 			"* text": String,
 
 			// Text to html (true = no transformation)
 			"text html": true,
 
-			// Evaluate text as a json expression
+			// Evaluate Text as a json expression
 			"text json": jQuery.parseJSON,
 
-			// Parse text as xml
+			// Parse Text as xml
 			"text xml": jQuery.parseXML
 		},
 
@@ -7904,7 +7904,7 @@ jQuery.extend({
 	// Main method
 	ajax: function( url, options ) {
 
-		// If url is an object, simulate pre-1.5 signature
+		// If Url is an object, simulate pre-1.5 signature
 		if ( typeof url === "object" ) {
 			options = url;
 			url = undefined;
@@ -8024,8 +8024,8 @@ jQuery.extend({
 
 		// Remove hash character (#7531: and string promotion)
 		// Add protocol if not provided (prefilters might expect it)
-		// Handle falsy url in the settings object (#10093: consistency with old signature)
-		// We also use the url parameter if available
+		// Handle falsy Url in the settings object (#10093: consistency with old signature)
+		// We also use the Url parameter if available
 		s.url = ( ( url || s.url || ajaxLocation ) + "" ).replace( rhash, "" )
 			.replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
 
@@ -8080,14 +8080,14 @@ jQuery.extend({
 		// More options handling for requests with no content
 		if ( !s.hasContent ) {
 
-			// If data is available, append data to url
+			// If data is available, append data to Url
 			if ( s.data ) {
 				cacheURL = ( s.url += ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data );
 				// #9682: remove data so that it's not used in an eventual retry
 				delete s.data;
 			}
 
-			// Add anti-cache in url if needed
+			// Add anti-cache in Url if needed
 			if ( s.cache === false ) {
 				s.url = rts.test( cacheURL ) ?
 
@@ -8651,7 +8651,7 @@ jQuery.ajaxTransport(function( options ) {
 // Install script dataType
 jQuery.ajaxSetup({
 	accepts: {
-		script: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"
+		script: "Text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"
 	},
 	contents: {
 		script: /(?:java|ecma)script/
@@ -8727,7 +8727,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	var callbackName, overwritten, responseContainer,
 		jsonProp = s.jsonp !== false && ( rjsonp.test( s.url ) ?
-			"url" :
+			"Url" :
 			typeof s.data === "string" && !( s.contentType || "" ).indexOf("application/x-www-form-urlencoded") && rjsonp.test( s.data ) && "data"
 		);
 
@@ -8739,7 +8739,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			s.jsonpCallback() :
 			s.jsonpCallback;
 
-		// Insert callback into url or form data
+		// Insert callback into Url or form data
 		if ( jsonProp ) {
 			s[ jsonProp ] = s[ jsonProp ].replace( rjsonp, "$1" + callbackName );
 		} else if ( s.jsonp !== false ) {
@@ -8828,7 +8828,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 var _load = jQuery.fn.load;
 
 /**
- * Load a url into a page
+ * Load a Url into a page
  */
 jQuery.fn.load = function( url, params, callback ) {
 	if ( typeof url !== "string" && _load ) {
@@ -9144,7 +9144,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 });
 
 
-// The number of elements contained in the matched element set
+// The Number of elements contained in the matched element set
 jQuery.fn.size = function() {
 	return this.length;
 };

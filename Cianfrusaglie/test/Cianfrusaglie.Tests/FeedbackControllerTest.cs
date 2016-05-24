@@ -21,8 +21,11 @@ namespace Cianfrusaglie.Tests
             return new FeedBack
             {
                 Announce = announce,
+                AnnounceId = announce.Id,
                 Author = feedbackAuthor,
+                AuthorId = feedbackAuthor.Id,
                 DateTime = DateTime.Now,
+                ReceiverId = feedbackReceiver.Id,
                 Receiver = feedbackReceiver,
                 Vote = 2,
                 Text = "buu"
@@ -68,7 +71,7 @@ namespace Cianfrusaglie.Tests
         }
 
         [Fact]
-        public void AuthorGivesFeedbackToNotLastChoosenUserAndFails()
+        public void AuthorGivesFeedbackToNotLastChoosenUserAndIsOk()
         {
             var announce = Context.Announces.Include(a => a.Interested).First(a => a.Closed == false && a.DeadLine == null && a.Author.UserName.Equals(FirstUserName));
             var author = announce.Author;
@@ -78,7 +81,7 @@ namespace Cianfrusaglie.Tests
             SetUserInterestedToAnnounceAndChoosen(announce, notChoosenUser, 1);
             var feedbackController = CreateFeedbackController(author.Id);
             var actionResult = feedbackController.Create(CreateNewFeedback(announce, author, notChoosenUser));
-            Assert.IsType<BadRequestResult>(actionResult);
+            Assert.IsType< RedirectToActionResult >(actionResult);
         }
 
         [Fact]
