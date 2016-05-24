@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
-using Cianfrusaglie.ViewModels.Feedback;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Xunit;
