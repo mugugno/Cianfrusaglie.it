@@ -11,28 +11,26 @@
 
     <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
     <div class="panel panel-body" >
-        <div class="form-group">
-            <label class="control-label">Scrivi una Recensione per l'utente @((User)ViewData["receiver"])</label>
-            <div class="col-md-5">
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
-            </div>
+        <div style="display: none" >
+            <input asp-for="AnnounceId" value="@(((Announce)ViewData[ "announce" ]).Id)" />
+            <input asp-for="ReceiverId" value="@(( (User) ViewData[ "receiver" ] ).Id)" />
+            <input asp-for="AuthorId" value="@(ViewData[ "authorId" ])" />
         </div>
-        <div class="form-group">
-            <label class="control-label">Voto</label>
-            <div class="col-md-8">
-                <input asp-for="Vote" class="form-control" />
-                <span asp-validation-for="Vote" class="text-danger"></span>
-            </div>
+        <div class="form-group" >
+            <label class="control-label" >Scrivi una Recensione per l'utente @((User) ViewData[ "receiver" ])</label>
+            <textarea asp-for="Text" class="form-control" rows="5" ></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+        <div class="form-group" >
+            <label class="control-label" >Voto</label>
+            <input asp-for="Vote" class="form-control"type="number" value="3" />
+            <span asp-validation-for="Vote" class="text-danger"></span>
         </div>
+        <input type="submit" value="Create" class="btn btn-default" />
+    </div>
+    <div>
+        <a href="~/InterestedAnnounce/?id=@(((Announce)ViewData["announce"]).Id)">Torna ai miei Annunci</a>
     </div>
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
