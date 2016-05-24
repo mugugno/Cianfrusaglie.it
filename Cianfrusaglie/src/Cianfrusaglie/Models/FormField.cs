@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Models {
     public class FormField {

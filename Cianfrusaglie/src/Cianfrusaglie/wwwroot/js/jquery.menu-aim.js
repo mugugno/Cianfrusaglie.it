@@ -96,7 +96,7 @@
                 },
                 opts);
 
-        var MOUSE_LOCS_TRACKED = 3, // number of past mouse locations to track
+        var MOUSE_LOCS_TRACKED = 3, // Number of past mouse locations to track
             DELAY = 300; // ms delay when user appears to be entering submenu
 
         /**
@@ -176,7 +176,7 @@
          * currently hovered row is activated.
          *
          * Returns 0 if the activation should happen immediately. Otherwise,
-         * returns the number of milliseconds that should be delayed before
+         * returns the Number of milliseconds that should be delayed before
          * checking again to see if the row should be activated.
          */
         var activationDelay = function() {
