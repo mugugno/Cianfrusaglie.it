@@ -32,7 +32,7 @@ namespace Cianfrusaglie.Controllers
                 var user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
                 ViewData[ "listSuggestedAnnounces" ] =
                     _context.Announces.Where(
-                        a =>
+                        a => !a.AuthorId.Equals( User.GetUserId() ) &&
                             GeoPosition.GeoCoordinate.Distance( a.Latitude, a.Longitude, user.Latitude, user.Longitude ) <=
                             100 ).OrderByDescending( a => rankAlgorithm.calculateRank( a, user ) ).Take( 3 ).ToList();
             } else {
