@@ -21,7 +21,7 @@ namespace Cianfrusaglie.GeoPosition {
         /// <param name="long2">Longitudine del secondo punto</param>
         /// <returns></returns>
         public static double Distance( double lat1, double long1, double lat2, double long2 ) {
-            return new GeoCoordinate( lat1, lat2 ).Distance( new GeoCoordinate( lat2, long2 ) );
+            return new GeoCoordinate( lat1, long1 ).Distance( new GeoCoordinate( lat2, long2 ) );
         }
 
         /// <summary>
@@ -29,22 +29,18 @@ namespace Cianfrusaglie.GeoPosition {
         /// </summary>
         /// <param name="gc">Il punto GPS</param>
         /// <returns>La distanza in KM</returns>
-        public double Distance( GeoCoordinate gc ) {
-            if( gc == null )
+        public double Distance( GeoCoordinate other ) {
+            if( other == null )
                 throw new ArgumentNullException();
 
-            const double toRad = Math.PI / 180;
-
-            double dLat = ( gc.Latitude - Latitude ) * toRad;
-            double dLon = ( gc.Longitude - Longitude ) * toRad;
-
-            double lat1 = Latitude * toRad;
-            double lat2 = gc.Latitude * toRad;
-
-            double a = Math.Pow( Math.Sin( dLat / 2 ), 2 ) +
-                       Math.Pow( Math.Sin( dLon / 2 ), 2 ) * Math.Cos( lat1 ) * Math.Cos( lat2 );
-            double c = 2 * Math.Atan2( Math.Sqrt( a ), Math.Sqrt( 1 - a ) );
-            return 6.371 * c;
-        }
+         const double toRad = Math.PI / 180.0;
+         var d1 = Latitude * toRad;
+         var num1 = Longitude * toRad;
+         var d2 = other.Latitude * toRad;
+         var num2 = other.Longitude * toRad - num1;
+         var d3 = Math.Pow( Math.Sin( ( d2 - d1 ) / 2.0 ), 2.0 ) +
+                  Math.Cos( d1 ) * Math.Cos( d2 ) * Math.Pow( Math.Sin( num2 / 2.0 ), 2.0 );
+         return 6371 * ( 2.0 * Math.Atan2( Math.Sqrt( d3 ), Math.Sqrt( 1.0 - d3 ) ) );
+      }
     }
 }
