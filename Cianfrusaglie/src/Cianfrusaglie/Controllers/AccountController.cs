@@ -146,8 +146,8 @@ namespace Cianfrusaglie.Controllers {
                    Genre = genre,
                    UserName = model.UserName,
                    Email = model.Email,
-                   Latitude = double.Parse( model.Latitude, CultureInfo.InvariantCulture ),
-                   Longitude = double.Parse( model.Longitude, CultureInfo.InvariantCulture )
+                   Latitude = double.Parse( model.Latitude ?? "0", CultureInfo.InvariantCulture ),
+                   Longitude = double.Parse( model.Longitude ?? "0", CultureInfo.InvariantCulture )
                 };
                 string imageUrl = "";
                 if ( model.Photo != null ) {
