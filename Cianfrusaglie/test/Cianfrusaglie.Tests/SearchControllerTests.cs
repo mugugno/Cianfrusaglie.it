@@ -89,15 +89,19 @@ namespace Cianfrusaglie.Tests {
          Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
       }
 
-      [Theory, 
-      InlineData( "C for Dummies" ), 
-      InlineData( "Libro di Mariangiongiangela" )]
+      [Theory, InlineData( "C for Dummies" ), InlineData( "Libro di Mariangiongiangela" )]
       public void SearchOnTitleDoesntContainClosedOrExpired( string title ) {
          var researchController = CreateResearchController( null );
 
          var result = researchController.TitleBasedSearch( title );
          Assert.True( !result.Any( p => p.Closed ) );
          Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
+      }
+
+      [Fact]
+      public void SearchByTitleReturnsAnnouncesWithTheSubWord() {
+         var researchController = CreateResearchController( null );
+         var result = researchController.TitleBasedSearch( "Libro" );
       }
    }
 }

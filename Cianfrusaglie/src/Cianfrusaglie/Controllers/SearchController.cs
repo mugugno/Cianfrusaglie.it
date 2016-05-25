@@ -44,7 +44,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
-            if ( string.IsNullOrEmpty( title ))
+            if ( string.IsNullOrEmpty( title ) && !categories.Any() )
                 if (user == null)
                 {
                     var res = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
@@ -88,8 +88,11 @@ namespace Cianfrusaglie.Controllers {
          if( catEnum.Any() )
             categoryTask = Task.Run( () => CategoryBySearch( catEnum ) );
          Task< IEnumerable< Announce > > textTask = null;
-         if( title != "" )
-            textTask = Task.Run( () => TitleBasedSearch( title ) );
+         if( title != null ) {
+            title = title.Trim();
+            if( title.Length > 0 )
+               textTask = Task.Run( () => TitleBasedSearch( title ) );
+         }
 
          var catResults = categoryTask == null ? new List< Announce >() : categoryTask.Result;
          var textResults = textTask == null ? new List< Announce >() : textTask.Result;
