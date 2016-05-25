@@ -21,8 +21,11 @@ namespace Cianfrusaglie.Tests
             return new FeedBack
             {
                 Announce = announce,
+                AnnounceId = announce.Id,
                 Author = feedbackAuthor,
+                AuthorId = feedbackAuthor.Id,
                 DateTime = DateTime.Now,
+                ReceiverId = feedbackReceiver.Id,
                 Receiver = feedbackReceiver,
                 Vote = 2,
                 Text = "buu"

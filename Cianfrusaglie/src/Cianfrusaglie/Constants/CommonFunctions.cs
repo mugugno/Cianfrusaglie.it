@@ -12,6 +12,19 @@ namespace Cianfrusaglie.Constants
     public static class CommonFunctions
     {
 
+        /// <summary>
+        /// Dato un controller e un contesto dati, imposta i dati da mostrare nella navbar della view _Layout.cshtml
+        /// </summary>
+        /// <param name="controller">Il controller a cui passare i dati</param>
+        /// <param name="context">Il context da cui prendere i dati</param>
+        public static void SetRootLayoutViewData( Controller controller, ApplicationDbContext context ) {
+            controller.ViewData["formCategories"] = context.Categories.ToList();
+            controller.ViewData["numberOfCategories"] = context.Categories.ToList().Count;
+            controller.ViewData["IsThereNewMessage"] = IsThereNewMessage(controller.User.GetUserId(), context);
+            controller.ViewData["IsThereNewInterested"] = IsThereNewInterested(controller.User.GetUserId(), context);
+            controller.ViewData["IsThereAnyNotification"] = IsThereAnyNotification(controller.User.GetUserId(), context);
+        }
+
         public static bool IsThereAnyNotification( string userId, ApplicationDbContext context ) {
             return IsThereNewMessage( userId, context ) || IsThereNewInterested(userId,context); // && IsThereAnnounceNotification && ...
         }

@@ -43,14 +43,14 @@
                                 @if( ViewData.ContainsKey( chosenuserid ) ) {
                                     if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
                                         <h4><a href="#" >Scelto come Destinatario</a></h4>
-                                        <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@Model.Announce.AuthorId">Lascia una recensione all'Autore</a></h4>
+                                        <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id">Lascia una recensione all'Autore</a></h4>
                                     }
                                     else {
                                         const string allotherschosenuserid = "allOthersChosenUserId";
                                         if (((IEnumerable<string>)ViewData[allotherschosenuserid]).Contains(user.Id))
                                         {
                                             <h4><a href="#" >L'Autore ha scelto un altro Destinatario.</a></h4>
-                                            <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@Model.Announce.AuthorId">Lascia una recensione all'Autore</a></h4>
+                                            <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id">Lascia una recensione all'Autore</a></h4>
                                         }
                                     }
                                 }
