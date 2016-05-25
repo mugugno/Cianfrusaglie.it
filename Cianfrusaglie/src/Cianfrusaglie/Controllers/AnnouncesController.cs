@@ -283,7 +283,7 @@ namespace Cianfrusaglie.Controllers {
                 TempData[ "announceCreated" ] = true;
                 return RedirectToAction( nameof( HomeController.Index ), "Home" );
             }
-            SetViewDataForCreate( model.Price != 0 );
+            SetViewDataForCreate( model.Price!=0);
             return View( model );
         }
 

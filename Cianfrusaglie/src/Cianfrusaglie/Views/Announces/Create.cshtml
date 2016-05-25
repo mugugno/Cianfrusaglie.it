@@ -161,7 +161,7 @@
                                         <div class="form-group">
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
                                             <div class="col-md-7">
-                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="inserisci il titolo dell'annuncio" style="padding-left: 12px" type="text">
+                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="Obbligatorio" style="padding-left: 12px" type="text">
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -181,7 +181,7 @@
                                                 <div class="col-md-7" >
                                                     <div class="input-group">
 
-                                                        <input type="number" asp-for="Price" class="form-control inputMargin" id="price" name="Price" />
+                                                        <input type="number" asp-for="Price" value="1" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
                                                     </div>
                                                 </div>
@@ -195,7 +195,7 @@
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
-                                                    <input asp-for="Range" class="form-control inputMargin" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" >
+                                                    <input asp-for="Range" class="form-control inputMargin" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" min="0" >
                                                     <span class="input-group-addon">Km</span>
                                                 </div>
                                             </div>
@@ -205,6 +205,7 @@
                                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
 
                                         <div class="form-group">
+                                            
                                             <label class="col-md-4 control-label" for="photos">Immagini</label>
                                             <div class="col-md-6">
                                                 <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*">
