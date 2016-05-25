@@ -1,0 +1,10 @@
+diff a/Cianfrusaglie/src/Cianfrusaglie/Views/Announces/Create.cshtml b/Cianfrusaglie/src/Cianfrusaglie/Views/Announces/Create.cshtml	(rejected hunks)
+@@ -155,7 +155,7 @@
+                                 <div class="panel-body">
+                                     <fieldset>
+ 
+-                                        @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
++                                        @*<div asp-validation-summary="ValidationSummary.All" class="Text-danger"></div>*@
+ 
+                                         <!-- MediaTypeNames.Text input-->
+                                         <div class="form-group">

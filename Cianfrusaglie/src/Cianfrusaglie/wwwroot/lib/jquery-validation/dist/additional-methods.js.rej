@@ -1,0 +1,10 @@
+diff a/Cianfrusaglie/src/Cianfrusaglie/wwwroot/lib/jquery-validation/dist/additional-methods.js b/Cianfrusaglie/src/Cianfrusaglie/wwwroot/lib/jquery-validation/dist/additional-methods.js	(rejected hunks)
+@@ -244,7 +244,7 @@
+ 	}
+ 	return false;
+ 
+-}, "Please specify a valid CPF number");
++}, "Please specify a valid CPF Number");
+ 
+ /* NOTICE: Modified version of Castle.Components.Validator.CreditCardValidator
+  * Redistributed under the the Apache License 2.0 at http://www.apache.org/licenses/LICENSE-2.0

@@ -1,0 +1,13 @@
+diff a/Cianfrusaglie/src/Cianfrusaglie/wwwroot/lib/bootstrap/dist/js/bootstrap.js b/Cianfrusaglie/src/Cianfrusaglie/wwwroot/lib/bootstrap/dist/js/bootstrap.js	(rejected hunks)
+@@ -1808,9 +1808,9 @@
+     var title   = this.getTitle()
+     var content = this.getContent()
+ 
+-    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
++    $tip.find('.popover-title')[this.options.html ? 'html' : 'Text'](title)
+     $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
+-      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
++      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'Text'
+     ](content)
+ 
+     $tip.removeClass('fade top bottom left right in')

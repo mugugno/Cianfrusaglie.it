@@ -231,10 +231,10 @@
                         __RequestVerificationToken: antiForgeryToken
                     },
                             function() {
-                                if( $('.Text-det').text() === "Interessato" )
-                                    $('.Text-det').html("Non sono pi&ugrave; interessato");
+                                if( $('.text-det').text() === "Interessato" )
+                                    $('.text-det').html("Non sono pi&ugrave; interessato");
                                 else
-                                    $('.Text-det').text("Interessato");
+                                    $('.text-det').text("Interessato");
                             })
                         .fail(function() { alert("error"); });
                 });

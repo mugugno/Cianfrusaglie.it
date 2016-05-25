@@ -297,7 +297,7 @@ $.extend( $.validator, {
 			if ( element.name in this.submitted ) {
 				this.element( element );
 
-			// or option elements, check parent Select in that case
+			// or option elements, check parent select in that case
 			} else if ( element.parentNode.name in this.submitted ) {
 				this.element( element.parentNode );
 			}
@@ -330,9 +330,9 @@ $.extend( $.validator, {
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
 		dateISO: "Please enter a valid date ( ISO ).",
-		number: "Please enter a valid Number.",
+		number: "Please enter a valid number.",
 		digits: "Please enter only digits.",
-		creditcard: "Please enter a valid credit card Number.",
+		creditcard: "Please enter a valid credit card number.",
 		equalTo: "Please enter the same value again.",
 		maxlength: $.validator.format( "Please enter no more than {0} characters." ),
 		minlength: $.validator.format( "Please enter at least {0} characters." ),
@@ -383,13 +383,13 @@ $.extend( $.validator, {
 
 			$( this.currentForm )
 				.on( "focusin.validate focusout.validate keyup.validate",
-					":Text, [type='password'], [type='file'], Select, textarea, [type='Number'], [type='search'], " +
-					"[type='tel'], [type='Url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
+					":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
+					"[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
 					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
-					"[type='radio'], [type='Checkbox']", delegate)
+					"[type='radio'], [type='checkbox']", delegate)
 				// Support: Chrome, oldIE
-				// "Select" is provided as event.target when clicking a option
-				.on("click.validate", "Select, option, [type='radio'], [type='Checkbox']", delegate);
+				// "select" is provided as event.target when clicking a option
+				.on("click.validate", "select, option, [type='radio'], [type='checkbox']", delegate);
 
 			if ( this.settings.invalidHandler ) {
 				$( this.currentForm ).on( "invalid-form.validate", this.settings.invalidHandler );
@@ -555,9 +555,9 @@ $.extend( $.validator, {
 			var validator = this,
 				rulesCache = {};
 
-			// Select all valid inputs inside the form (no submit or reset buttons)
+			// select all valid inputs inside the form (no submit or reset buttons)
 			return $( this.currentForm )
-			.find( "input, Select, textarea" )
+			.find( "input, select, textarea" )
 			.not( ":submit, :reset, :image, :disabled" )
 			.not( this.settings.ignore )
 			.filter( function() {
@@ -565,7 +565,7 @@ $.extend( $.validator, {
 					console.error( "%o has no name assigned", this );
 				}
 
-				// Select only the first element for each name, and only those with rules specified
+				// select only the first element for each name, and only those with rules specified
 				if ( this.name in rulesCache || !validator.objectLength( $( this ).rules() ) ) {
 					return false;
 				}
@@ -608,9 +608,9 @@ $.extend( $.validator, {
 				$element = $( element ),
 				type = element.type;
 
-			if ( type === "radio" || type === "Checkbox" ) {
+			if ( type === "radio" || type === "checkbox" ) {
 				return this.findByName( element.name ).filter(":checked").val();
-			} else if ( type === "Number" && typeof element.validity !== "undefined" ) {
+			} else if ( type === "number" && typeof element.validity !== "undefined" ) {
 				return element.validity.badInput ? false : $element.val();
 			}
 
@@ -865,7 +865,7 @@ $.extend( $.validator, {
 
 		validationTargetFor: function( element ) {
 
-			// If radio/Checkbox, validate first element in group instead
+			// If radio/checkbox, validate first element in group instead
 			if ( this.checkable( element ) ) {
 				element = this.findByName( element.name );
 			}
@@ -884,7 +884,7 @@ $.extend( $.validator, {
 
 		getLength: function( value, element ) {
 			switch ( element.nodeName.toLowerCase() ) {
-			case "Select":
+			case "select":
 				return $( "option:selected", element ).length;
 			case "input":
 				if ( this.checkable( element ) ) {
@@ -992,7 +992,7 @@ $.extend( $.validator, {
 
 	normalizeAttributeRule: function( rules, type, method, value ) {
 
-		// convert the value to a Number for Number inputs, and for Text for backwards compability
+		// convert the value to a number for number inputs, and for text for backwards compability
 		// allows type="date" and others to be compared as strings
 		if ( /min|max/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
 			value = Number( value );
@@ -1040,7 +1040,7 @@ $.extend( $.validator, {
 			this.normalizeAttributeRule( rules, type, method, value );
 		}
 
-		// maxlength may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for Text inputs
+		// maxlength may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
 		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
 			delete rules.maxlength;
 		}
@@ -1102,7 +1102,7 @@ $.extend( $.validator, {
 			rules[ rule ] = $.isFunction( parameter ) ? parameter( element ) : parameter;
 		});
 
-		// clean Number parameters
+		// clean number parameters
 		$.each([ "minlength", "maxlength" ], function() {
 			if ( rules[ this ] ) {
 				rules[ this ] = Number( rules[ this ] );
@@ -1166,8 +1166,8 @@ $.extend( $.validator, {
 			if ( !this.depend( param, element ) ) {
 				return "dependency-mismatch";
 			}
-			if ( element.nodeName.toLowerCase() === "Select" ) {
-				// could be an array for Select-multiple or a string, both are fine this way
+			if ( element.nodeName.toLowerCase() === "select" ) {
+				// could be an array for select-multiple or a string, both are fine this way
 				var val = $( element ).val();
 				return val && val.length > 0;
 			}
@@ -1186,12 +1186,12 @@ $.extend( $.validator, {
 			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test( value );
 		},
 
-		// http://jqueryvalidation.org/Url-method/
+		// http://jqueryvalidation.org/url-method/
 		url: function( value, element ) {
 
 			// Copyright (c) 2010-2013 Diego Perini, MIT licensed
 			// https://gist.github.com/dperini/729294
-			// see also https://mathiasbynens.be/demo/Url-regex
+			// see also https://mathiasbynens.be/demo/url-regex
 			// modified to allow protocol-relative URLs
 			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
 		},
@@ -1206,7 +1206,7 @@ $.extend( $.validator, {
 			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
 		},
 
-		// http://jqueryvalidation.org/Number-method/
+		// http://jqueryvalidation.org/number-method/
 		number: function( value, element ) {
 			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
 		},

@@ -1,0 +1,10 @@
+diff a/Cianfrusaglie/src/Cianfrusaglie/Controllers/ManageController.cs b/Cianfrusaglie/src/Cianfrusaglie/Controllers/ManageController.cs	(rejected hunks)
+@@ -141,7 +141,7 @@
+                 }
+             }
+             // If we got this far, something failed, redisplay the form
+-            ModelState.AddModelError( string.Empty, "Failed to verify phone number" );
++            ModelState.AddModelError( string.Empty, "Failed to verify phone Number" );
+             return View( model );
+         }
+ 

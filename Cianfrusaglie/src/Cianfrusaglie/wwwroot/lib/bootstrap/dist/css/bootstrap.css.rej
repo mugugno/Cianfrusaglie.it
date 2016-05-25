@@ -1,0 +1,10 @@
+diff a/Cianfrusaglie/src/Cianfrusaglie/wwwroot/lib/bootstrap/dist/css/bootstrap.css b/Cianfrusaglie/src/Cianfrusaglie/wwwroot/lib/bootstrap/dist/css/bootstrap.css	(rejected hunks)
+@@ -158,7 +158,7 @@
+   -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+           box-sizing: content-box;
+-  -webkit-appearance: textfield;
++  -webkit-appearance: Textfield;
+ }
+ input[type="search"]::-webkit-search-cancel-button,
+ input[type="search"]::-webkit-search-decoration {

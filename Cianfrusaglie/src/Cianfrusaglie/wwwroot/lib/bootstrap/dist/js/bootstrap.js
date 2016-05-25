@@ -232,7 +232,7 @@ if (typeof jQuery === 'undefined') {
         if ($input.prop('checked')) changed = false
         $parent.find('.active').removeClass('active')
         this.$element.addClass('active')
-      } else if ($input.prop('type') == 'Checkbox') {
+      } else if ($input.prop('type') == 'checkbox') {
         if (($input.prop('checked')) !== this.$element.hasClass('active')) changed = false
         this.$element.toggleClass('active')
       }
@@ -284,7 +284,7 @@ if (typeof jQuery === 'undefined') {
       var $btn = $(e.target)
       if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
       Plugin.call($btn, 'toggle')
-      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="Checkbox"]'))) e.preventDefault()
+      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
     })
     .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
@@ -475,7 +475,7 @@ if (typeof jQuery === 'undefined') {
       var action  = typeof option == 'string' ? option : options.slide
 
       if (!data) $this.data('bs.carousel', (data = new Carousel(this, options)))
-      if (typeof option == 'Number') data.to(option)
+      if (typeof option == 'number') data.to(option)
       else if (action) data[action]()
       else if (options.interval) data.pause().cycle()
     })
@@ -1334,7 +1334,7 @@ if (typeof jQuery === 'undefined') {
   Tooltip.prototype.getOptions = function (options) {
     options = $.extend({}, this.getDefaults(), this.$element.data(), options)
 
-    if (options.delay && typeof options.delay == 'Number') {
+    if (options.delay && typeof options.delay == 'number') {
       options.delay = {
         show: options.delay,
         hide: options.delay
@@ -1554,7 +1554,7 @@ if (typeof jQuery === 'undefined') {
     var $tip  = this.tip()
     var title = this.getTitle()
 
-    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'Text'](title)
+    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
     $tip.removeClass('fade in top bottom left right')
   }
 
@@ -1808,9 +1808,9 @@ if (typeof jQuery === 'undefined') {
     var title   = this.getTitle()
     var content = this.getContent()
 
-    $tip.find('.popover-title')[this.options.html ? 'html' : 'Text'](title)
+    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
     $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
-      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'Text'
+      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
     ](content)
 
     $tip.removeClass('fade top bottom left right in')

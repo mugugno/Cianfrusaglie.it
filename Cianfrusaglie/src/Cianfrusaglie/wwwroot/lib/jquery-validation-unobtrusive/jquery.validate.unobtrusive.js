@@ -356,7 +356,7 @@
     }
 
     adapters.addSingleVal("regex", "pattern");
-    adapters.addBool("creditcard").addBool("date").addBool("digits").addBool("email").addBool("Number").addBool("Url");
+    adapters.addBool("creditcard").addBool("date").addBool("digits").addBool("email").addBool("number").addBool("url");
     adapters.addMinMax("length", "minlength", "maxlength", "rangelength").addMinMax("range", "min", "max", "range");
     adapters.addMinMax("minlength", "minlength").addMinMax("maxlength", "minlength", "maxlength");
     adapters.add("equalto", ["other"], function (options) {
@@ -368,12 +368,12 @@
         setValidationValues(options, "equalTo", element);
     });
     adapters.add("required", function (options) {
-        // jQuery Validate equates "required" with "mandatory" for Checkbox elements
+        // jQuery Validate equates "required" with "mandatory" for checkbox elements
         if (options.element.tagName.toUpperCase() !== "INPUT" || options.element.type.toUpperCase() !== "CHECKBOX") {
             setValidationValues(options, "required", true);
         }
     });
-    adapters.add("remote", ["Url", "type", "additionalfields"], function (options) {
+    adapters.add("remote", ["url", "type", "additionalfields"], function (options) {
         var value = {
             url: options.params.url,
             type: options.params.type || "GET",
@@ -386,7 +386,7 @@
             value.data[paramName] = function () {
                 var field = $(options.form).find(":input").filter("[name='" + escapeAttributeValue(paramName) + "']");
                 // For checkboxes and radio buttons, only pick up values from checked fields.
-                if (field.is(":Checkbox")) {
+                if (field.is(":checkbox")) {
                     return field.filter(":checked").val() || field.filter(":hidden").val() || '';
                 }
                 else if (field.is(":radio")) {
