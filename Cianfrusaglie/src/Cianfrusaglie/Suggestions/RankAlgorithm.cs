@@ -42,7 +42,7 @@ namespace Cianfrusaglie.Suggestions
 
         public int calculateDistanceScore( Announce announce, User user ) {
             var distance = GeoCoordinate.Distance( announce.Latitude, announce.Longitude, user.Latitude, user.Longitude );
-            return (int) (100 - Math.Max( 50, distance));
+            return (int) (100 - Math.Min( 50, distance));
         }
 
         public int calculateMatchedGatsScore(Announce announce, User user) {
@@ -59,12 +59,12 @@ namespace Cianfrusaglie.Suggestions
         }
 
         public int calculateMatchedCategoriesScore( Announce announce, User user ) {
-            var announceCategories = _context.AnnounceCategories.Where( a => a.Category.Equals( announce ) ).Select( a=> a.Category );
-            var userPreferredCategories = _context.UserCategoryPreferenceses.Where( p => p.UserId.Equals( user.Id ) );
+            var announceCategories = _context.AnnounceCategories.Where( a => a.AnnounceId.Equals( announce.Id ) ).Select( a=> a.CategoryId );
+            var userPreferredCategories = _context.UserCategoryPreferenceses.Where( p => p.UserId.Equals( user.Id ) ).Select( p=> p.CategoryId );
             int score = 0;
             foreach (var category in announceCategories)
             {
-                if (userPreferredCategories.Select(a => a.Category).Contains(category))
+                if (userPreferredCategories.Contains(category))
                 {
                     score += 20;
                 }
