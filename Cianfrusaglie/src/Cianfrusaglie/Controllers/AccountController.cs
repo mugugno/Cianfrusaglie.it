@@ -129,11 +129,21 @@ namespace Cianfrusaglie.Controllers {
             }
             //QUI BISOGNA INSERIRE TUTTI GLI ALTRI CAMPI
             if( ModelState.IsValid ) {
+                Genre genre = Genre.Unspecified;
+                switch( model.Genre ) {
+                  case 1:
+                     genre= Genre.Female;
+                            break;
+                  case 2:
+                     genre= Genre.Male;
+                            break;
+                }
+
                 var user = new User {
                    Name = model.Name,
                    Surname = model.Surname,
                    BirthDate = model.BirthDate,
-                   Genre = model.Genre,
+                   Genre = genre,
                    UserName = model.UserName,
                    Email = model.Email,
                    Latitude = double.Parse( model.Latitude, CultureInfo.InvariantCulture ),

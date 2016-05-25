@@ -35,10 +35,29 @@
                                 @*<h4>Rating!</h4>*@
                             </div>
                             <div class="col-md-6">
-                                <h4><a href="~/Messages/Create/?id=@user.Id">Contatta</a></h4>
-                                <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id">Scegli come destinatario</a></h4>
+                                <h4><a href="~/Messages/Create/?id=@user.Id" >Contatta</a></h4>
 
-                            </div>
+                                @{
+                                    const string chosenuserid = "chosenUserId";
+                                }
+                                @if( ViewData.ContainsKey( chosenuserid ) ) {
+                                    if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
+                                        <h4><a href="#" >Scelto come Destinatario</a></h4>
+                                        <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id">Lascia una recensione all'Autore</a></h4>
+                                    }
+                                    else {
+                                        const string allotherschosenuserid = "allOthersChosenUserId";
+                                        if (((IEnumerable<string>)ViewData[allotherschosenuserid]).Contains(user.Id))
+                                        {
+                                            <h4><a href="#" >L'Autore ha scelto un altro Destinatario.</a></h4>
+                                            <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id">Lascia una recensione all'Autore</a></h4>
+                                        }
+                                    }
+                                }
+                                else {
+                                    <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id">Scegli come destinatario</a></h4>
+                                }
+                               </div>
                         </div>
                     </div>
                 </div>

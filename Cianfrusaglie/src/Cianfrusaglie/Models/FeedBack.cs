@@ -7,7 +7,7 @@ namespace Cianfrusaglie.Models {
     public class FeedBack {
         public int Id { get; set; }
 
-        [Range( DomainConstraints.FeedBackVoteMinRange, DomainConstraints.FeedBackVoteMaxRange )]
+        [Range( DomainConstraints.FeedBackVoteMinRange, DomainConstraints.FeedBackVoteMaxRange,ErrorMessage = "Dev'essere un numero compreso tra 0 e 5")]
         public virtual int Vote { get; set; }
 
         [DataType( DataType.DateTime )]
@@ -15,10 +15,12 @@ namespace Cianfrusaglie.Models {
 
         [MaxLength( DomainConstraints.FeedBackTextMaxLenght )]
         public virtual string Text { get; set; }
-
+        [Required]
+        public virtual string AuthorId { get; set; }
         [Required]
         public virtual User Author { get; set; }
-
+        [Required]
+        public virtual string ReceiverId { get; set; }
         [Required]
         public virtual User Receiver { get; set; }
 

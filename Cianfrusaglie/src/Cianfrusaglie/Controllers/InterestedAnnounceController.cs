@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
@@ -24,7 +25,7 @@ namespace Cianfrusaglie.Controllers
 
         // GET: InterestedAnnounce
         public IActionResult Index(int id) {
-            var announce = _context.Announces.SingleOrDefault( a => a.Id == id );
+            var announce = _context.Announces.Include( a=>a.ChosenUsers ).SingleOrDefault( a => a.Id == id );
             if( announce == null )
                 return HttpNotFound();
             if( !LoginChecker.HasLoggedUser( this ) )
@@ -35,15 +36,16 @@ namespace Cianfrusaglie.Controllers
                 _context.Interested.Include( i => i.User ).Where( i => i.AnnounceId.Equals( id ) ).Select( u => u.User ).ToList();
             var interestedViewModel = new InterestedAnnounceViewModel() {Announce = announce, InterestedUsers = interested};
 
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             SetInterestedToReadStatus(id);
-            ViewData["IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            CommonFunctions.SetRootLayoutViewData( this,_context );
 
-
-
+            var chosen = announce.ChosenUsers.OrderByDescending( u => u.ChosenDateTime ).FirstOrDefault();
+            if( chosen != null ) {
+                ViewData["chosenUserId"] = chosen.ChosenUserId;
+                ViewData["allOthersChosenUserId"] = announce.ChosenUsers.Where(u => !u.ChosenUserId.Equals(chosen.ChosenUserId)).Select(u => u.Id);
+            }
+               
+           
             return View(interestedViewModel);
         }
         //  GET: InterestedAnnounce/?userId,announceId
