@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Mvc;
@@ -21,7 +22,7 @@ namespace Cianfrusaglie.Controllers
 
         public List< Announce > GetLoggedUserInterestedAnnounces()
         {
-            var myAnnounces = _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals( User.GetUserId() )));
+            var myAnnounces = _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals( User.GetUserId() )) && !a.Closed);
 
             return myAnnounces.ToList();
         }
@@ -34,11 +35,7 @@ namespace Cianfrusaglie.Controllers
         {
             if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where( u=> u.ChosenUserId.Equals( User.GetUserId() ) ).Select(u => u.AnnounceId).ToList();
             ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where( f => f.AuthorId.Equals( User.GetUserId() ) ).Select( f => f.AnnounceId ).ToList();
             //    _context.Announces.Include( a => a.ChosenUsers ).Select( a => new { a.Id, a.ChosenUsers }).ToDictionary( k=> k.Id, v=> v.ChosenUsers.ToList() );

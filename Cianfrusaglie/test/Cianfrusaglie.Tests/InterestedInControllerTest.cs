@@ -28,7 +28,6 @@ namespace Cianfrusaglie.Tests
             Assert.IsType<ViewResult>(result);
         }
 
-
         // Visualizzare la pagina dell'utente null restituisce una bad request
         [Fact]
         public void VisitorTryToViewHistoryBadRequest() {

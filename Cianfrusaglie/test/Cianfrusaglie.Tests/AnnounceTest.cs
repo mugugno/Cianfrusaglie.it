@@ -254,5 +254,17 @@ namespace Cianfrusaglie.Tests {
             var ann = Context.Announces.First(u => u.Closed==true && !u.AuthorId.Equals(id));       
             Assert.False(announceController.Interested(ann.Id));
         }
+
+        [Fact]
+        public void UserTriesToRemoveInterestFromClosedAnnounceAndFails() {
+            var closedAnnounce = Context.Announces.First( a=> a.Author.UserName.Equals( FirstUserName ) && !a.Closed );
+            var user = Context.Users.Single( u => u.UserName.Equals( SecondUserName ) );
+            var announcesController = CreateAnnounceController( user.Id );
+            announcesController.Interested( closedAnnounce.Id );
+            closedAnnounce.Closed = true;
+            Context.SaveChanges();
+            bool result = announcesController.Interested(closedAnnounce.Id);
+            Assert.False( result );
+        }
     }
 }
