@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Cianfrusaglie.Models.Announce>
+﻿@using System.Security.Claims
+@model IEnumerable<Cianfrusaglie.Models.Announce>
 
 @{
     ViewData["Title"] = "Gli annunci che mi interessano";
@@ -9,7 +10,7 @@
     <div class="panel panel-default">
 
         <div class="panel-heading" id="my-conversations">
-            <span style="color:#FFC107"><h1>Gli annunci che mi interessano</h1></span>
+            <h2>Gli annunci che mi interessano</h2>
         </div>
         <div class="panel-body">
             <div class="panel-group" id="panel-524234">
@@ -38,7 +39,13 @@
                                         <div class="col-md-9">
 
                                             <a href="~/Announces/Details/?id=@item.Id">Visualizza annuncio</a> <br />
-                                            <a href="~/Messages/Create/?id=@item.AuthorId">Contatta</a>
+                                            <a href="~/Messages/Create/?id=@item.AuthorId" >Contatta</a> <br />
+                                            @if (((List<int>)ViewData["AnnounceIWasChosenFor"]).Contains( item.Id ) && !((List<int>)ViewData["announceIAlreadyGiveFeedback"]).Contains(item.Id))
+                                            {
+                                                <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId">Manda una recensione all'autore dell'annuncio</a>
+                                            } else if( ( (List< int >) ViewData[ "AnnounceIWasChosenFor" ] ).Contains( item.Id ) && ( (List< int >) ViewData[ "announceIAlreadyGiveFeedback" ] ).Contains( item.Id ) ) {
+                                                <p>Hai gi&agrave; inviato la tua recensione!</p>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -48,7 +55,7 @@
                 }
                 else
                 {
-                    <div>Non sei interessato ad alcun annuncio!</div>
+                    <div style="text-align: center;">Non sei interessato ad alcun annuncio!</div>
                 }
 
             </div>
