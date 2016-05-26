@@ -12,14 +12,11 @@ using Cianfrusaglie.ViewModels.InterestedAnnounce;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 
-namespace Cianfrusaglie.Controllers
-{
-    public class InterestedAnnounceController : Controller
-    {
+namespace Cianfrusaglie.Controllers {
+    public class InterestedAnnounceController : Controller {
         private readonly ApplicationDbContext _context;
 
-        public InterestedAnnounceController(ApplicationDbContext context)
-        {
+        public InterestedAnnounceController(ApplicationDbContext context) {
             _context = context;    
         }
 
@@ -62,7 +59,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpBadRequest();
             if (!announce.AuthorId.Equals(User.GetUserId()))
                 return HttpBadRequest();
-            AnnounceChosen IChooseYou = new AnnounceChosen() {
+            var IChooseYou = new AnnounceChosen() {
                 ChosenUserId = userId,
                 AnnounceId = announceId,
                 ChosenDateTime = DateTime.Now,
@@ -72,16 +69,26 @@ namespace Cianfrusaglie.Controllers
             return RedirectToAction( "Index" , new { id=announceId } );
         }
 
-        public void SetInterestedToReadStatus(int id)
-        {
+       public IActionResult Close( int id ) {
+         if( !LoginChecker.HasLoggedUser( this ) )
+            return HttpBadRequest();
+
+         var announce = _context.Announces.SingleOrDefault( a => a.Id == id );
+          if( announce != null && announce.AuthorId == User.GetUserId() ) {
+             announce.Closed = true;
+             _context.SaveChanges();
+          }
+
+          return RedirectToAction( nameof( Index ), new { id = id } );
+       }
+
+        public void SetInterestedToReadStatus(int id) {
             var newInterested = _context.Interested.Where(i => !i.Read && i.AnnounceId.Equals(id));
-            foreach (var interested in newInterested)
-            {
+            foreach (var interested in newInterested) {
                 interested.Read = true;
                 //_context.SaveChanges();
             }
             _context.SaveChanges();
-
         }
 
     }

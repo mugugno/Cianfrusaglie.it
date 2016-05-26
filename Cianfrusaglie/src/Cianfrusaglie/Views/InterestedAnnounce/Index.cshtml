@@ -5,84 +5,102 @@
 }
 
 <div class="panel-body" >
-    <div class="panel panel-default">
-        <div class="panel-heading" id="my-conversations">
-            <h3>@ViewData["Title"]</h3>
+    <div class="panel panel-default" >
+        <div class="panel-heading" id="my-conversations" >
+            <h3>@ViewData[ "Title" ]</h3>
+            @if( ViewData.ContainsKey( "chosenUserId" ) && !Model.Announce.Closed ) {
+                <span><a onclick="announceCloseConfirm()">Concludi transazione</a></span>
+            } else if( Model.Announce.Closed ) {
+                <span>Annuncio chiuso</span>
+            }
         </div>
 
-        @if (!Model.InterestedUsers.Any())
-        {
+        @if( !Model.InterestedUsers.Any() ) {
             <div class="panel-group" >
-                <div class="panel-body" style="text-align: center">
+                <div class="panel-body" style="text-align: center" >
                     Non ci sono persone interessate a questo Annuncio!
                 </div>
             </div>
-        }
-        else {
-            <div class="panel-body">
-                @foreach (var user in Model.InterestedUsers)
-                {
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-md-1">
-                                <div class="photo">
-                                    <img class="img-responsive" src="@user.ProfileImageUrl" />
+        } else {
+            <div class="panel-body" >
+                @foreach( var user in Model.InterestedUsers ) {
+                    <div class="panel panel-default" >
+                        <div class="panel-body" >
+                            <div class="form-group" >
+                                <div class="col-md-1" >
+                                    <div class="photo" >
+                                        <img class="img-responsive" src="@user.ProfileImageUrl" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4" >
+                                    <h4> @user.UserName</h4>
+                                    @*<h4>Rating!</h4>*@
+                                </div>
+                                <div class="col-md-6" >
+                                    <h4><a href="~/Messages/Create/?id=@user.Id" >Contatta</a></h4>
+
+                                    @{
+                                        const string chosenuserid = "chosenUserId";
+                                    }
+                                    @if( ViewData.ContainsKey( chosenuserid ) ) {
+                                        const string feedbackgivenusers = "feedbackGivenUsers";
+                                        if( !( (List< string >) ViewData[ feedbackgivenusers ] ).Contains( user.Id ) ) {
+                                            if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
+                                                <h4>Hai scelto questo utente come destinatario!</h4>
+                                                <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recensione!</a></h4>
+                                            } else {
+                                                const string allotherschosenuserid = "allOthersChosenUserId";
+                                                if( ( (IEnumerable< string >) ViewData[ allotherschosenuserid ] ).Contains( user.Id ) ) {
+                                                    <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
+                                                    <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recesione</a></h4>
+                                                }
+                                            }
+                                        } else {
+                                            if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
+                                                <h4>Hai scelto questo utente come destinatario!</h4>
+                                                <h4>Hai gi&agrave; inviato la tua recensione!</h4>
+                                            } else {
+                                                const string allotherschosenuserid = "allOthersChosenUserId";
+                                                if( ( (IEnumerable< string >) ViewData[ allotherschosenuserid ] ).Contains( user.Id ) ) {
+                                                    <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
+                                                    <h4>Hai gi&agrave; inviato la tua recensione!</h4>
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id" >Scegli come destinatario</a></h4>
+                                    }
                                 </div>
                             </div>
-                            <div class="col-md-4" >
-                                <h4> @user.UserName</h4>
-                                @*<h4>Rating!</h4>*@
-                            </div>
-                            <div class="col-md-6">
-                                <h4><a href="~/Messages/Create/?id=@user.Id" >Contatta</a></h4>
-
-                                @{
-                                    const string chosenuserid = "chosenUserId";
-                                }
-                                @if( ViewData.ContainsKey( chosenuserid ) ) {
-                                    const string feedbackgivenusers = "feedbackGivenUsers";
-                                    if( !( (List< string >) ViewData[ feedbackgivenusers ] ).Contains( user.Id ) ) {
-                                        if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
-                                            <h4>Hai scelto questo utente come destinatario!</h4>
-                                            <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recensione!</a></h4>
-                                        } else {
-                                            const string allotherschosenuserid = "allOthersChosenUserId";
-                                            if( ( (IEnumerable< string >) ViewData[ allotherschosenuserid ] ).Contains( user.Id ) ) {
-                                                <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
-                                                <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recesione</a></h4>
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (ViewData[chosenuserid].Equals(user.Id))
-                                        {
-                                            <h4>Hai scelto questo utente come destinatario!</h4>
-                                            <h4>Hai gi&agrave; inviato la tua recensione!</h4>
-                                        }
-                                        else
-                                        {
-                                            const string allotherschosenuserid = "allOthersChosenUserId";
-                                            if (((IEnumerable<string>)ViewData[allotherschosenuserid]).Contains(user.Id))
-                                            {
-                                                <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
-                                                <h4>Hai gi&agrave; inviato la tua recensione!</h4>
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id">Scegli come destinatario</a></h4>
-                                }
-                               </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
 
         }
     </div>
 </div>
+
+<div id="AnnounceCloseConfirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>
+                    Sicuro di voler concludere la transazione relativa a questo annuncio?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmbtn">Conferma</button>
+                <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function announceCloseConfirm() {
+        $('#AnnounceCloseConfirm').modal({ backdrop : 'static', keyboard : false })
+            .one('click', '#confirmbtn', function(err) { window.location.href = "/InterestedAnnounce/Close?id=@Model.Announce.Id"; });
+    }
+</script>
