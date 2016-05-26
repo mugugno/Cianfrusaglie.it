@@ -110,7 +110,7 @@
                 <div class="form-group" id="linkVendi">
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <a href="~/Announces/Create?vendita=true" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
                     }
                     else
                     {
@@ -122,7 +122,7 @@
                 <div class="form-group" id="linkCerca">
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
                     }
                     else
                     {

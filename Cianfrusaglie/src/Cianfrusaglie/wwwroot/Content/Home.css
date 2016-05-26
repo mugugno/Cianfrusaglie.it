@@ -155,6 +155,7 @@
     position: absolute;
     top: -1px;
     visibility: hidden;
+    
 }
 
 .dropdown-menu li:hover .sub-menu { visibility: visible; }

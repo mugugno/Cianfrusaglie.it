@@ -59,7 +59,7 @@
 </head>
 <body>
 <div id="wrap">
-    <div id="pageHeader" class="container ">
+    <div id="pageHeader" class="container " style="background-color: ">
         <form class="navbar-form" role="search" asp-action="SearchRedirect" asp-controller="Search" method="get">
             <div id="title" class="col-md-3" >
                 <a href="~/" >
@@ -99,16 +99,36 @@
                         @foreach( var macro in GetCategories() ) {
                             <li>
                                 <a href="~/Search?categories=@macro.Id" >@macro.Name</a>
-                                @if( GetSubCategories( @macro.Name ).ToList().Count > 0 ) {
-                                    <ul class="dropdown-menu sub-menu" >
+                                @if (GetSubCategories(@macro.Name).ToList().Count > 0)
+                                {
+                                    if (@macro.Name.Equals("MisteryBox"))
+                                    {
+                                        <ul class="dropdown-menu sub-menu" style="height: auto;">
+                                            <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
+                                            <li class="divider"></li>
+                                            <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                            <li class="divider"></li>
+                                            @foreach (var sub in GetSubCategories(@macro.Name))
+                                            {
+                                                <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                        <li class="divider"></li>
+                                                <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;"><br/>Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                    <ul class="dropdown-menu sub-menu">
                                         <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
-                                        <li class="divider" ></li>
+                                        <li class="divider"></li>
                                         <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
-                                        <li class="divider" ></li>
-                                        @foreach( var sub in GetSubCategories( @macro.Name ) ) {
-                                            <li><a href="~/Search?categories=@sub.Id" >@sub.Name</a></li>
+                                        <li class="divider"></li>
+                                        @foreach (var sub in GetSubCategories(@macro.Name))
+                                        {
+                                            <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
                                         }
                                     </ul>
+                                    }
                                 }
                             </li>
                         }
@@ -275,7 +295,10 @@
                 Copyright © 2016 Mugugno / All rights reserved.
             </div>
 
-    <script src="~/js/AnnounceDetails.js"></script>
+<script src="~/js/AnnounceDetails.js"></script>
+<script type="text/javascript">
+    $('#popoverData').popover({ html: true });
+</script>
 
 </body>
 </html>
