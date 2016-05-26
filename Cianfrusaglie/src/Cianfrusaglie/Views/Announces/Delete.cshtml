@@ -4,58 +4,55 @@
     ViewData[ "Title" ] = "Elimina annuncio";
 }
 
-<h2>Elimina il tuo annuncio</h2>
 
-<div class="panel-body" >
-    <div class="panel panel-default" >
-        <div class="panel-heading" style="text-align: center">
-            <h2>Sei proprio sicuro di voler cancellare questo annuncio?</h2>
-        </div>
-        <div class="panel-body" >
-            <div class="col-md-3" >
-                @if( Model.Images.Any() ) {
-                    <div class="photo" >
-                        <img class="img-responsive" src="@Model.Images.First().Url" />
+<div id="wrap">
+    <div class="panel">
+        <div class="row" id="page1">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align: center">
+                    <h2>Sei proprio sicuro di voler cancellare questo annuncio?</h2>
+                </div>
+                <div class="panel-body">
+
+                    <div class="col-md-11">
+                        <dl class="dl-horizontal">
+
+
+                            <dt>
+                                Titolo
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Title)
+                            </dd>
+                            <dt>
+                                Descrizione
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Description)
+                            </dd>
+                            <dt>
+                                Data di pubblicazione
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PublishDate)
+                            </dd>
+
+                        </dl>
+
                     </div>
-                }
-            </div>
-            <div class="col-md-8" >
-                <dl class="dl-horizontal" >
+                </div>
+                <div class="panel-footer">
+                    <div style="text-align: center">
 
-
-                    <dt>
-                        Titolo:
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor( model => model.Title )
-                    </dd>
-                    <dt>
-                        Descrizione
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor( model => model.Description )
-                    </dd>
-                    <dt>
-                        Data di pubblicazione
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor( model => model.PublishDate )
-                    </dd>
-
-                </dl>
-
-            </div>
-        </div>
-        <div class="panel-footer" >
-            <div style="text-align: center">
-
-                <form asp-action="Delete">
-                    <div class="form-actions no-color" >
-                        <input type="hidden" id="id" name="id" value="@Model.Id"/>
-                        <input class="btn btn-default" type="submit" value="Elimina definitivamente" style="margin-right: 100px" />
-                        <a class="btn btn-default" href="~/History/Index" >Torna a tutti i miei annunci</a>
+                        <form asp-action="Delete">
+                            <div class="form-actions no-color">
+                                <input type="hidden" id="id" name="id" value="@Model.Id"/>
+                                <input class="btn btn-default" type="submit" value="Elimina definitivamente" style="margin-right: 100px"/>
+                                <a class="btn btn-default" href="~/History/Index">Torna a tutti i miei annunci</a>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

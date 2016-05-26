@@ -244,3 +244,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 Cianfrusaglie/src/Cianfrusaglie/wwwroot/images/
+/Cianfrusaglie/src/Cianfrusaglie/Properties/PublishProfiles

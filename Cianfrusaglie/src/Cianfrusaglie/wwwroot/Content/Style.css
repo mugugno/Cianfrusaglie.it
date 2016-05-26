@@ -16,6 +16,11 @@ body {
 }
 a, h1, h2, h3, h4, h5, h6 {font-family: 'Roboto', sans-serif; }
 
+p {
+   font-family: 'Roboto', sans-serif;
+    color: #909090 !important;
+}
+
 button { padding: 0; }
 #title {
     
@@ -33,9 +38,6 @@ button { padding: 0; }
     text-decoration: none;
 }
 
-.input-search {
-   
-}
 .input-search input{
     width: 20em;
 
@@ -101,4 +103,9 @@ button { padding: 0; }
 
 .inputMargin {
     margin-bottom: 1em;
+}
+
+.popoverDiv {
+    position: absolute;
+    max-width: 50em;
 }
