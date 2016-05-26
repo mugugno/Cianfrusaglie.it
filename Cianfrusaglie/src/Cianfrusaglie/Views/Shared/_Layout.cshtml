@@ -141,57 +141,52 @@
                 else
                 {
                     @* Pulsante Notifiche *@
-                        <li class="dropdown dropdown-large">
-                            @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
-                            @if (ViewData["IsThereAnyNotification"] as bool? ?? false)
-                            {
-                                <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;"><b class="caret"></b></a>
-                                <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
-                                    @*Se ci sono nuovi messaggi*@
-                                    @if (ViewData["IsThereNewMessage"] as bool? ?? false)
+                    <li class="dropdown dropdown-large">
+                        @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
+                        @if (ViewData["IsThereAnyNotification"] as bool? ?? false)
+                        {
+                            <a href="#" class="dropdown-toggle glyphicon glyphicon-send" data-toggle="dropdown" style="font-size: 2em; color: red;"><b class="caret"></b></a>
+                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
+                                @if (ViewData["IsThereNewMessage"] as bool? ?? false)
+                                {
+
+                                    <li class="dropdown-header">
+                                        <span class="glyphicon glyphicon-envelope"></span>
+                                        <span><a href="~/Messages"> Hai nuovi Messaggi da leggere!</a></span>
+                                    </li>
+
+
+                                }
+                                @{
+                                    if (ViewData[" IsThereNewInterested"] as bool? ?? false)
                                     {
                                         <li class="dropdown-header">
-                                            <p>Notifiche <span class="glyphicon glyphicon-envelope"></span></p>
-                                            <span><a href="~/Messages"> Hai nuovi Messaggi da leggere!</a></span>
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                            <span><a href="~/History/Index"> Hai nuovi Interessati ai tuoi annunci!</a></span>
                                         </li>
-
-
                                     }
-                                    @*Se ci sono nuovi interessati*@@{
-                                        if (ViewData[" IsThereNewInterested"] as bool? ?? false)
-                                        {
-                                            <li class="dropdown-header">
-                                                <p>Notifiche <span class="glyphicon glyphicon-eye-open"></span></p>
-                                                <span><a href="~/History/Index"> Hai nuovi Interessati ai tuoi annunci!</a></span>
+                                }
+                            </ul>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em"><b class="caret"></b></a>
+                                        <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
+                                            <li style="text-align: center; padding: 1em">
+                                                <span>Nessuna notifica</span>
                                             </li>
-                                        }
+                                        </ul>
                                     }
-                                </ul>
-                                        }
-                                        else
-                                        {
-                                            @*Se non c'è nessuna notifica*@
-                                            <a>
-                                                Notifiche
-                                                <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 1em; color:#909090">
-                                                    <b class="caret"> </b>
-                                                </a>
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
-                                                <li style="text-align: center">
-                                                    <span>Nessuna notifica</span>
-                                                </li>
-                                            </ul>
-                                        }
                         </li>
-                 
-                                        @* Menù profilo *@
-                                        <li class="dropdown dropdown-large">
+
+                        @* Menù profilo *@
+<li class="dropdown dropdown-large">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
                                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right:0">
                                                 <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
                                                 <li><a href="~/History/Index">I miei annunci</a></li>
                                                 <li><a href="~/InterestedIn/Index">Annunci che mi interessano</a></li>
+                                                <li><a href="">Le mie preferenze</a></li>
                                                 <li class="divider"></li>
                                                 <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
                                                 <li><a href="~/Messages">Le mie conversazioni</a></li>

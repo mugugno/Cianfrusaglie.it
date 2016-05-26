@@ -8,7 +8,6 @@ using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
-using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -29,14 +28,14 @@ namespace Cianfrusaglie.Controllers {
             CommonFunctions.SetRootLayoutViewData( this,_context );
             return View();
         }
+
         /// <summary>
         /// Restituisce la pagina con i risultati della ricerca.
         /// </summary>
         /// <param name="title">La stringa scritta nella barra di ricerca</param>
         /// <param name="categories">Le categorie selezionate</param>
         /// <returns>La View con i risultati della ricerca</returns>
-        public IActionResult Index(string title, IEnumerable<int> categories, int range = 0, int page = 0)
-        {
+        public IActionResult Index(string title, IEnumerable<int> categories, int range = 0, int page = 0) {
             ViewData["listUsers"] = _context.Users.ToList();
             User user = null;
             if (LoginChecker.HasLoggedUser(this))
@@ -58,8 +57,7 @@ namespace Cianfrusaglie.Controllers {
             List< Announce > result;
             List< Announce > pageResults;
             if (string.IsNullOrEmpty(title) && !categories.Any())
-                if (user == null)
-                {
+                if (user == null) {
                     result = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
                     ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1+ result.Count / resultsPerPage);
                     if( result.Count > resultsPerPage * ( page + 1 ) ) {
@@ -68,17 +66,12 @@ namespace Cianfrusaglie.Controllers {
                          pageResults = result.GetRange( Math.Min( resultsPerPage * page, (result.Count - 1) < 0 ? 0 : result.Count - 1), Math.Max(result.Count - resultsPerPage * page, 0));
                     }
                     return View(pageResults);
-                }
-                else
-                {
+                } else {
                     result = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
                     ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
-                    if (result.Count > resultsPerPage * (page + 1))
-                    {
+                    if (result.Count > resultsPerPage * (page + 1)) {
                         pageResults = result.GetRange(resultsPerPage * page, resultsPerPage);
-                    }
-                    else
-                    {
+                    } else {
                         pageResults = result.GetRange(Math.Min(resultsPerPage * page, (result.Count - 1) < 0 ? 0 : result.Count - 1), Math.Max(result.Count - resultsPerPage * page, 0));
                     }
                     return View(pageResults);
@@ -89,29 +82,49 @@ namespace Cianfrusaglie.Controllers {
 
             result = SearchAnnounces(title, categories).ToList();
 
-            if (user != null && range > 0)
-            {
+            if (user != null && range > 0) {
                 var loggedUser = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
                 result = DistanceSearch(result, loggedUser.Latitude, loggedUser.Longitude, range).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
             }
 
             ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
-            if (result.Count > resultsPerPage * (page + 1))
-            {
+            if (result.Count > resultsPerPage * (page + 1)) {
                 pageResults = result.GetRange(resultsPerPage * page, resultsPerPage);
-            }
-            else
-            {
+            } else {
                 pageResults = result.GetRange(Math.Min(resultsPerPage * page, (result.Count - 1) <0 ? 0 : result.Count -1), Math.Max(result.Count - resultsPerPage * page, 0));
             }
             return View(pageResults);
         }
 
-        public IActionResult SearchRedirect(string title, IEnumerable<int> categories)
-        {
+        public IActionResult SearchRedirect(string title, IEnumerable<int> categories) {
             return RedirectToAction("Index", new { title, categories });
         }
 
+      public IActionResult LastAnnounces(string f = "f", int page = 0) {
+         ViewData[ "listUsers" ] = _context.Users.ToList();
+
+
+         //TODO QUANDO SI FARANNO I BARATTI
+         //ViewData["listExchange"] = _context.Announces.Where();
+         ViewData[ "formCategories" ] = _context.Categories.ToList();
+         ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+         ViewData[ "listUsers" ] = _context.Users.ToList();
+         ViewData[ "listImages" ] = _context.ImageUrls.ToList();
+         ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
+         ViewData[ " IsThereNewInterested" ] = IsThereNewInterested( User.GetUserId(), _context );
+         ViewData[ "IsThereAnyNotification" ] = IsThereAnyNotification( User.GetUserId(), _context );
+         ViewData[ "pageNumber" ] = page;
+
+         var result = _context.Announces.OrderByDescending( u => u.PublishDate ).ToList();
+         List<Announce> pageResults;
+         ViewData[ "numberOfPages" ] = ( result.Count % resultsPerPage ) == 0 ? ( result.Count / resultsPerPage ) : ( 1 + result.Count / resultsPerPage );
+         if( result.Count > resultsPerPage * ( page + 1 ) ) {
+            pageResults = result.GetRange( resultsPerPage * page, resultsPerPage );
+         } else {
+            pageResults = result.GetRange( Math.Min( resultsPerPage * page, ( result.Count - 1 ) < 0 ? 0 : result.Count - 1 ), Math.Max( result.Count - resultsPerPage * page, 0 ) );
+         }
+         return View( nameof( Index ), pageResults );
+      }
 
         /// <summary>
         /// Data una stringa titolo e una lista di Id di categorie, ritorna i risultati della ricerca.
