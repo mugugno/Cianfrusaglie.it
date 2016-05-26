@@ -21,12 +21,12 @@
     margin-top: 10px;
     text-align: center;
 }
-.photo  {
+.photoThu  {
   max-height:200px;
   overflow:hidden;
 }
 
-.photo img {
+.photoThu img {
    width:100%;
    min-height:100px;
 }

@@ -148,14 +148,15 @@
 
                     <div class="col-item" >
 
-                        <div class="photo" >
+                        <div class="photoThu" >
                             @if (!User.Identity.IsAuthenticated)
                             {
                                 <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                            }
-                            else
-                            {
-                                <a href="~/Messages/Details/?id=@annuncio.AuthorId"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                                    }
+                                    else
+                                    {
+
+                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
 
                             }
                         </div>
@@ -201,14 +202,14 @@
 
                             <div class="col-item">
                                 
-                                <div class="photo">
+                                <div class="photoThu">
                                @if (!User.Identity.IsAuthenticated)
                                {
                                 <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
                                }
                                else
                                {
-                                <a href="~/Messages/Details/?id=@annuncio.AuthorId"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
 
                                }
 
