@@ -73,7 +73,7 @@
                             idDiv = "sale";
                         }
                         <div class="col-item" id="@idDiv">
-                            <div class="photo">
+                            <div class="photoThu">
                                 <img src="@GetImages(announce.Id)" class="img-responsive"/>
                             </div>
 
@@ -138,21 +138,32 @@
         </div>
 
     </div>
-    <!--<div class="paginationDiv">
-        <ul class="pagination">
-            <li><a href="/page=1">«</a></li>
-            <li><a href="">1</a></li>
-            <li><a class="active" href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-            <li><a href="#">7</a></li>
-            <li><a href="#">»</a></li>
+    <div class="paginationDiv" style="text-align: center" >
+        <ul class="pagination" >
+            <p>Pagine dei risultati</p>
+            @{
+                for( int page = 0; page < (int) ViewData[ "numberOfPages" ]; page++ ) {
+                    int printPage = page + 1;
+                    if( (int) ViewData[ "pageNumber" ] == page ) {
+                        <li><a href="" class="page-nav" id="page=@page" style="background: #FFC107" >@printPage</a></li>
+                    } else {
+                        <li><a href="" class="page-nav" id="page=@page" >@printPage</a></li>
+                    }
+                }
+            }
         </ul>
-    </div>-->
+    </div>
 </div>
+<script>
 
+    var navButton = document.getElementsByClassName("page-nav");
+    for( var i = 0; i < navButton.length; i++ ) {
+
+        navButton[ i ].setAttribute('href', window.location.href.replace(/&page=[^&]+/, "") + "&"+navButton[i].id);
+    }
+
+
+</script>
 
 
 

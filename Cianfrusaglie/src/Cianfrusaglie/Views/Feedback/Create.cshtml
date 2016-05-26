@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @model Cianfrusaglie.Models.FeedBack
 
 @{
@@ -9,27 +10,39 @@
         <h3>@ViewData["Title"]</h3>
     </div>
 
-    <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-    <div class="panel panel-body" >
-        <div  >
-            <input asp-for="AnnounceId" value="@(((Announce)ViewData[ "announce" ]).Id)" />
-            <input asp-for="ReceiverId" value="@(( (User) ViewData[ "receiver" ] ).Id)" />
-            <input asp-for="AuthorId" value="@((string)ViewData[ "authorId" ])" />
+    <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger" ></div>
+    @{
+        var receiver = (User)ViewData["receiver"];
+       
+    }
+    <div class="panel panel-body">
+        <div  hidden>
+            <input asp-for="AnnounceId" value="@(((int)ViewData[ "announce" ]))" />
+            <input asp-for="ReceiverId" value="@receiver.Id"  />
+            <input asp-for="AuthorId" value="@User.GetUserId()" />
         </div>
         <div class="form-group" >
-            <label class="control-label" >Scrivi una Recensione per l'utente @((User) ViewData[ "receiver" ])</label>
+            <label class="control-label" >Scrivi una Recensione per l'utente @receiver.UserName</label>
             <textarea asp-for="Text" class="form-control" rows="5" ></textarea>
             <span asp-validation-for="Text" class="text-danger"></span>
         </div>
         <div class="form-group" >
-            <label class="control-label" >Voto</label>
-            <input asp-for="Vote" class="form-control"type="number" value="3" />
-            <span asp-validation-for="Vote" class="text-danger"></span>
+            <input asp-for="Vote" class="form-control" id="AspStarRatingValue" value="5" type="number" style="display: none"/>
+            <label class="control-label" >Voto</label><br/>
+            <div class="acidjs-rating-stars" >
+                <div>
+                    <input type="radio" name="group-1" id="group-1-0" value="5" checked="checked" onclick="onStarClick(event)" /><label for="group-1-0" ></label>
+                    <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClick(event)" /><label for="group-1-1" ></label>
+                    <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClick(event)"/><label for="group-1-2" ></label>
+                    <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClick(event)"/><label for="group-1-3" ></label>
+                    <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClick(event)"/><label for="group-1-4" ></label>
+                </div>
+            </div>
         </div>
-        <input type="submit" value="Create" class="btn btn-default" />
+        <input type="submit" value="Aggiungi Recensione" class="btn btn-default" />
     </div>
     <div>
-        <a href="~/InterestedAnnounce/?id=@(((Announce)ViewData["announce"]).Id)">Torna ai miei Annunci</a>
+        <a href="~/InterestedAnnounce/?id=@(((int)ViewData["announce"]))">Torna ai miei Annunci</a>
     </div>
 </form>
 

@@ -42,20 +42,39 @@
                                     const string chosenuserid = "chosenUserId";
                                 }
                                 @if( ViewData.ContainsKey( chosenuserid ) ) {
-                                    if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
-                                        <h4><a href="#" >Scelto come Destinatario</a></h4>
-                                        <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id">Lascia una recensione all'Autore</a></h4>
+                                    const string feedbackgivenusers = "feedbackGivenUsers";
+                                    if( !( (List< string >) ViewData[ feedbackgivenusers ] ).Contains( user.Id ) ) {
+                                        if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
+                                            <h4>Hai scelto questo utente come destinatario!</h4>
+                                            <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recensione!</a></h4>
+                                        } else {
+                                            const string allotherschosenuserid = "allOthersChosenUserId";
+                                            if( ( (IEnumerable< string >) ViewData[ allotherschosenuserid ] ).Contains( user.Id ) ) {
+                                                <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
+                                                <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recesione</a></h4>
+                                            }
+                                        }
                                     }
-                                    else {
-                                        const string allotherschosenuserid = "allOthersChosenUserId";
-                                        if (((IEnumerable<string>)ViewData[allotherschosenuserid]).Contains(user.Id))
+                                    else
+                                    {
+                                        if (ViewData[chosenuserid].Equals(user.Id))
                                         {
-                                            <h4><a href="#" >L'Autore ha scelto un altro Destinatario.</a></h4>
-                                            <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id">Lascia una recensione all'Autore</a></h4>
+                                            <h4>Hai scelto questo utente come destinatario!</h4>
+                                            <h4>Hai gi&agrave; inviato la tua recensione!</h4>
+                                        }
+                                        else
+                                        {
+                                            const string allotherschosenuserid = "allOthersChosenUserId";
+                                            if (((IEnumerable<string>)ViewData[allotherschosenuserid]).Contains(user.Id))
+                                            {
+                                                <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
+                                                <h4>Hai gi&agrave; inviato la tua recensione!</h4>
+                                            }
                                         }
                                     }
                                 }
-                                else {
+                                else
+                                {
                                     <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id">Scegli come destinatario</a></h4>
                                 }
                                </div>
