@@ -86,7 +86,22 @@
         </div>
         <div class="col-sm-10 col-md-5">
             <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
+            @{
+                int j = 0;
+                foreach (var category in (IEnumerable<AnnounceCategory>) ViewData["nameAnnounceCategories"])
+                {
 
+                    if (j == 0)
+                    {
+                        <li style="padding-left: 1em"> in @category.Category.Name</li>
+                    }
+                    else
+                    {
+                        <li>- @category.Category.Name</li>
+                    }
+                    j++;
+                }
+            }
             @if (@ViewData["interested"].Equals(false) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
             {
                 <div class="icon-detail">
@@ -262,15 +277,12 @@
                     $('button[name="nonLoVoglio"]').hide();
                     $('button[name="loVoglio"]').show();
                     $('span[name="spanGliphNonLoVoglioPiu"]').hide();
-                    $('span[name="seiInteressato"]').hide()
+                    $('span[name="seiInteressato"]').hide();
                     
                     $.post( "/Announces/Interested", {
                         AnnounceId: tmp,
                         __RequestVerificationToken: antiForgeryToken
-                    })
-                   
-                    
-                        .fail(function() { alert("error"); });
+                    }).fail(function() { alert("error"); });
                 });
         });
 

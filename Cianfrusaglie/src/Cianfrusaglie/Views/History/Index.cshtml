@@ -4,62 +4,68 @@
     ViewData["Title"] = "I miei annunci";
 }
 
+<div id="wrap">
+    <div class="panel panel-body">
+        <div class="panel panel-default">
 
-<div class="panel panel-body" >
-    <div class="panel panel-default" >
+            <div class="panel-heading" id="my-conversations">
+                <h2>I miei annunci</h2>
+            </div>
+            <div class="panel-body">
+                <div class="panel-group" id="panel-524234">
+                    @if (Model.Any())
+                    {
+                        var interessati = (Dictionary<int, List<int>>) ViewData["Interested"];
+                        foreach (var item in Model)
+                        {
 
-        <div class="panel-heading" id="my-conversations" >
-            <span style="color:#FFC107"><h1>I miei annunci</h1></span>
-        </div>
-        <div class="panel-body" >
-            <div class="panel-group" id="panel-524234" >
-                @if( Model.Any() ) {
-                    var interessati = (Dictionary<int, List<int>>)ViewData["Interested"];
-                    foreach ( var item in Model ) {
 
-                        
-                        <div class="panel panel-default" >
-                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer">
 
-                                <span style="float: right"> Pubblicato il @item.PublishDate </span>
-                                <span style="font-size:1.5em"><b>@item.Title</b></span>
+                                    <span style="float: right"> Pubblicato il @item.PublishDate </span>
+                                    <span style="font-size: 1.5em"><b>@item.Title</b></span>
 
                                 
-                                <span style="margin-left:1em" >Numero di interessati @interessati[item.Id].First()</span><span><b> di cui @interessati[item.Id].Last() nuovi </b></span>
+                                    <span style="margin-left: 1em" >Numero di interessati: @interessati[item.Id].First()</span><span><b> (di cui @interessati[item.Id].Last() nuovi) </b></span>
 
-                                @*@foreach (var interested in interessati.Values)
+                                    @*@foreach (var interested in interessati.Values)
     {
 
         <span>Numero di interessati @interested.ElementAt(0).ToString()  </span>
     }
                                 *@
-                            </div>
-                            <div id="announce-number-@item.Id" class="panel-collapse collapse" >
-                                <div class="panel-body" >
-                                    <div class="form-group" >
-                                        <div class="col-md-1" >
-                                            @if( item.Images.Any() ) {
-                                                <div class="photo" >
-                                                    <img class="img-responsive" src="@item.Images.First().Url" />
-                                                </div>
-                                            }
-                                        </div>
-                                        <div class="col-md-9" >
+                                </div>
+                                <div id="announce-number-@item.Id" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class="col-md-1">
+                                                @if (item.Images.Any())
+                                                {
+                                                    <div class="photo">
+                                                        <img class="img-responsive" src="@item.Images.First().Url"/>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="col-md-9">
 
-                                            <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
-                                            <a href="~/Announces/Delete/?id=@item.Id" >Elimina annuncio</a> <br />
-                                            <a href="~/InterestedAnnounce/?id=@item.Id" >Visualizza utenti interessati</a>
-                                            
+                                                <a href="~/Announces/Details/?id=@item.Id">Visualizza annuncio</a> <br/>
+                                                <a href="~/Announces/Delete/?id=@item.Id">Elimina annuncio</a> <br/>
+                                                <a href="~/InterestedAnnounce/?id=@item.Id">Visualizza utenti interessati</a>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     }
-                } else {
-                    <div>Non hai ancora pubblicato alcun annuncio!</div>
-                }
+                    else
+                    {
+                        <div>Non hai ancora pubblicato alcun annuncio!</div>
+                    }
 
+                </div>
             </div>
         </div>
     </div>

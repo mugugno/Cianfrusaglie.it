@@ -21,7 +21,7 @@ namespace Cianfrusaglie.Controllers {
       /// </summary>
       /// <returns>Restituisce annunci pubblicati dall'utente loggato</returns>
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
-         var myAnnounces = _context.Announces.Include( p => p.Images ).Where( a => a.AuthorId == User.GetUserId() );
+         var myAnnounces = _context.Announces.Include( p => p.Images ).Include( p => p.Interested ).Where( a => a.AuthorId == User.GetUserId() );
          return myAnnounces;
       } 
 
