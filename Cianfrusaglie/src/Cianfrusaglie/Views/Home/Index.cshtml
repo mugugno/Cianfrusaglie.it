@@ -197,7 +197,7 @@
             <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
             @if (User.Identity.IsAuthenticated)
             {
-                <br /><br /><h3>Annunci Suggeriti</h3><hr class="simple-hr" /><br /><br />
+                <br /><br /><h3>Scelti per te   </h3><hr class="simple-hr" /><br /><br />
             }
             @foreach( var annuncio in GetSuggestedAnnounce() ) {
                 <div class="col-sm-5 col-md-4" >
