@@ -36,8 +36,11 @@ namespace Cianfrusaglie.Controllers
             if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
             CommonFunctions.SetRootLayoutViewData(this, _context);
+            var receiver = _context.Users.SingleOrDefault( u => u.Id.Equals( receiverId ) );
+            if(receiver==null)
+                return HttpNotFound();
             ViewData["announce"] = announceId;
-            ViewData["receiver"] = receiverId;
+            ViewData["receiver"] = receiver;
             if(_context.FeedBacks.Any(f=> f.AnnounceId.Equals( announceId ) && f.ReceiverId.Equals( receiverId ) && f.AuthorId.Equals( User.GetUserId())))
             {
                 return HttpBadRequest();

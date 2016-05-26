@@ -159,9 +159,13 @@ namespace Cianfrusaglie.Controllers {
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
-                ViewData[ "interested" ] =
+                ViewData[ "int" ] =
                     announce.Interested.Where( c => c.UserId.Equals( User.GetUserId() ) ).Select( u => u.UserId )
                         .SingleOrDefault();
+            if (ViewData["int"] != null)
+                ViewData["interested"] = true;
+            else
+                ViewData["interested"] = false;
             return View( announce );
         }
 
@@ -322,7 +326,7 @@ namespace Cianfrusaglie.Controllers {
             if( exis == null ) {
                 var interestedTmp = new Interested {User = userTmp, Announce = annTmp, DateTime = DateTime.Now};
                 _context.Interested.Add( interestedTmp );
-
+                ViewData["interested"] = true;
                 foreach( var gat in announceGats ) {
                     if( userGats.Select( a => a.Gat ).Contains( gat ) ) {
                         var userGatHistogram =
@@ -351,7 +355,9 @@ namespace Cianfrusaglie.Controllers {
                     //    _context.UserGatHistograms.Add(newGat);
                     //}
                 }
+
                 _context.Interested.Remove( exis );
+                ViewData["interested"] = false;
                 _context.SaveChanges();
             }
 
@@ -517,9 +523,8 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
 
             var im = _context.ImageUrls.Where( i => i.AnnounceId.Equals( announce.Id ) );
-            foreach( var imm in im ) {
-                _context.ImageUrls.Remove( imm );
-            }
+            _context.ImageUrls.RemoveRange( im );
+            _context.Interested.RemoveRange( _context.Interested.Where( i => i.AnnounceId == announce.Id ) );
             _context.Announces.Remove( announce );
 
             _context.SaveChanges();
