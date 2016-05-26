@@ -1,0 +1,125 @@
+﻿@using System.Collections.Generic
+@using System.Net.Mime
+@using System.Threading.Tasks
+@using Cianfrusaglie.Constants
+@using Microsoft.AspNet.JsonPatch.Helpers
+@using Microsoft.AspNet.Mvc.Rendering
+@using Cianfrusaglie.Models
+@model Cianfrusaglie.ViewModels.Preference.PreferenceViewModel
+@{
+    ViewData["Title"] = "Preferences";
+}
+
+
+@functions
+{
+
+    private IEnumerable<Category> GetMacroCategories()
+    {
+        for (int i = 0; i < (ViewData["numberOfMacroCategories"] as int? ?? 0); i++)
+        {
+            var categories = ViewData["formMacroCategories"] as List<Category>;
+            if (categories != null && categories[i].OverCategory == null)
+                yield return categories[i];
+        }
+    }
+
+    private IEnumerable<Category> GetCategories(Category macro)
+    {
+        for (int j = 0; j < (ViewData["numberOfMacroCategories"] as int? ?? 0); j++)
+        {
+            var subCat = ViewData["formMacroCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Id == macro.Id)
+                yield return subCat[j];
+        }
+    }
+
+}
+
+
+<html>
+<head>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Register.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Style.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="~/css/maps.css" rel="stylesheet" type="text/css" />
+
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script src="/js/googleMaps.js"></script>
+
+</head>
+<body>
+    <div style="text-align:center">
+        <form asp-action="Edit" asp-controller="Preferences" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
+
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="panel panel-default" id="sceltaCategorie">
+                            <h5 id="scelta"><strong>Modifica le tue categorie:</strong></h5>
+                        </div>
+                        <div class="col-md-6" style="margin-left: 25%">
+
+                            <div class="panel-group" id="panel-423221" >
+                                @foreach (var macroCategory in GetMacroCategories())
+                                {
+                                    var userPreferences = (IDictionary<int, bool>)ViewData["userPreferences"];
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
+                                            @macroCategory.Name
+                                        </div>
+                                        <div id="category-@macroCategory.Id" class="panel-collapse collapse">
+                                            <div class="panel-body" style="text-align:left;margin-left:40%">
+                                                <div class="form-group">
+
+                                                    <div class="col-md-12">
+                                                        
+                                                        @foreach (var category in GetCategories(macroCategory))
+                                                        {
+
+                                                            <div class="checkbox">
+                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                    @if (userPreferences[category.Id])
+                                                                    {
+                                                                        <input asp-for="CategoryDictionary[category.Id]" checked class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
+
+                                                                    }
+
+
+                                                                    @category.Name
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+                            </div>
+                            <div class="form-group" style="text-align:center">
+                                <br />
+                                <button class="btn btn-default col-md-12 btn-next" type="submit">Conferma</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </form>
+    </div>
+</body>
+</html>
+

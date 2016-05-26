@@ -56,7 +56,7 @@ namespace Cianfrusaglie.Controllers {
         ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
         ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
         ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
-        //ViewData["Interested"] = GetInterestedToAnnounces();
+        ViewData["Interested"] = GetInterestedToAnnounces();
         return View( GetLoggedUserPublishedAnnounces().ToList() );
       }
       

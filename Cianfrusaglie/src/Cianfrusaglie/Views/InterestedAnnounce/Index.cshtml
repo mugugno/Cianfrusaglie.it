@@ -1,7 +1,7 @@
 @model Cianfrusaglie.ViewModels.InterestedAnnounce.InterestedAnnounceViewModel
 
 @{
-    ViewData["Title"] = "Gli Interessati all'annuncio " + Model.Announce.Title;
+    ViewData["Title"] = Model.Announce.Title;
 }
 
 <div class="panel-body" >
@@ -21,6 +21,7 @@
                     Non ci sono persone interessate a questo Annuncio!
                 </div>
             </div>
+            
         } else {
             <div class="panel-body" >
                 @foreach( var user in Model.InterestedUsers ) {

@@ -40,8 +40,7 @@ namespace Cianfrusaglie.Controllers {
             if( chosen != null ) {
                 ViewData["chosenUserId"] = chosen.ChosenUserId;
                 ViewData["allOthersChosenUserId"] = announce.ChosenUsers.Where(u => !u.ChosenUserId.Equals(chosen.ChosenUserId)).Select(u => u.Id);
-                var z = _context.FeedBacks.Where(f => f.AnnounceId.Equals(announce.Id) && f.ReceiverId.Equals(chosen.ChosenUserId) && f.AuthorId.Equals(User.GetUserId())).Select(f => f.ReceiverId).ToList();
-                ViewData[ "feedbackGivenUsers" ] = z;
+                ViewData["feedbackGivenUsers"] = _context.FeedBacks.Where(f => f.AnnounceId.Equals(announce.Id) && f.ReceiverId.Equals(chosen.ChosenUserId) && f.AuthorId.Equals(User.GetUserId())).Select(f => f.ReceiverId).ToList();
             }
                
            

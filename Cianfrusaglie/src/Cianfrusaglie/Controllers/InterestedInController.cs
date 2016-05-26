@@ -39,6 +39,11 @@ namespace Cianfrusaglie.Controllers
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where( u=> u.ChosenUserId.Equals( User.GetUserId() ) ).Select(u => u.AnnounceId).ToList();
+            ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where( f => f.AuthorId.Equals( User.GetUserId() ) ).Select( f => f.AnnounceId ).ToList();
+            //    _context.Announces.Include( a => a.ChosenUsers ).Select( a => new { a.Id, a.ChosenUsers }).ToDictionary( k=> k.Id, v=> v.ChosenUsers.ToList() );
+            //ViewData["feedbackGivenAuthorsId"] = _context.FeedBacks.Where(  )
+
             return View(GetLoggedUserInterestedAnnounces());
         }
 
