@@ -1,22 +1,23 @@
 @model Cianfrusaglie.ViewModels.InterestedAnnounce.InterestedAnnounceViewModel
 
 @{
-    ViewData["Title"] = "Gli Interessati all'annuncio " + Model.Announce.Title;
+    ViewData["Title"] = Model.Announce.Title;
 }
 
 <div class="panel-body" >
     <div class="panel panel-default">
         <div class="panel-heading" id="my-conversations">
-            <h3>@ViewData["Title"]</h3>
+            <h2>Persone interessate all'annuncio <strong>@ViewData["Title"]</strong></h2>
         </div>
 
         @if (!Model.InterestedUsers.Any())
         {
-            <div class="panel-group" >
-                <div class="panel-body" style="text-align: center">
-                    Non ci sono persone interessate a questo Annuncio!
+            <div class="panel-group">
+                    <div class="panel-body" style="text-align: center">
+                        Non ci sono persone interessate a questo annuncio!
+                    </div>
                 </div>
-            </div>
+            
         }
         else {
             <div class="panel-body">
