@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
@@ -67,14 +68,11 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult Index( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData[ "allConversations" ] = GetAllConversations();
             ViewData[ "idAfterRefresh" ] = id;
             SetMessagesToReadStatus();
-            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            
             return View();
         }
 
@@ -101,12 +99,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             if ( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
                 return HttpNotFound();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData[ "receiver" ] = _context.Users.First( u => u.Id.Equals( id ) );
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            CommonFunctions.SetRootLayoutViewData( this,_context );
             return View();
         }
 
@@ -164,11 +157,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
 		    if( !message.Sender.Id.Equals( User.GetUserId() ) )
 		        return HttpBadRequest();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            CommonFunctions.SetRootLayoutViewData( this, _context );
             return View( message );
         }
 

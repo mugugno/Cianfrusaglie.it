@@ -98,13 +98,10 @@ namespace Cianfrusaglie.Controllers {
       public IActionResult LastAnnounces(string f = "f", int page = 0) {
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
-         ViewData[ "formCategories" ] = _context.Categories.ToList();
-         ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+         CommonFunctions.SetRootLayoutViewData( this, _context );
          ViewData[ "listUsers" ] = _context.Users.ToList();
          ViewData[ "listImages" ] = _context.ImageUrls.ToList();
-         ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-         ViewData[ " IsThereNewInterested" ] = IsThereNewInterested( User.GetUserId(), _context );
-         ViewData[ "IsThereAnyNotification" ] = IsThereAnyNotification( User.GetUserId(), _context );
+        
          ViewData[ "pageNumber" ] = page;
 
          var result = _context.Announces.Where(a => !a.Closed).OrderByDescending( u => u.PublishDate ).ToList();
