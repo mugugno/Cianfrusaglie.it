@@ -23,6 +23,10 @@ namespace Cianfrusaglie.Controllers {
             rankAlgorithm = new RankAlgorithm(context);
         }
 
+        public IActionResult Advanced()
+        {
+            return View();
+        }
         /// <summary>
         /// Restituisce la pagina con i risultati della ricerca.
         /// </summary>
