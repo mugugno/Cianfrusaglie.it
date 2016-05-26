@@ -3,8 +3,6 @@
     padding-right: 0px;
 }
 
-
-
 .affix {
     top: 0;
     width: 100%;
@@ -47,10 +45,8 @@
     left: -4px;
 }
 
-#linkRegala, #LinkVendi, #linkBaratta {
-    color: #333333;
-    font-size: large;
-    font-style: italic;
+#linkRegala, #LinkVendi, #linkCerca {
+    color: black;
     padding-bottom: 0;
     padding-left: 100px;
     padding-right: 100px;
