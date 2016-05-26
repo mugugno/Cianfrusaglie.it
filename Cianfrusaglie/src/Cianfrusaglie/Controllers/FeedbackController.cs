@@ -9,6 +9,7 @@ using Microsoft.Data.Entity;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 
+
 namespace Cianfrusaglie.Controllers
 {
     public class FeedbackController : Controller
@@ -21,7 +22,7 @@ namespace Cianfrusaglie.Controllers
         }
 
         private bool IsUserInterestedToAnnounce( int announceId, string userId ) {
-            var announce = _context.Announces.SingleOrDefault( a => a.Id == announceId );
+            var announce = _context.Announces.Include( a => a.Interested ).SingleOrDefault( a => a.Id == announceId );
             return announce != null && announce.Interested.Any( interested => interested.UserId == userId );
         }
 
@@ -32,12 +33,15 @@ namespace Cianfrusaglie.Controllers
 
         // GET: Feedback/Create
         public IActionResult Create(int announceId, string receiverId) {
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
             CommonFunctions.SetRootLayoutViewData(this, _context);
-            var announce = _context.Announces.Single( a => a.Id.Equals( announceId ) );
-            var user = _context.Users.Single( u => u.Id.Equals( receiverId ) );
-            ViewData["announce"] = announce;
-            ViewData["receiver"] = user;
-            ViewData["authorId"] = User.GetUserId();
+            ViewData["announce"] = announceId;
+            ViewData["receiver"] = receiverId;
+            if(_context.FeedBacks.Any(f=> f.AnnounceId.Equals( announceId ) && f.ReceiverId.Equals( receiverId ) && f.AuthorId.Equals( User.GetUserId())))
+            {
+                return HttpBadRequest();
+            }
             return View();
         }
 
@@ -45,45 +49,38 @@ namespace Cianfrusaglie.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(FeedBack feedBack) {
-            var announce = _context.Announces.SingleOrDefault( a => a.Id.Equals( feedBack.AnnounceId ) );
-            if( announce == null )
+            if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
-            feedBack.Announce = announce;
-            var receiver = _context.Users.SingleOrDefault(a => a.Id.Equals(feedBack.ReceiverId));
-            if(receiver == null)
-                return HttpBadRequest();
-            feedBack.Receiver = receiver;
-            var author = _context.Users.SingleOrDefault(a => a.Id.Equals(feedBack.AuthorId));
-            if( author == null )
-                return HttpBadRequest();
-            feedBack.Author = author;
-
-            if (ModelState.IsValid)
+            if (_context.FeedBacks.Any(f => f.AnnounceId.Equals(feedBack.AnnounceId) && f.ReceiverId.Equals(feedBack.ReceiverId) && f.AuthorId.Equals(User.GetUserId())))
             {
-                if (!LoginChecker.HasLoggedUser(this))
-                    return HttpBadRequest();
-                
-                if (feedBack.Author.Id == announce.AuthorId)
+                return HttpBadRequest();
+            }
+            var announce = _context.Announces.SingleOrDefault( a => a.Id.Equals( feedBack.AnnounceId ) );
+            if (ModelState.IsValid) {
+                // o sei l'autore dell'annuncio che lascia il feedback a un prescelto
+                if (feedBack.AuthorId.Equals(announce.AuthorId))
                 {
                     //autore da feedback a prescelto
-                    if (IsUserChoosenForTheAnnounce(announce.Id, feedBack.Receiver.Id))
+                    if (IsUserChoosenForTheAnnounce(announce.Id, feedBack.ReceiverId))
                     {
                         _context.FeedBacks.Add(feedBack);
                         _context.SaveChanges();
-                        return RedirectToAction("InterestedAnnounce",new {id=announce.Id});
+                        return RedirectToAction( nameof(InterestedAnnounceController.Index), "InterestedAnnounce",new {id=announce.Id});
                     }
                 }
-                if (!IsUserInterestedToAnnounce(announce.Id, feedBack.Author.Id))
+                // oppure sei un interessato, che e' stato scelto, che da feedback all'autore dell'annuncio
+                if (!IsUserChoosenForTheAnnounce(announce.Id, feedBack.AuthorId))
                     return new BadRequestResult();
-                //interessato da feedback ad annuncio (autore dell'annuncio)
-                if (announce.AuthorId != feedBack.Receiver.Id)
+                if (announce.AuthorId != feedBack.ReceiverId)
                     return new BadRequestResult();
                 _context.FeedBacks.Add(feedBack);
                 _context.SaveChanges();
-                return RedirectToAction("InterestedAnnounce", new { id = announce.Id });
+                return RedirectToAction(nameof(InterestedAnnounceController.Index), "InterestedAnnounce", new { id = announce.Id });
             }
+            ViewData["announce"] = feedBack.AnnounceId;
+            ViewData["receiver"] = feedBack.ReceiverId;
             CommonFunctions.SetRootLayoutViewData(this, _context);
-            return RedirectToAction("Create", new { announceId = feedBack.AnnounceId, receiverId = feedBack.ReceiverId });
+            return View( feedBack );
             
         }
     }

@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @model Cianfrusaglie.Models.FeedBack
 
 @{
@@ -10,26 +11,26 @@
     </div>
 
     <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-    <div class="panel panel-body" >
-        <div  >
-            <input asp-for="AnnounceId" value="@(((Announce)ViewData[ "announce" ]).Id)" />
-            <input asp-for="ReceiverId" value="@(( (User) ViewData[ "receiver" ] ).Id)" />
-            <input asp-for="AuthorId" value="@((string)ViewData[ "authorId" ])" />
+    <div class="panel panel-body">
+        <div  hidden>
+            <input asp-for="AnnounceId" value="@(((int)ViewData[ "announce" ]))" />
+            <input asp-for="ReceiverId" value="@(( (string) ViewData[ "receiver" ] ))" />
+            <input asp-for="AuthorId" value="@User.GetUserId()" />
         </div>
         <div class="form-group" >
-            <label class="control-label" >Scrivi una Recensione per l'utente @((User) ViewData[ "receiver" ])</label>
+            <label class="control-label" >Scrivi una Recensione per l'utente @((string) ViewData[ "receiver" ])</label>
             <textarea asp-for="Text" class="form-control" rows="5" ></textarea>
             <span asp-validation-for="Text" class="text-danger"></span>
         </div>
         <div class="form-group" >
             <label class="control-label" >Voto</label>
-            <input asp-for="Vote" class="form-control"type="number" value="3" />
+            <input asp-for="Vote" class="form-control"type="number" value="5" />
             <span asp-validation-for="Vote" class="text-danger"></span>
         </div>
         <input type="submit" value="Create" class="btn btn-default" />
     </div>
     <div>
-        <a href="~/InterestedAnnounce/?id=@(((Announce)ViewData["announce"]).Id)">Torna ai miei Annunci</a>
+        <a href="~/InterestedAnnounce/?id=@(((int)ViewData["announce"]))">Torna ai miei Annunci</a>
     </div>
 </form>
 

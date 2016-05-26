@@ -7,82 +7,114 @@ using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
    public class SearchController : Controller {
-      private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         public RankAlgorithm rankAlgorithm;
+        private int resultsPerPage = 12;
 
         public SearchController( ApplicationDbContext context ) {
             _context = context;
             rankAlgorithm = new RankAlgorithm(context);
         }
 
-      /// <summary>
-      /// Restituisce la pagina con i risultati della ricerca.
-      /// </summary>
-      /// <param name="title">La stringa scritta nella barra di ricerca</param>
-      /// <param name="categories">Le categorie selezionate</param>
-      /// <returns>La View con i risultati della ricerca</returns>
-      public IActionResult Index( string title, IEnumerable< int > categories, int range = 0 ) {
-         ViewData[ "listUsers" ] = _context.Users.ToList();
+        /// <summary>
+        /// Restituisce la pagina con i risultati della ricerca.
+        /// </summary>
+        /// <param name="title">La stringa scritta nella barra di ricerca</param>
+        /// <param name="categories">Le categorie selezionate</param>
+        /// <returns>La View con i risultati della ricerca</returns>
+        public IActionResult Index(string title, IEnumerable<int> categories, int range = 0, int page = 0)
+        {
+            ViewData["listUsers"] = _context.Users.ToList();
             User user = null;
             if (LoginChecker.HasLoggedUser(this))
                 user = _context.Users.Single(u => User.GetUserId().Equals(u.Id));
             
 
 
-         //TODO QUANDO SI FARANNO I BARATTI
-         //ViewData["listExchange"] = _context.Announces.Where();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-         ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            //TODO QUANDO SI FARANNO I BARATTI
+            //ViewData["listExchange"] = _context.Announces.Where();
+            ViewData["formCategories"] = _context.Categories.ToList();
+            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
             ViewData["listUsers"] = _context.Users.ToList();
             ViewData["listImages"] = _context.ImageUrls.ToList();
             ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
-            if ( string.IsNullOrEmpty( title ) && !categories.Any() )
+            ViewData[ "pageNumber" ] = page;
+
+            List< Announce > result;
+            List< Announce > pageResults;
+            if (string.IsNullOrEmpty(title) && !categories.Any())
                 if (user == null)
                 {
-                    var res = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
-                    return View(res);
+                    result = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
+                    ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1+ result.Count / resultsPerPage);
+                    if( result.Count > resultsPerPage * ( page + 1 ) ) {
+                         pageResults = result.GetRange( resultsPerPage * page, resultsPerPage );
+                    } else {
+                         pageResults = result.GetRange( Math.Min( resultsPerPage * page, (result.Count - 1) < 0 ? 0 : result.Count - 1), Math.Max(result.Count - resultsPerPage * page, 0));
+                    }
+                    return View(pageResults);
                 }
                 else
                 {
-                    var res = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
-                    return View(res);
+                    result = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
+                    ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
+                    if (result.Count > resultsPerPage * (page + 1))
+                    {
+                        pageResults = result.GetRange(resultsPerPage * page, resultsPerPage);
+                    }
+                    else
+                    {
+                        pageResults = result.GetRange(Math.Min(resultsPerPage * page, (result.Count - 1) < 0 ? 0 : result.Count - 1), Math.Max(result.Count - resultsPerPage * page, 0));
+                    }
+                    return View(pageResults);
 
                 }
-            if ( categories == null )
-            categories = new List< int >();
+            if (categories == null)
+                categories = new List<int>();
 
-         var result = SearchAnnounces( title, categories ).ToList();
+            result = SearchAnnounces(title, categories).ToList();
 
-           if( user != null && range > 0 ) {
-              var loggedUser = _context.Users.Single(u => u.Id.Equals( User.GetUserId() ));
-              result = DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
-         }
+            if (user != null && range > 0)
+            {
+                var loggedUser = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
+                result = DistanceSearch(result, loggedUser.Latitude, loggedUser.Longitude, range).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
+            }
+
+            ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
+            if (result.Count > resultsPerPage * (page + 1))
+            {
+                pageResults = result.GetRange(resultsPerPage * page, resultsPerPage);
+            }
+            else
+            {
+                pageResults = result.GetRange(Math.Min(resultsPerPage * page, (result.Count - 1) <0 ? 0 : result.Count -1), Math.Max(result.Count - resultsPerPage * page, 0));
+            }
+            return View(pageResults);
+        }
+
+        public IActionResult SearchRedirect(string title, IEnumerable<int> categories)
+        {
+            return RedirectToAction("Index", new { title, categories });
+        }
 
 
-         return View( result );
-      }
-
-      public IActionResult SearchRedirect( string title, IEnumerable< int > categories ) {
-         return RedirectToAction( "Index", new {title, categories} );
-      }
-
-
-      /// <summary>
-      /// Data una stringa titolo e una lista di Id di categorie, ritorna i risultati della ricerca.
-      /// Se titolo == null allora la ricerca è effettuata solo per categoria (e viceversa).
-      /// </summary>
-      /// <param name="title">Titolo che si vuole cercare</param>
-      /// <param name="categories">Lista di Id di categorie da utilizzare nella ricerca</param>
-      /// <returns>Un IEnumerable di Annunci contenenti i risultati della ricerca.</returns>
-      public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
+        /// <summary>
+        /// Data una stringa titolo e una lista di Id di categorie, ritorna i risultati della ricerca.
+        /// Se titolo == null allora la ricerca è effettuata solo per categoria (e viceversa).
+        /// </summary>
+        /// <param name="title">Titolo che si vuole cercare</param>
+        /// <param name="categories">Lista di Id di categorie da utilizzare nella ricerca</param>
+        /// <returns>Un IEnumerable di Annunci contenenti i risultati della ricerca.</returns>
+        public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
          Task< IEnumerable< Announce > > categoryTask = null;
          var catEnum = categories as IList< int > ?? categories.ToList();
          if( catEnum.Any() )
