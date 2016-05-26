@@ -109,3 +109,8 @@ button { padding: 0; }
     position: absolute;
     max-width: 50em;
 }
+
+.btn-searchadv {
+    padding: 13px;
+
+}

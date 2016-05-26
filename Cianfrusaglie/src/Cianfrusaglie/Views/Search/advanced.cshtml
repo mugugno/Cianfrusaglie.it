@@ -49,22 +49,23 @@
 <body>
 
 <div id="wrapper-register">
-    <div class="col-md-8 col-lg-offset-2 " style="align-content: center" >
-        <form class="panel panel-body"  asp-action="SearchRedirect" asp-controller="Search" method="get">
+    <div class="col-md-6 col-lg-offset-3 " style="align-content: center; margin-top: 5em;" >
+        <form class="panel panel-body"  asp-action="SearchRedirect" asp-controller="Search"  method="get">
             <div id="title" >
-                <a href="~/" >
+                <a href="~/">
                     <h1>
                         @CommonStrings.SiteName
                     </h1>
                     <h5>Il posto giusto per le tue cianfrusaglie</h5>
 
                 </a>
+                <br/>
             </div>
             <br/>
             <div class="input-group">
                 <span class="input-group-btn">
                     
-                        <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie</button>
+                        <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie <span class="caret"></span></button>
                         <ul class="dropdown-menu dropdown-menu-large">
                             @foreach (var macro in GetCategories())
                             {
@@ -107,9 +108,9 @@
                       
                 </span>
                 
-                <input type="text" class="form-control input-lg" placeholder="Cerca">
+                <input type="text" name="title" class="form-control input-lg" placeholder="Cerca">
                 <span class="input-group-btn">
-                    <button type="submit" class="btn btn-warning btn-search btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
+                    <button type="submit" class="btn btn-warning btn-searchadv btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
             </div>
             
