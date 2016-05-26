@@ -74,14 +74,50 @@
                         }
                         <div class="col-item" id="@idDiv">
                             <div class="photoThu">
-                                <img src="@GetImages(announce.Id)" class="img-responsive"/>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a href="~/Announces/Details/?id=@announce.Id"><img src="@GetImages(@announce.Id)" class="img-responsive"/></a>
+                                }
+                                else
+                                {
+                                    <a href="#" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@announce.Id)" class="img-responsive" /></a>
+                                }
                             </div>
 
                             <div class="info">
 
 
                                 <h3>
-                                    @announce.Title
+                                    @if (announce.Title.Length > 20)
+                                    {
+                                        if (User.Identity.IsAuthenticated)
+                                         {
+                                             <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
+                                                 <h3>@announce.Title.Substring(0, 15)... </h3>
+                                             </a>
+                                        }
+                                        else
+                                        {
+                                            <a data-toggle="modal" data-target="#myWindow" style="color: black">
+                                                <h3>@announce.Title.Substring(0, 15)... </h3>
+                                            </a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
+                                                <h3>@announce.Title</h3>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a data-toggle="modal" data-target="#myWindow" style="color: black">
+                                                <h3>@announce.Title</h3>
+                                            </a>
+                                        }
+                                    }
                                 </h3>
                                 @if (@announce.Price == 0)
                                 {
@@ -101,9 +137,9 @@
                                     <h5>Autore: @GetAutore(announce.AuthorId).UserName</h5>
                                     <br/>
                                 </div>
-                                <div class="separator clear-left">
+                                
                                     @if (!User.Identity.IsAuthenticated)
-                                    {
+                                    {/*
                                         <p class="btn-add">
                                             <i class="fa fa-shopping-cart"></i>
                                             <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
@@ -123,10 +159,10 @@
                                             <p class="btn-details">
                                                 <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@announce.AuthorId" class="">Contatta</a>
                                             </p>
-                                        }
+                                        }*/
                                     }
 
-                                </div>
+                               
                                 <div class="clearfix"></div>
                             </div>
                         </div>
