@@ -145,48 +145,62 @@
             <br /><br />
             @foreach( var annuncio in GetAnnounce() ) {
                 <div class="col-sm-5 col-md-4" >
+                    
+                    <div class="col-item">
 
-                    <div class="col-item" >
-
-                        <div class="photoThu" >
+                        <div class="photoThu">
                             @if (!User.Identity.IsAuthenticated)
                             {
-                                <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                                    }
-                                    else
-                                    {
+                                <a href data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive"/></a>
+                            }
+                            else
+                            {
 
-                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive"/></a>
 
                             }
                         </div>
 
-                        <div class="info" >
+                        <div class="info">
 
 
-                            <h3>
-                                @annuncio.Title
-                            </h3>
-                            @if( @annuncio.Price == 0 ) {
-                                <h5 class="price-text-color" >IN REGALO</h5>
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                            } else {
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                            <!--titolo su una linea sola-->
+                            @if (annuncio.Title.Length > 20)
+                            {
+                                <a href="~/Announces/Details/?id=@annuncio.Id" style="color:black">
+                                    <h3>@annuncio.Title.Substring(0, 17)... </h3></a>
+                            }
+                            else
+                            {
+                                <a href="~/Announces/Details/?id=@annuncio.Id" style="color:black">
+                                    <h3>@annuncio.Title</h3></a>
                             }
 
 
-                            <div class="price" >
-                                <h5>Autore: @GetAutore( @annuncio.AuthorId ).UserName</h5>
-                                <br />
+                            @if (@annuncio.Price == 0)
+                            {
+                                <h5 class="price-text-color">IN REGALO</h5>
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                            }
+                            else
+                            {
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
+                            }
+
+
+                            <div class="price">
+                                <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
+                                <br/>
                             </div>
-                            
-                               
-                           
-                            <div class="clearfix" ></div>
+
+
+
+                            <div class="clearfix"></div>
                         </div>
                     </div>
-                </div>
+                        
+</div>
             }
             </div>
                 <div class="row">
@@ -200,48 +214,61 @@
                         
                         <div class="col-sm-5 col-md-4">
 
-                            <div class="col-item">
-                                
-                                <div class="photoThu">
-                               @if (!User.Identity.IsAuthenticated)
-                               {
-                                <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                               }
-                               else
-                               {
-                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                            
+                                <div class="col-item">
 
-                               }
+                                    <div class="photoThu">
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/Announces/Details/?id=@annuncio.Id" ><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                                        }
 
-                                </div>
-                                
-                                <div class="info">
-
-
-                                    <h3>
-                                        @annuncio.Title
-                                    </h3>
-                                    @if (@annuncio.Price == 0)
-                                    {
-                                        <h5 class="price-text-color">IN REGALO</h5>
-                                        <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                                    }
-                                    else {
-                                        <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                        <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
-                                    }
-
-
-                                    <div class="price">
-                                        <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
-                                        <br />
                                     </div>
-                                   
-                                       
-                                    
-                                    <div class="clearfix"></div>
+
+                                    <div class="info">
+
+
+                                        <!--titolo su una linea sola-->
+                                        @if (annuncio.Title.Length > 20)
+                                        {
+                                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+                                                <h3>@annuncio.Title.Substring(0, 17)... </h3>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+                                                <h3>@annuncio.Title</h3>
+                                            </a>
+                                        }
+
+                                        @if (@annuncio.Price == 0)
+                                        {
+                                            <h5 class="price-text-color">IN REGALO</h5>
+                                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                            <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
+                                        }
+
+
+                                        <div class="price">
+                                            <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
+                                            <br />
+                                        </div>
+
+
+
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
-                            </div>
+                           
                         </div>
                     }
                 </div>
