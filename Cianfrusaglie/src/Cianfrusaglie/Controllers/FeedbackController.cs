@@ -75,7 +75,7 @@ namespace Cianfrusaglie.Controllers
                     return new BadRequestResult();
                 _context.FeedBacks.Add(feedBack);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(InterestedAnnounceController.Index), "InterestedAnnounce", new { id = announce.Id });
+                return RedirectToAction(nameof(InterestedInController.Index), "InterestedIn");
             }
             ViewData["announce"] = feedBack.AnnounceId;
             ViewData["receiver"] = feedBack.ReceiverId;
