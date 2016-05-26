@@ -93,15 +93,16 @@
 
                     if (j == 0)
                     {
-                        <li style="padding-left: 1em"> in @category.Category.Name</li>
+                        <li style="padding-left: 1em"> <a href="~/Search?categories=@category.CategoryId">@category.Category.Name</a></li>
                     }
                     else
                     {
-                        <li>- @category.Category.Name</li>
+                        <li>- <a href="~/Search?categories=@category.CategoryId">@category.Category.Name</a></li>
                     }
                     j++;
                 }
             }
+            <br/>
             @if (@ViewData["interested"].Equals(false) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
             {
                 <div class="icon-detail">
