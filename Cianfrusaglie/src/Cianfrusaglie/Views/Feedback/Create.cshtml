@@ -10,21 +10,25 @@
         <h3>@ViewData["Title"]</h3>
     </div>
 
-    <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger" ></div>
+    @{
+        var receiver = (User)ViewData["receiver"];
+       
+    }
     <div class="panel panel-body">
         <div  hidden>
             <input asp-for="AnnounceId" value="@(((int)ViewData[ "announce" ]))" />
-            <input asp-for="ReceiverId" value="@(( (string) ViewData[ "receiver" ] ))" />
+            <input asp-for="ReceiverId" value="@receiver.Id"  />
             <input asp-for="AuthorId" value="@User.GetUserId()" />
         </div>
         <div class="form-group" >
-            <label class="control-label" >Scrivi una Recensione per l'utente @((string) ViewData[ "receiver" ])</label>
+            <label class="control-label" >Scrivi una Recensione per l'utente @receiver.UserName</label>
             <textarea asp-for="Text" class="form-control" rows="5" ></textarea>
             <span asp-validation-for="Text" class="text-danger"></span>
         </div>
         <div class="form-group" >
             <input asp-for="Vote" class="form-control" id="AspStarRatingValue" value="5" type="number" style="display: none"/>
-            <label class="control-label" >Voto</label>
+            <label class="control-label" >Voto</label><br/>
             <div class="acidjs-rating-stars" >
                 <div>
                     <input type="radio" name="group-1" id="group-1-0" value="5" checked="checked" onclick="onStarClick(event)" /><label for="group-1-0" ></label>
@@ -34,12 +38,8 @@
                     <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClick(event)"/><label for="group-1-4" ></label>
                 </div>
             </div>
-
-            @*<label class="control-label" >Voto</label>
-            <input asp-for="Vote" class="form-control"type="number" value="5" />
-            <span asp-validation-for="Vote" class="text-danger"></span>*@
         </div>
-        <input type="submit" value="Create" class="btn btn-default" />
+        <input type="submit" value="Aggiungi Recensione" class="btn btn-default" />
     </div>
     <div>
         <a href="~/InterestedAnnounce/?id=@(((int)ViewData["announce"]))">Torna ai miei Annunci</a>
