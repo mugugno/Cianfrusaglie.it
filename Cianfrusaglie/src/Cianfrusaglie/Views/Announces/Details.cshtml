@@ -87,20 +87,31 @@
         <div class="col-sm-10 col-md-5">
             <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
 
-            @if (@ViewData["interested"] == null && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
+            @if (@ViewData["interested"].Equals(false) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
             {
                 <div class="icon-detail">
                     <form action="#" method="POST">
-                        <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Interessato</span></a>
+                        <button name="loVoglio" class="btn btn-warning"><span class="text-det">Lo voglio</span></button>     
+                        
+                        <span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color:green;display:none"></span><span name="seiInteressato"style="color:black;display:none">Sei gi&aacute; interessato all' annuncio</span><br /><button name="nonLoVoglio" class="btn btn-danger" style="display:none"><span class="text-det">Non lo voglio pi&ugrave;</span></button>              
                     </form>
                 </div>
+                <div class="icon-detail">
+                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
+                </div>
             }
-            else if (!Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
+            else if (@ViewData["interested"].Equals(true) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
             {
                 <div class="icon-detail">
                     <form action="#" method="POST">
-                        <a name="confirm_levels" value="Interessato"><span class="glyphicon glyphicon-plus-sign icon-det"></span><span class="text-det">Non sono pi&ugrave; interessato</span></a>
+                        <span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color:green;font-size:2.5em"></span><span style="color:black;margin-left:1.5em" name="seiInteressato" >Sei gi&aacute; interessato all' annuncio</span><br /><br />
+                        <button name="nonLoVoglio" class="btn btn-danger" style="font-size:0.8em"><span class="text-det">Non lo voglio pi&ugrave;</span></button>                        
+                        <button name="loVoglio"  class="btn btn-success" style="display:none"><span class="text-det">Lo voglio</span></button>
+                        
                     </form>
+                </div>
+                <div class="icon-detail">
+                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
                 </div>
             }
 
@@ -154,7 +165,7 @@
                         <dd>
                             <div>
                                 @ViewData["Autore"]
-                                <a href="~/Messages/Details/?id=@ViewData["AuthorId"]" style="margin-left: 5em">Contatta</a>
+                               
                             </div>
                         </dd>
                     }
@@ -217,29 +228,55 @@
     </div>
 
     <script type="text/javascript">
-        
+
         var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
-        $('a[name="confirm_levels"]').on('click', function (e) {
+        $('button[name="loVoglio"]').on('click', function (e) {
             var $form = $(this).closest('form');
             e.preventDefault();
             var tmp = @ViewData["IdAnnounce"];
 
             $('#confirm').modal({ backdrop: 'static', keyboard: false })
                 .one('click', '#confirmbtn', function (err) {
-                    $.post( "/Announces/Interested", { 
+                    $('button[name="loVoglio"]').hide();
+                    $('button[name="nonLoVoglio"]').show();
+                    $('span[name="spanGliphNonLoVoglioPiu"]').show();
+                    $('span[name="seiInteressato"]').show();
+                    $.post( "/Announces/Interested", {
+                        
                         AnnounceId: tmp,
                         __RequestVerificationToken: antiForgeryToken
-                    },
-                            function() {
-                                if( $('.text-det').text() === "Interessato" )
-                                    $('.text-det').html("Non sono pi&ugrave; interessato");
-                                else
-                                    $('.text-det').text("Interessato");
-                            })
+                        
+                    })
                         .fail(function() { alert("error"); });
                 });
         });
-        
+
+        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+        $('button[name="nonLoVoglio"]').on('click', function (e) {
+            var $form = $(this).closest('form');
+            e.preventDefault();
+            var tmp = @ViewData["IdAnnounce"];
+
+            $('#notConfirm').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#confirmbtn', function (err) {
+                    $('button[name="nonLoVoglio"]').hide();
+                    $('button[name="loVoglio"]').show();
+                    $('span[name="spanGliphNonLoVoglioPiu"]').hide();
+                    $('span[name="seiInteressato"]').hide()
+                    
+                    $.post( "/Announces/Interested", {
+                        AnnounceId: tmp,
+                        __RequestVerificationToken: antiForgeryToken
+                    })
+                   
+                    
+                        .fail(function() { alert("error"); });
+                });
+        });
+
+
+
+
     </script>
     @*    <p>*@
     @*        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@

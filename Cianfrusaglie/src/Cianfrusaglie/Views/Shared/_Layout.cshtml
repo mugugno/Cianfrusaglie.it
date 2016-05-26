@@ -43,7 +43,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <link href="~/Content/Home.css" rel="stylesheet" type="text/css" />
-    
+    <link href="~/Content/Advanced.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
     <link href= "~/Content/Create.css"  rel="stylesheet" type="text/css"/>
     <link href="~/Content/StarRating.css" rel="stylesheet" type="text/css" />
@@ -247,7 +247,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Sei sicuro di voler continuare?</p>
+                    <p>Dichiarando che vuoi l' oggetto l' autore dell' annuncio potr&agrave; selezionarti come destinatario.<br>
+                       Vuoi continuare??</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmbtn">Conferma</button>
+                    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notConfirm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        Sicuro di non voler pi&ugrave; l' oggetto??
+                    </p>
                 </div>
 
                 <div class="modal-footer">
