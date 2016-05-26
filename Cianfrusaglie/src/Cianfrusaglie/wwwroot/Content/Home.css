@@ -21,7 +21,15 @@
     margin-top: 10px;
     text-align: center;
 }
+.photo  {
+  max-height:200px;
+  overflow:hidden;
+}
 
+.photo img {
+   width:100%;
+   min-height:100px;
+}
 #title h5 {
     color: #FFC107;
     font-family: 'Lato', sans-serif;
