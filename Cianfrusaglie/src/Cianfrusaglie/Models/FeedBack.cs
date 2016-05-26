@@ -15,19 +15,20 @@ namespace Cianfrusaglie.Models {
 
         [MaxLength( DomainConstraints.FeedBackTextMaxLenght )]
         public virtual string Text { get; set; }
-        [Required]
+
+        [Required, ForeignKey("User")]
         public virtual string AuthorId { get; set; }
-        [Required]
+        
         public virtual User Author { get; set; }
-        [Required]
+
+        [Required, ForeignKey( "User")]
         public virtual string ReceiverId { get; set; }
-        [Required]
+        
         public virtual User Receiver { get; set; }
 
-        [ForeignKey( "Announce" )]
+        [Required, ForeignKey( "Announce" )]
         public virtual int AnnounceId { get; set; }
-
-        [Required]
+        
         public virtual Announce Announce { get; set; }
     }
 }
