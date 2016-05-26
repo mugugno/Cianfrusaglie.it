@@ -149,7 +149,15 @@
                     <div class="col-item" >
 
                         <div class="photo" >
-                            <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                            }
+                            else
+                            {
+                                <a href="~/Messages/Details/?id=@annuncio.AuthorId"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+
+                            }
                         </div>
 
                         <div class="info" >
@@ -171,27 +179,9 @@
                                 <h5>Autore: @GetAutore( @annuncio.AuthorId ).UserName</h5>
                                 <br />
                             </div>
-                            <div class="separator clear-left" >
-                                @if( !User.Identity.IsAuthenticated ) {
-                                    <p class="btn-add" >
-                                        <i class="fa fa-shopping-cart" ></i>
-                                        <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
-                                    </p>
-                                    <p class="btn-details" >
-                                        <i class="fa fa-list" ></i><a href="#" data-toggle="modal" data-target="#myWindow" class="" >Contatta</a>
-                                    </p>
-                                } else {
-                                    <p class="btn-add" >
-                                        <i class="fa fa-shopping-cart" ></i>
-                                        <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
-                                    </p>
-                                    if( annuncio.AuthorId != User.GetUserId() ) {
-                                        <p class="btn-details" >
-                                            <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
-                                        </p>
-                                    }
-                                }
-                            </div>
+                            
+                               
+                           
                             <div class="clearfix" ></div>
                         </div>
                     </div>
@@ -206,14 +196,24 @@
                     }
                     @foreach (var annuncio in GetSuggestedAnnounce())
                     {
+                        
                         <div class="col-sm-5 col-md-4">
 
                             <div class="col-item">
-
+                                
                                 <div class="photo">
-                                    <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
-                                </div>
+                               @if (!User.Identity.IsAuthenticated)
+                               {
+                                <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                               }
+                               else
+                               {
+                                <a href="~/Messages/Details/?id=@annuncio.AuthorId"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
 
+                               }
+
+                                </div>
+                                
                                 <div class="info">
 
 
@@ -235,30 +235,9 @@
                                         <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
                                         <br />
                                     </div>
-                                    <div class="separator clear-left">
-                                        @if (!User.Identity.IsAuthenticated)
-                                        {
-                                            <p class="btn-add">
-                                                <i class="fa fa-shopping-cart"></i>
-                                                <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
-                                            </p>
-                                            <p class="btn-details">
-                                                <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
-                                            </p>
-                                        }
-                                        else {
-                                            <p class="btn-add">
-                                                <i class="fa fa-shopping-cart"></i>
-                                                <a href="~/Announces/Details/?id=@annuncio.Id" class="">Dettagli</a>
-                                            </p>
-                                            if (annuncio.AuthorId != User.GetUserId())
-                                            {
-                                                <p class="btn-details">
-                                                    <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="">Contatta</a>
-                                                </p>
-                                            }
-                                        }
-                                    </div>
+                                   
+                                       
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
