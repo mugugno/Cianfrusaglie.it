@@ -39,7 +39,8 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Style.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
+    <link href="~/Content/Home.css" rel ="stylesheet" type="text/css"/>
     <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 
@@ -60,33 +61,53 @@
                 </a>
             </div>
             <br/>
-            <div class="input-group" >
+            <div class="input-group">
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie</button>
-                    <ul class="dropdown-menu">
-                        @foreach (var macro in GetCategories())
-                        {
-                            <li>
-                                <a href="~/Search?categories=@macro.Id">@macro.Name</a>
-                                @if (GetSubCategories(@macro.Name).ToList().Count > 0)
-                                {
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
-                                        <li class="divider"></li>
-                                        <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
-                                        <li class="divider"></li>
-                                        @foreach (var sub in GetSubCategories(@macro.Name))
+                    
+                        <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie</button>
+                        <ul class="dropdown-menu dropdown-menu-large">
+                            @foreach (var macro in GetCategories())
+                            {
+                                <li>
+                                    <a href="~/Search?categories=@macro.Id">@macro.Name</a>
+                                    @if (GetSubCategories(@macro.Name).ToList().Count > 0)
+                                    {
+                                        if (@macro.Name.Equals("MisteryBox"))
                                         {
-                                            <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                            <ul class="dropdown-menu sub-menu">
+                                                <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
+                                                <li class="divider"></li>
+                                                <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                                <li class="divider"></li>
+                                                @foreach (var sub in GetSubCategories(@macro.Name))
+                                                {
+                                                    <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;"><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
+                                                }
+                                            </ul>
                                         }
-                                    </ul>
-                                }
-                            </li>
-                        }
-                    </ul>
+                                        else
+                                        {
+                                            <ul class="dropdown-menu sub-menu">
+                                                <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
+                                                <li class="divider"></li>
+                                                <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                                <li class="divider"></li>
+                                                @foreach (var sub in GetSubCategories(@macro.Name))
+                                                {
+                                                    <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                }
+                                            </ul>
+                                        }
+                                    }
+                                </li>
+                            }
+                        </ul>
+                      
                 </span>
                 
-                <input type="text" class="form-control input-lg" placeholder="Cerca" >
+                <input type="text" class="form-control input-lg" placeholder="Cerca">
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-warning btn-search btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
