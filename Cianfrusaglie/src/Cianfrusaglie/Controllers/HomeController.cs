@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using static Cianfrusaglie.Constants.CommonFunctions;
 using Cianfrusaglie.Suggestions;
+using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Controllers
 {
@@ -26,6 +27,7 @@ namespace Cianfrusaglie.Controllers
         {
             ViewData["listImages"] = _context.ImageUrls.ToList();
             ViewData["listUsers"] = _context.Users.ToList();
+            //Include(u=>u.AnnounceCategories).
             ViewData["listAnnounces"] = _context.Announces.OrderByDescending(u => u.PublishDate).Take(3).ToList();
 
             if( LoginChecker.HasLoggedUser( this ) ) {
