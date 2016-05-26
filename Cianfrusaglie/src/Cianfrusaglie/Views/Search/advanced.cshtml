@@ -1,8 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Cianfrusaglie.Constants
-@model Cianfrusaglie.ViewModels.Account.LoginViewModel
 @{
-    ViewData["Title"] = "Login";
     Layout = "";
 }
 
@@ -51,7 +49,7 @@
 
 <div id="wrapper-register">
     <div class="col-md-8 col-lg-offset-2 " style="align-content: center" >
-        <div class="panel panel-body" >
+        <form class="panel panel-body"  asp-action="SearchRedirect" asp-controller="Search" method="get">
             <div id="title" >
                 <a href="~/" >
                     <h1>
@@ -94,7 +92,7 @@
                 </span>
             </div>
             
-        </div>
+        </form>
     </div>
 </div>
 
