@@ -517,9 +517,8 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
 
             var im = _context.ImageUrls.Where( i => i.AnnounceId.Equals( announce.Id ) );
-            foreach( var imm in im ) {
-                _context.ImageUrls.Remove( imm );
-            }
+            _context.ImageUrls.RemoveRange( im );
+            _context.Interested.RemoveRange( _context.Interested.Where( i => i.AnnounceId == announce.Id ) );
             _context.Announces.Remove( announce );
 
             _context.SaveChanges();
