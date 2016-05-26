@@ -3,8 +3,6 @@
     padding-right: 0px;
 }
 
-
-
 .affix {
     top: 0;
     width: 100%;
@@ -23,7 +21,15 @@
     margin-top: 10px;
     text-align: center;
 }
+.photoThu  {
+  max-height:200px;
+  overflow:hidden;
+}
 
+.photoThu img {
+   width:100%;
+   min-height:100px;
+}
 #title h5 {
     color: #FFC107;
     font-family: 'Lato', sans-serif;
@@ -47,10 +53,8 @@
     left: -4px;
 }
 
-#linkRegala, #LinkVendi, #linkBaratta {
-    color: #333333;
-    font-size: large;
-    font-style: italic;
+#linkRegala, #LinkVendi, #linkCerca {
+    color: black;
     padding-bottom: 0;
     padding-left: 100px;
     padding-right: 100px;

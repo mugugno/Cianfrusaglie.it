@@ -101,31 +101,35 @@
                     }
                     else
                     {
-                        <a href="~/Announces/Create" role="button"class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
+                        <a href="~/Announces/Create" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
                     }
-                    <br/><br/><label>REGALA</label>
+                    <br/>
+                    <h4><strong>LIBERATI DI UNA<BR/>CIANFRUSAGLIA
+                            </strong></h4>
                 </div>
                 <div class="form-group" id="linkVendi">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="~/Announces/Create?vendita=true" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
-                    }
-                    else
-                    {
-                        <a href="~/Announces/Create/?vendita=true" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
-                    }
-                    <br/><br/><label>VENDI</label>
-                </div>
-                <div class="form-group" id="linkBaratta">
                     @if (!User.Identity.IsAuthenticated)
                     {
                         <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
                     }
                     else
                     {
-                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
+                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
                     }
-                    <br/><br/><label>BARATTA</label>
+                    <br/>
+                    <h4 style="color: black;"><strong>VENDI QUELLO<br />CHE NON TI SERVE</strong></h4>
+                </div>
+                <div class="form-group" id="linkCerca">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="~/Announces/Create?vendita=true" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
+                    }
+                    else
+                    {
+                        <a href="~/Announces/Create/?vendita=true" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
+                    }
+                    <br/>
+                    <h4><strong>CERCA<br />UN OGGETTO</strong></h4>
                 </div>
             </div>
         </div>
@@ -144,8 +148,17 @@
 
                     <div class="col-item" >
 
-                        <div class="photo" >
-                            <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                        <div class="photoThu" >
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                                    }
+                                    else
+                                    {
+
+                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+
+                            }
                         </div>
 
                         <div class="info" >
@@ -167,93 +180,71 @@
                                 <h5>Autore: @GetAutore( @annuncio.AuthorId ).UserName</h5>
                                 <br />
                             </div>
-                            <div class="separator clear-left" >
-                                @if( !User.Identity.IsAuthenticated ) {
-                                    <p class="btn-add" >
-                                        <i class="fa fa-shopping-cart" ></i>
-                                        <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
-                                    </p>
-                                    <p class="btn-details" >
-                                        <i class="fa fa-list" ></i><a href="#" data-toggle="modal" data-target="#myWindow" class="" >Contatta</a>
-                                    </p>
-                                } else {
-                                    <p class="btn-add" >
-                                        <i class="fa fa-shopping-cart" ></i>
-                                        <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
-                                    </p>
-                                    if( annuncio.AuthorId != User.GetUserId() ) {
-                                        <p class="btn-details" >
-                                            <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
-                                        </p>
-                                    }
-                                }
-                            </div>
+                            
+                               
+                           
                             <div class="clearfix" ></div>
                         </div>
                     </div>
                 </div>
             }
-
-            <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
-            @if (User.Identity.IsAuthenticated)
+            </div>
+                <div class="row">
+                    <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
+                    @if (User.Identity.IsAuthenticated)
             {
-                <br /><br /><h3>Annunci Suggeriti</h3><hr class="simple-hr" /><br /><br />
-            }
-            @foreach( var annuncio in GetSuggestedAnnounce() ) {
-                <div class="col-sm-5 col-md-4" >
+                        <br /><br /><h3>Scelti per te   </h3><hr class="simple-hr" /><br /><br />
+                    }
+                    @foreach (var annuncio in GetSuggestedAnnounce())
+                    {
+                        
+                        <div class="col-sm-5 col-md-4">
 
-                    <div class="col-item" >
+                            <div class="col-item">
+                                
+                                <div class="photoThu">
+                               @if (!User.Identity.IsAuthenticated)
+                               {
+                                <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
+                               }
+                               else
+                               {
+                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
 
-                        <div class="photo" >
-                            <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
-                        </div>
+                               }
 
-                        <div class="info" >
-
-
-                            <h3>
-                                @annuncio.Title
-                            </h3>
-                            @if( @annuncio.Price == 0 ) {
-                                <h5 class="price-text-color" >IN REGALO</h5>
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                            } else {
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
-                            }
+                                </div>
+                                
+                                <div class="info">
 
 
-                            <div class="price" >
-                                <h5>Autore: @GetAutore( @annuncio.AuthorId ).UserName</h5>
-                                <br />
-                            </div>
-                            <div class="separator clear-left" >
-                                @if( !User.Identity.IsAuthenticated ) {
-                                    <p class="btn-add" >
-                                        <i class="fa fa-shopping-cart" ></i>
-                                        <a href="#" data-toggle="modal" data-target="#myWindow" >Dettagli</a>
-                                    </p>
-                                    <p class="btn-details" >
-                                        <i class="fa fa-list" ></i><a href="#" data-toggle="modal" data-target="#myWindow" class="" >Contatta</a>
-                                    </p>
-                                } else {
-                                    <p class="btn-add" >
-                                        <i class="fa fa-shopping-cart" ></i>
-                                        <a href="~/Announces/Details/?id=@annuncio.Id" class="" >Dettagli</a>
-                                    </p>
-                                    if( annuncio.AuthorId != User.GetUserId() ) {
-                                        <p class="btn-details" >
-                                            <i class="fa fa-list" ></i><a href="~/Messages/Details/?id=@annuncio.AuthorId" class="" >Contatta</a>
-                                        </p>
+                                    <h3>
+                                        @annuncio.Title
+                                    </h3>
+                                    @if (@annuncio.Price == 0)
+                                    {
+                                        <h5 class="price-text-color">IN REGALO</h5>
+                                        <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                                     }
-                                }
-                            </div>
-                            <div class="clearfix" ></div>
-                        </div>
-                    </div>
-                </div>
-            }
+                                    else {
+                                        <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                        <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
+                                    }
 
+
+                                    <div class="price">
+                                        <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
+                                        <br />
+                                    </div>
+                                   
+                                       
+                                    
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
         </div>
 
     </div>
