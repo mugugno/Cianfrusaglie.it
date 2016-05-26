@@ -234,6 +234,7 @@
 </div>
 
 <script>
+    clickForwardButton();
     // TODO spostare tutto in un file js
     $("#announce-navbar").attr("data-offset-top", document.getElementById("pageHeader").offsetHeight);
     $("#range-input").val(1);
@@ -257,12 +258,16 @@
 
     // 500 sono i millisecondi di durata della transizione
     var transitionTime = 350;
-    $(".category-checkboxes").change(function () {
+    function disableForward(){
         if (!atLeastOneCategorySelected()) {
             $("#forward-button").addClass("disabled");
         } else {
             $("#forward-button").removeClass("disabled");
         }
+    }
+    disableForward();
+    $(".category-checkboxes").change(function () {
+        disableForward();
     });
     function clickForwardButton() {
         if( !atLeastOneCategorySelected() ) {
@@ -296,7 +301,7 @@
         mapLoaded= true;
     }
 
-                                            function clickBackButton() {
+     function clickBackButton() {
         $('#page1').show(transitionTime);
         $('#page2').hide(transitionTime);
         $('#back-button').hide(0);
@@ -331,5 +336,5 @@
     $("#range-input").change(function () {
         setCircle(marker.position, $("#range-input").val());
     });
-
+    clickForwardButton();
 </script>
