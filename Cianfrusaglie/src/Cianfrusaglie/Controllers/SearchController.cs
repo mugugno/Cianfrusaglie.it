@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
@@ -22,7 +23,9 @@ namespace Cianfrusaglie.Controllers {
             rankAlgorithm = new RankAlgorithm(context);
         }
 
-        public IActionResult Advanced() {
+        public IActionResult Advanced()
+        {
+            CommonFunctions.SetRootLayoutViewData( this,_context );
             return View();
         }
 

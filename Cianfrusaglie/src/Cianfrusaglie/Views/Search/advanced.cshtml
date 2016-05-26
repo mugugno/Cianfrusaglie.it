@@ -6,6 +6,32 @@
     Layout = "";
 }
 
+@functions
+{
+
+    public IEnumerable<Category> GetCategories()
+    {
+        var t = ViewData["numberOfCategories"];
+        for (int i = 0; i < (ViewData["numberOfCategories"] as int? ?? 0); i++)
+        {
+            var categories = ViewData["formCategories"] as List<Category>;
+            if (categories != null && categories[i].OverCategory == null)
+                yield return categories[i];
+        }
+    }
+
+    public IEnumerable<Category> GetSubCategories(String macro)
+    {
+        for (int j = 0; j < (ViewData["numberOfCategories"] as int? ?? 0); j++)
+        {
+            var subCat = ViewData["formCategories"] as List<Category>;
+            if (subCat != null && subCat[j].OverCategory != null && subCat[j].OverCategory.Name == macro)
+                yield return subCat[j];
+        }
+    }
+
+
+}
 
 <html>
 <head>
@@ -22,16 +48,55 @@
 
 </head>
 <body>
-    <div id="wrapper-advanced">
-        <div id="title" class="col-md-3" >
-            <a href="~/">
-                <h1>
-                    @CommonStrings.SiteName
-                </h1>
-                <h5>Il posto giusto per le tue cianfrusaglie</h5>
-            </a>
+
+<div id="wrapper-register">
+    <div class="col-md-8 col-lg-offset-2 " style="align-content: center" >
+        <div class="panel panel-body" >
+            <div id="title" >
+                <a href="~/" >
+                    <h1>
+                        @CommonStrings.SiteName
+                    </h1>
+                    <h5>Il posto giusto per le tue cianfrusaglie</h5>
+
+                </a>
+            </div>
+            <br/>
+            <div class="input-group" >
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie</button>
+                    <ul class="dropdown-menu">
+                        @foreach (var macro in GetCategories())
+                        {
+                            <li>
+                                <a href="~/Search?categories=@macro.Id">@macro.Name</a>
+                                @if (GetSubCategories(@macro.Name).ToList().Count > 0)
+                                {
+                                    <ul class="dropdown-menu sub-menu">
+                                        <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
+                                        <li class="divider"></li>
+                                        <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                        <li class="divider"></li>
+                                        @foreach (var sub in GetSubCategories(@macro.Name))
+                                        {
+                                            <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </span>
+                
+                <input type="text" class="form-control input-lg" placeholder="Cerca" >
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-warning btn-search btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+            
         </div>
     </div>
+</div>
 
 </body>
 </html>
