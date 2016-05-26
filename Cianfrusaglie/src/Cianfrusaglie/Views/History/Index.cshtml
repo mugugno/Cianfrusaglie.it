@@ -14,7 +14,6 @@
         <div class="panel-body" >
             <div class="panel-group" id="panel-524234" >
                 @if( Model.Any() ) {
-                    var interessati = (Dictionary<int, List<int>>)ViewData["Interested"];
                     foreach ( var item in Model ) {
 
                         
@@ -25,7 +24,10 @@
                                 <span style="font-size:1.5em"><b>@item.Title</b></span>
 
                                 
-                                <span style="margin-left:1em" >Numero di interessati @interessati[item.Id].First()</span><span><b> di cui @interessati[item.Id].Last() nuovi </b></span>
+                                <span style="margin-left: 1em" >Numero di interessati @item.Interested.Count</span>
+                                @if( item.Interested.Any() ) {
+                                    <span><b> di cui @item.Interested.Count( p => !p.Read ) nuovi </b></span>
+                                }
 
                                 @*@foreach (var interested in interessati.Values)
     {
@@ -47,7 +49,10 @@
                                         <div class="col-md-9" >
 
                                             <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
-                                            <a href="~/Announces/Delete/?id=@item.Id" >Elimina annuncio</a> <br />
+                                            @if( !item.Interested.Any( p => p.ChooseDate != null ) ) {
+                                                <a href="~/Announces/Delete/?id=@item.Id" >Elimina annuncio</a>
+                                                <br />
+                                            }
                                             <a href="~/InterestedAnnounce/?id=@item.Id" >Visualizza utenti interessati</a>
                                             
                                         </div>
