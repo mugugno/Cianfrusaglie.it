@@ -50,7 +50,7 @@
     <link href="~/Content/SubmitAnnounce.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/VisualizzaAnnuncio.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Search.css"  rel="stylesheet" type="text/css" />
-    <link href= "~/Content/Messages.css"  rel="stylesheet" type="text/css" />
+    <link href="~/Content/Messages.css"  rel="stylesheet" type="text/css" />
     <link href="~/css/maps.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -75,8 +75,16 @@
                     <input name="title" type="text" class="form-control" placeholder="Cerca" size="55">
                     <button type="submit" class="btn btn-warning btn-search"><span class="glyphicon glyphicon-search"></span></button>
                 </div>
-                <a href="~/Search/Advanced">Ricerca Avanzata</a>
-            </div>
+
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <a href="#" data-toggle="modal" data-target="#myWindow">Ricerca Avanzata</a>
+                }
+                else
+                {
+                    <a href="~/Search/Advanced">Ricerca Avanzata</a>
+                }
+                </div>
         </form>
     </div>
     <nav id="horizontalMenu" class="navbar navbar-default" data-spy="affix" data-offset-top="100">
