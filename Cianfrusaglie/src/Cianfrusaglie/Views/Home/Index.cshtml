@@ -3,9 +3,6 @@
 
 @functions
 {
-
-
-
     public IEnumerable<Announce> GetAnnounce()
     {
         foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
@@ -188,27 +185,20 @@
                     </div>
                 </div>
             }
+            <div style="text-align: right;" width="100%"><a href="~/Search/LastAnnounces?f=0">Visualizza tutti</a></div>
             </div>
                 <div class="row">
                     <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
-                    @if (User.Identity.IsAuthenticated)
-            {
+                    @if(User.Identity.IsAuthenticated) {
                         <br /><br /><h3>Scelti per te   </h3><hr class="simple-hr" /><br /><br />
                     }
-                    @foreach (var annuncio in GetSuggestedAnnounce())
-                    {
-                        
+                    @foreach (var annuncio in GetSuggestedAnnounce()) {
                         <div class="col-sm-5 col-md-4">
-
                             <div class="col-item">
-                                
                                 <div class="photoThu">
-                               @if (!User.Identity.IsAuthenticated)
-                               {
+                               @if( !User.Identity.IsAuthenticated ) {
                                 <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                               }
-                               else
-                               {
+                               } else {
                                 <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
 
                                }
@@ -216,8 +206,6 @@
                                 </div>
                                 
                                 <div class="info">
-
-
                                     <h3>
                                         @annuncio.Title
                                     </h3>
