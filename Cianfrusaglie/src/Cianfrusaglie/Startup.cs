@@ -42,14 +42,13 @@ namespace Cianfrusaglie {
 
             // Opzioni sui ruoli
             // Modificare qui le impostazioni sulle password accettate e rifiutate
-            services.AddIdentity< User, IdentityRole >( options => 
-            {
+            services.AddIdentity< User, IdentityRole >( options => {
                 options.User.RequireUniqueEmail = true ;
-                options.Password.RequireDigit = true;
+                options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonLetterOrDigit = true;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonLetterOrDigit = false;
+                options.Password.RequireUppercase = false;
             })
             .AddEntityFrameworkStores< ApplicationDbContext >().AddDefaultTokenProviders();
 
