@@ -1,25 +1,14 @@
 ﻿@using System.Security.Claims
 @using Microsoft.Data.Entity.Query.Internal
 
-@functions
-{
-
-
-
-    public IEnumerable<Announce> GetAnnounce()
-    {
-        foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
-        {
-            yield return announce;
-        }
+@functions {
+    public IEnumerable<Announce> GetAnnounce() {
+        return ViewData["listAnnounces"] as IEnumerable<Announce>;
     }
 
-    public IEnumerable<Announce> GetSuggestedAnnounce()
-    {
-        foreach (var announce in ViewData["listSuggestedAnnounces"] as List<Announce>)
-        {
-            yield return announce;
-        }
+
+    public IEnumerable<Announce> GetSuggestedAnnounce() {
+        return ViewData["listSuggestedAnnounces"] as IEnumerable<Announce>;
     }
 
     /*public IEnumerable<Category> GetAnnounceCategories(int announceId)
@@ -32,20 +21,12 @@
         return null;
     }*/
 
-    public User GetAutore(string AuthorId)
-    {
-        foreach (var user in ViewData["listUsers"] as List<User>)
-        {
-            if (user.Id == AuthorId)
-                return user;
-        }
-        return null;
+    public User GetAutore( string AuthorId ) {
+        return ( ViewData[ "listUsers" ] as List< User > ).FirstOrDefault( user => user.Id == AuthorId );
     }
 
-    public string GetImages(int AnnounceId)
-    {
-        foreach (var imm in ViewData["listImages"] as List<ImageUrl>)
-        {
+    public string GetImages(int AnnounceId) {
+        foreach (var imm in ViewData["listImages"] as List<ImageUrl>) {
             if (imm.AnnounceId == AnnounceId)
                 return imm.Url;
         }
@@ -56,10 +37,7 @@
 }
 
 <div id="wrap">
-
-
-    @if(TempData["announceCreated"] != null)
-    {
+    @if(TempData["announceCreated"] != null) {
         <div class="alert alert-success alert-dismissible" role="alert" >
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
             <strong>Ottimo! </strong> Il tuo annuncio è stato creato correttamente!
@@ -76,14 +54,11 @@
                 <li data-target="#homeCarousel" data-slide-to="4"></li> -->
             </ol>
             <div class="carousel-inner" role="listbox" align="center">
-                @if (!User.Identity.IsAuthenticated)
-                {
+                @if (!User.Identity.IsAuthenticated) {
                     <div class="item active">
                         <img src="/images/carouse1l.png"/>
                     </div>
-                }
-                else
-                {
+                } else {
                     <div class="item active">
                         <img src="/images/carousel2.png" />
                     </div>
@@ -109,8 +84,7 @@
         <div id="linkHome">
             <div class="form-inline" role="form">
                 <div class="form-group" id="linkRegala">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
+                    @if (!User.Identity.IsAuthenticated) {
                         <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
                     }
                     else
@@ -122,24 +96,18 @@
                             </strong></h4>
                 </div>
                 <div class="form-group" id="linkVendi">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
+                    @if (!User.Identity.IsAuthenticated) {
                         <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
-                    }
-                    else
-                    {
+                    } else {
                         <a href="~/Announces/Create/?vendita=true" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
                     }
                     <br/>
                     <h4 style="color: black;"><strong>VENDI QUELLO<br />CHE NON TI SERVE</strong></h4>
                 </div>
                 <div class="form-group" id="linkCerca">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
+                    @if (!User.Identity.IsAuthenticated) {
                         <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
-                    }
-                    else
-                    {
+                    } else {
                         <a href="~/Search/Advanced" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
                     }
                     <br/>
@@ -163,15 +131,10 @@
                     <div class="col-item">
 
                         <div class="photoThu">
-                            @if (!User.Identity.IsAuthenticated)
-                            {
+                            @if (!User.Identity.IsAuthenticated) {
                                 <a href data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive"/></a>
-                            }
-                            else
-                            {
-
+                            } else {
                                 <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive"/></a>
-
                             }
                         </div>
 
@@ -179,25 +142,19 @@
 
 
                             <!--titolo su una linea sola-->
-                            @if (annuncio.Title.Length > 20)
-                            {
+                            @if (annuncio.Title.Length > 20) {
                                 <a href="~/Announces/Details/?id=@annuncio.Id" style="color:black">
                                     <h3>@annuncio.Title.Substring(0, 17)... </h3></a>
-                            }
-                            else
-                            {
+                            } else {
                                 <a href="~/Announces/Details/?id=@annuncio.Id" style="color:black">
                                     <h3>@annuncio.Title</h3></a>
                             }
 
 
-                            @if (@annuncio.Price == 0)
-                            {
+                            @if (@annuncio.Price == 0) {
                                 <h5 class="price-text-color">IN REGALO</h5>
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                            }
-                            else
-                            {
+                            } else {
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
                                 <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
                             }
@@ -212,32 +169,26 @@
 
                             <div class="clearfix"></div>
                         </div>
-                    </div>
-                        
-</div>
+                    </div>            
+                </div>
             }
+            <div style="text-align: right; width: 100%;"><a href="~/Search/LastAnnounces?f=0&page=0">Visualizza tutti</a></div>
             </div>
                 <div class="row">
                     <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
-                    @if (User.Identity.IsAuthenticated)
-            {
+                    @if (User.Identity.IsAuthenticated) {
                         <br /><br /><h3>Scelti Per Te</h3><hr class="simple-hr" /><br /><br />
                     }
-                    @foreach (var annuncio in GetSuggestedAnnounce())
-                    {
-                        
+                    @foreach (var annuncio in GetSuggestedAnnounce()) {
                         <div class="col-sm-5 col-md-4">
 
                             
                                 <div class="col-item">
 
                                     <div class="photoThu">
-                                        @if (!User.Identity.IsAuthenticated)
-                                        {
+                                        @if (!User.Identity.IsAuthenticated) {
                                             <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             <a href="~/Announces/Details/?id=@annuncio.Id" ><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
                                         }
 
@@ -247,26 +198,20 @@
 
 
                                         <!--titolo su una linea sola-->
-                                        @if (annuncio.Title.Length > 20)
-                                        {
+                                        @if (annuncio.Title.Length > 20) {
                                             <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
                                                 <h3>@annuncio.Title.Substring(0, 17)... </h3>
                                             </a>
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
                                                 <h3>@annuncio.Title</h3>
                                             </a>
                                         }
 
-                                        @if (@annuncio.Price == 0)
-                                        {
+                                        @if (@annuncio.Price == 0) {
                                             <h5 class="price-text-color">IN REGALO</h5>
                                             <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
                                             <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
                                         }
@@ -294,7 +239,6 @@
 
 
     </div>
-</div>
 
 
 

@@ -245,3 +245,4 @@ ModelManifest.xml
 .fake/
 Cianfrusaglie/src/Cianfrusaglie/wwwroot/images/
 /Cianfrusaglie/src/Cianfrusaglie/Properties/PublishProfiles
+/Cianfrusaglie/src/Cianfrusaglie/wwwroot
