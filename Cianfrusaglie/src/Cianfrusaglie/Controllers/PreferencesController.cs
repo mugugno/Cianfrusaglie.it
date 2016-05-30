@@ -35,8 +35,7 @@ namespace Cianfrusaglie.Controllers
         public IActionResult Index()
         {
             CommonFunctions.SetRootLayoutViewData( this, _context );
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            CommonFunctions.SetMacroCategoriesViewData( this,_context );
            
             var userCategories = _context.UserCategoryPreferenceses.Where(c => c.UserId.Equals(User.GetUserId()));
             var userPreferences = new Dictionary<int, bool>();
