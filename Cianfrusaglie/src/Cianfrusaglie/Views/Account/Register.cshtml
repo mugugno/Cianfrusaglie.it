@@ -98,9 +98,9 @@
                     <div class="form-group row">
                         <label asp-for="Genre" class="control-label">Sesso</label><label> *</label><br/>
 
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@Genre.Male" class="form-control"/>Uomo</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@Genre.Female" class="form-control"/>Donna</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@Genre.Unspecified" class="form-control"/>Non specificato</label>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)" class="form-control"/>Uomo</label><br/>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)" class="form-control"/>Donna</label><br/>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Unspecified)" class="form-control"/>Non specificato</label>
                         <span asp-validation-for="Genre" class="text-danger"></span>
                     </div>
                     <div class="form-group">
