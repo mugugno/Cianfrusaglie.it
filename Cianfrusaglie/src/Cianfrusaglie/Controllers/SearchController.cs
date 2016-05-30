@@ -101,9 +101,6 @@ namespace Cianfrusaglie.Controllers {
         }
 
       public IActionResult LastAnnounces(string f = "f", int page = 0) {
-         ViewData[ "listUsers" ] = _context.Users.ToList();
-
-
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
          ViewData[ "formCategories" ] = _context.Categories.ToList();
@@ -128,9 +125,6 @@ namespace Cianfrusaglie.Controllers {
       }
 
       public IActionResult Suggestions( string f = "f", int page = 0 ) {
-         ViewData[ "listUsers" ] = _context.Users.ToList();
-
-
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
          ViewData[ "formCategories" ] = _context.Categories.ToList();
@@ -142,7 +136,7 @@ namespace Cianfrusaglie.Controllers {
          ViewData[ "IsThereAnyNotification" ] = IsThereAnyNotification( User.GetUserId(), _context );
          ViewData[ "pageNumber" ] = page;
 
-         var result = _context.Announces.OrderByDescending( u => u.PublishDate ).ToList();
+         var result = CommonFunctions.GetSuggestedAnnounces( _context, this ).ToList();
          List<Announce> pageResults;
          ViewData[ "numberOfPages" ] = ( result.Count % resultsPerPage ) == 0 ? ( result.Count / resultsPerPage ) : ( 1 + result.Count / resultsPerPage );
 
