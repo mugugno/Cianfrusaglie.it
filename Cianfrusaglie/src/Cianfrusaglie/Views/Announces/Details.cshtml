@@ -255,40 +255,55 @@
             e.preventDefault();
             var tmp = @ViewData["IdAnnounce"];
 
-            $('#confirm').modal({ backdrop: 'static', keyboard: false })
-                .one('click', '#confirmbtn', function (err) {
-                    $('button[name="loVoglio"]').hide();
-                    $('button[name="nonLoVoglio"]').show();
-                    $('span[name="spanGliphNonLoVoglioPiu"]').show();
-                    $('span[name="seiInteressato"]').show();
-                    $.post( "/Announces/Interested", {
-                        
-                        AnnounceId: tmp,
-                        __RequestVerificationToken: antiForgeryToken
-                        
-                    })
-                        .fail(function() { alert("error"); });
-                });
+            $('#confirm')
+                .modal({ backdrop : 'static', keyboard : false })
+                .one('click',
+                    '#confirmbtn',
+                    function(err) {
+                        $('button[name="loVoglio"]').hide();
+                        $('button[name="nonLoVoglio"]').show();
+                        $('span[name="spanGliphNonLoVoglioPiu"]').show();
+                        $('span[name="seiInteressato"]').show();
+                        $.post("/Announces/Interested",
+                            {
+                                AnnounceId : tmp,
+                                __RequestVerificationToken : antiForgeryToken
+
+                            })
+                            .fail(function() { alert("error"); });
+                    });
         });
 
         var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
-        $('button[name="nonLoVoglio"]').on('click', function (e) {
-            var $form = $(this).closest('form');
-            e.preventDefault();
+        $('button[name="nonLoVoglio"]')
+            .on('click',
+                function(e) {
+                    var $form = $(this).closest('form');
+                    e.preventDefault();
+                    var isChoosen = '@ViewData["choosen"]' === '@true';
             var tmp = @ViewData["IdAnnounce"];
 
-            $('#notConfirm').modal({ backdrop: 'static', keyboard: false })
-                .one('click', '#confirmbtn', function (err) {
-                    $('button[name="nonLoVoglio"]').hide();
-                    $('button[name="loVoglio"]').show();
-                    $('span[name="spanGliphNonLoVoglioPiu"]').hide();
-                    $('span[name="seiInteressato"]').hide();
-                    
-                    $.post( "/Announces/Interested", {
-                        AnnounceId: tmp,
-                        __RequestVerificationToken: antiForgeryToken
-                    }).fail(function() { alert("error"); });
-                });
+            if( !isChoosen ) {
+                $('#notConfirm')
+                    .modal({ backdrop : 'static', keyboard : false })
+                    .one('click',
+                        '#confirmbtn',
+                        function(err) {
+                            $('button[name="nonLoVoglio"]').hide();
+                            $('button[name="loVoglio"]').show();
+                            $('span[name="spanGliphNonLoVoglioPiu"]').hide();
+                            $('span[name="seiInteressato"]').hide();
+
+                            $.post("/Announces/Interested",
+                                {
+                                    AnnounceId : tmp,
+                                    __RequestVerificationToken : antiForgeryToken
+                                })
+                                .fail(function() { alert("error"); });
+                        });
+            } else {
+                $('#choosen').modal({ backdrop : 'static', keyboard : false });
+            }
         });
 
 

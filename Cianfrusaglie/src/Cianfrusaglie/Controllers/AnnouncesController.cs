@@ -169,6 +169,7 @@ namespace Cianfrusaglie.Controllers {
             //ViewData Dato un annuncio ho tutti i nomi delle categorie di cui fa parte
             var announces = _context.Announces.Include(u => u.AnnounceCategories).Single(a => a.Id == announce.Id);
             ViewData["nameAnnounceCategories"] = announces.AnnounceCategories.ToList();
+            ViewData[ "choosen" ] = IsUserChoosenForTheAnnounce( (int) id, User.GetUserId() );
             return View( announce );
         }
 
