@@ -48,6 +48,12 @@ namespace Cianfrusaglie.Controllers {
             return formField.Value;
         }
 
+        //TODO Metodo copiato e incollato da FeedbackController! Refactoring!!!!
+        private bool IsUserChoosenForTheAnnounce(int announceId, string userId) {
+            var announce = _context.Announces.Include(a => a.ChosenUsers).SingleOrDefault(a => a.Id == announceId);
+            return announce != null && announce.ChosenUsers.Any(chosen => chosen.ChosenUserId == userId);
+        }
+
         /// <summary>
         ///     Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
@@ -307,7 +313,8 @@ namespace Cianfrusaglie.Controllers {
             }
             if( !LoginChecker.HasLoggedUser( this ) )
                 return false;
-
+            if( IsUserChoosenForTheAnnounce( (int) announceId, User.GetUserId() ) )
+                return false;
             var userTmp = _context.Users.SingleOrDefault( c => c.Id.Equals( User.GetUserId() ) );
             var annTmp = _context.Announces.Include( u => u.Interested ).SingleOrDefault( c => c.Id == announceId );
             var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( announceId ) ).Select( a => a.Gat );

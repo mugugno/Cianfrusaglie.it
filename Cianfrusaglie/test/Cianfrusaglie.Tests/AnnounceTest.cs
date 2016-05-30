@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
@@ -253,6 +254,26 @@ namespace Cianfrusaglie.Tests {
             var announceController = CreateAnnounceController(id);
             var ann = Context.Announces.First(u => u.Closed==true && !u.AuthorId.Equals(id));       
             Assert.False(announceController.Interested(ann.Id));
+        }
+
+        [Fact]
+        public void ChoosenUserUnInterestedInAnnounceAndFail() {
+            string id = Context.Users.Single(u => u.UserName.Equals(FirstUserName)).Id;
+            var announceController = CreateAnnounceController(id);
+            var ann = Context.Announces.First(u => !u.AuthorId.Equals(id) && u.Closed == false);
+            announceController.Interested(ann.Id);
+            SetUserChoosenForTheAnnounce( ann.Id, id );
+            Assert.False(announceController.Interested(ann.Id));
+        }
+
+        private void SetUserChoosenForTheAnnounce( int announceId, string userId ) {
+            var announce = Context.Announces.SingleOrDefault( a => a.Id.Equals( announceId ) );
+            var user = Context.Users.SingleOrDefault(u => u.Id.Equals( userId ));
+            Context.AnnounceChosenUsers.Add( new AnnounceChosen {
+                Announce = announce,
+                ChosenDateTime = DateTime.Now,
+                ChosenUser = user
+            } );
         }
     }
 }
