@@ -2,14 +2,19 @@
 
 #messageReceived { text-align: justify; }
 
-#balloonSent {
-    margin-left: 200px;
-    margin-right: 50px;
+.message-avatar {
+    height: 4em;
+    width: 4em;
+    overflow: hidden;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
-#balloonReceived {
-    margin-left: 50px;
-    margin-right: 200px;
+.conversation-avatar {
+    height: 2em;
+    width: 2em;
+    overflow: hidden;
+    margin-bottom: 7.5em;
 }
 
 #allConversations {
@@ -97,7 +102,8 @@ h6 {
 
 .triangle-isosceles.left {
     background: #FEEDAA;
-    margin-left: 50px;
+    margin-left: 15px;
+    margin-right: -15px;
 }
 
 

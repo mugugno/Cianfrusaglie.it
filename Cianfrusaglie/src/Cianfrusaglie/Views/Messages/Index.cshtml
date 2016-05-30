@@ -13,6 +13,7 @@
 
     private Dictionary< User, Dictionary< Message, User > > GetUserAndMessagesDictionary() { return ViewData[ "allConversations" ] as Dictionary< User, Dictionary< Message, User > >; }
     private string GetIdAfterRefresh() { return ViewData[ "idAfterRefresh" ] as string; }
+    private string GetMyAvatar() { return ViewData["MyAvatarUrl"] as string; }
 }
 
 <div class="row" id="fluid-row" >
@@ -29,7 +30,12 @@
                 @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
                     <div class="panel panel-default panel-message @(( kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) && GetIdAfterRefresh().Equals( "" ) ) || kvPair.Key.Id.Equals( GetIdAfterRefresh() ) ? "first-message-panel" : "")" onclick='showConversation("@kvPair.Key.Id", this)' >
 
-                        <div class="panel-heading panel-message" >
+                        <div class="panel-heading panel-message" style="padding-top: 7px;">
+                            <div class="col-md-1" style="padding-left: 0px; padding-right: 3em;">
+                                <div class="photo conversation-avatar panel panel-default">
+                                    <img class="img-responsive" src=@kvPair.Key.ProfileImageUrl />
+                                </div>
+                            </div>
                             <h4>
                                 <b>@kvPair.Key.UserName</b>
                             </h4>
@@ -98,29 +104,49 @@
                             var messages = kvPair.Value;
                             foreach( var messageUserPair in messages ) {
                                 <div class="row" >
-                                    <div class="col-md-1" ></div>
-                                    <div class="col-md-10" >
+                                    <div class="col-md-12" style="padding-right: 30px;" >
                                         @* Disegna il balloon *@
-                                        @if( messageUserPair.Value.Id.Equals( User.GetUserId() ) ) {
-                                            <div class="triangle-isosceles right" id="balloonSent" >
-                                                <h6>
-                                                    <span style="float: right">@messageUserPair.Key.DateTime</span>
-                                                    <span style="float: left"> @otherUser.UserName </span>
-                                                </h6>
-                                                <br />
-                                                <div id="messageSent" >
-                                                    @messageUserPair.Key.Text
+                                        @if (messageUserPair.Value.Id.Equals(User.GetUserId()))
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-11">
+                                                    <div class="triangle-isosceles right" id="balloonSentMeMessage">
+                                                        <h6>
+                                                            <span style="float: right">@messageUserPair.Key.DateTime</span>
+                                                            <span style="float: left"> @otherUser.UserName </span>
+                                                        </h6>
+                                                        <br />
+                                                        <div id="messageSent">
+                                                            @messageUserPair.Key.Text
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <div class="photo message-avatar panel panel-default">
+                                                        <img class="img-responsive" src="@kvPair.Key.ProfileImageUrl" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        } else {
-                                            <div class="triangle-isosceles left" id="balloonReceived" >
-                                                <h6>
-                                                    <span style="float: right">@messageUserPair.Key.DateTime</span>
-                                                    <span style="float: left"> @User.GetUserName() </span>
-                                                </h6>
-                                                <br />
-                                                <div id="messageReceived" >
-                                                    @messageUserPair.Key.Text
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <div class="photo message-avatar panel panel-default">
+                                                        <img class="img-responsive" src=@GetMyAvatar() />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <div class="triangle-isosceles left" id="balloonISentMessage">
+                                                        <h6>
+                                                            <span style="float: right">@messageUserPair.Key.DateTime</span>
+                                                            <span style="float: left"> @User.GetUserName() </span>
+                                                        </h6>
+                                                        <br />
+                                                        <div id="messageReceived">
+                                                            @messageUserPair.Key.Text
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         }
@@ -137,14 +163,14 @@
                         <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
                         <div class="row" >
                             <div class="form-group" >
-                                <div class="col-md-10" >
+                                <div class="col-md-11" >
                                     <textarea asp-for="Text" class="form-control" rows="4" ></textarea>
                                     <span asp-validation-for="Text" class="text-danger"></span>
 
                                     <input asp-for="ReceiverId" type="hidden" value="@kvPair.Key.Id" class="form-control" />
                                 </div>
-                                <div class="col-md-2" style="margin-top: 25px; padding-left: 5px; padding-right: 30px;" >
-                                    <button class="btn btn-default" type="submit" >
+                                <div class="col-md-1" style="margin-top: 2em; padding-left: 0.3em;" >
+                                    <button class="btn btn-warning" type="submit" >
                                         Invia
                                     </button>
                                 </div>

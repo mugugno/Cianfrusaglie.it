@@ -75,6 +75,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
             ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
             ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+		    ViewData[ "MyAvatarUrl" ] = _context.Users.First( u => u.Id.Equals( User.GetUserId() ) ).ProfileImageUrl;
             return View();
         }
 
