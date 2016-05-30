@@ -95,7 +95,6 @@ function placeMarker(location, title) {
     marker = new google.maps.Marker({
         position: location,
         title: title,
-        animation: google.maps.Animation.BOUNCE,
         map: map
     });
 }
