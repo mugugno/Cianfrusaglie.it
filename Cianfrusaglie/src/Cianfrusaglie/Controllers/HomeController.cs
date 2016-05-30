@@ -38,11 +38,7 @@ namespace Cianfrusaglie.Controllers
             } else {
                 ViewData[ "listSuggestedAnnounces" ] = new List< Announce >();
             }
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            CommonFunctions.SetRootLayoutViewData( this,_context );
             ViewData["listCategory"] = _context.Categories.ToList();
             return View();
         }

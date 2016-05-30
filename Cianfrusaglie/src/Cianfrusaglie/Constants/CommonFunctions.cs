@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Models;
-using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
-using Cianfrusaglie.ViewModels;
 using Microsoft.AspNet.Mvc;
 
 namespace Cianfrusaglie.Constants
