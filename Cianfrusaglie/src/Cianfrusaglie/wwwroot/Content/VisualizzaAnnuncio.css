@@ -16,6 +16,9 @@
 li {
     display: inline;
 }
+li.divider {
+    display: inherit;
+}
 #wrapper-announce {
     /* Safari 4-5, Chrome 1-9 */
     background: -webkit-gradient( radial, center center, 0, center center, 460, from( #fff ), to( white ) );
