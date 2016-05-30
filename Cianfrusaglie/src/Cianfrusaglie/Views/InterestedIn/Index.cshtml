@@ -22,8 +22,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer">
 
-                                <span style="float: right"> Pubblicato il @item.PublishDate </span>
-                                <span style="font-size:1.5em"><b>@item.Title</b></span>
+                                <div class="row" >
+                                    <div class="col-md-4" ><span style="font-size: 1.5em"><b>@item.Title</b></span></div>
+                                    <div class="col-md-4" style="text-align: center; padding-top: 5px">@if (((List<int>)ViewData["AnnounceIWasChosenFor"]).Contains(item.Id))
+                                    {
+                                        <span class="label label-success" style="font-size: 1em; border-radius: 1em; font-weight: normal;">Sei stato scelto per questo annuncio!</span>
+                                    }</div>
+                                    <div class="col-md-4" style="text-align: right; padding-top: 5px"><span> Pubblicato il @item.PublishDate </span></div>
+                                </div>
                             </div>
                             <div id="announce-number-@item.Id" class="panel-collapse collapse">
                                 <div class="panel-body">

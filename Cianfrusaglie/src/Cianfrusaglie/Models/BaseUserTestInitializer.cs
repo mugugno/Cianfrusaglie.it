@@ -59,7 +59,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce1, Url = @"/images/cell1.jpg"} );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce1, Url = @"/upload/cell1.jpg"} );
 
          ctx.SaveChanges();
 
@@ -86,7 +86,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce2, Url = @"/images/i2.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce2, Url = @"/upload/i2.jpg" } );
 
          ctx.SaveChanges();
 
@@ -114,7 +114,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce3, Url = @"/images/all-star.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce3, Url = @"/upload/all-star.jpg" } );
 
          ctx.SaveChanges();
 
@@ -143,7 +143,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce4, Url = @"/images/tavolo-da-giardino.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce4, Url = @"/upload/tavolo-da-giardino.jpg" } );
 
          ctx.SaveChanges();
 
@@ -172,7 +172,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce6, Url = @"/images/lettorevhs.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce6, Url = @"/upload/lettorevhs.jpg" } );
 
          ctx.SaveChanges();
 
@@ -194,7 +194,7 @@ namespace Cianfrusaglie.Models {
             new AnnounceCategory() { Announce = announce5, Category = ctx.Categories.Single( p => p.Name == "MisteryBox" && p.OverCategory != null ) } );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce5, Url = @"/images/vhs.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce5, Url = @"/upload/vhs.jpg" } );
 
          ctx.SaveChanges();
 
@@ -223,7 +223,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce7, Url = @"/images/tr.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce7, Url = @"/upload/tr.jpg" } );
 
          ctx.SaveChanges();
 
@@ -252,7 +252,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce8, Url = @"/images/xbox360.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce8, Url = @"/upload/xbox360.jpg" } );
 
          ctx.SaveChanges();
 
@@ -281,7 +281,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce9, Url = @"/images/kirby.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce9, Url = @"/upload/kirby.jpg" } );
 
          ctx.SaveChanges();
 
@@ -308,7 +308,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce10, Url = @"/images/triciclo.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce10, Url = @"/upload/triciclo.jpg" } );
 
          ctx.SaveChanges();
 
@@ -338,7 +338,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce11, Url = @"/images/ape.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce11, Url = @"/upload/ape.jpg" } );
 
          ctx.SaveChanges();
 
@@ -360,7 +360,7 @@ namespace Cianfrusaglie.Models {
             new AnnounceCategory() { Announce = announce12, Category = ctx.Categories.Single( p => p.Name == "Modellismo e collezionismo" ) } );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce12, Url = @"/images/olandese.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce12, Url = @"/upload/olandese.jpg" } );
 
          ctx.SaveChanges();
 
@@ -391,7 +391,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce13, Url = @"/images/trenolego.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce13, Url = @"/upload/trenolego.jpg" } );
 
          ctx.SaveChanges();
 
@@ -420,7 +420,7 @@ namespace Cianfrusaglie.Models {
          );
          ctx.SaveChanges();
 
-         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce14, Url = @"/images/tennis.jpg" } );
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce14, Url = @"/upload/tennis.jpg" } );
 
          ctx.SaveChanges();
       }

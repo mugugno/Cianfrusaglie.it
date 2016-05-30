@@ -261,6 +261,10 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<int>("FeedbacksCount");
+
+                    b.Property<double>("FeedbacksMean");
+
                     b.Property<int>("Genre");
 
                     b.Property<double>("Latitude");
