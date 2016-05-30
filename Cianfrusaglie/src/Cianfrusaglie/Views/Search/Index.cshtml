@@ -47,7 +47,7 @@
     public string idDiv = "";
 
 }
-<div class="container">
+<div class="container-search">
     <!--Categorie della ricerca che ho effettuato-->
 
     <!-- Risultati di ricerca -->
@@ -63,7 +63,7 @@
             @foreach (var announce in Model)
             {
                 <div class="item active">
-                    <div class="col-sm-4 col-md-3">
+                    <div class="">
                         @if (announce.Price == 0)
                         {
                             idDiv = "donation";

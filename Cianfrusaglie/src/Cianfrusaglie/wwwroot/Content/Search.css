@@ -1,1 +1,15 @@
-﻿
+﻿.container-search{
+    margin:2em;
+    padding:2em;
+}
+
+.container-search .item{
+    min-width: 20em !important;
+    width:20em;
+    display: inline-block;
+    position:relative;
+}
+.container-search .btn-round.btn-sm.card-img {
+    position:absolute;
+    top:0;
+}
