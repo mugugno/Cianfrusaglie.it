@@ -108,8 +108,7 @@ namespace Cianfrusaglie.Controllers {
                 field => ( from defaultValue in _context.FieldDefaultValues.ToList()
                     where field.Id.Equals( defaultValue.FormFieldId )
                     select new SelectListItem {Text = defaultValue.Value, Value = defaultValue.Value} ).ToList() );
-            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
+            CommonFunctions.SetMacroCategoriesViewData( this, _context );
             ViewData[ "isVendita" ] = vendita;
 
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );

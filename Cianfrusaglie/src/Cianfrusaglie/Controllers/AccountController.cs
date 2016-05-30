@@ -108,11 +108,11 @@ namespace Cianfrusaglie.Controllers {
             if( LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
 
-            ViewData["formMacroCategories"] = _context.Categories.ToList();
-            ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
+            CommonFunctions.SetMacroCategoriesViewData(this,_context);
 
             return View();
         }
+
 
         //
         // POST: /Account/Register
@@ -129,14 +129,14 @@ namespace Cianfrusaglie.Controllers {
             }
             //QUI BISOGNA INSERIRE TUTTI GLI ALTRI CAMPI
             if( ModelState.IsValid ) {
-                Genre genre = Genre.Unspecified;
+                var genre = Genre.Unspecified;
                 switch( model.Genre ) {
-                  case 1:
-                     genre= Genre.Female;
-                            break;
-                  case 2:
-                     genre= Genre.Male;
-                            break;
+                    case 1:
+                        genre = Genre.Female;
+                        break;
+                    case 2:
+                        genre = Genre.Male;
+                        break;
                 }
 
                 var user = new User {
