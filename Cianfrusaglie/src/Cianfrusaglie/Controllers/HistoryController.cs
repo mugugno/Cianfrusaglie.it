@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Mvc;
@@ -51,11 +52,7 @@ namespace Cianfrusaglie.Controllers {
       public IActionResult Index() {
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
-        ViewData["formCategories"] = _context.Categories.ToList();
-        ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
-        ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-        ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-        ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+        CommonFunctions.SetRootLayoutViewData( this, _context );
         ViewData["Interested"] = GetInterestedToAnnounces();
         return View( GetLoggedUserPublishedAnnounces().ToList() );
       }

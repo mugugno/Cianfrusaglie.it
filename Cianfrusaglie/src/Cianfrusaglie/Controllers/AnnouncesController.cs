@@ -48,6 +48,12 @@ namespace Cianfrusaglie.Controllers {
             return formField.Value;
         }
 
+        //TODO Metodo copiato e incollato da FeedbackController! Refactoring!!!!
+        private bool IsUserChoosenForTheAnnounce(int announceId, string userId) {
+            var announce = _context.Announces.Include(a => a.ChosenUsers).SingleOrDefault(a => a.Id == announceId);
+            return announce != null && announce.ChosenUsers.Any(chosen => chosen.ChosenUserId == userId);
+        }
+
         /// <summary>
         ///     Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
@@ -92,8 +98,7 @@ namespace Cianfrusaglie.Controllers {
 
 
         private void SetViewDataForCreate( bool vendita ) {
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+           CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData[ "listUsers" ] = _context.Users.ToList();
             ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
@@ -103,12 +108,9 @@ namespace Cianfrusaglie.Controllers {
                 field => ( from defaultValue in _context.FieldDefaultValues.ToList()
                     where field.Id.Equals( defaultValue.FormFieldId )
                     select new SelectListItem {Text = defaultValue.Value, Value = defaultValue.Value} ).ToList() );
-            ViewData[ "formMacroCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfMacroCategories" ] = _context.Categories.ToList().Count;
+            CommonFunctions.SetMacroCategoriesViewData( this, _context );
             ViewData[ "isVendita" ] = vendita;
-            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             SetViewDataWithFormFieldCategoryDictionary();
         }
@@ -146,17 +148,14 @@ namespace Cianfrusaglie.Controllers {
                 var formField = _context.FormFields.Single( ff => ff.Id.Equals( f.FormFieldId ) );
                 formFieldsValue.Add( formField, f.Value );
             }
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+            CommonFunctions.SetRootLayoutViewData( this,_context );
             ViewData[ "formFieldsValue" ] = formFieldsValue;
             ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
             ViewData[ "IdAnnounce" ] = id;
             ViewData[ "AuthorId" ] = announce.AuthorId;
             ViewData[ "Autore" ] =
                 _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
-            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
                 ViewData[ "int" ] =
@@ -170,6 +169,7 @@ namespace Cianfrusaglie.Controllers {
             //ViewData Dato un annuncio ho tutti i nomi delle categorie di cui fa parte
             var announces = _context.Announces.Include(u => u.AnnounceCategories).Single(a => a.Id == announce.Id);
             ViewData["nameAnnounceCategories"] = announces.AnnounceCategories.ToList();
+            ViewData[ "choosen" ] = IsUserChoosenForTheAnnounce( (int) id, User.GetUserId() );
             return View( announce );
         }
 
@@ -307,7 +307,8 @@ namespace Cianfrusaglie.Controllers {
             }
             if( !LoginChecker.HasLoggedUser( this ) )
                 return false;
-
+            if( IsUserChoosenForTheAnnounce( (int) announceId, User.GetUserId() ) )
+                return false;
             var userTmp = _context.Users.SingleOrDefault( c => c.Id.Equals( User.GetUserId() ) );
             var annTmp = _context.Announces.Include( u => u.Interested ).SingleOrDefault( c => c.Id == announceId );
             var announceGats = _context.AnnounceGats.Where( a => a.AnnounceId.Equals( announceId ) ).Select( a => a.Gat );
@@ -499,11 +500,7 @@ namespace Cianfrusaglie.Controllers {
             if( !User.GetUserId().Equals( announce.AuthorId ) )
                 return HttpBadRequest();
 
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            CommonFunctions.SetRootLayoutViewData( this,_context );
             return View( announce );
         }
 

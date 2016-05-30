@@ -4,3 +4,10 @@ function onStarClick(e) {
     var target = e.target || e.srcElement;
     document.getElementById("AspStarRatingValue").value = target.value;
 }
+
+//function onStarOver(e) {
+    /*e = e || window.event;
+    if()
+    document.getElementById("AspStarRatingValue").value = "this.style.color='yellow'";
+    document.getElementById("AspStarRatingValue").value = "this.style.color='grey'";
+}*/

@@ -30,8 +30,8 @@
                 @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
                     <div class="panel panel-default panel-message @(( kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) && GetIdAfterRefresh().Equals( "" ) ) || kvPair.Key.Id.Equals( GetIdAfterRefresh() ) ? "first-message-panel" : "")" onclick='showConversation("@kvPair.Key.Id", this)' >
 
-                        <div class="panel-heading panel-message" style="padding-top: 7px;">
-                            <div class="col-md-1" style="padding-left: 0px; padding-right: 3em;">
+                        <div class="panel-heading panel-message" style="padding-top: 7px; ">
+                            <div class="col-md-1" style="padding-left: 0px; padding-right: 3em; max-height: 3em;">
                                 <div class="photo conversation-avatar panel panel-default">
                                     <img class="img-responsive" src=@kvPair.Key.ProfileImageUrl />
                                 </div>
