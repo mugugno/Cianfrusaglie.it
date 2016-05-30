@@ -129,6 +129,10 @@
                 <div class="icon-detail">
                     <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
                 </div>
+            }else if( @Model.Closed ) {
+                <div class="icon-detail" style="color: grey; align-content: center; cursor: default">
+                    <h3>Annuncio Chiuso!</h3>
+                </div>
             }
 
 

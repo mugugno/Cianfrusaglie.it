@@ -93,7 +93,7 @@ namespace Cianfrusaglie.Tests {
       public void SearchOnTitleDoesntContainClosedOrExpired( string title ) {
          var researchController = CreateResearchController( null );
 
-         var result = researchController.TitleBasedSearch( title );
+         var result = researchController.TitleBasedSearch( title ).ToList();
          Assert.True( !result.Any( p => p.Closed ) );
          Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
       }
