@@ -153,6 +153,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
             ViewData[ "IdAnnounce" ] = id;
             ViewData[ "Author" ] = _context.Users.First( u => u.Id.Equals( announce.AuthorId ) );
+            ViewData["AuthorId"] = ((User)ViewData["Author"]).Id;
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
                 ViewData[ "int" ] =
