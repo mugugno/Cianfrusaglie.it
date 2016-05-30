@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.Suggestions;
 using Cianfrusaglie.ViewModels;
 using Microsoft.AspNet.Mvc;
 
@@ -23,6 +24,17 @@ namespace Cianfrusaglie.Constants
             controller.ViewData["IsThereNewMessage"] = IsThereNewMessage(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewInterested"] = IsThereNewInterested(controller.User.GetUserId(), context);
             controller.ViewData["IsThereAnyNotification"] = IsThereAnyNotification(controller.User.GetUserId(), context);
+        }
+
+        public static IEnumerable< Announce > GetSuggestedAnnounces(ApplicationDbContext context, Controller controller) {
+            var user = context.Users.Single( u => u.Id.Equals( controller.User.GetUserId() ) );
+            var rankAlgorithm = new RankAlgorithm( context );
+            return
+                context.Announces.Where(
+                    a =>
+                        !a.AuthorId.Equals( controller.User.GetUserId() ) && !a.Closed &&
+                        GeoPosition.GeoCoordinate.Distance( a.Latitude, a.Longitude, user.Latitude, user.Longitude ) <=
+                        100 ).OrderByDescending( a => rankAlgorithm.CalculateRank( a, user ) );
         }
 
         public static bool IsThereAnyNotification( string userId, ApplicationDbContext context ) {

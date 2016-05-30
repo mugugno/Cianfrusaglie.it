@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Microsoft.AspNet.Identity;
@@ -15,12 +16,12 @@ namespace Cianfrusaglie.Controllers
     {
         private readonly ApplicationDbContext _context;
         public UserManager<User> UserManager;
-        public RankAlgorithm rankAlgorithm;
+        public RankAlgorithm RankAlgorithm;
 
         public HomeController(ApplicationDbContext context)
         {
             _context = context;
-            rankAlgorithm = new RankAlgorithm(context);
+            RankAlgorithm = new RankAlgorithm(context);
         }
 
         public IActionResult Index()
@@ -33,10 +34,7 @@ namespace Cianfrusaglie.Controllers
             if( LoginChecker.HasLoggedUser( this ) ) {
                 var user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
                 ViewData[ "listSuggestedAnnounces" ] =
-                    _context.Announces.Where(
-                        a => !a.AuthorId.Equals( User.GetUserId() ) &&
-                            GeoPosition.GeoCoordinate.Distance( a.Latitude, a.Longitude, user.Latitude, user.Longitude ) <=
-                            100 ).OrderByDescending( a => rankAlgorithm.calculateRank( a, user ) ).Take( 3 ).ToList();
+                   CommonFunctions.GetSuggestedAnnounces( _context,this ).Take( 3 ).ToList();
             } else {
                 ViewData[ "listSuggestedAnnounces" ] = new List< Announce >();
             }
