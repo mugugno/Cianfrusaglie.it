@@ -15,12 +15,12 @@ using static Cianfrusaglie.Constants.CommonFunctions;
 namespace Cianfrusaglie.Controllers {
    public class SearchController : Controller {
         private readonly ApplicationDbContext _context;
-        public RankAlgorithm rankAlgorithm;
+        public RankAlgorithm RankAlgorithm;
         private int resultsPerPage = 12;
 
         public SearchController( ApplicationDbContext context ) {
             _context = context;
-            rankAlgorithm = new RankAlgorithm(context);
+            RankAlgorithm = new RankAlgorithm(context);
         }
 
         public IActionResult Advanced()
@@ -67,7 +67,7 @@ namespace Cianfrusaglie.Controllers {
                     }
                     return View(pageResults);
                 } else {
-                    result = _context.Announces.OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
+                    result = _context.Announces.OrderByDescending(a => RankAlgorithm.CalculateRank(a, user)).ToList();
                     ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
                     if (result.Count > resultsPerPage * (page + 1)) {
                         pageResults = result.GetRange(resultsPerPage * page, resultsPerPage);
@@ -84,7 +84,7 @@ namespace Cianfrusaglie.Controllers {
 
             if (user != null && range > 0) {
                 var loggedUser = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
-                result = DistanceSearch(result, loggedUser.Latitude, loggedUser.Longitude, range).OrderByDescending(a => rankAlgorithm.calculateRank(a, user)).ToList();
+                result = DistanceSearch(result, loggedUser.Latitude, loggedUser.Longitude, range).OrderByDescending(a => RankAlgorithm.CalculateRank(a, user)).ToList();
             }
 
             ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
@@ -115,7 +115,7 @@ namespace Cianfrusaglie.Controllers {
          ViewData[ "IsThereAnyNotification" ] = IsThereAnyNotification( User.GetUserId(), _context );
          ViewData[ "pageNumber" ] = page;
 
-         var result = _context.Announces.OrderByDescending( u => u.PublishDate ).ToList();
+         var result = _context.Announces.Where(a => !a.Closed).OrderByDescending( u => u.PublishDate ).ToList();
          List<Announce> pageResults;
          ViewData[ "numberOfPages" ] = ( result.Count % resultsPerPage ) == 0 ? ( result.Count / resultsPerPage ) : ( 1 + result.Count / resultsPerPage );
          if( result.Count > resultsPerPage * ( page + 1 ) ) {

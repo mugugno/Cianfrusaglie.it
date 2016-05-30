@@ -21,31 +21,31 @@ using Cianfrusaglie.GeoPosition;
 namespace Cianfrusaglie.Suggestions
 {
     public class RankAlgorithm {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public RankAlgorithm(ApplicationDbContext context) { _context = context; }
 
-        public int calculateRank(Announce announce, User user) {
-            int score = calculateDistanceScore( announce, user ) + calculateMatchedCategoriesScore( announce, user ) + calculateMatchedGatsScore( announce, user );
-            double multiplier = calculateFeedbackMultiplier( announce );
+        public int CalculateRank(Announce announce, User user) {
+            int score = CalculateDistanceScore( announce, user ) + CalculateMatchedCategoriesScore( announce, user ) + CalculateMatchedGatsScore( announce, user );
+            double multiplier = CalculateFeedbackMultiplier( announce );
             double rank = score * (multiplier <= 0.01 ? 1 : multiplier);
             return (int) rank;
         }
 
-        public double calculateFeedbackMultiplier(Announce announce)
+        public double CalculateFeedbackMultiplier(Announce announce)
         {
             var userFeedbackVotes = _context.FeedBacks.Where(a => a.Receiver.Equals( announce.Author ));
             int userFeedbackSum = userFeedbackVotes.Sum( f => f.Vote );
-            var userFeedbackMean = userFeedbackSum / Math.Max(userFeedbackVotes.Count(), 1);
+            int userFeedbackMean = userFeedbackSum / Math.Max(userFeedbackVotes.Count(), 1);
             return userFeedbackMean * Math.Sqrt( userFeedbackSum);
         }
 
-        public int calculateDistanceScore( Announce announce, User user ) {
-            var distance = GeoCoordinate.Distance( announce.Latitude, announce.Longitude, user.Latitude, user.Longitude );
+        public int CalculateDistanceScore( Announce announce, User user ) {
+            double distance = GeoCoordinate.Distance( announce.Latitude, announce.Longitude, user.Latitude, user.Longitude );
             return (int) (100 - Math.Min( 50, distance));
         }
 
-        public int calculateMatchedGatsScore(Announce announce, User user) {
+        public int CalculateMatchedGatsScore(Announce announce, User user) {
             var announceGats = _context.AnnounceGats.Where( a=> a.AnnounceId.Equals( announce.Id ) );
             var userHistogramGats = _context.UserGatHistograms.Where( u=> u.UserId.Equals( user.Id ) );
             var userTotalCount = userHistogramGats.Sum( a => a.Count );
@@ -58,7 +58,7 @@ namespace Cianfrusaglie.Suggestions
             return (int) score;
         }
 
-        public int calculateMatchedCategoriesScore( Announce announce, User user ) {
+        public int CalculateMatchedCategoriesScore( Announce announce, User user ) {
             var announceCategories = _context.AnnounceCategories.Where( a => a.AnnounceId.Equals( announce.Id ) ).Select( a=> a.CategoryId );
             var userPreferredCategories = _context.UserCategoryPreferenceses.Where( p => p.UserId.Equals( user.Id ) ).Select( p=> p.CategoryId );
             int score = 0;
