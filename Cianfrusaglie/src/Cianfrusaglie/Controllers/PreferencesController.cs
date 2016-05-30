@@ -34,13 +34,10 @@ namespace Cianfrusaglie.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ViewData["formCategories"] = _context.Categories.ToList();
-            ViewData["numberOfCategories"] = _context.Categories.ToList().Count;
+            CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData["formMacroCategories"] = _context.Categories.ToList();
             ViewData["numberOfMacroCategories"] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+           
             var userCategories = _context.UserCategoryPreferenceses.Where(c => c.UserId.Equals(User.GetUserId()));
             var userPreferences = new Dictionary<int, bool>();
             foreach (var category in _context.Categories.ToList())
