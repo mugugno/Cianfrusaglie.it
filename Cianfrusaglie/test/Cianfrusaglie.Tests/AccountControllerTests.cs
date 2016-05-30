@@ -15,6 +15,7 @@ using Moq;
 using Xunit;
 using Microsoft.Data.Entity;
 using System.Globalization;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Tests {
     public class AccountControllerTests : BaseTestSetup {
@@ -74,7 +75,7 @@ namespace Cianfrusaglie.Tests {
             Assert.True(dbuser.Name.Equals(Name));
             Assert.True(dbuser.Longitude.ToString(CultureInfo.InvariantCulture).Equals(Lon));
             Assert.True(dbuser.Latitude.ToString(CultureInfo.InvariantCulture).Equals(Lat));
-            Assert.True(dbuser.Genre.Equals(0));
+            Assert.True(dbuser.Genre.Equals(Genre.Unspecified));
             Assert.True(dbuser.Surname.Equals(Surname));
             foreach(var tmp in two)
             {

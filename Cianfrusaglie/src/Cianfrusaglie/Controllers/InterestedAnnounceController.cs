@@ -1,15 +1,12 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.InterestedAnnounce;
-using static Cianfrusaglie.Constants.CommonFunctions;
 
 
 namespace Cianfrusaglie.Controllers {
@@ -39,7 +36,7 @@ namespace Cianfrusaglie.Controllers {
             var chosen = announce.ChosenUsers.OrderByDescending( u => u.ChosenDateTime ).FirstOrDefault();
             if( chosen != null ) {
                 ViewData["chosenUserId"] = chosen.ChosenUserId;
-                ViewData["allOthersChosenUserId"] = announce.ChosenUsers.Where(u => !u.ChosenUserId.Equals(chosen.ChosenUserId)).Select(u => u.Id);
+                ViewData["allOthersChosenUserId"] = announce.ChosenUsers.Where(u => !u.ChosenUserId.Equals(chosen.ChosenUserId)).Select(u => u.ChosenUserId).ToList();
                 ViewData["feedbackGivenUsers"] = _context.FeedBacks.Where(f => f.AnnounceId.Equals(announce.Id) && f.ReceiverId.Equals(chosen.ChosenUserId) && f.AuthorId.Equals(User.GetUserId())).Select(f => f.ReceiverId).ToList();
             }
                

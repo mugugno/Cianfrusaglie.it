@@ -37,35 +37,38 @@ function initializeGMaps(position, onlyView, radius) {
         var searchBox = new google.maps.places.SearchBox(input);
        // map.controls[ google.maps.ControlPosition.TOP_LEFT ].push(input);
 
-        searchBox.addListener('places_changed', function() {
-            var places = searchBox.getPlaces();
+        searchBox.addListener('places_changed',
+            function () {
+                var places = searchBox.getPlaces();
 
-            if( places.length == 0 )
-                return;
+                if( places.length == 0 )
+                    return;
 
-            var bounds = new google.maps.LatLngBounds();
+                var bounds = new google.maps.LatLngBounds();
 
-            if( places[ 0 ].geometry.viewport ) {
-                bounds.union(places[ 0 ].geometry.viewport);
-            } else {
-                bounds.extend(places[ 0 ].geometry.location);
-            }
-            map.fitBounds(bounds);
+                if( places[ 0 ].geometry.viewport ) {
+                    bounds.union(places[ 0 ].geometry.viewport);
+                } else {
+                    bounds.extend(places[ 0 ].geometry.location);
+                }
+                map.fitBounds(bounds);
 
-            placeMarker(places[0].geometry.location, places[0].title);
+                placeMarker(places[0].geometry.location, places[0].title);
 
-            var range = $("#range-input").val();
-            if( range > 0 )
-                setCircle(marker.position, range);
+                var range = $("#range-input").val();
+                if( range > 0 )
+                    setCircle(marker.position, range);
         });
 
         if (radius > 0)
             setCircle(marker.position, 1);
-        google.maps.event.addListener(map, 'click', function(event) {
-            placeMarker(event.latLng);
-            if (radius > 0)
-                setCircle(marker.position, $("#range-input").val());
-        });
+
+        google.maps.event.addListener(map, 'click',
+            function (event) {
+                placeMarker(event.latLng);
+                if( radius > 0 )
+                    setCircle(marker.position, $("#range-input").val());
+            });
     } else if( radius != null && radius > 0 ) {
         //creo un cerchio intorno alla posizione
         setCircle(marker.position, radius);
@@ -86,6 +89,12 @@ function setCircle(position, radius) {
         center: position,
         radius: radius * 1000
     });
+
+    map.setCenter(position);
+    if (radius == 0)
+        map.setZoom(map.maxZoom);
+    else
+        map.fitBounds(cityCircle.getBounds());
 }
 
 function placeMarker(location, title) {
@@ -95,7 +104,8 @@ function placeMarker(location, title) {
     marker = new google.maps.Marker({
         position: location,
         title: title,
-        animation: google.maps.Animation.BOUNCE,
         map: map
     });
+
+    map.setCenter(location);
 }
