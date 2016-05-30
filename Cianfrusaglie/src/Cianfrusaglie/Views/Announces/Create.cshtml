@@ -98,34 +98,35 @@
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Informazioni aggiuntive</h3>
                                     </div>
-                                    <div class="panel-body">
-                                        @{var fieldDefault = (Dictionary<int, List<SelectListItem>>)ViewData["formFieldDefaultValue"];
-                                            foreach (var field in GetFormFields()) {
-                                                switch (field.Type) {
+                                    <div class="panel-body" >
+                                        <div>Tutti i campi sono opzionali</div><br/>
+                                        @{var fieldDefault = (Dictionary< int, List< SelectListItem > >) ViewData[ "formFieldDefaultValue" ];
+                                            foreach( var field in GetFormFields() ) {
+                                                switch( field.Type ) {
                                                     case FormFieldType.Checkbox:
-                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
-                                                                
-                                                            <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
-                                                            @field.Name
+                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label" >
+
+                                                                <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField" >
+                                                                @field.Name
                                                             </label>
                                                         </div>
                                                         break;
-                                      
+
 
                                                     case FormFieldType.Select:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
 
-                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]">
-                                                                <option selected="selected" value="">&nbsp;</option>
+                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]" >
+                                                                <option selected="selected" value="" >&nbsp;</option>
                                                             </select>
                                                         </div>
                                                         break;
 
                                                     case FormFieldType.Text:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
                                                             <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
                                                         </div>
                                                         break;
@@ -158,28 +159,28 @@
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
                                         <!-- MediaTypeNames.Text input-->
-                                        <div class="form-group">
-                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
-                                            <div class="col-md-7">
-                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="Obbligatorio" style="padding-left: 12px" type="text">
+                                        <div class="form-group" >
+                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                            <div class="col-md-7" >
+                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
 
                                         <!-- Textarea -->
-                                        <div class="form-group">
-                                            <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
-                                            <div class="col-md-7">
-                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description"></textarea>
+                                        <div class="form-group" >
+                                            <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione*</label>
+                                            <div class="col-md-7" >
+                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description" ></textarea>
                                             </div>
                                         </div>
 
                                         <!-- Prezzo -->
-                                        @if (ViewData["isVendita"] as bool? ?? false) {
-                                            <div class="form-group">
-                                                <label asp-for="Price" class="col-md-4 control-label" for="price">Prezzo</label>
+                                        @if( ViewData[ "isVendita" ] as bool? ?? false ) {
+                                            <div class="form-group" >
+                                                <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
                                                 <div class="col-md-7" >
-                                                    <div class="input-group">
+                                                    <div class="input-group" >
 
                                                         <input type="number" asp-for="Price" value="1" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
@@ -188,10 +189,10 @@
                                             </div>
                                         }
 
-                                        <div class="form-group">
-                                            <label asp-for="Range" class="col-md-4 control-label" for="range-input">Sei disposto a spostarti?</label>
-                                            <div class="col-md-7">
-                                                <div class="input-group">
+                                        <div class="form-group" >
+                                            <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
+                                            <div class="col-md-7" >
+                                                <div class="input-group" >
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
@@ -201,30 +202,34 @@
                                             </div>
                                         </div>
 
-                                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
-                                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
+                                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
 
-                                        <div class="form-group">
-                                            
-                                            <label class="col-md-4 control-label" for="photos">Immagini</label>
-                                            <div class="col-md-6">
-                                                <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*">
+                                        <div class="form-group" >
+
+                                            <label class="col-md-4 control-label" for="photos" >Immagini</label>
+                                            <div class="col-md-6" >
+                                                <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
                                                 <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
 
                                         <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
 
-                                        <div class="form-group">
-                                            <label class="col-md-4">Dove si trova l'oggetto?</label>
-                                            <div class="col-md-6">
-                                                <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo">
+                                        <div class="form-group" >
+                                            <label class="col-md-4" >Dove si trova l'oggetto?</label>
+                                            <div class="col-md-6" >
+                                                <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
                                             </div>
                                         </div>
-                                    <div class="form-group">
-                                        <div id="googleMap" style="width: 500px; height: 380px;"></div>
-                                    </div>
+                                        <div class="form-group" >
+                                            <div class="col-md-4" ></div>
+                                            <div class="col-md-7" >
+                                                <div id="googleMap" style="width: 500px; height: 380px;" ></div>
+                                            </div>
+                                        </div>
                                     </fieldset>
+                                    <div>I dati contrassegnati con * sono facoltativi</div>
                                 </div>
                             </div>
                         </div>
