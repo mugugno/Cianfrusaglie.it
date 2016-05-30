@@ -346,7 +346,8 @@
 
     //google maps
     $("#range-input").change(function () {
-        setCircle(marker.position, $("#range-input").val());
+        var range = $("#range-input").val();
+        setCircle(marker.position, range);
     });
     clickForwardButton();
 </script>
