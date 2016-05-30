@@ -16,7 +16,14 @@
 {
     private User GetAuthor() { return ViewData["Author"] as User; }
 }
+@*
+    
 
+
+Nascondere tasto nnon lo voglio più     uando sono stato scelto
+
+
+*@
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script src="/js/googleMaps.js" ></script>
 <script>
@@ -193,6 +200,15 @@
                     <div class="icon-detail" style="color: grey; align-content: center; cursor: default">
                         <h3>Annuncio Chiuso!</h3>
                     </div>
+                    }
+                    else if (ViewData["choosen"].Equals(true))
+                    {
+                        <a href="~/Feedback/Create?announceId=@Model.Id&receiverId=@Model.AuthorId">
+                            <button class="btn btn-success lovoglio">
+                                <span class="text-det">Lascia un feedback</span>
+                            </button>
+                        </a>
+
                     }
                     else if (ViewData["interested"].Equals(false))
                     {
