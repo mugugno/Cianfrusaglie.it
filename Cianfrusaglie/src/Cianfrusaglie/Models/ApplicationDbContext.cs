@@ -98,7 +98,7 @@ namespace Cianfrusaglie.Models {
                 DeleteBehavior.Restrict );
 
 
-            builder.Entity< ImageUrl >().HasOne( i => i.Announce ).WithMany( a => a.Images ).OnDelete(
+            builder.Entity< ImageUrl >().HasOne( i => i.Announce ).WithMany( a => a.Images ).HasForeignKey( a => a.AnnounceId ).OnDelete(
                 DeleteBehavior.Restrict );
 
 
