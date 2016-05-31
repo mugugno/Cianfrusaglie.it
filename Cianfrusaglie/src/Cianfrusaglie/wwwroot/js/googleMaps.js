@@ -29,7 +29,7 @@ function initializeGMaps(position, onlyView, radius) {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
+    
     placeMarker(position);
 
     if( !onlyView ) { //parte di input della posizione e click utente per riposizionare il marker
@@ -69,7 +69,7 @@ function initializeGMaps(position, onlyView, radius) {
                 if( radius > 0 )
                     setCircle(marker.position, $("#range-input").val());
             });
-    } else if( radius != null && radius > 0 ) {
+    } else if( radius > 0 ) {
         //creo un cerchio intorno alla posizione
         setCircle(marker.position, radius);
     }
@@ -84,7 +84,7 @@ function setCircle(position, radius) {
         strokeOpacity: 0.8,
         strokeWeight: 2,
         fillColor: '#FF0000',
-        fillOpacity: 0.35,
+        fillOpacity: 0,
         map: map,
         center: position,
         radius: radius * 1000
