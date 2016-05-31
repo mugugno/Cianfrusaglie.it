@@ -10,6 +10,13 @@
     ViewData["Title"] = "Details";
 }
 @Html.AntiForgeryToken()
+
+
+@functions
+{
+    private User GetAuthor() { return ViewData["Author"] as User; }
+}
+
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script src="/js/googleMaps.js" ></script>
 <script>
@@ -113,7 +120,7 @@
                     </form>
                 </div>
                 <div class="icon-detail">
-                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
+                    <a class="btn btn-info" href="~/Messages/Details/?id=@Model.AuthorId">Contatta</a>
                 </div>
             }
             else if (@ViewData["interested"].Equals(true) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
@@ -127,7 +134,7 @@
                     </form>
                 </div>
                 <div class="icon-detail">
-                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
+                    <a class="btn btn-info" href="~/Messages/Details/?id=@Model.AuthorId">Contatta</a>
                 </div>
             }else if( @Model.Closed ) {
                 <div class="icon-detail" style="color: grey; align-content: center; cursor: default">
@@ -180,12 +187,19 @@
                         Autore
                     </dt>
 
-                    @if ((string)ViewData["AuthorId"] != User.GetUserId())
+                    @if (!GetAuthor().Id.Equals(User.GetUserId()))
                     {
                         <dd>
+
                             <div>
-                                @ViewData["Autore"]
-                               
+                                <div class="col-sm-1" style="padding-left: 0; margin-right: 0.4em; margin-top: 0em; max-height: 2em;" >
+                                    <div class="photo conversation-avatar panel panel-default" >
+                                        <img class="img-responsive" src=@GetAuthor().ProfileImageUrl />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                @GetAuthor().UserName
                             </div>
                         </dd>
                     }
