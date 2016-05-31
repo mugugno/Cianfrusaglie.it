@@ -41,14 +41,14 @@ namespace Cianfrusaglie.Controllers {
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
          SetRootLayoutViewData( this, _context );
-         ViewData[ "listImages" ] = _context.ImageUrls.ToList();
+         //ViewData[ "listImages" ] = _context.ImageUrls.ToList();
 
          ViewData[ "pageNumber" ] = page;
 
          List< Announce > result;
          List< Announce > pageResults;
          var ctxAnnounces = _context.Announces.Include( a => a.Author );
-         if( string.IsNullOrEmpty( title ) && !categories.Any() )
+         if( string.IsNullOrEmpty( title ) && !categories.Any() ) {
             if( user == null ) {
                result = ctxAnnounces.OrderByDescending( u => u.PublishDate ).ToList();
                ViewData[ "numberOfPages" ] = result.Count % resultsPerPage == 0
@@ -59,7 +59,6 @@ namespace Cianfrusaglie.Controllers {
                   pageResults =
                      result.GetRange( Math.Min( resultsPerPage * page, result.Count - 1 < 0 ? 0 : result.Count - 1 ),
                         Math.Max( result.Count - resultsPerPage * page, 0 ) );
-               return View( pageResults );
             } else {
                result = ctxAnnounces.OrderByDescending( a => RankAlgorithm.CalculateRank( a, user ) ).ToList();
                ViewData[ "numberOfPages" ] = result.Count % resultsPerPage == 0
@@ -70,28 +69,34 @@ namespace Cianfrusaglie.Controllers {
                   pageResults =
                      result.GetRange( Math.Min( resultsPerPage * page, result.Count - 1 < 0 ? 0 : result.Count - 1 ),
                         Math.Max( result.Count - resultsPerPage * page, 0 ) );
-               return View( pageResults );
             }
-         if( categories == null )
-            categories = new List< int >();
+         } else {
+            if( categories == null )
+               categories = new List< int >();
 
-         result = SearchAnnounces( title, categories ).ToList();
+            result = SearchAnnounces( title, categories ).ToList();
 
-         if( user != null && range > 0 ) {
-            var loggedUser = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
-            result =
-               DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(
-                  a => RankAlgorithm.CalculateRank( a, user ) ).ToList();
+            if( user != null && range > 0 ) {
+               var loggedUser = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
+               result =
+                  DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(
+                     a => RankAlgorithm.CalculateRank( a, user ) ).ToList();
+            }
+
+            ViewData[ "numberOfPages" ] = result.Count % resultsPerPage == 0
+               ? result.Count / resultsPerPage : 1 + result.Count / resultsPerPage;
+            if( result.Count > resultsPerPage * ( page + 1 ) )
+               pageResults = result.GetRange( resultsPerPage * page, resultsPerPage );
+            else
+               pageResults =
+                  result.GetRange( Math.Min( resultsPerPage * page, result.Count - 1 < 0 ? 0 : result.Count - 1 ),
+                     Math.Max( result.Count - resultsPerPage * page, 0 ) );
          }
 
-         ViewData[ "numberOfPages" ] = result.Count % resultsPerPage == 0
-            ? result.Count / resultsPerPage : 1 + result.Count / resultsPerPage;
-         if( result.Count > resultsPerPage * ( page + 1 ) )
-            pageResults = result.GetRange( resultsPerPage * page, resultsPerPage );
-         else
-            pageResults =
-               result.GetRange( Math.Min( resultsPerPage * page, result.Count - 1 < 0 ? 0 : result.Count - 1 ),
-                  Math.Max( result.Count - resultsPerPage * page, 0 ) );
+         ViewData[ "listImages" ] =
+                  _context.ImageUrls.Where(
+                     iu => pageResults.SelectMany( p => p.Images.Select( i => i.Id ) ).Contains( iu.Id )
+               ).ToList();
 
          return View( pageResults );
       }
