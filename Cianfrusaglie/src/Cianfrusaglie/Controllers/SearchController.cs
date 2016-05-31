@@ -230,12 +230,13 @@ namespace Cianfrusaglie.Controllers {
       /// <param name="firstString">Prima stringa da passare per il confronto (sul db)</param>
       /// <param name="secondString">Seconda stringa da passare per il confronto</param>
       /// <returns>Ritorna vero se le stringhe sono simili, falso al contrario.</returns>
-      protected bool AreSimilar( string firstString, string secondString ) {
+      public static bool AreSimilar( string firstString, string secondString ) {
          var first = firstString.ToLower().Split( ' ' );
          var second = secondString.ToLower().Split( ' ' );
 
          // meglio StartWith ?
-         return first.Any( f => second.Any( s => f.Contains( s ) ) );
+         return first.Any( f => second.Any( s => f.Contains( s ) ) ) 
+            || second.Any( s => first.Any( f => s.Contains( f )  ) );
       }
 
       protected override void Dispose( bool disposing ) {
