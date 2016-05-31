@@ -55,13 +55,13 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        ///     Effettua l'upload delle immagini per un determinato annuncio
+        /// Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
         /// <param name="formFiles">immagini dal form</param>
         /// <param name="announce">l'annuncio</param>
         /// <returns></returns>
         private async Task UploadAnnounceImages( ICollection< IFormFile > formFiles, Announce announce ) {
-            string uploads = Path.Combine( _environment.WebRootPath, "images" );
+            string uploads = Path.Combine( _environment.WebRootPath, "upload" );
             foreach( var file in formFiles ) {
                 if( file.ContentType != "image/png" && file.ContentType != "image/jpeg" )
                     continue;
@@ -76,7 +76,7 @@ namespace Cianfrusaglie.Controllers {
                 fileName = "i" + imgUrl.Id + Path.GetExtension( fileName );
                 await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
-                imgUrl.Url = @"/images/" + fileName;
+                imgUrl.Url = @"/upload/" + fileName;
             }
         }
 
