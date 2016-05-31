@@ -13,19 +13,14 @@
             </div>
             <div class="panel-body">
                 <div class="panel-group" id="panel-524234">
-                    @if (Model.Any())
-                    {
-                        var interessati = (Dictionary<int, List<int>>) ViewData["Interested"];
-                        foreach (var item in Model)
-                        {
-
-
+                    @if( Model.Any() ) {
+                        foreach (var item in Model) {
                             <div class="panel panel-default">
                                 <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer">
 
                                     <span style="float: right"> Pubblicato il @item.PublishDate </span>
                                     <span style="font-size: 1.5em"><b>@item.Title</b></span>
-                                    <span style="margin-left: 1em" >Numero di interessati: @interessati[item.Id].First()</span><span><b> (di cui @interessati[item.Id].Last() nuovi) </b></span>
+                                    <span style="margin-left: 1em" >Numero di interessati: @item.Interested.Count</span><span><b> (di cui @item.Interested.Count(i => !i.Read)  ) nuovi </b></span>
 
                                     @*@foreach (var interested in interessati.Values)
     {
@@ -38,8 +33,7 @@
                                     <div class="panel-body">
                                         <div class="form-group">
                                             <div class="col-md-1">
-                                                @if (item.Images.Any())
-                                                {
+                                                @if( item.Images.Any() ) {
                                                     <div class="photo">
                                                         <img class="img-responsive" src="@item.Images.First().Url"/>
                                                     </div>
@@ -57,9 +51,7 @@
                                 </div>
                             </div>
                         }
-                    }
-                    else
-                    {
+                    } else {
                         <div>Non hai ancora pubblicato alcun annuncio!</div>
                     }
 
