@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160531140002_MaterializeFix3")]
+    partial class MaterializeFix3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -261,11 +262,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("FeedbacksCount");
+                    b.Property<int>("FeedbacksCount")
+                        .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<double>("FeedbacksMean");
-
-                    b.Property<int>("FeedbacksSum");
+                    b.Property<double>("FeedbacksMean")
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<int>("Genre");
 

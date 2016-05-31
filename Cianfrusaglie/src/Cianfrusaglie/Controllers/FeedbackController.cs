@@ -60,6 +60,7 @@ namespace Cianfrusaglie.Controllers
             }
             var announce = _context.Announces.SingleOrDefault( a => a.Id.Equals( feedBack.AnnounceId ) );
             if (ModelState.IsValid) {
+                User receiver;
                 // o sei l'autore dell'annuncio che lascia il feedback a un prescelto
                 if (feedBack.AuthorId.Equals(announce.AuthorId))
                 {
@@ -67,6 +68,11 @@ namespace Cianfrusaglie.Controllers
                     if (IsUserChoosenForTheAnnounce(announce.Id, feedBack.ReceiverId))
                     {
                         _context.FeedBacks.Add(feedBack);
+                        _context.SaveChanges();
+                        receiver = _context.Users.First( u => u.Id.Equals( feedBack.ReceiverId ) );
+                        receiver.FeedbacksCount++;
+                        receiver.FeedbacksSum += feedBack.Vote;
+                        receiver.FeedbacksMean = (double)receiver.FeedbacksSum / receiver.FeedbacksCount;
                         _context.SaveChanges();
                         return RedirectToAction( nameof(InterestedAnnounceController.Index), "InterestedAnnounce",new {id=announce.Id});
                     }
@@ -77,6 +83,11 @@ namespace Cianfrusaglie.Controllers
                 if (announce.AuthorId != feedBack.ReceiverId)
                     return new BadRequestResult();
                 _context.FeedBacks.Add(feedBack);
+                _context.SaveChanges();
+                receiver = _context.Users.First(u => u.Id.Equals(feedBack.ReceiverId));
+                receiver.FeedbacksCount++;
+                receiver.FeedbacksSum += feedBack.Vote;
+                receiver.FeedbacksMean = (double)receiver.FeedbacksSum / receiver.FeedbacksCount;
                 _context.SaveChanges();
                 return RedirectToAction(nameof(InterestedInController.Index), "InterestedIn");
             }

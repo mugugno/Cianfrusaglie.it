@@ -33,23 +33,9 @@ namespace Cianfrusaglie.Models {
         public virtual ICollection< FeedBack > ReceivedFeedBacks { get; set; }
         public virtual ICollection< AnnounceChosen > ChosenUsers { get; set; }
         public virtual ICollection< UserCategoryPreferences > CategoryPreferenceses { get; set; }
-
-        //public virtual int FeedbacksCount {
-        //    get {
-        //        return ReceivedFeedBacks.Count;
-        //    }
-        //    set { }
-        //}
-
-        //public virtual double FeedbacksMean
-        //{
-        //    get
-        //    {
-        //        return ReceivedFeedBacks.Average(f => f.Vote);
-        //    }
-        //    set { }
-        //}
-       
+        public virtual int FeedbacksCount { get; set; }
+        public virtual double FeedbacksMean { get; set; }
+        public virtual int FeedbacksSum { get; set; }
 
     }
 }
