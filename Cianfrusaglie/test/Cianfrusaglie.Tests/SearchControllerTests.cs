@@ -44,7 +44,6 @@ namespace Cianfrusaglie.Tests {
 
         [Theory, InlineData( "libr", "libro" )]
         public void AreSimilarSubWord( string a, string b ) {
-            Assert.True( SearchController.AreSimilar( a, b ) );
             Assert.True( SearchController.AreSimilar( b, a ) );
         }
 
