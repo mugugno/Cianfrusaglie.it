@@ -45,7 +45,7 @@ namespace Cianfrusaglie.Suggestions
         public int CalculateMatchedGatsScore(Announce announce, User user) {
             var announceGats = _context.AnnounceGats.Where( a=> a.AnnounceId.Equals( announce.Id ) );
             var userHistogramGats = _context.UserGatHistograms.Where( u=> u.UserId.Equals( user.Id ) );
-            var userTotalCount = userHistogramGats.Sum( a => a.Count );
+            int userTotalCount = userHistogramGats.Sum( a => a.Count );
             double score = 0;
             foreach( var gat in userHistogramGats ) {
                 if( announceGats.Select( a=> a.Gat ).Contains( gat.Gat ) ) {
