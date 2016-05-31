@@ -98,10 +98,18 @@ namespace Cianfrusaglie.Tests {
          Assert.True( !result.Any( p => p.DeadLine != null && p.DeadLine < DateTime.Now ) );
       }
 
-      [Fact]
-      public void SearchByTitleReturnsAnnouncesWithTheSubWord() {
+      [Theory, InlineData("Libro")]
+      public void SearchByTitleReturnsAnnouncesWithTheSubWord(string title) {
          var researchController = CreateResearchController( null );
-         var result = researchController.TitleBasedSearch( "Libro" );
+         var result = researchController.TitleBasedSearch( title );
+
+         Assert.True( result.All( r => SearchController.AreSimilar( r.Title, title ) ) );
+      }
+
+      [Theory, InlineData( "libr", "libro" )]
+      public void AreSimilarSubWord( string a, string b ) {
+         Assert.True( SearchController.AreSimilar( a, b ) );
+         Assert.True( SearchController.AreSimilar( b, a ) );
       }
    }
 }
