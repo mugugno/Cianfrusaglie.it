@@ -26,12 +26,14 @@ namespace Cianfrusaglie.Controllers {
          ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderByDescending( u => u.PublishDate ).Take( 3 ).ToList();
 
          if( LoginChecker.HasLoggedUser( this ) ) {
-            var user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
+            //var user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
             ViewData[ "listSuggestedAnnounces" ] = GetSuggestedAnnounces( _context, this ).Take( 3 ).ToList();
          } else
             ViewData[ "listSuggestedAnnounces" ] = new List< Announce >();
+
          SetRootLayoutViewData( this, _context );
          ViewData[ "listCategory" ] = ViewData[ "formCategories" ];
+
          return View();
       }
 

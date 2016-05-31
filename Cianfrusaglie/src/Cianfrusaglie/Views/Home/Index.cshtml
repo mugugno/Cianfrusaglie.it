@@ -1,15 +1,12 @@
-﻿@using System.Collections.Generic
-@using System.Security.Claims
-@using System.Threading.Tasks
-@using Microsoft.Data.Entity.Query.Internal
-
+﻿@using System.Threading.Tasks
 @functions {
-    public IEnumerable<Announce> GetAnnounce() {
-        return ViewData["listAnnounces"] as List<Announce>;
+
+    public IEnumerable< Announce > GetAnnounce() {
+        return ViewData[ "listAnnounces" ] as List< Announce >;
     }
 
-    public IEnumerable<Announce> GetSuggestedAnnounce() {
-        return ViewData["listSuggestedAnnounces"] as List<Announce>;
+    public IEnumerable< Announce > GetSuggestedAnnounce() {
+        return ViewData[ "listSuggestedAnnounces" ] as List< Announce >;
     }
 
     /*public IEnumerable<Category> GetAnnounceCategories(int announceId)
@@ -22,11 +19,9 @@
         return null;
     }*/
 
-    public string GetImages(int AnnounceId)
-    {
-        foreach (var imm in ViewData["listImages"] as List<ImageUrl>)
-        {
-            if (imm.AnnounceId == AnnounceId)
+    public string GetImages( int AnnounceId ) {
+        foreach( var imm in ViewData[ "listImages" ] as List< ImageUrl > ) {
+            if( imm.AnnounceId == AnnounceId )
                 return imm.Url;
         }
         return null;
@@ -35,233 +30,226 @@
     public string idDiv = "";
 }
 
-<div id="wrap">
+<div id="wrap" >
 
 
-    @if(TempData["announceCreated"] != null)
-    {
-        <div class="alert alert-success alert-dismissible" role="alert" >
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-            <strong>Ottimo! </strong> Il tuo annuncio è stato creato correttamente!
+@if( TempData[ "announceCreated" ] != null ) {
+    <div class="alert alert-success alert-dismissible" role="alert" >
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button" >
+            <span aria-hidden="true">&times;</span></button>
+        <strong>Ottimo! </strong> Il tuo annuncio è stato creato correttamente!
+    </div>
+}
+<div class="container-fluid" id="containerPrincipale" >
+<div class="carousel slide" data-ride="carousel" id="homeCarousel" >
+    <ol class="carousel-indicators" style="z-index: 1" >
+        <li class="active" data-slide-to="0" data-target="#homeCarousel" ></li>
+        <li data-slide-to="1" data-target="#homeCarousel" ></li>
+        <!-- <li data-slide-to="2" data-target="#homeCarousel" ></li>
+        <li data-slide-to="3" data-target="#homeCarousel" ></li>
+        <li data-slide-to="4" data-target="#homeCarousel" ></li> -->
+    </ol>
+    <div align="center" class="carousel-inner" role="listbox" >
+        <div class="item active" >
+            <img src="/images/test.png" />
         </div>
-    }
-    <div class="container-fluid" id="containerPrincipale">
-        <div id="homeCarousel" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators" style="z-index: 1">
-                <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#homeCarousel" data-slide-to="1"></li>
-             <!--   <li data-target="#homeCarousel" data-slide-to="2"></li>
-                <li data-target="#homeCarousel" data-slide-to="3"></li>
-                <li data-target="#homeCarousel" data-slide-to="4"></li> -->
-            </ol>
-            <div class="carousel-inner" role="listbox" align="center">
-                <div class="item active">
-                    <img src="/images/test.png"/>
-                </div>
-                <div class="item">
-                    <img src="/images/test2.png"/>
-                </div>
-            </div>
-            <a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                <span class="sr-only">Next</span>
-            </a>
+        <div class="item" >
+            <img src="/images/test2.png" />
         </div>
-
-        <div id="linkHome">
-            <div class="form-inline" role="form">
-                <div class="form-group" id="linkRegala">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="#" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
-                    }
-                    else
-                    {
-                        <a href="~/Announces/Create" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-gift"></span></a>
-                    }
-                    <br/>
-                    <h4><strong>LIBERATI DI UNA<BR/>CIANFRUSAGLIA
-                            </strong></h4>
-                </div>
-                <div class="form-group" id="linkVendi">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="~/Announces/Create?vendita=true" data-toggle="modal" data-target="#myWindow" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-random"></span></a>
-                    }
-                    else
-                    {
-                        <a href="~/Announces/Create/?vendita=true" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-eur"></span></a>
-                    }
-                    <br/>
-                    <h4 style="color: black;"><strong>VENDI QUELLO<br />CHE NON TI SERVE</strong></h4>
-                </div>
-                <div class="form-group" id="linkCerca">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="#" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
-                    }
-                    else
-                    {
-                        <a href="~/Search/Advanced" role="button" class="btn btn-warning btn-lg btn-round"><span class="glyphicon glyphicon-search"></span></a>
-                    }
-                    <br/>
-                    <h4><strong>CERCA<br />UN OGGETTO</strong></h4>
-                </div>
-            </div>
-        </div>
-
-
-        <hr/>
-
-    <div class="container" >
-        <h3>Annunci Recenti</h3>
-        <hr class="simple-hr"/>
-        <!-- Mostra i 3 annunci più recenti -->
-        <div class="row" >
-            <br /><br />
-            @foreach( var annuncio in GetAnnounce() ) {
-                <div class="col-sm-5 col-md-4" >
-                    
-                    <div class="col-item">
-
-                        <div class="photoThu">
-                            @if (!User.Identity.IsAuthenticated)
-                            {
-                                <a href data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive"/></a>
-                            }
-                            else
-                            {
-
-                                <a href="~/Announces/Details/?id=@annuncio.Id"><img src="@GetImages(@annuncio.Id)" class="img-responsive"/></a>
-
-                            }
-                        </div>
-
-                        <div class="info">
-
-
-                            <!--titolo su una linea sola-->
-                            @if (annuncio.Title.Length > 20)
-                            {
-                                <a href="~/Announces/Details/?id=@annuncio.Id" style="color:black">
-                                    <h3>@annuncio.Title.Substring(0, 17)... </h3></a>
-                            }
-                            else
-                            {
-                                <a href="~/Announces/Details/?id=@annuncio.Id" style="color:black">
-                                    <h3>@annuncio.Title</h3></a>
-                            }
-
-
-                            @if (@annuncio.Price == 0)
-                            {
-                                <h5 class="price-text-color">IN REGALO</h5>
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                            }
-                            else
-                            {
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
-                            }
-
-
-                            <div class="price">
-                                <h5>Autore: @annuncio.Author.UserName</h5>
-                                <br/>
-                            </div>
-
-
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                        
+    </div>
+    <a class="left carousel-control" data-slide="prev" href="#homeCarousel" role="button" >
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" data-slide="next" href="#homeCarousel" role="button" >
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>
+
+<div id="linkHome" >
+    <div class="form-inline" role="form" >
+        <div class="form-group" id="linkRegala" >
+            @if( !User.Identity.IsAuthenticated ) {
+                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
+                    <span class="glyphicon glyphicon-gift"></span></a>
+            } else {
+                <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create" role="button" >
+                    <span class="glyphicon glyphicon-gift"></span></a>
             }
-            </div>
-                <div class="row">
-                    <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
-                    @if (User.Identity.IsAuthenticated)
-            {
-                        <br /><br /><h3>Scelti Per Te</h3><hr class="simple-hr" /><br /><br />
-                    }
-                    @foreach (var annuncio in GetSuggestedAnnounce())
-                    {
-                        
-                        <div class="col-sm-5 col-md-4">
-
-                            
-                                <div class="col-item">
-
-                                    <div class="photoThu">
-                                        @if (!User.Identity.IsAuthenticated)
-                                        {
-                                            <a href="" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                                        }
-                                        else
-                                        {
-                                            <a href="~/Announces/Details/?id=@annuncio.Id" ><img src="@GetImages(@annuncio.Id)" class="img-responsive" /></a>
-                                        }
-
-                                    </div>
-
-                                    <div class="info">
-
-
-                                        <!--titolo su una linea sola-->
-                                        @if (annuncio.Title.Length > 20)
-                                        {
-                                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
-                                                <h3>@annuncio.Title.Substring(0, 17)... </h3>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
-                                                <h3>@annuncio.Title</h3>
-                                            </a>
-                                        }
-
-                                        @if (@annuncio.Price == 0)
-                                        {
-                                            <h5 class="price-text-color">IN REGALO</h5>
-                                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                                        }
-                                        else
-                                        {
-                                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                            <h5 class="price-text-color">Prezzo: @annuncio.Price €</h5>
-                                        }
-
-
-                                        <div class="price">
-                                            <h5>Autore: @annuncio.Author.UserName</h5>
-                                            <br />
-                                        </div>
-
-
-
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                    }
-                    <div style="text-align: right; width: 100%;"><a href="~/Search/Suggestions?f=0&page=0">Visualizza tutti</a></div>
-                </div>
+            <br />
+            <h4>
+                <strong>
+                    LIBERATI DI UNA<br />CIANFRUSAGLIA
+                </strong>
+            </h4>
         </div>
-
-    </div>
-
-        
-
-
+        <div class="form-group" id="linkVendi" >
+            @if( !User.Identity.IsAuthenticated ) {
+                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="~/Announces/Create?vendita=true" role="button" >
+                    <span class="glyphicon glyphicon-random"></span></a>
+            } else {
+                <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create/?vendita=true" role="button" >
+                    <span class="glyphicon glyphicon-eur"></span></a>
+            }
+            <br />
+            <h4 style="color: black;" >
+                <strong>VENDI QUELLO<br />CHE NON TI SERVE</strong>
+            </h4>
+        </div>
+        <div class="form-group" id="linkCerca" >
+            @if( !User.Identity.IsAuthenticated ) {
+                <a class="btn btn-warning btn-lg btn-round" href="#" role="button" >
+                    <span class="glyphicon glyphicon-search"></span></a>
+            } else {
+                <a class="btn btn-warning btn-lg btn-round" href="~/Search/Advanced" role="button" >
+                    <span class="glyphicon glyphicon-search"></span></a>
+            }
+            <br />
+            <h4>
+                <strong>CERCA<br />UN OGGETTO</strong>
+            </h4>
+        </div>
     </div>
 </div>
 
 
+<hr />
 
+<div class="container" >
+    <h3>Annunci Recenti</h3>
+    <hr class="simple-hr" />
+    <!-- Mostra i 3 annunci più recenti -->
+    <div class="row" >
+        <br /><br />
+        @foreach( var annuncio in GetAnnounce() ) {
+            <div class="col-sm-5 col-md-4" >
+
+                <div class="col-item" >
+
+                    <div class="photoThu" >
+                        @if( !User.Identity.IsAuthenticated ) {
+                            <a data-target="#myWindow" data-toggle="modal" href >
+                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                            </a>
+                        } else {
+                            <a href="~/Announces/Details/?id=@annuncio.Id" >
+                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                            </a>
+                        }
+                    </div>
+
+                    <div class="info" >
+
+
+                        <!--titolo su una linea sola-->
+                        @if( annuncio.Title.Length > 20 ) {
+                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
+                                <h3>@annuncio.Title.Substring( 0, 17 )... </h3>
+                            </a>
+                        } else {
+                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
+                                <h3>@annuncio.Title</h3>
+                            </a>
+                        }
+
+
+                        @if( @annuncio.Price == 0 ) {
+                            <h5 class="price-text-color" >IN REGALO</h5>
+                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                        } else {
+                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                            <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                        }
+
+
+                        <div class="price" >
+                            <h5>Autore: @annuncio.Author.UserName</h5>
+                            <br />
+                        </div>
+
+
+                        <div class="clearfix" ></div>
+                    </div>
+                </div>
+
+            </div>
+        }
+        <div style="text-align: right; width: 100%;">
+            <a href="~/Search/LastAnnounces?f=0&page=0">Visualizza tutti</a>
+        </div>
+    </div>
+    <div class="row" >
+        <!-- Mostra i 3 annunci suggeriti con il rank più alto -->
+        @if( User.Identity.IsAuthenticated ) {
+            <br />
+            <br />
+            <h3>Scelti Per Te</h3>
+            <hr class="simple-hr" />
+            <br />
+            <br />
+        }
+        @foreach( var annuncio in GetSuggestedAnnounce() ) {
+            <div class="col-sm-5 col-md-4" >
+
+
+                <div class="col-item" >
+
+                    <div class="photoThu" >
+                        @if( !User.Identity.IsAuthenticated ) {
+                            <a data-target="#myWindow" data-toggle="modal" href="" >
+                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                            </a>
+                        } else {
+                            <a href="~/Announces/Details/?id=@annuncio.Id" >
+                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
+                            </a>
+                        }
+
+                    </div>
+
+                    <div class="info" >
+
+
+                        <!--titolo su una linea sola-->
+                        @if( annuncio.Title.Length > 20 ) {
+                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
+                                <h3>@annuncio.Title.Substring( 0, 17 )... </h3>
+                            </a>
+                        } else {
+                            <a href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
+                                <h3>@annuncio.Title</h3>
+                            </a>
+                        }
+
+                        @if( @annuncio.Price == 0 ) {
+                            <h5 class="price-text-color" >IN REGALO</h5>
+                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                        } else {
+                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                            <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                        }
+
+
+                        <div class="price" >
+                            <h5>Autore: @annuncio.Author.UserName</h5>
+                            <br />
+                        </div>
+
+
+                        <div class="clearfix" ></div>
+                    </div>
+                </div>
+
+            </div>
+        }
+        <div style="text-align: right; width: 100%;" >
+            <a href="~/Search/Suggestions?f=0&page=0" >Visualizza tutti</a>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+</div>
