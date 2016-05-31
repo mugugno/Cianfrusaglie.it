@@ -99,10 +99,9 @@ namespace Cianfrusaglie.Controllers {
 
         private void SetViewDataForCreate( bool vendita ) {
            CommonFunctions.SetRootLayoutViewData( this, _context );
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            //ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "formFields" ] = _context.FormFields.ToList();
             ViewData[ "formFieldDefaultValue" ] = _context.FormFields.ToList().ToDictionary( field => field.Id,
                 field => ( from defaultValue in _context.FieldDefaultValues.ToList()
@@ -378,7 +377,6 @@ namespace Cianfrusaglie.Controllers {
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
 
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             if( announce == null ) {
                 return HttpNotFound();
             }
