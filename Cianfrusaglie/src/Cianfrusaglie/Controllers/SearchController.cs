@@ -36,7 +36,6 @@ namespace Cianfrusaglie.Controllers {
         /// <param name="categories">Le categorie selezionate</param>
         /// <returns>La View con i risultati della ricerca</returns>
         public IActionResult Index(string title, IEnumerable<int> categories, int range = 0, int page = 0) {
-            ViewData["listUsers"] = _context.Users.ToList();
             User user = null;
             if (LoginChecker.HasLoggedUser(this))
                 user = _context.Users.Single(u => User.GetUserId().Equals(u.Id));
@@ -44,16 +43,17 @@ namespace Cianfrusaglie.Controllers {
             //TODO QUANDO SI FARANNO I BARATTI
             //ViewData["listExchange"] = _context.Announces.Where();
             CommonFunctions.SetRootLayoutViewData( this, _context );
-            ViewData["listUsers"] = _context.Users.ToList();
+            //ViewData["listUsers"] = _context.Users.ToList();
             ViewData["listImages"] = _context.ImageUrls.ToList();
             
             ViewData[ "pageNumber" ] = page;
 
             List< Announce > result;
             List< Announce > pageResults;
+            var ctxAnnounces = _context.Announces.Include( a => a.Author );
             if (string.IsNullOrEmpty(title) && !categories.Any())
                 if (user == null) {
-                    result = _context.Announces.OrderByDescending(u => u.PublishDate).ToList();
+                    result = ctxAnnounces.OrderByDescending(u => u.PublishDate).ToList();
                     ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1+ result.Count / resultsPerPage);
                     if( result.Count > resultsPerPage * ( page + 1 ) ) {
                          pageResults = result.GetRange( resultsPerPage * page, resultsPerPage );
@@ -62,7 +62,7 @@ namespace Cianfrusaglie.Controllers {
                     }
                     return View(pageResults);
                 } else {
-                    result = _context.Announces.OrderByDescending(a => RankAlgorithm.CalculateRank(a, user)).ToList();
+                    result = ctxAnnounces.OrderByDescending(a => RankAlgorithm.CalculateRank(a, user)).ToList();
                     ViewData["numberOfPages"] = (result.Count % resultsPerPage) == 0 ? (result.Count / resultsPerPage) : (1 + result.Count / resultsPerPage);
                     if (result.Count > resultsPerPage * (page + 1)) {
                         pageResults = result.GetRange(resultsPerPage * page, resultsPerPage);
@@ -88,6 +88,7 @@ namespace Cianfrusaglie.Controllers {
             } else {
                 pageResults = result.GetRange(Math.Min(resultsPerPage * page, (result.Count - 1) <0 ? 0 : result.Count -1), Math.Max(result.Count - resultsPerPage * page, 0));
             }
+
             return View(pageResults);
         }
 
@@ -99,12 +100,12 @@ namespace Cianfrusaglie.Controllers {
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
          CommonFunctions.SetRootLayoutViewData( this, _context );
-         ViewData[ "listUsers" ] = _context.Users.ToList();
+         //ViewData[ "listUsers" ] = _context.Users.ToList();
          ViewData[ "listImages" ] = _context.ImageUrls.ToList();
         
          ViewData[ "pageNumber" ] = page;
 
-         var result = _context.Announces.Where(a => !a.Closed).OrderByDescending( u => u.PublishDate ).ToList();
+         var result = _context.Announces.Include( a => a.Author ).Where(a => !a.Closed).OrderByDescending( u => u.PublishDate ).ToList();
          List<Announce> pageResults;
          ViewData[ "numberOfPages" ] = ( result.Count % resultsPerPage ) == 0 ? ( result.Count / resultsPerPage ) : ( 1 + result.Count / resultsPerPage );
 
@@ -120,7 +121,7 @@ namespace Cianfrusaglie.Controllers {
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
          CommonFunctions.SetRootLayoutViewData( this, _context );
-         ViewData[ "listUsers" ] = _context.Users.ToList();
+         //ViewData[ "listUsers" ] = _context.Users.ToList();
          ViewData[ "listImages" ] = _context.ImageUrls.ToList();
         
          ViewData[ "pageNumber" ] = page;
@@ -145,7 +146,7 @@ namespace Cianfrusaglie.Controllers {
         /// <param name="categories">Lista di Id di categorie da utilizzare nella ricerca</param>
         /// <returns>Un IEnumerable di Annunci contenenti i risultati della ricerca.</returns>
         public IEnumerable< Announce > SearchAnnounces( string title, IEnumerable< int > categories ) {
-         Task< IEnumerable< Announce > > categoryTask = null;
+         Task< IQueryable< Announce > > categoryTask = null;
          var catEnum = categories as IList< int > ?? categories.ToList();
          if( catEnum.Any() )
             categoryTask = Task.Run( () => CategoryBySearch( catEnum ) );
@@ -156,8 +157,13 @@ namespace Cianfrusaglie.Controllers {
                textTask = Task.Run( () => TitleBasedSearch( title ) );
          }
 
-         var catResults = categoryTask == null ? new List< Announce >() : categoryTask.Result;
-         var textResults = textTask == null ? new List< Announce >() : textTask.Result;
+         var catResults = categoryTask == null ? new List< Announce >() : categoryTask.Result.ToList();
+
+           foreach( var ann in catResults ) {
+              ann.Author = _context.Users.Single( u => u.Id == ann.AuthorId );
+           }
+
+           var textResults = textTask == null ? new List< Announce >() : textTask.Result;
 
          if( textTask == null || categoryTask == null )
             return catResults.Union( textResults );
@@ -170,7 +176,7 @@ namespace Cianfrusaglie.Controllers {
       /// </summary>
       /// <param name="categories">IEnumerable di Id di categorie</param>
       /// <returns>IEnumerable di Annunci contenente il risultato della ricerca</returns>
-      public IEnumerable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
+      public IQueryable< Announce > CategoryBySearch( IEnumerable< int > categories ) {
          var catLeafs = new List< int >();
          foreach( int ci in categories ) {
             var cat = _context.Categories.Include( p => p.SubCategories ).Single( c => c.Id == ci );
@@ -183,8 +189,7 @@ namespace Cianfrusaglie.Controllers {
          var announcesCategories = _context.AnnounceCategories.Where( a => catLeafs.Contains( a.CategoryId ) );
          return
             announcesCategories.Select( ac => ac.Announce ).Where(
-               announce => !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) )
-               .ToList();
+               announce => !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) );
       }
 
       /// <summary>
@@ -194,7 +199,7 @@ namespace Cianfrusaglie.Controllers {
       /// <returns>IEnumerable di Annunci contenente i risultati della ricerca</returns>
       public IEnumerable< Announce > TitleBasedSearch( string title ) {
          return
-            _context.Announces.Where(
+            _context.Announces.Include( a => a.Author ).Where(
                announce =>
                   !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) &&
                   AreSimilar( announce.Title, title ) );
