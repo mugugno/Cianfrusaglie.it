@@ -24,228 +24,206 @@
 <div id="wrapper-announce">
 
 
-    <div class="row">
-        <div class="col-sm-10 col-md-5">
-            <!--IMMAGINI + carosello-->
-            <div class="col-item" style="">
-                <div class="photo carousel slide" id="carosello">
-                    
-                    <!--Pallini nelle immagini -->
-                    <ol class="carousel-indicators" style="z-index: 1">
-                        @{
-                            var count = 0;
-                            foreach (var i in (IEnumerable<ImageUrl>) ViewData["Images"])
-                            {
-                                if (count == 0)
-                                {
-                                    <li data-target="#carosello" class="active"></li>
-                                }
-                                else
-                                {
-                                    <li data-target="#carosello"></li>
-                                }
-                                count = count + 1;
-                            }
-                        }
-                    </ol>
-                    <!--ELEMENTI DEL CAROSELLO-->
-                    <div class="carousel-inner">
-                        @{
-                            var count2 = 0;
-                            foreach (var immagine in (IEnumerable<ImageUrl>) ViewData["Images"])
-                            {
-                                if (count2 == 0)
-                                {
-                                    <div class="item active">
-                                        <img src="@immagine.Url" class="img-responsive" alt="a"/>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="item">
-                                        <img src="@immagine.Url" class="img-responsive" alt="a"/>
-                                    </div>
-                                }
-                                count2 = count2 + 1;
-                            }
-                        }
-                    </div>
-                    <!-- FRECCE PER IL CONTROLLO-->
-                    <a class="left carousel-control" href="#carosello" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#carosello" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                    
-                </div>
-               
-            </div>
-        </div>
-        <div class="col-sm-10 col-md-5">
-            <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
-            @{
-                int j = 0;
-                foreach (var category in (IEnumerable<AnnounceCategory>) ViewData["nameAnnounceCategories"])
-                {
+<div class="row" >
+    <div class="panel panel-default col-md-8" style="color: gold; text-align: center">
+        <h2>@Model.Title</h2>
+    </div>
+    <div class="col-md-4"></div>
+<div class="col-sm-10 col-md-5" >
+    <!--IMMAGINI + carosello-->
 
-                    if (j == 0)
-                    {
-                        <li style="padding-left: 1em"> <a href="~/Search?categories=@category.CategoryId">@category.Category.Name</a></li>
+    <div class="col-item" style="" >
+        <div class="photo carousel slide" id="carosello" >
+
+            <!--Pallini nelle immagini -->
+            <ol class="carousel-indicators" style="z-index: 1" >
+                @{
+                    var count = 0;
+                    foreach( var i in (IEnumerable< ImageUrl >) ViewData[ "Images" ] ) {
+                        if( count == 0 ) {
+                            <li data-target="#carosello" class="active" ></li>
+                        } else {
+                            <li data-target="#carosello" ></li>
+                        }
+                        count = count + 1;
                     }
-                    else
-                    {
-                        <li>- <a href="~/Search?categories=@category.CategoryId">@category.Category.Name</a></li>
-                    }
-                    j++;
                 }
-            }
-            <br/>
-            @if (@ViewData["interested"].Equals(false) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
-            {
-                <div class="icon-detail">
-                    <form action="#" method="POST">
-                        <button name="loVoglio" class="btn btn-warning"><span class="text-det">Lo voglio</span></button>     
-                        
-                        <span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color:green;display:none"></span><span name="seiInteressato"style="color:black;display:none">Sei gi&aacute; interessato all' annuncio</span><br /><button name="nonLoVoglio" class="btn btn-danger" style="display:none"><span class="text-det">Non lo voglio pi&ugrave;</span></button>              
-                    </form>
-                </div>
-                <div class="icon-detail">
-                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
-                </div>
-            }
-            else if (@ViewData["interested"].Equals(true) && !Model.Closed && !Model.AuthorId.Equals(User.GetUserId()))
-            {
-                <div class="icon-detail">
-                    <form action="#" method="POST">
-                        <span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color:green;font-size:2.5em"></span><span style="color:black;margin-left:1.5em" name="seiInteressato" >Sei gi&aacute; interessato all' annuncio</span><br /><br />
-                        <button name="nonLoVoglio" class="btn btn-danger" style="font-size:0.8em"><span class="text-det">Non lo voglio pi&ugrave;</span></button>                        
-                        <button name="loVoglio"  class="btn btn-success" style="display:none"><span class="text-det">Lo voglio</span></button>
-                        
-                    </form>
-                </div>
-                <div class="icon-detail">
-                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
-                </div>
-            }else if( @Model.Closed ) {
-                <div class="icon-detail" style="color: grey; align-content: center; cursor: default">
-                    <h3>Annuncio Chiuso!</h3>
-                </div>
-            }
-
-
-
-
-            <div class="col-item">
-                <dl class="dl-horizontal container-announce">
-
-                    @foreach (var f in (Dictionary<FormField, string>)ViewData["formFieldsValue"])
-                    {
-
-                        <dt>
-                            @f.Key.Name
-                        </dt>
-                            <dd>
-                                @f.Value
-                            </dd>
-                    }
-
-                    @if (Model.Description != null)
-                    {
-                        <dt>
-                            Dettagli annuncio
-                        </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Description)
-                            </dd>
-                    }
-                    @if (Model.Price > 0)
-                    {
-                        <dt>
-                            Prezzo
-                        </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Price) &euro;
-                            </dd>
-                    }
-                </dl>
-            </div>
-
-            <div class="col-item container-announce">
-                <dl class="dl-horizontal">
-
-                    <dt>
-                        Autore
-                    </dt>
-
-                    @if ((string)ViewData["AuthorId"] != User.GetUserId())
-                    {
-                        <dd>
-                            <div>
-                                @ViewData["Autore"]
-                               
+            </ol>
+            <!--ELEMENTI DEL CAROSELLO-->
+            <div class="carousel-inner" >
+                @{
+                    var count2 = 0;
+                    foreach( var immagine in (IEnumerable< ImageUrl >) ViewData[ "Images" ] ) {
+                        if( count2 == 0 ) {
+                            <div class="item active" >
+                                <img src="@immagine.Url" class="img-responsive" alt="a" />
                             </div>
-                        </dd>
+                        } else {
+                            <div class="item" >
+                                <img src="@immagine.Url" class="img-responsive" alt="a" />
+                            </div>
+                        }
+                        count2 = count2 + 1;
                     }
-                    else
-                    {
-                        <dd>Hai creato tu questo annuncio</dd>
-                    }
-                    @if (Model.MeterRange > 0)
-                    {
-
-                        <dt style="white-space: normal">
-                            @Html.DisplayName("Disponibile a muoversi")
-                        </dt>
-                            <dd>
-                                Si
-                            </dd>
-                            <dt>
-                                @Html.DisplayName("Range di disponibilita' in km")
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.MeterRange)
-                            </dd>
-                    }
-                    else
-                    {
-                        <dt>
-                            Disponibile a muoversi
-                        </dt>
-                            <dd>
-                                No
-                            </dd>
-                    }
-                    <dt>
-                        Data di Pubblicazione
-                    </dt>
-                    @if (!string.IsNullOrEmpty(Model.Description))
-                    {
-                        <dd>
-                            @Html.DisplayFor(model => model.PublishDate)
-                        </dd>
-                    }
-                    @if (Model.DeadLine != null)
-                    {
-                        <dt>
-                            Questo annuncio scade il
-                        </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.DeadLine)
-                            </dd>
-                    }
-                </dl>
+                }
             </div>
-
-            <div id="googleMap" style="width: 500px; height: 380px;"></div>
+            <!-- FRECCE PER IL CONTROLLO-->
+            <a class="left carousel-control" href="#carosello" role="button" data-slide="prev" >
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carosello" role="button" data-slide="next" >
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
 
         </div>
-
-
 
     </div>
+</div>
+<div class="col-sm-10 col-md-5" >
+    @{
+        int j = 0;
+        foreach( var category in (IEnumerable< AnnounceCategory >) ViewData[ "nameAnnounceCategories" ] ) {
+
+            if( j == 0 ) {
+                <li style="padding-left: 1em" > <a href="~/Search?categories=@category.CategoryId" >@category.Category.Name</a></li>
+            } else {
+                <li>- <a href="~/Search?categories=@category.CategoryId" >@category.Category.Name</a></li>
+            }
+            j++;
+        }
+    }
+    <br />
+    @if( @ViewData[ "interested" ].Equals( false ) && !Model.Closed && !Model.AuthorId.Equals( User.GetUserId() ) ) {
+        <div class="icon-detail" >
+            <form action="#" method="POST" >
+                <button name="loVoglio" class="btn btn-warning" ><span class="text-det">Lo voglio</span></button>
+
+                <span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; display: none"></span><span name="seiInteressato"style="color: black; display: none">Sei gi&aacute; interessato all' annuncio</span><br /><button name="nonLoVoglio" class="btn btn-danger" style="display: none" ><span class="text-det">Non lo voglio pi&ugrave;</span></button>
+            </form>
+        </div>
+        <div class="icon-detail" >
+            <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" >Contatta</a>
+        </div>
+    } else if( @ViewData[ "interested" ].Equals( true ) && !Model.Closed && !Model.AuthorId.Equals( User.GetUserId() ) ) {
+        <div class="icon-detail" >
+            <form action="#" method="POST" >
+                <span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; font-size: 2.5em"></span><span style="color: black; margin-left: 1.5em" name="seiInteressato" >Sei gi&aacute; interessato all' annuncio</span><br /><br />
+                <button name="nonLoVoglio" class="btn btn-danger" style="font-size: 0.8em" ><span class="text-det">Non lo voglio pi&ugrave;</span></button>
+                <button name="loVoglio" class="btn btn-success" style="display: none" ><span class="text-det">Lo voglio</span></button>
+
+            </form>
+        </div>
+        <div class="icon-detail" >
+            <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" >Contatta</a>
+        </div>
+    } else if( @Model.Closed ) {
+        <div class="icon-detail" style="color: grey; align-content: center; cursor: default" >
+            <h3>Annuncio Chiuso!</h3>
+        </div>
+    }
+
+
+
+
+    <div class="col-item" >
+        <dl class="dl-horizontal container-announce" >
+
+            @foreach( var f in (Dictionary< FormField, string >) ViewData[ "formFieldsValue" ] ) {
+
+                <dt>
+                    @f.Key.Name
+                </dt>
+                <dd>
+                    @f.Value
+                </dd>
+            }
+
+            @if( Model.Description != null ) {
+                <dt>
+                    Dettagli annuncio
+                </dt>
+                <dd>
+                    @Html.DisplayFor( model => model.Description )
+                </dd>
+            }
+            @if( Model.Price > 0 ) {
+                <dt>
+                    Prezzo
+                </dt>
+                <dd>
+                    @Html.DisplayFor( model => model.Price ) &euro;
+                </dd>
+            }
+        </dl>
+    </div>
+
+    <div class="col-item container-announce" >
+        <dl class="dl-horizontal" >
+
+            <dt>
+                Autore
+            </dt>
+
+            @if( (string) ViewData[ "AuthorId" ] != User.GetUserId() ) {
+                <dd>
+                    <div>
+                        @ViewData[ "Autore" ]
+
+                    </div>
+                </dd>
+            } else {
+                <dd>Hai creato tu questo annuncio</dd>
+            }
+            @if( Model.MeterRange > 0 ) {
+
+                <dt style="white-space: normal" >
+                    @Html.DisplayName( "Disponibile a muoversi" )
+                </dt>
+                <dd>
+                    Si
+                </dd>
+                <dt>
+                    @Html.DisplayName( "Range di disponibilita' in km" )
+                </dt>
+                <dd>
+                    @Html.DisplayFor( model => model.MeterRange )
+                </dd>
+            } else {
+                <dt>
+                    Disponibile a muoversi
+                </dt>
+                <dd>
+                    No
+                </dd>
+            }
+            <dt>
+                Data di Pubblicazione
+            </dt>
+            @if( !string.IsNullOrEmpty( Model.Description ) ) {
+                <dd>
+                    @Html.DisplayFor( model => model.PublishDate )
+                </dd>
+            }
+            @if( Model.DeadLine != null ) {
+                <dt>
+                    Questo annuncio scade il
+                </dt>
+                <dd>
+                    @Html.DisplayFor( model => model.DeadLine )
+                </dd>
+            }
+            </dl>
+        </div>
+
+        <div id="googleMap" style="width: 500px; height: 380px;" ></div>
+
+    </div>
+
+
+
+</div>
 
     <script type="text/javascript">
 

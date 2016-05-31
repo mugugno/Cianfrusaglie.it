@@ -5,6 +5,7 @@ using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Suggestions;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Constants
 {
@@ -34,7 +35,7 @@ namespace Cianfrusaglie.Constants
             var user = context.Users.Single( u => u.Id.Equals( controller.User.GetUserId() ) );
             var rankAlgorithm = new RankAlgorithm( context );
             return
-                context.Announces.Where(
+                context.Announces.Include( a=>a.Author ).Where(
                     a =>
                         !a.AuthorId.Equals( controller.User.GetUserId() ) && !a.Closed &&
                         GeoCoordinate.Distance( a.Latitude, a.Longitude, user.Latitude, user.Longitude ) <=

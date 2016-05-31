@@ -54,7 +54,7 @@ namespace Cianfrusaglie.Tests
             var author = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
             var interestedController = CreateInterestedAnnounceController(author.Id);
             var result = interestedController.ChooseUserAsReceiverForAnnounce( null, 0 );
-            Assert.IsType< BadRequestResult >( result );
+            Assert.IsType< HttpNotFoundResult >( result );
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Cianfrusaglie.Tests
             });
             Context.SaveChanges();
             var result = interestedController.ChooseUserAsReceiverForAnnounce(user.Id, 9090);
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<HttpNotFoundResult>(result);
         }
 
         [Fact]
