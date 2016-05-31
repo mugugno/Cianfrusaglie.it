@@ -46,7 +46,7 @@ namespace Cianfrusaglie.Controllers {
         /// <param name="user">utente</param>
         /// <returns></returns>
         private async Task< string > UploadProfileImage( IFormFile formFile, User user ) {
-            string uploads = Path.Combine( _environment.WebRootPath, "images" );
+            string uploads = Path.Combine( _environment.WebRootPath, "upload" );
 
             if(formFile.ContentType == "image/png" || formFile.ContentType == "image/jpeg" ) {
                 if(formFile.Length > 0 ) {
@@ -54,7 +54,7 @@ namespace Cianfrusaglie.Controllers {
                     fileName = user.Id + Path.GetExtension( fileName );
                     await formFile.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
-                    return @"/images/" + fileName;
+                    return @"/upload/" + fileName;
                 }
             }
             return null;
