@@ -83,7 +83,7 @@ namespace Cianfrusaglie.Tests {
             var category = Context.Categories.Single( c => c.Name.Equals( "Videogiochi" ) );
             var allVideogamesAnnounces = Context.AnnounceCategories.Where( ac => ac.CategoryId.Equals( category.Id ) );
             var announces = allVideogamesAnnounces.Select( ac => ac.Announce ).Distinct();
-                //tutti gli annunnci delle categorie category
+            //tutti gli annunnci delle categorie category
 
             var result = researchController.SearchAnnounces( "", new[] {category.Id} );
             var enumerable = result as Announce[] ?? result.ToArray();
@@ -114,11 +114,11 @@ namespace Cianfrusaglie.Tests {
         public void TitleSearchWhichContainsGatReturnsCorrectResult() {
             var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var searchController = CreateResearchController( user.Id );
-            var gat = new Gat() { Text = "Ciao" };
-            var announce = Context.Announces.Single(a => a.Title == "Libro di OST di Videogiochi");
-            var announceGat = new AnnounceGat() { Announce = announce, Gat = gat };
-            Context.Gats.Add(gat);
-            Context.AnnounceGats.Add(announceGat);
+            var gat = new Gat() {Text = "Ciao"};
+            var announce = Context.Announces.Single( a => a.Title == "Libro di OST di Videogiochi" );
+            var announceGat = new AnnounceGat() {Announce = announce, Gat = gat};
+            Context.Gats.Add( gat );
+            Context.AnnounceGats.Add( announceGat );
             Context.SaveChanges();
 
             var result = searchController.TitleBasedSearch( gat.Text );
@@ -126,19 +126,19 @@ namespace Cianfrusaglie.Tests {
         }
 
         [Fact]
-        public void TitleSearchWhichNotContainsGatReturnsCorrectResultWithoutAnnounce()
-        {
-            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
-            var searchController = CreateResearchController(user.Id);
-            var gat = new Gat() { Text = "Ciao" };
-            var announce = Context.Announces.Single(a => a.Title == "Libro di OST di Videogiochi");
-            var announceGat = new AnnounceGat() { Announce = announce, Gat = gat };
-            Context.Gats.Add(gat);
-            Context.AnnounceGats.Add(announceGat);
+        public void TitleSearchWhichNotContainsGatReturnsCorrectResultWithoutAnnounce() {
+            var user = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
+            var searchController = CreateResearchController( user.Id );
+            var gat = new Gat() {Text = "Ciao"};
+            var announce = Context.Announces.Single( a => a.Title == "Libro di OST di Videogiochi" );
+            var announceGat = new AnnounceGat() {Announce = announce, Gat = gat};
+            Context.Gats.Add( gat );
+            Context.AnnounceGats.Add( announceGat );
             Context.SaveChanges();
 
-            var result = searchController.TitleBasedSearch("Altra cosa");
-            Assert.DoesNotContain( announce, result);
+            var result = searchController.TitleBasedSearch( "Altra cosa" );
+            Assert.DoesNotContain( announce, result );
         }
     }
+
 }
