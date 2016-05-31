@@ -21,18 +21,22 @@ namespace Cianfrusaglie.Controllers {
       }
 
       public IActionResult Index() {
-         ViewData[ "listImages" ] = _context.ImageUrls.ToList();
          //Include(u=>u.AnnounceCategories).
-         ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderByDescending( u => u.PublishDate ).Take( 3 ).ToList();
+         var ann= _context.Announces.Include( a => a.Author ).OrderByDescending( u => u.PublishDate ).Take( 3 ).ToList();
+         ViewData[ "listAnnounces" ] = ann;
 
+         IEnumerable< Announce > suggestions;
          if( LoginChecker.HasLoggedUser( this ) ) {
             //var user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
-            ViewData[ "listSuggestedAnnounces" ] = GetSuggestedAnnounces( _context, this ).Take( 3 ).ToList();
+            suggestions = GetSuggestedAnnounces( _context, this ).Take( 3 ).ToList();
          } else
-            ViewData[ "listSuggestedAnnounces" ] = new List< Announce >();
+            suggestions = new List< Announce >();
+
+         ViewData[ "listSuggestedAnnounces" ] = suggestions;
 
          SetRootLayoutViewData( this, _context );
          ViewData[ "listCategory" ] = ViewData[ "formCategories" ];
+         ViewData[ "listImages" ] = _context.ImageUrls.Where( i => ann.Select( a => a.Id ).Contains( i.AnnounceId ) || suggestions.Select( a => a.Id ).Contains( i.AnnounceId ) ).ToList();
 
          return View();
       }

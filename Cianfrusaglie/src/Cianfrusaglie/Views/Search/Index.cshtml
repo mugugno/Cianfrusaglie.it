@@ -15,16 +15,6 @@
 @functions 
 {
 
-    public User GetAutore(string AuthorId)
-    {
-        foreach (var user in ViewData["listUsers"] as List<User>)
-        {
-            if (user.Id == AuthorId)
-                return user;
-        }
-        return null;
-    }
-
     public string GetImages(int AnnounceId)
     {
         foreach (var imm in ViewData["listImages"] as List<ImageUrl>)
@@ -35,13 +25,8 @@
         return null;
     }
 
-    public IEnumerable<Announce> GetAnnounce(int idCat)
-    {
-        foreach (var announce in ViewData["listAnnounce"] as List<Announce>)
-        {
-            yield return announce;
-        }
-
+    public IEnumerable<Announce> GetAnnounce(int idCat) {
+        return ViewData["listAnnounce"] as List<Announce>;
     }
 
     public string idDiv = "";
@@ -134,12 +119,11 @@
                                 <!--DI quale categoria fa parte-->
                                 <div class="price">
                                     <br/>
-                                    <h5>Autore: @GetAutore(announce.AuthorId).UserName</h5>
+                                    <h5>Autore: @announce.Author.UserName</h5>
                                     <br/>
                                 </div>
                                 
-                                    @if (!User.Identity.IsAuthenticated)
-                                    {/*
+                                    @*@if (!User.Identity.IsAuthenticated){/*
                                         <p class="btn-add">
                                             <i class="fa fa-shopping-cart"></i>
                                             <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
@@ -160,7 +144,7 @@
                                                 <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@announce.AuthorId" class="">Contatta</a>
                                             </p>
                                         }*/
-                                    }
+                                    }*@
 
                                
                                 <div class="clearfix"></div>
