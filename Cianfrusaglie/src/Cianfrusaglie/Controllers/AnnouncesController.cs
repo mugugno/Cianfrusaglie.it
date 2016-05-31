@@ -55,13 +55,13 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        ///     Effettua l'upload delle immagini per un determinato annuncio
+        /// Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
         /// <param name="formFiles">immagini dal form</param>
         /// <param name="announce">l'annuncio</param>
         /// <returns></returns>
         private async Task UploadAnnounceImages( ICollection< IFormFile > formFiles, Announce announce ) {
-            string uploads = Path.Combine( _environment.WebRootPath, "images" );
+            string uploads = Path.Combine( _environment.WebRootPath, "upload" );
             foreach( var file in formFiles ) {
                 if( file.ContentType != "image/png" && file.ContentType != "image/jpeg" )
                     continue;
@@ -76,7 +76,7 @@ namespace Cianfrusaglie.Controllers {
                 fileName = "i" + imgUrl.Id + Path.GetExtension( fileName );
                 await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
-                imgUrl.Url = @"/images/" + fileName;
+                imgUrl.Url = @"/upload/" + fileName;
             }
         }
 
@@ -99,10 +99,9 @@ namespace Cianfrusaglie.Controllers {
 
         private void SetViewDataForCreate( bool vendita ) {
            CommonFunctions.SetRootLayoutViewData( this, _context );
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            //ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "formFields" ] = _context.FormFields.ToList();
             ViewData[ "formFieldDefaultValue" ] = _context.FormFields.ToList().ToDictionary( field => field.Id,
                 field => ( from defaultValue in _context.FieldDefaultValues.ToList()
@@ -152,10 +151,7 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formFieldsValue" ] = formFieldsValue;
             ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
             ViewData[ "IdAnnounce" ] = id;
-            ViewData[ "AuthorId" ] = announce.AuthorId;
-            ViewData[ "Autore" ] =
-                _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
-
+            ViewData[ "Author" ] = _context.Users.First( u => u.Id.Equals( announce.AuthorId ) );
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
                 ViewData[ "int" ] =
@@ -381,7 +377,6 @@ namespace Cianfrusaglie.Controllers {
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
 
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             if( announce == null ) {
                 return HttpNotFound();
             }
