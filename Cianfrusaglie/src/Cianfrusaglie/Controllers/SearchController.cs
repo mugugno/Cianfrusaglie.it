@@ -235,8 +235,7 @@ namespace Cianfrusaglie.Controllers {
          var second = secondString.ToLower().Split( ' ' );
 
          // meglio StartWith ?
-         return first.Any( f => second.Any( s => f.Contains( s ) ) ) 
-            || second.Any( s => first.Any( f => s.Contains( f )  ) );
+         return first.Any( f => second.Any( s => f.Contains( s ) ) );
       }
 
       protected override void Dispose( bool disposing ) {
