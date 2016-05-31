@@ -120,6 +120,25 @@
                                 <div class="price">
                                     <br/>
                                     <h5>Autore: @announce.Author.UserName</h5>
+                                    <!-- Stelline col rating dell'utente (style.css)-->
+                                    <div class="star-container">
+                                        <div class="star-shape">
+                                            <svg viewbox="0 0 61 19">
+                                                <defs>
+                                                    <mask id="starmask" x="0" y="0" width="100" height="100">
+                                                        <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                        <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                                    </mask>
+                                                </defs>
+                                                <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                                <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                            </svg>
+                                        </div>
+                                        @{ string starWidth = ((int)(20 * announce.Author.FeedbacksMean)).ToString(); }
+                                        <div class="star-colorbar" style="width: @starWidth%">
+                                        </div>
+                                    </div>
+                                    <!-- Fine Stelline col rating dell'utente-->
                                     <br/>
                                 </div>
                                 

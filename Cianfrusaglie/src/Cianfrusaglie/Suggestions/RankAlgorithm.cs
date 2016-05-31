@@ -32,9 +32,8 @@ namespace Cianfrusaglie.Suggestions
         }
 
         public double CalculateFeedbackMultiplier(User user) {
-            //double multiplier = Math.Sqrt(user.FeedbacksCount) * user.FeedbacksMean;
-            //return multiplier <= 0.05 ? 1 : multiplier;
-            return 1;
+            double multiplier = Math.Sqrt(user.FeedbacksCount) * user.FeedbacksMean;
+            return multiplier <= 0.05 ? 1 : multiplier;
         }
 
         public int CalculateDistanceScore( Announce announce, User user ) {
