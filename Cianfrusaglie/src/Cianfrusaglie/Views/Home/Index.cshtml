@@ -3,25 +3,13 @@
 @using System.Threading.Tasks
 @using Microsoft.Data.Entity.Query.Internal
 
-@functions
-{
-
-
-
-    public IEnumerable<Announce> GetAnnounce()
-    {
-        foreach (var announce in ViewData["listAnnounces"] as List<Announce>)
-        {
-            yield return announce;
-        }
+@functions {
+    public IEnumerable<Announce> GetAnnounce() {
+        return ViewData["listAnnounces"] as List<Announce>;
     }
 
-    public IEnumerable<Announce> GetSuggestedAnnounce()
-    {
-        foreach (var announce in ViewData["listSuggestedAnnounces"] as List<Announce>)
-        {
-            yield return announce;
-        }
+    public IEnumerable<Announce> GetSuggestedAnnounce() {
+        return ViewData["listSuggestedAnnounces"] as List<Announce>;
     }
 
     /*public IEnumerable<Category> GetAnnounceCategories(int announceId)
@@ -33,16 +21,6 @@
         }
         return null;
     }*/
-
-    public User GetAutore(string AuthorId)
-    {
-        foreach (var user in ViewData["listUsers"] as List<User>)
-        {
-            if (user.Id == AuthorId)
-                return user;
-        }
-        return null;
-    }
 
     public string GetImages(int AnnounceId)
     {
@@ -192,7 +170,7 @@
 
 
                             <div class="price">
-                                <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
+                                <h5>Autore: @annuncio.Author.UserName</h5>
                                 <br/>
                             </div>
 
@@ -261,7 +239,7 @@
 
 
                                         <div class="price">
-                                            <h5>Autore: @GetAutore(@annuncio.AuthorId).UserName</h5>
+                                            <h5>Autore: @annuncio.Author.UserName</h5>
                                             <br />
                                         </div>
 
