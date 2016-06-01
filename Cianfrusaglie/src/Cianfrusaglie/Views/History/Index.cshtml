@@ -20,7 +20,7 @@
 
                                     <span style="float: right"> Pubblicato il @item.PublishDate </span>
                                     <span style="font-size: 1.5em"><b>@item.Title</b></span>
-                                    <span style="margin-left: 1em" >Numero di interessati: @item.Interested.Count</span><span><b> (di cui @item.Interested.Count(i => !i.Read)  ) nuovi </b></span>
+                                    <span style="margin-left: 1em" >Numero di interessati: @item.Interested.Count</span>@*<span><b> (di cui @item.Interested.Count(i => !i.Read)  ) nuovi </b></span>*@
 
                                     @*@foreach (var interested in interessati.Values)
     {

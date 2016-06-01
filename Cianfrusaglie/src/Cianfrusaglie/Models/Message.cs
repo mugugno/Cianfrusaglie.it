@@ -16,7 +16,5 @@ namespace Cianfrusaglie.Models {
 
         [Required]
         public virtual User Receiver { get; set; }
-
-        public virtual bool Read { get; set; }
     }
 }

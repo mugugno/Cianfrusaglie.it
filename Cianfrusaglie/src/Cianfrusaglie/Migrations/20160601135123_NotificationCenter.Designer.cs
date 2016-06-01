@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160601135123_NotificationCenter")]
+    partial class NotificationCenter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -271,12 +272,6 @@ namespace Cianfrusaglie.Migrations
                         .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<int>("FeedbacksCount");
-
-                    b.Property<double>("FeedbacksMean");
-
-                    b.Property<int>("FeedbacksSum");
 
                     b.Property<int>("Genre");
 

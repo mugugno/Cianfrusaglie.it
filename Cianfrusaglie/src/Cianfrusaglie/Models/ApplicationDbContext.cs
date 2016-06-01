@@ -2,7 +2,6 @@
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
-using Cianfrusaglie.ViewModels.History;
 
 namespace Cianfrusaglie.Models {
     public class ApplicationDbContext : IdentityDbContext< User, IdentityRole, string > {
@@ -25,6 +24,8 @@ namespace Cianfrusaglie.Models {
         public DbSet< UserGatHistogram > UserGatHistograms { get; set; }
         public DbSet< UserCategoryPreferences > UserCategoryPreferenceses { get; set; }
         public DbSet< AnnounceChosen > AnnounceChosenUsers { get; set; }
+        public DbSet< Notification> NotificationCenter { get; set; }
+
         public DbSet<UserFeedbackScore> UserFeedbackScores { get; set; }
 
         protected override void OnModelCreating( ModelBuilder builder ) {
