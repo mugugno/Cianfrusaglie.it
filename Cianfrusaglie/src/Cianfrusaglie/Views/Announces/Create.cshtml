@@ -167,7 +167,7 @@
                                         <div class="form-group" >
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
                                             <div class="col-md-7" >
-                                                <input asp-for="Title" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
+                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -187,7 +187,7 @@
                                                 <div class="col-md-7" >
                                                     <div class="input-group" >
 
-                                                        <input type="number" asp-for="Price" value="1" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
+                                                        <input type="number" asp-for="Price" value="1" required="" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
                                                     </div>
                                                 </div>
@@ -214,7 +214,7 @@
 
                                             <label class="col-md-4 control-label" for="photos" >Immagini</label>
                                             <div class="col-md-6" >
-                                                <input asp-for="Photos" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
+                                                <input asp-for="Photos" required="" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
                                                 <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
