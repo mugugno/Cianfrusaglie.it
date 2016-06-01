@@ -41,9 +41,32 @@ namespace Cianfrusaglie.Controllers
             //    _context.Announces.Include( a => a.ChosenUsers ).Select( a => new { a.Id, a.ChosenUsers }).ToDictionary( k=> k.Id, v=> v.ChosenUsers.ToList() );
             //ViewData["feedbackGivenAuthorsId"] = _context.FeedBacks.Where(  )
 
+            SetChoosenToReadStatus(User.GetUserId());
+
             return View(GetLoggedUserInterestedAnnounces());
         }
 
+        public void SetChoosenToReadStatus(string id)
+        {
+            var newChoosed = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
+            (i.TypeNotification == MessageTypeNotification.NewChoosed ||
+            i.TypeNotification == MessageTypeNotification.NewAnotherChoosed));
+            foreach (var choosed in newChoosed)
+            {
+                choosed.Read = true;
+                //_context.SaveChanges();
+            }
+
+            var feedbacks = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read && 
+            i.TypeNotification == MessageTypeNotification.NewFeedback);
+
+            foreach (var feedback in feedbacks)
+            {
+                feedback.Read = true;
+            }
+
+            _context.SaveChanges();
+        }
 
 
 

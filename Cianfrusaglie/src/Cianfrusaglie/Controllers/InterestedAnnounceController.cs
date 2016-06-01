@@ -30,7 +30,7 @@ namespace Cianfrusaglie.Controllers {
                 _context.Interested.Include( i => i.User ).Where( i => i.AnnounceId.Equals( id ) ).Select( u => u.User ).ToList();
             var interestedViewModel = new InterestedAnnounceViewModel() {Announce = announce, InterestedUsers = interested};
 
-            SetInterestedToReadStatus(id);
+
             CommonFunctions.SetRootLayoutViewData( this,_context );
 
             var chosen = announce.ChosenUsers.OrderByDescending( u => u.ChosenDateTime ).FirstOrDefault();
@@ -61,6 +61,31 @@ namespace Cianfrusaglie.Controllers {
                 ChosenDateTime = DateTime.Now,
             };
             _context.AnnounceChosenUsers.Add( IChooseYou );
+
+            _context.NotificationCenter.Add(new Notification
+            {
+                User = _context.Users.Single(u => u.Id.Equals(userId)),
+                TypeNotification = MessageTypeNotification.NewChoosed
+
+            });
+
+            _context.NotificationCenter.Add(new Notification
+            {
+                User = _context.Users.Single(u => u.Id.Equals(userId)),
+                TypeNotification = MessageTypeNotification.NewFeedback
+            });
+
+            var notChooseds = _context.Interested.Where(u => u.AnnounceId.Equals(announceId) && !u.UserId.Equals(userId));
+            foreach (var notChoosed in notChooseds)
+            {
+                var userNotChoosed = _context.Users.Single(u => u.Id.Equals(notChoosed.UserId));
+                _context.NotificationCenter.Add(new Notification
+                {
+                    User = userNotChoosed,
+                    TypeNotification = MessageTypeNotification.NewAnotherChoosed
+                });
+            }
+
             _context.SaveChanges();
             return RedirectToAction( "Index" , new { id=announceId } );
         }
@@ -78,14 +103,7 @@ namespace Cianfrusaglie.Controllers {
           return RedirectToAction( nameof( Index ), new { id = id } );
        }
 
-        public void SetInterestedToReadStatus(int id) {
-            var newInterested = _context.Interested.Where(i => !i.Read && i.AnnounceId.Equals(id));
-            foreach (var interested in newInterested) {
-                interested.Read = true;
-                //_context.SaveChanges();
-            }
-            _context.SaveChanges();
-        }
+
 
     }
 }

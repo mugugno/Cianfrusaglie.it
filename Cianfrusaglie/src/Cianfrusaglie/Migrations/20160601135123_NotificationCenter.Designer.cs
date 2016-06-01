@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160601135123_NotificationCenter")]
+    partial class NotificationCenter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -145,8 +146,6 @@ namespace Cianfrusaglie.Migrations
                     b.Property<string>("Text")
                         .HasAnnotation("MaxLength", 99);
 
-                    b.Property<int>("Usefulness");
-
                     b.Property<int>("Vote");
 
                     b.HasKey("Id");
@@ -274,12 +273,6 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("FeedbacksCount");
-
-                    b.Property<double>("FeedbacksMean");
-
-                    b.Property<int>("FeedbacksSum");
-
                     b.Property<int>("Genre");
 
                     b.Property<double>("Latitude");
@@ -346,21 +339,6 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired();
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.UserFeedbackScore", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
-
-                    b.Property<int>("FeedBackId");
-
-                    b.Property<bool>("Useful");
 
                     b.HasKey("Id");
                 });
@@ -614,17 +592,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.UserFeedbackScore", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.User")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
-                    b.HasOne("Cianfrusaglie.Models.FeedBack")
-                        .WithMany()
-                        .HasForeignKey("FeedBackId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.UserGatHistogram", b =>
