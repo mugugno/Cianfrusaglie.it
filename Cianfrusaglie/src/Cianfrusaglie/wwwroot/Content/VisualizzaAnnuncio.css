@@ -24,7 +24,7 @@ li.divider {
     margin-bottom:2em;
 }
 .lovoglio, .nonLoVoglio{
-    
+    display: inline-block;
 }
 .right-butt{
     position:absolute;
