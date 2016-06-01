@@ -33,5 +33,7 @@ namespace Cianfrusaglie.Models {
         public virtual Announce Announce { get; set; }
 
         public virtual ICollection< UserFeedbackScore > UserFeedbackScores { get; set; }
+
+        public virtual int Usefulness { get; set; }
     }
 }
