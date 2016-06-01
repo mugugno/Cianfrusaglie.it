@@ -24,9 +24,13 @@ li.divider {
     margin-bottom:2em;
 }
 .lovoglio, .nonLoVoglio{
+    
+}
+.right-butt{
     position:absolute;
     bottom:0;
     right:2em;
+    text-align:right;
 }
 #wrapper-announce {
     padding-top:6em;
@@ -44,7 +48,7 @@ li.divider {
 }
 
 .title-detail-items{
-    margin-top:3em;
+    margin-top:7em;
 
 }
 #googleMap{

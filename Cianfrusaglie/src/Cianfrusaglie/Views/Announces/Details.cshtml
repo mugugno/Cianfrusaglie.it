@@ -69,14 +69,14 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                                 if (count2 == 0)
                                 {
                                     <div class="item active">
-                                        <img src="@immagine.Url" class="img-responsive" alt="a"/>
+                                        <img src="@immagine.Url" class="img-responsive" alt="a" />
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="item">
-                                        <img src="@immagine.Url" class="img-responsive" alt="a"/>
-                                    </div>
+                                        <img src="@immagine.Url" class="img-responsive" alt="a" />
+</div>
                                 }
                                 count2 = count2 + 1;
                             }
@@ -98,6 +98,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
             <div class="col-item container-announce">
 @if (!GetAuthor().Id.Equals(User.GetUserId()))
 {
+                
                 <dl class="dl-horizontal">
                     <dt>
                         <div class="icon-detail">
@@ -217,7 +218,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                     
                     <div id="titolo">
                         <h2 >@Html.DisplayName(Model.Title)</h2>
-                        
+                        <br />
                         @if (Model.Closed)
                         {
                             <h5 style="color:red;"> Annuncio chiuso - </h5>
@@ -232,65 +233,70 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                             //Aperta
                         }
                         <h5 ><span class="utentInteressati">@ViewData["numInterested"]</span> utenti interessati </h5>
-
+                        
                     </div>
-                    @if (Model.AuthorId.Equals(User.GetUserId()))
-                    {
-                        <a href="~/InterestedAnnounce?id=@Model.Id">
-                            <button class="btn btn-success lovoglio">
-                                <span class="text-det">VIsualizza interessati</span>
-                            </button>
-                        </a>
-                    }
-                    else if (Model.Closed || ViewData["feedbackGiven"] != null)
-                    {
-                        //Non puoi fare niente
-                    }
-                    else if (ViewData["choosen"].Equals(true))
-                    {
-                        <a href="~/Feedback/Create?announceId=@Model.Id&receiverId=@Model.AuthorId">
-                            <button class="btn btn-success lovoglio">
-                                <span class="text-det">Lascia un feedback</span>
-                            </button>
-                        </a>
+                    <div class="right-butt">
+                        @if (Model.AuthorId.Equals(User.GetUserId()))
+                        {
+                            <a href="~/InterestedAnnounce?id=@Model.Id">
+                                <button class="btn btn-success lovoglio">
+                                    <span class="text-det">VIsualizza interessati</span>
+                                </button>
+                            </a>
+                        }
+                        else if (Model.Closed || ViewData["feedbackGiven"] != null)
+                        {
+                            //Non puoi fare niente
+                        }
+                        else if (ViewData["choosen"].Equals(true))
+                        {
+                            <a href="~/Feedback/Create?announceId=@Model.Id&receiverId=@Model.AuthorId">
+                                <button class="btn btn-success lovoglio">
+                                    <span class="text-det">Lascia un feedback</span>
+                                </button>
+                            </a>
 
-                    }
-                    else if (ViewData["interested"].Equals(false))
-                    {
-                    <form action="#" method="POST" style="vertical-align: text-bottom">
-                        <button name="loVoglio" class="btn btn-success lovoglio">
-                            <span class="text-det">Lo voglio</span>
-                        </button>
-                        <div class="nonLoVoglio">
-                            @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; display: none"></span>
-                              <span name="seiInteressato" style="color: black; display: none">Sei gi&aacute; interessato all' annuncio</span>*@
-                            <br />
-                            <button name="nonLoVoglio" class="btn btn-danger" style="display: none;float:right;">
-                                <span class="text-det">Non lo voglio pi&ugrave;</span>
-                            </button>
-                        </div>
-                    </form>
+                        }
+                        else if (ViewData["interested"].Equals(false))
+                        {
+                            <form action="#" method="POST" style="vertical-align: text-bottom">
+                                <button name="loVoglio" class="btn btn-success lovoglio">
+                                    <span class="text-det">Lo voglio</span>
+                                </button>
+                                <div class="nonLoVoglio">
+                                    @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; display: none"></span>
+                        <span name="seiInteressato" style="color: black; display: none">Sei gi&aacute; interessato all' annuncio</span>*@
+                                    <br />
+                                    <button name="nonLoVoglio" class="btn btn-danger" style="display: none;float:right;">
+                                        <span class="text-det">Non lo voglio pi&ugrave;</span>
+                                    </button>
+                                </div>
+                            </form>
 
-                    }
-                    else if (@ViewData["interested"].Equals(true))
-                    {
-                    <form action="#" method="POST">
-                        @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; font-size: 2.5em"></span>*@
-                        <br /><br />
-                        <div class="nonLoVoglio">
-                            @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; font-size: 0.8em"></span>
-    <span style="color: black;" name="seiInteressato">Sei gi&aacute; interessato all' annuncio</span><br />*@
-                            <button name="nonLoVoglio" class="btn btn-danger" style="font-size: 0.8em;float:right;">
-                                <span class="text-det">Non lo voglio pi&ugrave;</span>
-                            </button>
-                        </div>
-                        <button name="loVoglio" class="btn btn-success lovoglio" style="display: none"><span class="text-det">Lo voglio</span></button>
+                        }
+                        else if (@ViewData["interested"].Equals(true))
+                        {
+                            <form action="#" method="POST">
+                                @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; font-size: 2.5em"></span>*@
+                                <br /><br />
+                                <div class="nonLoVoglio">
+                                    @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; font-size: 0.8em"></span>
+                        <span style="color: black;" name="seiInteressato">Sei gi&aacute; interessato all' annuncio</span><br />*@
+                                    <button name="nonLoVoglio" class="btn btn-danger" style="font-size: 0.8em;float:right;">
+                                        <span class="text-det">Non lo voglio pi&ugrave;</span>
+                                    </button>
+                                </div>
+                                <button name="loVoglio" class="btn btn-success lovoglio" style="display: none"><span class="text-det">Lo voglio</span></button>
 
-                    </form>
-                    @*<div class="icon-detail">
-                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]">Contatta</a>
-                    </div>*@
-                    }
+                            </form>
+                            @*<div class="icon-detail">
+                <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]">Contatta</a>
+                </div>*@
+                        }
+                        <script>
+                            document.write("<br><br><iframe src=\"https://www.facebook.com/plugins/share_button.php?href="+window.location+".href&layout=button_count&mobile_iframe=true&appId=228034747580137&width=95&height=20\" width=\"95\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
+                        </script>
+                    </div>
                 </div>
             </div>
 
