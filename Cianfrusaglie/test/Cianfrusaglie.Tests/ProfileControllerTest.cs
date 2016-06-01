@@ -35,7 +35,7 @@ namespace Cianfrusaglie.Tests
             Context.SaveChanges();
             var profileController = CreateProfileController(feedbackAuthor.Id);
             var result = profileController.VoteFeedbackUsefulness(999, true);
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<HttpNotFoundResult>(result);
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Cianfrusaglie.Tests
             var result = profileController.VoteFeedbackUsefulness( feedback.Id, useful );
             var vote = Context.UserFeedbackScores.Single( f => f.AuthorId.Equals(thirdUser.Id) && f.FeedBackId.Equals(feedback.Id) );
             Assert.Equal(vote.Useful,useful );
-            Assert.IsType< ViewResult >( result );
+            Assert.IsType<RedirectToActionResult>( result );
             Assert.Equal( feedback.Usefulness, expected );
         }
 
@@ -99,7 +99,7 @@ namespace Cianfrusaglie.Tests
             var vote = Context.UserFeedbackScores.Single(f => f.AuthorId.Equals(thirdUser.Id) && f.FeedBackId.Equals(feedback.Id));
             var result = profileController.VoteFeedbackUsefulness(feedback.Id, !choice);
             Assert.Equal(vote.Useful, !choice);
-            Assert.IsType<ViewResult>(result);
+            Assert.IsType<RedirectToActionResult>(result);
             Assert.NotEqual( oldScore, feedback.Usefulness );
         }
 
