@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.ViewModels.History;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -37,12 +38,12 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>Gli annunci chiusi vinti dall'utente</returns>
         public IEnumerable< Announce > GetLoggedUserWonClosedAnnounces() {
+            string userId = User.GetUserId();
+            var loggedUserWonClosedAnnounces = _context.Announces.Include( a => a.ChosenUsers ).Where(
+                announce =>
+                    announce.Closed && userId.Equals(announce.ChosenUsers.OrderByDescending(a => a.ChosenDateTime).FirstOrDefault().ChosenUserId) );
             return
-                _context.Announces.Include( a => a.ChosenUsers ).Where(
-                    announce =>
-                        announce.Closed &&
-                        announce.ChosenUsers.OrderByDescending( a => a.ChosenDateTime ).FirstOrDefault().ChosenUserId
-                            .Equals( User.GetUserId() ) );
+                loggedUserWonClosedAnnounces;
         }
 
         /// <summary>
@@ -50,17 +51,22 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>Gli annunci chiusi interessati all'utente</returns>
         private IEnumerable< Announce > GetLoggedUserInterestedClosedAnnounce() {
-            return
-                _context.Announces.Include( a => a.Interested ).Where( announce => announce.Closed ).SelectMany( announce => announce.Interested,
-                    ( announce, interested ) => new {announce, interested} ).Where(
-                        @t => @t.interested.UserId.Equals( User.GetUserId() ) ).Select( @t => @t.announce );
+            foreach( var entity in _context.Announces.Include( a => a.Interested ) ) {
+                if( entity.Closed  ) {
+                    foreach( var interested in entity.Interested ) {
+                        if( interested.UserId.Equals( User.GetUserId() ) ) {
+                            yield return entity;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Ritorna gli annunci chiusi persi dell'utente (ovvero gli annunci per cui l'utente ha avuto interesse ma non è stato scelto come assegnatario)
         /// </summary>
         /// <returns>gli annunci chiusi persi dell'utente</returns>
-        private IEnumerable< Announce > GetLoggedUserLostAnnounces() {
+        public IEnumerable< Announce > GetLoggedUserLostAnnounces() {
             return GetLoggedUserInterestedClosedAnnounce().Except( GetLoggedUserWonClosedAnnounces() );
         }
 
@@ -81,11 +87,12 @@ namespace Cianfrusaglie.Controllers {
             if(!LoginChecker.HasLoggedUser(this)) 
                 return HttpBadRequest();
             SetRootLayoutViewData(this, _context);
-            var historyAnnouncesDictionary = new Dictionary<string, IEnumerable<Announce> >();
-            historyAnnouncesDictionary[ "published" ] = GetLoggedUserClosedAnnounces();
-            historyAnnouncesDictionary[ "won" ] = GetLoggedUserWonClosedAnnounces();
-            historyAnnouncesDictionary[ "lost" ] = GetLoggedUserLostAnnounces();
-            return View( historyAnnouncesDictionary );
+            var model = new MyHistoryViewModel {
+                LostClosedAnnounces = GetLoggedUserLostAnnounces().ToList(),
+                PublishedClosedAnnounces = GetLoggedUserClosedAnnounces().ToList(),
+                WonClosedAnnounces = GetLoggedUserWonClosedAnnounces().ToList()
+            };
+            return View( model );
         }
     }
 }
