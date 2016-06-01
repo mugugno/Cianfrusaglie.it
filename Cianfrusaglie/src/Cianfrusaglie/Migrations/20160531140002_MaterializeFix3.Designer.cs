@@ -8,9 +8,10 @@ using Cianfrusaglie.Models;
 namespace Cianfrusaglie.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160531140002_MaterializeFix3")]
+    partial class MaterializeFix3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -213,6 +214,8 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("DateTime");
 
+                    b.Property<bool>("Read");
+
                     b.Property<string>("UserId")
                         .IsRequired();
 
@@ -229,6 +232,8 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<DateTime>("DateTime");
 
+                    b.Property<bool>("Read");
+
                     b.Property<string>("ReceiverId")
                         .IsRequired();
 
@@ -236,21 +241,6 @@ namespace Cianfrusaglie.Migrations
                         .IsRequired();
 
                     b.Property<string>("Text")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Read");
-
-                    b.Property<int>("TypeNotification");
-
-                    b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -272,11 +262,11 @@ namespace Cianfrusaglie.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("FeedbacksCount");
+                    b.Property<int>("FeedbacksCount")
+                        .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<double>("FeedbacksMean");
-
-                    b.Property<int>("FeedbacksSum");
+                    b.Property<double>("FeedbacksMean")
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<int>("Genre");
 
@@ -572,13 +562,6 @@ namespace Cianfrusaglie.Migrations
                     b.HasOne("Cianfrusaglie.Models.User")
                         .WithMany()
                         .HasForeignKey("SenderId");
-                });
-
-            modelBuilder.Entity("Cianfrusaglie.Models.Notification", b =>
-                {
-                    b.HasOne("Cianfrusaglie.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Cianfrusaglie.Models.User", b =>

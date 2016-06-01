@@ -6,10 +6,6 @@ namespace Cianfrusaglie.Constants {
     ///     aggiungete anche nei Model/ViewModel relativi :)
     /// </summary>
     public static class DomainConstraints {
-        //Constraints per Announce
-        public const int UserGenreMale = 2;
-        public const int UserGenreFemale = 1;
-        public const int UserGenreNotSpecified = 0;
 
         //Constraints per Announce/CreateAnnounceViewModel
         public const int AnnounceTitleMinLenght = 3;

@@ -1,12 +1,29 @@
-﻿html{
-    min-height: 100%;
-    position:relative;
-}
+﻿
 body {
-    /*font-family: 'Lato', sans-serif;*/
+    margin: 0;
+    padding: 0;
     font-family: 'Roboto', sans-serif;
     font-size: 1.5em;
-    margin: 0;
+}
+
+* {
+	margin: 0;
+}
+html, body {
+	height: 100%;
+}
+#wrap {
+  min-height: 100%;
+  /* equal to footer height */
+	margin-bottom: -40px; 
+}
+#wrap:after {
+  content: "";
+  display: block;
+}
+#footer, #wrap:after {
+  /* .push must be the same height as footer */
+	height: 142px; 
 }
 .navbar-default .navbar-collapse, .navbar-default .navbar-form {
     background: #ffffff;
@@ -49,14 +66,7 @@ button { padding: 0; }
     margin-left: -6px;
 }
 
-#wrap {
-    height: auto;
-    /* Negative indent footer by its height */
-    
-    min-height: 100%;
-    /* Pad bottom by footer height */
-    padding: 0 0 60px;
-}
+
 #horizontalMenu {
     box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.03 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.18 );
     z-index: 20;
@@ -82,7 +92,7 @@ button { padding: 0; }
     margin-left: -20em;
 
 }
-
+ 
 
 #footer {
     border-top: 1px solid;
@@ -91,8 +101,8 @@ button { padding: 0; }
     font-weight: bold;
     height: 40px;
     text-align: center;
-    position:absolute;
     width:100%;
+
 }
 
 #newNotification {
@@ -117,3 +127,44 @@ button { padding: 0; }
     padding: 13px;
 
 }
+/* Css per mostrare le stelline dell'utente, va in combo con l'svg che non si puo' estrarre ma e' da copiaincollare*/
+/* Ho fatto del mio meglio per renderlo fluido e responsive*/
+
+        .star-container {
+            height: 25px; /* !!! Se modifichi height o width causerai effetti collaterali dappertutto! */
+            width: 100px; /* !!! Se modifichi height o width causerai effetti collaterali dappertutto! */
+        }
+        
+        .star-colorbar {
+            height: 40%;
+            background: orange;
+            z-index: -1;
+            margin-top: -15%;
+        }
+        .star-shape {
+            width: 100%;
+            height: 100%;
+        }
+/* 
+        PROTOTIPO PER L'HTML DA COPIAINCOLLARE:
+        STELLINE CON IL RATING DELL'UTENTE
+
+
+                            <div class="star-container" >
+                                <div class="star-shape" >
+                                    <svg viewbox="0 0 61 19" >
+                                        <defs>
+                                            <mask id="starmask" x="0" y="0" width="100" height="100" >
+                                                <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                <text text-anchor="middle" x="50%" y="70%" dy="1" > &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                            </mask>
+                                        </defs>
+                                        <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                        <text text-anchor="middle" x="50%" y="70%" dy="1" color="black" > &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                    </svg>
+                                </div>
+                                @{ string starWidth = ( (int) ( 20 * announce.Author.FeedbacksMean ) ).ToString(); }            ESTRARRE DAL DB IL VOTO MEDIO!
+                                <div class="star-colorbar" style="width: @starWidth%" >                             SE INSERISCI UNO SPAZIO PRIMA DEL SIMBOLO % NON FUNZIONA!
+                                </div>
+                            </div>
+*/

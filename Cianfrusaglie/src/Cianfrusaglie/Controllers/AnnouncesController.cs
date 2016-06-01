@@ -27,24 +27,28 @@ namespace Cianfrusaglie.Controllers {
             _environment = environment;
         }
 
-        /// <summary>
-        ///     Genera i Gat a partire da un annuncio.
-        /// </summary>
-        /// <param name="announce">L'annuncio appena creato.</param>
-        /// <returns>I Gat relativi all'annuncio</returns>
-        public IEnumerable< Gat > GenerateGats( Announce announce ) {
-            var formFieldsValues = _context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
-            foreach( var fieldsValue in formFieldsValues ) {
-                yield return new Gat {Text = GetStringFromAnnounceFormField( fieldsValue )};
-            }
-        }
+       /// <summary>
+       ///     Genera i Gat a partire da un annuncio.
+       /// </summary>
+       /// <param name="announce">L'annuncio appena creato.</param>
+       /// <returns>I Gat relativi all'annuncio</returns>
+       public IEnumerable< Gat > GenerateGats( Announce announce ) {
+          return GenerateGats( _context, announce );
+       }
+
+       public static IEnumerable< Gat > GenerateGats( ApplicationDbContext context, Announce announce ) {
+         var formFieldsValues = context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
+         foreach( var fieldsValue in formFieldsValues ) {
+            yield return new Gat { Text = GetStringFromAnnounceFormField( fieldsValue ) };
+         }
+      } 
 
         /// <summary>
         ///     Dato un AnnounceFormField, genera il corrispettivo valore stringa.
         /// </summary>
         /// <param name="formField">L'announceFormField da trattare.</param>
         /// <returns>Il valore in formato stringa per inserirlo nel DB.</returns>
-        public string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) {
+        public static string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) {
             return formField.Value;
         }
 
@@ -55,13 +59,13 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        ///     Effettua l'upload delle immagini per un determinato annuncio
+        /// Effettua l'upload delle immagini per un determinato annuncio
         /// </summary>
         /// <param name="formFiles">immagini dal form</param>
         /// <param name="announce">l'annuncio</param>
         /// <returns></returns>
         private async Task UploadAnnounceImages( ICollection< IFormFile > formFiles, Announce announce ) {
-            string uploads = Path.Combine( _environment.WebRootPath, "images" );
+            string uploads = Path.Combine( _environment.WebRootPath, "upload" );
             foreach( var file in formFiles ) {
                 if( file.ContentType != "image/png" && file.ContentType != "image/jpeg" )
                     continue;
@@ -76,7 +80,7 @@ namespace Cianfrusaglie.Controllers {
                 fileName = "i" + imgUrl.Id + Path.GetExtension( fileName );
                 await file.SaveAsAsync( Path.Combine( uploads, fileName ) );
 
-                imgUrl.Url = @"/images/" + fileName;
+                imgUrl.Url = @"/upload/" + fileName;
             }
         }
 
@@ -99,10 +103,9 @@ namespace Cianfrusaglie.Controllers {
 
         private void SetViewDataForCreate( bool vendita ) {
            CommonFunctions.SetRootLayoutViewData( this, _context );
-            ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            //ViewData[ "listUsers" ] = _context.Users.ToList();
+            ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "formFields" ] = _context.FormFields.ToList();
             ViewData[ "formFieldDefaultValue" ] = _context.FormFields.ToList().ToDictionary( field => field.Id,
                 field => ( from defaultValue in _context.FieldDefaultValues.ToList()
@@ -152,10 +155,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "formFieldsValue" ] = formFieldsValue;
             ViewData[ "Images" ] = _context.ImageUrls.Where( i => i.Announce.Equals( announce ) ).ToList();
             ViewData[ "IdAnnounce" ] = id;
-            ViewData[ "AuthorId" ] = announce.AuthorId;
-            ViewData[ "Autore" ] =
-                _context.Users.Where( u => u.Id == announce.AuthorId ).Select( u => u.UserName ).SingleOrDefault();
-
+            ViewData[ "Author" ] = _context.Users.First( u => u.Id.Equals( announce.AuthorId ) );
+            ViewData["AuthorId"] = ((User)ViewData["Author"]).Id;
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
                 ViewData[ "int" ] =
@@ -167,9 +168,12 @@ namespace Cianfrusaglie.Controllers {
                 ViewData["interested"] = false;
 
             //ViewData Dato un annuncio ho tutti i nomi delle categorie di cui fa parte
-            var announces = _context.Announces.Include(u => u.AnnounceCategories).Single(a => a.Id == announce.Id);
+            var announces = _context.Announces.Include(u => u.AnnounceCategories).Include(p=>p.Author).Single(a => a.Id == announce.Id);
             ViewData["nameAnnounceCategories"] = announces.AnnounceCategories.ToList();
+            ViewData["numInterested"] = announce.Interested.Count;
             ViewData[ "choosen" ] = IsUserChoosenForTheAnnounce( (int) id, User.GetUserId() );
+            ViewData["someoneIsChoosen"] = announce.Interested.Where(u => u.ChooseDate != null).SingleOrDefault();
+            ViewData["feedbackGiven"] = _context.FeedBacks.Where(u => u.AuthorId.Equals(User.GetUserId()) && u.AnnounceId.Equals(announce.Id)).SingleOrDefault();
             return View( announce );
         }
 
@@ -390,7 +394,6 @@ namespace Cianfrusaglie.Controllers {
             var announce = _context.Announces.SingleOrDefault( m => m.Id == id );
 
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             if( announce == null ) {
                 return HttpNotFound();
             }

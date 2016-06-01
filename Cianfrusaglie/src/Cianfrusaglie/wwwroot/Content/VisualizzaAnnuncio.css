@@ -19,34 +19,42 @@ li {
 li.divider {
     display: inherit;
 }
-#wrapper-announce {
-    /* Safari 4-5, Chrome 1-9 */
-    background: -webkit-gradient( radial, center center, 0, center center, 460, from( #fff ), to( white ) );
-    /* Safari 5.1+, Chrome 10+ */
-    background: -webkit-radial-gradient( circle, #fff, white );
-    /* Firefox 3.6+ */
-    background: -moz-radial-gradient( circle, #fff, white );
-    /* IE 10 */
-    background: -ms-radial-gradient( circle, #fff, white );
-    /*bottom:0;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    position: absolute;*/
-    /*Leggero gradiente*/
-    background-color: white;
-    background-position: center center;
-    background-repeat: no-repeat;
-    margin-left: 5%;
-    padding-top:4em;
+.title-detail{
+    position:relative;
+    margin-bottom:2em;
 }
-.icon-detail{
-    color: lightgrey;
-    display: inline-block;
-    padding: 2em;
-    cursor:pointer;
+.lovoglio, .nonLoVoglio{
+    
+}
+.right-butt{
+    position:absolute;
+    bottom:0;
+    right:2em;
+    text-align:right;
+}
+#wrapper-announce {
+    padding-top:6em;
+}
+#wrapper-announce .photo{
 
+    max-height:38em;
+    overflow-y:hidden;
+}
+#wrapper-announce dd,dt{
+    margin-bottom:1em;
+}
+#wrapper-announce .star-container, .btn-det{
+    margin-top:-5px;
+}
+
+.title-detail-items{
+    margin-top:7em;
+
+}
+#googleMap{
+    /*margin: 15px;*/
+    width: 100%; 
+    height: 380px;
 }
 /*.icon-detail .icon-det:hover{
     color: lightgreen;
@@ -84,5 +92,16 @@ li.divider {
 
 #titolo {
     color: #FFC107;
+    margin:0;
     margin-left:1em;
+    margin-right:5em;
+    position:absolute;
+    bottom:0;
+
+}
+#titolo h5{
+    margin:0;
+    padding:0;
+    color:black;
+      display: inline;
 }

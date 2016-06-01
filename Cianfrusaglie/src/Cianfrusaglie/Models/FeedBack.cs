@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cianfrusaglie.Constants;
@@ -30,5 +31,7 @@ namespace Cianfrusaglie.Models {
         public virtual int AnnounceId { get; set; }
         
         public virtual Announce Announce { get; set; }
+
+        public virtual ICollection< UserFeedbackScore > UserFeedbackScores { get; set; }
     }
 }

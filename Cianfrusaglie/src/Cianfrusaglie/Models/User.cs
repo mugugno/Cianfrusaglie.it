@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Cianfrusaglie.Constants;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -30,6 +32,11 @@ namespace Cianfrusaglie.Models {
         public virtual ICollection< FeedBack > SentFeedBacks { get; set; }
         public virtual ICollection< FeedBack > ReceivedFeedBacks { get; set; }
         public virtual ICollection< AnnounceChosen > ChosenUsers { get; set; }
-        public virtual ICollection< UserCategoryPreferences > CategoryPreferenceses { get; set; } 
+        public virtual ICollection< UserCategoryPreferences > CategoryPreferenceses { get; set; }
+        public virtual ICollection< UserFeedbackScore > FeedbackScores { get; set; }
+        public virtual int FeedbacksCount { get; set; }
+        public virtual double FeedbacksMean { get; set; }
+        public virtual int FeedbacksSum { get; set; }
+
     }
 }

@@ -26,7 +26,7 @@ namespace Cianfrusaglie.ViewModels.Account {
          Compare( "Password", ErrorMessage = "The password and confirmation password do not match." )]
         public string ConfirmPassword { get; set; }
 
-        [Range(DomainConstraints.UserGenreNotSpecified, DomainConstraints.UserGenreMale)]
+        [Range((int)Constants.Genre.Unspecified, (int)Constants.Genre.Male)]
         public int Genre { get; set; }
 
         [DataType(DataType.DateTime)]
