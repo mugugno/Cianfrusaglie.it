@@ -26,6 +26,8 @@ namespace Cianfrusaglie.Models {
         public DbSet< AnnounceChosen > AnnounceChosenUsers { get; set; }
         public DbSet< Notification> NotificationCenter { get; set; }
 
+        public DbSet<UserFeedbackScore> UserFeedbackScores { get; set; }
+
         protected override void OnModelCreating( ModelBuilder builder ) {
             base.OnModelCreating( builder );
             // Customize the ASP.NET Identity model and override the defaults if needed.
