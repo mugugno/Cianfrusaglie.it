@@ -32,22 +32,6 @@ namespace Cianfrusaglie.Tests
             };
         }
 
-        private void SetUserInterestedToAnnounce( Announce announce, User user ) {
-            Context.Interested.Add( new Interested {Announce = announce, DateTime = DateTime.Now, User = user} );
-            Context.SaveChanges();
-        }
-
-        private void SetUserInterestedToAnnounceAndChoosen( Announce announce, User user, int daysToSubstractToChoosenDateTime ) {
-            SetUserInterestedToAnnounce( announce, user );
-            var interestedUser = Context.Interested.Single( i => i.User.Equals( user ) );
-            Context.AnnounceChosenUsers.Add( new AnnounceChosen {
-                Announce = announce,
-                ChosenDateTime = DateTime.Now - new TimeSpan(daysToSubstractToChoosenDateTime, 0, 0, 0),
-                ChosenUser = interestedUser.User
-            } );
-            Context.SaveChanges();
-        }
-
         [Fact]
         public void InterestedUserGivesFeedbackToAuthorAndIsOk() {
             
