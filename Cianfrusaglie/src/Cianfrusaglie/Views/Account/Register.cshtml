@@ -60,7 +60,7 @@
 </head>
 <body>
     <div id="wrapper-register">
-        <form asp-action="Register" asp-controller="Account" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
+        <form asp-action="Register" asp-controller="Account" id="formRegister" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
             
             <div id="register" class="form-horizontal form-register form-register1" id="tabellaForm">
                 <h1>
@@ -148,8 +148,7 @@ clickBackButton(2)"><span>1</span>Su di te</span>
                         <br />
                         <div class="panel-group" id="panel-423221" role="tablist" aria-multiselectable="true">
                 
-                            @foreach (var macroCategory in GetMacroCategories())
-                            {
+                            @foreach (var macroCategory in GetMacroCategories()) {
                                 <div class="panel panel-default">
                                     <div class="panel-heading collapsed" role="tab" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()' >
                                         @macroCategory.Name
@@ -159,8 +158,7 @@ clickBackButton(2)"><span>1</span>Su di te</span>
                                                 <div class="form-group">
 
                                                     <div class="col-md-12">
-                                                        @foreach (var category in GetCategories(macroCategory))
-                                                        {
+                                                        @foreach (var category in GetCategories(macroCategory)) {
                                                             <div class="checkbox">
                                                                 <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
                                                                     <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
@@ -208,24 +206,24 @@ clickBackButton(2)"><span>1</span>Su di te</span>
 
                     <div class="form-group">
                         <label asp-for="UserName" class="control-label">Username</label><br />
-                        <input asp-for="UserName" class="form-control" />
+                        <input asp-for="UserName" required="" onchange="this.checkValidity()" class="form-control" />
                         <span asp-validation-for="UserName" class="text-danger"></span>
 
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                        <input asp-for="Email" class="form-control" />
+                        <input asp-for="Email" type="email" required="" onchange="this.checkValidity()" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Password" class="control-label">Password</label><br />
-                        <input asp-for="Password" class="form-control" type="password" id="popoverData" data-content="<b>Deve contenere almeno 8 caratteri</b>" data-placement="right"/>
+                        <input asp-for="Password" type="password" required="" class="form-control" id="popoverData"/>
                         <span asp-validation-for="Password" class="text-danger" data-trigger="hover" rel="popover"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
-                        <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                        <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control" />
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 
                     </div>
@@ -244,9 +242,22 @@ clickBackButton(2)"><span>1</span>Su di te</span>
 </form>
     </div>
 
-<script type="text/javascript">
-    $('#popoverData').popover({html:true});
-    
+<script type="text/javascript" >
+    $('#popoverData').change( passwordCheck );
+    $("#confirmPassword").change( passwordCheck );
+
+    function passwordCheck() {
+        if( $('#popoverData').val().length < 8 ) 
+            $('#popoverData').get(0).setCustomValidity('La password deve contenere almeno 8 caratteri!');
+        else
+            $('#popoverData').get(0).setCustomValidity('');
+
+        if( $("#popoverData").val() != $("#confirmPassword").val() )
+            $("#confirmPassword").get(0).setCustomValidity('La password di conferma è diversa dalla password!');
+        else
+            $("#confirmPassword").get(0).setCustomValidity('');
+    }
+
     function clickNextButton(tmp) {
         if (tmp === 1) {
             $('.form-register1').hide();
@@ -259,6 +270,7 @@ clickBackButton(2)"><span>1</span>Su di te</span>
             $('.form-register3').show();
         }
     }
+
     function clickBackButton(tmp) {
         if (tmp === 2) {
             $('.form-register1').show();
