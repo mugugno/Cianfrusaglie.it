@@ -37,9 +37,9 @@ namespace Cianfrusaglie.Models {
          };
 
          var user3 = new User() {
-            Email = "giovanni@gnu.org",
+            Email = "giovanni@gmail.com",
             Name = "Giovanni",
-            UserName = "Giovanni C.",
+            UserName = "Giovanni Chiari",
             BirthDate = new DateTime( 1970, 1, 1 ),
             Genre = Genre.Male,
             PasswordHash = password,
@@ -48,9 +48,9 @@ namespace Cianfrusaglie.Models {
          };
 
          var user4 = new User() {
-            Email = "pino.r@gmail.it",
+            Email = "pino.rossi@gmail.it",
             Name = "Pino",
-            UserName = "Pino R.",
+            UserName = "Pino Rossi",
             BirthDate = new DateTime( 1976, 6, 6 ),
             Genre = Genre.Male,
             PasswordHash = password,
