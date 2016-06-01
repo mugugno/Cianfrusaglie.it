@@ -110,7 +110,5 @@ namespace Cianfrusaglie.Models {
            builder.Entity< UserCategoryPreferences >().HasOne( uc => uc.User ).WithMany( u => u.CategoryPreferenceses ).OnDelete(
                 DeleteBehavior.Restrict );
       }
-
-        public DbSet<MyHistoryViewModel> MyHistoryViewModel { get; set; }
     }
 }
