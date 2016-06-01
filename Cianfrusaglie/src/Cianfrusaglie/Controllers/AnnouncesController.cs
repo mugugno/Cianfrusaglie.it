@@ -332,6 +332,15 @@ namespace Cianfrusaglie.Controllers {
                 var interestedTmp = new Interested {User = userTmp, Announce = annTmp, DateTime = DateTime.Now};
                 _context.Interested.Add( interestedTmp );
                 ViewData["interested"] = true;
+
+                _context.NotificationCenter.Add(new Notification
+                {
+                    User = _context.Users.Single(u=> u.Id.Equals(annTmp.AuthorId)),
+                    TypeNotification = MessageTypeNotification.NewInterested
+                });
+                _context.SaveChanges();
+
+
                 foreach( var gat in announceGats ) {
                     if( userGats.Select( a => a.Gat ).Contains( gat ) ) {
                         var userGatHistogram =

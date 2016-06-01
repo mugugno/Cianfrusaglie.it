@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels;
@@ -48,7 +49,7 @@ namespace Cianfrusaglie.Controllers {
 		/// Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
 		/// </summary>
         public void SetMessagesToReadStatus() {
-            var unreadMessages =_context.Messages.Where( m => m.Receiver.Id.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
+            var unreadMessages =_context.NotificationCenter.Where( m => m.UserId.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
             foreach( var message in unreadMessages ) {
                 message.Read = true;
                 _context.SaveChanges();
@@ -67,14 +68,10 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult Index( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
+		    SetRootLayoutViewData(this, _context);
             ViewData[ "allConversations" ] = GetAllConversations();
             ViewData[ "idAfterRefresh" ] = id;
             SetMessagesToReadStatus();
-            ViewData[ "IsThereNewMessage" ] = IsThereNewMessage( User.GetUserId(), _context );
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
 		    ViewData[ "MyAvatarUrl" ] = _context.Users.First( u => u.Id.Equals( User.GetUserId() ) ).ProfileImageUrl;
             return View();
         }
@@ -102,12 +99,8 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
             if ( !_context.Users.Any( u => u.Id == User.GetUserId() ) )
                 return HttpNotFound();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
             ViewData[ "receiver" ] = _context.Users.First( u => u.Id.Equals( id ) );
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            SetRootLayoutViewData(this, _context);
             return View();
         }
 
@@ -140,6 +133,14 @@ namespace Cianfrusaglie.Controllers {
                     DateTime = DateTime.Now
                 } );
                 _context.SaveChanges();
+
+                _context.NotificationCenter.Add(new Notification
+                {
+                    User = receiverUsr,
+                    TypeNotification = (int) MessageTypeNotification.NewMessage
+                });
+                _context.SaveChanges();
+
                 return RedirectToAction( "Index", new {id = receiverUsr.Id} );
             }
             return View( messageCreate );
@@ -165,11 +166,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpNotFound();
 		    if( !message.Sender.Id.Equals( User.GetUserId() ) )
 		        return HttpBadRequest();
-            ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "numberOfCategories" ] = _context.Categories.ToList().Count;
-            ViewData["IsThereNewMessage"] = IsThereNewMessage(User.GetUserId(), _context);
-            ViewData[" IsThereNewInterested"] = IsThereNewInterested(User.GetUserId(), _context);
-            ViewData["IsThereAnyNotification"] = IsThereAnyNotification(User.GetUserId(), _context);
+            SetRootLayoutViewData(this, _context);
             return View( message );
         }
 

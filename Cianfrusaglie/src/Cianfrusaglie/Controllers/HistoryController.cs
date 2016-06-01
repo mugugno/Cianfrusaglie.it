@@ -23,6 +23,7 @@ namespace Cianfrusaglie.Controllers {
       /// <returns>Restituisce annunci pubblicati dall'utente loggato</returns>
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
          var myAnnounces = _context.Announces.Include( p => p.Images ).Include( p => p.Interested ).Where( a => a.AuthorId == User.GetUserId() );
+         SetInterestedToReadStatus(User.GetUserId());
          return myAnnounces;
       } 
 
@@ -38,6 +39,18 @@ namespace Cianfrusaglie.Controllers {
 
         return View( GetLoggedUserPublishedAnnounces().ToList() );
       }
-      
-   }
+
+        //TODO SUMMARY
+        public void SetInterestedToReadStatus(string id)
+        {
+            var newInterested = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read && i.TypeNotification == MessageTypeNotification.NewInterested);
+            foreach (var interested in newInterested)
+            {
+                interested.Read = true;
+                //_context.SaveChanges();
+            }
+            _context.SaveChanges();
+        }
+
+    }
 }
