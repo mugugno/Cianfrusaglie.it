@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
+using Cianfrusaglie.ViewModels.History;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -86,11 +87,12 @@ namespace Cianfrusaglie.Controllers {
             if(!LoginChecker.HasLoggedUser(this)) 
                 return HttpBadRequest();
             SetRootLayoutViewData(this, _context);
-            var historyAnnouncesDictionary = new Dictionary<string, IEnumerable<Announce> >();
-            historyAnnouncesDictionary[ "published" ] = GetLoggedUserClosedAnnounces();
-            historyAnnouncesDictionary[ "won" ] = GetLoggedUserWonClosedAnnounces();
-            historyAnnouncesDictionary[ "lost" ] = GetLoggedUserLostAnnounces();
-            return View( historyAnnouncesDictionary );
+            var model = new MyHistoryViewModel {
+                LostClosedAnnounces = GetLoggedUserLostAnnounces().ToList(),
+                PublishedClosedAnnounces = GetLoggedUserClosedAnnounces().ToList(),
+                WonClosedAnnounces = GetLoggedUserWonClosedAnnounces().ToList()
+            };
+            return View( model );
         }
     }
 }

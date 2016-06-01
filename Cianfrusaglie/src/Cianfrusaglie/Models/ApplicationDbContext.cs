@@ -2,6 +2,7 @@
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
+using Cianfrusaglie.ViewModels.History;
 
 namespace Cianfrusaglie.Models {
     public class ApplicationDbContext : IdentityDbContext< User, IdentityRole, string > {

@@ -1333,7 +1333,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var numero = new FormField { Name = "Numero", Type = FormFieldType.Text };
+                var numero = new FormField { Name = "Numero", Type = FormFieldType.Number };
                 ctx.FormFields.Add(numero);
                 ctx.SaveChanges();
 
@@ -1492,13 +1492,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                ////Da qui Claudio
-
-
-
-
-
-                var numeroJoypad = new FormField { Name = "Numero Joypad", Type = FormFieldType.Select };
+                var numeroJoypad = new FormField { Name = "Numero Joypad", Type = FormFieldType.Number };
                 ctx.FormFields.Add(numeroJoypad);
                 ctx.SaveChanges();
 
@@ -1509,15 +1503,8 @@ namespace Cianfrusaglie.Models {
                 });
                 ctx.SaveChanges();
 
-                ctx.FieldDefaultValues.AddRange(new FieldDefaultValue { Value = "0", FormField = numeroJoypad },
-                    new FieldDefaultValue { Value = "1", FormField = numeroJoypad },
-                    new FieldDefaultValue { Value = "2", FormField = numeroJoypad },
-                    new FieldDefaultValue { Value = "3", FormField = numeroJoypad },
-                    new FieldDefaultValue { Value = "Oltre", FormField = numeroJoypad });
-                ctx.SaveChanges();
 
-
-                var altezza = new FormField { Name = "Altezza", Type = FormFieldType.Text };
+                var altezza = new FormField { Name = "Altezza", Type = FormFieldType.Number };
                 ctx.FormFields.Add(altezza);
                 ctx.SaveChanges();
 
@@ -1592,7 +1579,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var profondita = new FormField { Name = "Profondita'", Type = FormFieldType.Text };
+                var profondita = new FormField { Name = "Profondita'", Type = FormFieldType.Number };
                 ctx.FormFields.Add(profondita);
                 ctx.SaveChanges();
 
@@ -1687,7 +1674,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var larghezza = new FormField { Name = "Larghezza", Type = FormFieldType.Text };
+                var larghezza = new FormField { Name = "Larghezza", Type = FormFieldType.Number };
                 ctx.FormFields.Add(larghezza);
                 ctx.SaveChanges();
 
@@ -1938,7 +1925,7 @@ namespace Cianfrusaglie.Models {
                 
 
 
-                var etaMinima = new FormField { Name = "Eta Minima", Type = FormFieldType.Text };
+                var etaMinima = new FormField { Name = "Eta Minima", Type = FormFieldType.Number };
                 ctx.FormFields.Add(etaMinima);
                 ctx.SaveChanges();
 
@@ -1993,7 +1980,7 @@ namespace Cianfrusaglie.Models {
 
 
 
-                var cavalli = new FormField { Name = "Cavalli", Type = FormFieldType.Text };
+                var cavalli = new FormField { Name = "Cavalli", Type = FormFieldType.Number };
                 ctx.FormFields.Add(cavalli);
                 ctx.SaveChanges();
 
@@ -2001,7 +1988,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var cilindrata = new FormField { Name = "Cilindrata", Type = FormFieldType.Text };
+                var cilindrata = new FormField { Name = "Cilindrata", Type = FormFieldType.Number };
                 ctx.FormFields.Add(cilindrata);
                 ctx.SaveChanges();
 
@@ -2037,7 +2024,7 @@ namespace Cianfrusaglie.Models {
 
 
 
-                var ram = new FormField { Name = "Ram", Type = FormFieldType.Text };
+                var ram = new FormField { Name = "Ram", Type = FormFieldType.Number };
                 ctx.FormFields.Add(ram);
                 ctx.SaveChanges();
 
@@ -2062,7 +2049,7 @@ namespace Cianfrusaglie.Models {
                 ctx.CategoryFormFields.Add(new CategoryFormField { CategoryId = eComputer.Id, FormFieldId = hardDisk.Id });
                 ctx.SaveChanges();
 
-                var pollici = new FormField { Name = "Pollici", Type = FormFieldType.Text };
+                var pollici = new FormField { Name = "Pollici", Type = FormFieldType.Number };
                 ctx.FormFields.Add(pollici);
                 ctx.SaveChanges();
 
@@ -2090,7 +2077,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
 
-                var memoriaExp = new FormField { Name = "Memoria Espandibile", Type = FormFieldType.Text };
+                var memoriaExp = new FormField { Name = "Memoria Espandibile", Type = FormFieldType.Number };
                 ctx.FormFields.Add(memoriaExp);
                 ctx.SaveChanges();
 
@@ -2195,7 +2182,7 @@ namespace Cianfrusaglie.Models {
                 ctx.SaveChanges();
 
                 
-                var etaAnimale = new FormField { Name = "Eta' Animale", Type = FormFieldType.Text };
+                var etaAnimale = new FormField { Name = "Eta' Animale", Type = FormFieldType.Number };
                 ctx.FormFields.Add(etaAnimale);
                 ctx.SaveChanges();
 

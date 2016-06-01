@@ -83,15 +83,17 @@ namespace Cianfrusaglie {
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
             }
 
-            try {
-                using( var serviceScope =
-                        app.ApplicationServices.GetRequiredService< IServiceScopeFactory >().CreateScope() ) {
-                    serviceScope.ServiceProvider.GetService< ApplicationDbContext >().Database.Migrate();
-                    serviceScope.ServiceProvider.GetService< ApplicationDbContext >().EnsureSeedData();
-                    //TODO togliere in release!!!
-                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().SeedBaseUserTest();
-               }
-            } catch {}
+           try {
+              using(
+                 var serviceScope = app.ApplicationServices.GetRequiredService< IServiceScopeFactory >().CreateScope() ) {
+                 serviceScope.ServiceProvider.GetService< ApplicationDbContext >().Database.Migrate();
+                 serviceScope.ServiceProvider.GetService< ApplicationDbContext >().EnsureSeedData();
+                 //TODO togliere in release!!!
+                 serviceScope.ServiceProvider.GetService< ApplicationDbContext >().SeedBaseUserTest();
+              }
+           } catch( Exception ex ) {
+              
+           }
 
             app.UseIISPlatformHandler( options => options.AuthenticationDescriptions.Clear() );
 
