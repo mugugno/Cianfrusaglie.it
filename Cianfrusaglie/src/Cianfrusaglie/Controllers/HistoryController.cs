@@ -37,12 +37,12 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>Gli annunci chiusi vinti dall'utente</returns>
         public IEnumerable< Announce > GetLoggedUserWonClosedAnnounces() {
+            string userId = User.GetUserId();
+            var loggedUserWonClosedAnnounces = _context.Announces.Include( a => a.ChosenUsers ).Where(
+                announce =>
+                    announce.Closed && userId.Equals(announce.ChosenUsers.OrderByDescending(a => a.ChosenDateTime).FirstOrDefault().ChosenUserId) );
             return
-                _context.Announces.Include( a => a.ChosenUsers ).Where(
-                    announce =>
-                        announce.Closed &&
-                        announce.ChosenUsers.OrderByDescending( a => a.ChosenDateTime ).FirstOrDefault().ChosenUserId
-                            .Equals( User.GetUserId() ) );
+                loggedUserWonClosedAnnounces;
         }
 
         /// <summary>
@@ -50,17 +50,22 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>Gli annunci chiusi interessati all'utente</returns>
         private IEnumerable< Announce > GetLoggedUserInterestedClosedAnnounce() {
-            return
-                _context.Announces.Include( a => a.Interested ).Where( announce => announce.Closed ).SelectMany( announce => announce.Interested,
-                    ( announce, interested ) => new {announce, interested} ).Where(
-                        @t => @t.interested.UserId.Equals( User.GetUserId() ) ).Select( @t => @t.announce );
+            foreach( var entity in _context.Announces.Include( a => a.Interested ) ) {
+                if( entity.Closed  ) {
+                    foreach( var interested in entity.Interested ) {
+                        if( interested.UserId.Equals( User.GetUserId() ) ) {
+                            yield return entity;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Ritorna gli annunci chiusi persi dell'utente (ovvero gli annunci per cui l'utente ha avuto interesse ma non è stato scelto come assegnatario)
         /// </summary>
         /// <returns>gli annunci chiusi persi dell'utente</returns>
-        private IEnumerable< Announce > GetLoggedUserLostAnnounces() {
+        public IEnumerable< Announce > GetLoggedUserLostAnnounces() {
             return GetLoggedUserInterestedClosedAnnounce().Except( GetLoggedUserWonClosedAnnounces() );
         }
 
