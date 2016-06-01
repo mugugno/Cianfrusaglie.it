@@ -35,7 +35,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
     } );
 </script>
 
-<div id="wrapper-announce">
+<div id="wrapper-announce" class="container-fluid">
         <div class="col-md-2"></div>
         <div class="col-md-4">
             <!--IMMAGINI + carosello-->
@@ -99,16 +99,32 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
 @if (!GetAuthor().Id.Equals(User.GetUserId()))
 {
                 <dl class="dl-horizontal">
-
                     <dt>
                         <div class="icon-detail">
-                            Hai domande per @GetAuthor().UserName?
+                            Feedback utente
                         </div>
-                        </dt>
-                    <dd>
-                        <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
+                    </dt>
+                    <dd>     
+                        <div class="star-container">
+                            <div class="star-shape">
+                                <svg viewbox="0 0 61 19">
+                                    <defs>
+                                        <mask id="starmask" x="0" y="0" width="100" height="100">
+                                            <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                            <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                        </mask>
+                                    </defs>
+                                    <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                    <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                </svg>
+                            </div>
+                            @{ string starWidth = ((int)(20 * GetAuthor().FeedbacksMean)).ToString(); }            
+                            <div class="star-colorbar" style="width: @starWidth%">
+                            </div>
+                        </div>
                     </dd>
-                    </dl>
+                </dl>
+                
                         <br />
 }
                         <dl class="dl-horizontal">
@@ -165,12 +181,11 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                             <dt>
                                 Data di Pubblicazione
                             </dt>
-                            @if (!string.IsNullOrEmpty(Model.Description))
-                            {
-                                <dd>
-                                    @Html.DisplayFor(model => model.PublishDate)
-                                </dd>
-                            }
+                           
+                            <dd>
+                                @Html.DisplayFor(model => model.PublishDate)
+                            </dd>
+                            
                             @if (Model.DeadLine != null)
                             {
                                 <dt>
@@ -181,6 +196,17 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                                 </dd>
                             }
                         </dl>
+                        <dl class="dl-horizontal">
+
+                            <dt>
+                                <div class="icon-detail">
+                                    Hai domande per @GetAuthor().UserName?
+                                </div>
+                            </dt>
+                            <dd>
+                                <a class="btn btn-info btn-det" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
+                            </dd>
+                        </dl>
             </div>
         </div>
         <div class="col-md-4">
@@ -189,17 +215,36 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                 
                 <div class="title-detail-items">
                     
-                    <h2 id="titolo">@Html.DisplayName(Model.Title)</h2>
+                    <div id="titolo">
+                        <h2 >@Html.DisplayName(Model.Title)</h2>
+                        
+                        @if (Model.Closed)
+                        {
+                            <h5 style="color:red;"> Annuncio chiuso - </h5>
+                        }
+                        else if (ViewData["choosen"].Equals(true))
+                        {
+                            <h5 style="color:#5cb85c;"> Sei stato scelto - </h5>
+                        }else if (ViewData["someoneIsChoosen"] != null)
+                        {
+                            <h5> In trattativa con un utente - </h5>
+                        }else{
+                            //Aperta
+                        }
+                        <h5 ><span class="utentInteressati">@ViewData["numInterested"]</span> utenti interessati </h5>
 
+                    </div>
                     @if (Model.AuthorId.Equals(User.GetUserId()))
                     {
-                    //Decidere se aggiungere qualche info per l'autore
+                        <a href="~/InterestedAnnounce?id=@Model.Id">
+                            <button class="btn btn-success lovoglio">
+                                <span class="text-det">VIsualizza interessati</span>
+                            </button>
+                        </a>
                     }
-                    else if (Model.Closed)
+                    else if (Model.Closed || ViewData["feedbackGiven"] != null)
                     {
-                    <div class="icon-detail" style="color: grey; align-content: center; cursor: default">
-                        <h3>Annuncio Chiuso!</h3>
-                    </div>
+                        //Non puoi fare niente
                     }
                     else if (ViewData["choosen"].Equals(true))
                     {
@@ -216,9 +261,6 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                         <button name="loVoglio" class="btn btn-success lovoglio">
                             <span class="text-det">Lo voglio</span>
                         </button>
-
-
-
                         <div class="nonLoVoglio">
                             @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; display: none"></span>
                               <span name="seiInteressato" style="color: black; display: none">Sei gi&aacute; interessato all' annuncio</span>*@
@@ -228,12 +270,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                             </button>
                         </div>
                     </form>
-                    @*<div class="icon-detail">
 
-                    </div>*@
-                    @*<div class="icon-detail">
-                    <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]">Contatta</a>
-                    </div>*@
                     }
                     else if (@ViewData["interested"].Equals(true))
                     {
@@ -313,9 +350,9 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
             <div class="col-item" style="padding:1em;">
                 <div id="googleMap" style=""></div>
                 </div>
-           
             </div>
-
+            <br />
+            <br />
 
 
     
@@ -325,6 +362,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
     @*        <a asp-action="Index">Back to List</a>*@
     @*    </p>*@
 </div>
+
 <script type="text/javascript">
 
         var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
@@ -338,6 +376,8 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                 .one('click',
                     '#confirmbtn',
                     function(err) {
+                        var numu=parseInt($('.utentInteressati').text(),10)+1;
+                        $('.utentInteressati').text(numu);
                         $('button[name="loVoglio"]').hide();
                         $('button[name="nonLoVoglio"]').show();
                         $('span[name="spanGliphNonLoVoglioPiu"]').show();
@@ -367,6 +407,8 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                     .one('click',
                         '#confirmbtn',
                         function(err) {
+                            var numu=parseInt($('.utentInteressati').text(),10)-1;
+                            $('.utentInteressati').text(numu);
                             $('button[name="nonLoVoglio"]').hide();
                             $('button[name="loVoglio"]').show();
                             $('span[name="spanGliphNonLoVoglioPiu"]').hide();

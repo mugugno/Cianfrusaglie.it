@@ -164,9 +164,12 @@ namespace Cianfrusaglie.Controllers {
                 ViewData["interested"] = false;
 
             //ViewData Dato un annuncio ho tutti i nomi delle categorie di cui fa parte
-            var announces = _context.Announces.Include(u => u.AnnounceCategories).Single(a => a.Id == announce.Id);
+            var announces = _context.Announces.Include(u => u.AnnounceCategories).Include(p=>p.Author).Single(a => a.Id == announce.Id);
             ViewData["nameAnnounceCategories"] = announces.AnnounceCategories.ToList();
+            ViewData["numInterested"] = announce.Interested.Count;
             ViewData[ "choosen" ] = IsUserChoosenForTheAnnounce( (int) id, User.GetUserId() );
+            ViewData["someoneIsChoosen"] = announce.Interested.Where(u => u.ChooseDate != null).SingleOrDefault();
+            ViewData["feedbackGiven"] = _context.FeedBacks.Where(u => u.AuthorId.Equals(User.GetUserId()) && u.AnnounceId.Equals(announce.Id)).SingleOrDefault();
             return View( announce );
         }
 

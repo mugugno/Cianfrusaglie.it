@@ -29,9 +29,20 @@ li.divider {
     right:2em;
 }
 #wrapper-announce {
-
-    padding-top:4em;
+    padding-top:6em;
 }
+#wrapper-announce .photo{
+
+    max-height:28em;
+    overflow-y:hidden;
+}
+#wrapper-announce dd,dt{
+    margin-bottom:1em;
+}
+#wrapper-announce .star-container, .btn-det{
+    margin-top:-5px;
+}
+
 .title-detail-items{
     margin-top:3em;
 
@@ -83,4 +94,10 @@ li.divider {
     position:absolute;
     bottom:0;
 
+}
+#titolo h5{
+    margin:0;
+    padding:0;
+    color:black;
+      display: inline;
 }
