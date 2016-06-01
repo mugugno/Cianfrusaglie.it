@@ -96,8 +96,8 @@ namespace Cianfrusaglie.Models {
             Title = "Gattino appena nato di pochi mesi",
             Description = "Regalo gattino appena nato perchè non lo posso tenere.",
             PublishDate = DateTime.Now.AddDays( -3 ),
-            Latitude = 44.40678,
-            Longitude = 8.93391,
+            Latitude = 44.4131743,
+            Longitude = 8.8872294,
             MeterRange = 7
          };
 
@@ -125,8 +125,8 @@ namespace Cianfrusaglie.Models {
             Title = "Scarpe all star",
             Description = "Regalo scarpe all star come nuove, mai usate",
             PublishDate = DateTime.Now.AddDays( -3 ),
-            Latitude = 44.40678,
-            Longitude = 8.93391,
+            Latitude = 44.4131743,
+            Longitude = 8.8872294,
             MeterRange = 7
          };
 
@@ -156,8 +156,8 @@ namespace Cianfrusaglie.Models {
             Title = "Tavolo da giardino con sedie",
             Description = "Regalo tavolo da giardino con 8 sedie. Venite a prenderlo se lo volete",
             PublishDate = DateTime.Now.AddDays( -3 ),
-            Latitude = 44.40678,
-            Longitude = 8.93391,
+            Latitude = 44.4168945,
+            Longitude = 8.921603,
             MeterRange = 0
          };
 
@@ -242,8 +242,8 @@ namespace Cianfrusaglie.Models {
             Title = "LP Trololo",
             Description = "Regalo LP Trololo.\nnon mi piace più\noramai è abusato.",
             PublishDate = DateTime.Now.AddDays( -6 ),
-            Latitude = 44.40678,
-            Longitude = 8.93391,
+            Latitude = 44.4168945,
+            Longitude = 8.921603,
             MeterRange = 30
          };
 
@@ -335,8 +335,8 @@ namespace Cianfrusaglie.Models {
             Title = "Triciclo usato",
             Description = "Regalo triciclo usato di mio figlio\nora è grande e non lo usa più",
             PublishDate = DateTime.Now.AddDays( -3 ),
-            Latitude = 44.40678,
-            Longitude = 8.93391,
+            Latitude = 44.4327835,
+            Longitude = 8.75637729999994,
             MeterRange = 15
          };
 
@@ -416,7 +416,7 @@ namespace Cianfrusaglie.Models {
 
 
          var announce13 = new Announce() {
-            Author = user1,
+            Author = user2,
             Title = "Trenino Lego",
             Description = "Regalo treno lego con qualche pezzo mancante",
             PublishDate = DateTime.Now.AddDays( -1 ),
@@ -527,7 +527,7 @@ namespace Cianfrusaglie.Models {
          ctx.SaveChanges();
 
          ctx.AnnounceCategories.Add(
-            new AnnounceCategory() { Announce = announce16, Category = ctx.Categories.Single( p => p.Name == "Tempo libero" ) }
+            new AnnounceCategory() { Announce = announce16, Category = ctx.Categories.Single( p => p.Name == "Tv e schermi" ) }
          );
          ctx.SaveChanges();
 
@@ -542,6 +542,166 @@ namespace Cianfrusaglie.Models {
          ctx.SaveChanges();
 
          ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce16 ) );
+         ctx.SaveChanges();
+
+
+         var announce17 = new Announce() {
+            Author = user2,
+            Title = "Regalo libro Hunger Games",
+            Description = "Regalo libro di hunger games, non mi piace!!!",
+            PublishDate = DateTime.Now.AddMonths( -6 ),
+            Latitude = 44.40678,
+            Longitude = 8.93391,
+            MeterRange = 6
+         };
+
+         ctx.Announces.Add( announce17 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce17, Category = ctx.Categories.Single( p => p.Name == "Libri" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce17, FormField = ctx.FormFields.Single( p => p.Name == "Titolo" ), Value = "Hunger Games" },
+            new AnnounceFormFieldsValues() { Announce = announce17, FormField = ctx.FormFields.Single( p => p.Name == "Genere letterario" ), Value = "romanzi" },
+            new AnnounceFormFieldsValues() { Announce = announce17, FormField = ctx.FormFields.Single( p => p.Name == "Autore" ), Value = "Suzanne Collins" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce17, Url = @"/upload/hungergames.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce17 ) );
+         ctx.SaveChanges();
+
+
+         var announce18 = new Announce() {
+            Author = user1,
+            Title = "The Imitation Game",
+            Description = "Regalo il film su Turing",
+            PublishDate = DateTime.Now.AddMonths( -1 ),
+            Latitude = 44.40678,
+            Longitude = 8.93391,
+            MeterRange = 6
+         };
+
+         ctx.Announces.Add( announce18 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce18, Category = ctx.Categories.Single( p => p.Name == "Film" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce18, FormField = ctx.FormFields.Single( p => p.Name == "Titolo" ), Value = "The Imitation Game" },
+            new AnnounceFormFieldsValues() { Announce = announce18, FormField = ctx.FormFields.Single( p => p.Name == "Genere Film" ), Value = "Drama" },
+            new AnnounceFormFieldsValues() { Announce = announce18, FormField = ctx.FormFields.Single( p => p.Name == "Supporto Film" ), Value = "Dvd" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce18, Url = @"/upload/turing.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce18 ) );
+         ctx.SaveChanges();
+
+
+         var announce19 = new Announce() {
+            Author = user4,
+            Title = "Regalo videogioco Lucius",
+            Description = "è un videogioco su satana",
+            PublishDate = new DateTime( 2016, 6, 6 ),
+            Latitude = 44.40666,
+            Longitude = 8.93666,
+            MeterRange = 6
+         };
+
+         ctx.Announces.Add( announce19 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce19, Category = ctx.Categories.Single( p => p.Name == "Videogiochi" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce19, FormField = ctx.FormFields.Single( p => p.Name == "Titolo" ), Value = "Lucius" },
+            new AnnounceFormFieldsValues() { Announce = announce19, FormField = ctx.FormFields.Single( p => p.Name == "Genere Videogioco" ), Value = "Action/Adventure" },
+            new AnnounceFormFieldsValues() { Announce = announce19, FormField = ctx.FormFields.Single( p => p.Name == "Piattaforma" ), Value = "pc" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce19, Url = @"/upload/lucius.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce19 ) );
+         ctx.SaveChanges();
+
+
+         var announce20 = new Announce() {
+            Author = user1,
+            Title = "Regalo Tablet mediacom",
+            Description = "Regalo tablet mediacom, è diventato vetusto",
+            PublishDate = DateTime.Now.AddDays( -11 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 11
+         };
+
+         ctx.Announces.Add( announce20 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce20, Category = ctx.Categories.Single( p => p.Name == "Computer" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce20, FormField = ctx.FormFields.Single( p => p.Name == "Stato" ), Value = "Scarso" },
+            new AnnounceFormFieldsValues() { Announce = announce20, FormField = ctx.FormFields.Single( p => p.Name == "Tipo Computer" ), Value = "Tablet" },
+            new AnnounceFormFieldsValues() { Announce = announce20, FormField = ctx.FormFields.Single( p => p.Name == "Marca" ), Value = "Mediacom" },
+            new AnnounceFormFieldsValues() { Announce = announce20, FormField = ctx.FormFields.Single( p => p.Name == "Pollici" ), Value = "9" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce20, Url = @"/upload/tablet.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce20 ) );
+         ctx.SaveChanges();
+
+
+         var announce21 = new Announce() {
+            Author = user3,
+            Title = "Regalo polaroid",
+            Description = "Regalo polaroid analogica per disuso, ormai uso fotocamere digitali",
+            PublishDate = DateTime.Now.AddDays( -11 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 11
+         };
+
+         ctx.Announces.Add( announce21 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce21, Category = ctx.Categories.Single( p => p.Name == "Foto e videocamere" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce21, FormField = ctx.FormFields.Single( p => p.Name == "Stato" ), Value = "Ottimo" },
+            new AnnounceFormFieldsValues() { Announce = announce21, FormField = ctx.FormFields.Single( p => p.Name == "Marca" ), Value = "Polaroid" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce21, Url = @"/upload/polaroid.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce21 ) );
          ctx.SaveChanges();
       }
    }
