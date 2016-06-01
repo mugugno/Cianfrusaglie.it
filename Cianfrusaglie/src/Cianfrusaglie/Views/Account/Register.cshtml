@@ -206,19 +206,19 @@ clickBackButton(2)"><span>1</span>Su di te</span>
 
                     <div class="form-group">
                         <label asp-for="UserName" class="control-label">Username</label><br />
-                        <input asp-for="UserName" required="" onchange="this.checkValidity()" class="form-control" />
+                        <input asp-for="UserName" required="" minlength="3" class="form-control" />
                         <span asp-validation-for="UserName" class="text-danger"></span>
 
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                        <input asp-for="Email" type="email" required="" onchange="this.checkValidity()" class="form-control" />
+                        <input asp-for="Email" type="email" required="" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Password" class="control-label">Password</label><br />
-                        <input asp-for="Password" type="password" required="" class="form-control" id="popoverData"/>
+                        <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData"/>
                         <span asp-validation-for="Password" class="text-danger" data-trigger="hover" rel="popover"></span>
                     </div>
                     <div class="form-group">
@@ -247,10 +247,10 @@ clickBackButton(2)"><span>1</span>Su di te</span>
     $("#confirmPassword").change( passwordCheck );
 
     function passwordCheck() {
-        if( $('#popoverData').val().length < 8 ) 
-            $('#popoverData').get(0).setCustomValidity('La password deve contenere almeno 8 caratteri!');
-        else
-            $('#popoverData').get(0).setCustomValidity('');
+        //if( $('#popoverData').val().length < 8 ) 
+        //    $('#popoverData').get(0).setCustomValidity('La password deve contenere almeno 8 caratteri!');
+        //else
+        //    $('#popoverData').get(0).setCustomValidity('');
 
         if( $("#popoverData").val() != $("#confirmPassword").val() )
             $("#confirmPassword").get(0).setCustomValidity('La password di conferma è diversa dalla password!');
