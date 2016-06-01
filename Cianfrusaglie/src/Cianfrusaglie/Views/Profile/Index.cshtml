@@ -4,6 +4,12 @@
 @{
     ViewData["Title"] = "Profilo di " + Model.UserName;
 }
+@functions{
+
+    public List< FeedBack > GetLastFeedBacks() { return ViewData[ "lastFeedbacks" ] as List< FeedBack >; }
+    public List< FeedBack > GetBestFeedBacks() { return ViewData[ "bestFeedbacks" ] as List< FeedBack >; }
+    public List< FeedBack > GetWorstFeedBacks() { return ViewData[ "worstFeedbacks" ] as List< FeedBack >; }
+}
 
 <div class="container-fluid" >
     <div class="col-md-2" >
@@ -18,7 +24,7 @@
                             <img class="img-responsive" src=@Model.ProfileImageUrl />
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <h2>Profilo di @Model.UserName</h2>
                         <!-- Stelline col rating dell'utente (style.css)-->
                         <div class="star-container">
@@ -41,14 +47,17 @@
                         <!-- Fine Stelline col rating dell'utente-->
                         @($"{Model.FeedbacksMean:N1}") su 5 (@Model.FeedbacksCount recensioni)
                         <br>
-                        @Model.Name
-                        @Model.Surname
-                        @Model.BirthDate.ToString("dd MMMM yyyy")
+                        <h4>
+                            @Model.Name
+                            @Model.Surname
+                        </h4>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         @if (User.GetUserId().Equals(Model.Id))
                         {
-                            <a href="~/Preferences/Index">Cambia le mie preferenze</a>
+                            <div style="font-size: 1.2em; margin-top: 1em;">
+                                <a href="~/Preferences/Index" ><div class="glyphicon glyphicon-cog"> </div> Cambia le mie preferenze</a>
+                            </div>
                         }
 
                     </div>
@@ -69,85 +78,450 @@
 
 
 
+    <h3 style="text-align: center" >Recensioni ricevute</h3>
+
+        @if( !Model.ReceivedFeedBacks.Any() ) {
+            <br />
+            <h4 style="text-align: center" >Non ci sono ancora recensioni per questo utente!</h4>
+        } else {
 
 
-        @foreach (var feedback in Model.ReceivedFeedBacks)
-        {
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="col-md-1">
-                        <div class="photo message-avatar panel panel-default">
-                            <img class="img-responsive" src=@feedback.Author.ProfileImageUrl />
-                        </div>
 
-                    </div>
-                    <div class="col-md-2">
-                        @feedback.Author.UserName
-                        <!-- Stelline col rating dell'utente (style.css)-->
-                        <div class="star-container">
-                            <div class="star-shape">
-                                <svg viewbox="0 0 61 19">
-                                    <defs>
-                                        <mask id="starmask" x="0" y="0" width="100" height="100">
-                                            <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
-                                            <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
-                                        </mask>
-                                    </defs>
-                                    <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
-                                    <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
-                                </svg>
+
+            <h3 >Le migliori 3</h3>
+            if (!GetBestFeedBacks().Any())
+            {
+                <h4 style="text-align: center">Non ci sono abbastanza recensioni utili per questo utente!</h4>
+            }
+            else
+            {
+                foreach (var feedback in GetBestFeedBacks())
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="padding-bottom: 7px;">
+                            <div class="col-md-1">
+                                <div class="photo message-avatar panel panel-default">
+                                    <img class="img-responsive" src=@feedback.Author.ProfileImageUrl />
+                                </div>
                             </div>
-                            @{ string starWidth2 = ((int)(20 * feedback.Author.FeedbacksMean)).ToString(); }
-                            <div class="star-colorbar" style="width: @starWidth2%">
+                            <div class="col-md-2" style="margin-top: 0.8em;">
+                                @feedback.Author.UserName
+                                <!-- Stelline col rating dell'utente (style.css)-->
+                                <div class="star-container">
+                                    <div class="star-shape">
+                                        <svg viewbox="0 0 61 19">
+                                            <defs>
+                                                <mask id="starmask" x="0" y="0" width="100" height="100">
+                                                    <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                    <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                                </mask>
+                                            </defs>
+                                            <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                            <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                        </svg>
+                                    </div>
+                                    @{ string starWidth2 = ((int)(20 * feedback.Author.FeedbacksMean)).ToString(); }
+                                    <div class="star-colorbar" style="width: @starWidth2 %">
+                                    </div>
+                                </div>
+                                <!-- Fine Stelline col rating dell'utente-->
+
                             </div>
-                        </div>
-                        <!-- Fine Stelline col rating dell'utente-->
+                            <div class="col-md-8">
+                                <span style="font-size: 0.7em;">Inviato il: @feedback.DateTime.ToString("dd MMMM yyyy")</span>
 
-                    </div>
-                    <div class="col-md-8" >
-                        <div class="panel panel-default" >
-                            <div class="panel-heading" >
-                                @feedback.DateTime.ToString( "dd MMMM yyyy" )
-                                <!-- aggiungere voto di questo feedback in stelline! -->
+                                <span style="float: right; margin-top: -1em;">
+                                    <span>Voto:</span>
+                                    @for (var i = 0; i < feedback.Vote; i++)
+                                    {
+                                        <span style="color: orange; font-size: 2em;">&#x2605;</span>
+                                    }
+                                </span>
+
+                                <div class="panel panel-default">
+
+
+
+                                    <div class="panel-body">
+                                        @feedback.Text
+                                    </div>
+                                </div>
+
+                                <div style="font-size: 0.7em; float: right; margin-top: -10px;">Sei d'accordo? Vota!</div>
                             </div>
-                            <div class="panel-body" >
-                                @feedback.Text
-                            </div>
-                        </div>
 
+                            <div class="col-md-1">
+                                @if (feedback.AuthorId.Equals(User.GetUserId()))
+                                {
+                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
 
-                    </div>
+                                    <br />
 
-                    <div class="col-md-1" >
-                        <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true">
-                            <div class="glyphicon glyphicon-thumbs-up" style="color: orange; font-size: 2em; text-align: center;" ></div>
-                        </a>
-
-                        <br />
-                        <!-- inserire feedback.Usefulness -->
-                        @if( feedback.Usefulness >= 0 ) {
-                            <p>+@feedback.Usefulness</p>
-                        }
-                        else
-                        {
-                            <p>@feedback.Usefulness</p>
-                        }
-                        <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false">
-                            <div class="glyphicon glyphicon-thumbs-down" style="color: orange; font-size: 2em; text-align: center;" ></div>
-                        </a>
-</div>
-
-                </div>
-            </div>
-
-
-
-
-
-
-
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-down"></div>
 
                                 }
+                                else if (!feedback.UserFeedbackScores.Any())
+                                {
+                                    <!-- caso normale non colorati nessuno dei due -->
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-up"></div>
+                                    </a>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-down"></div>
+                                    </a>
+
+                                }
+                                else if (feedback.UserFeedbackScores.First().Useful)
+                                {
+                                    <!-- colora di hover perenne il thumb UP -->
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-down"></div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <!-- colora di hover perenne il thumb DOWN -->
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-up"></div>
+                                    </a>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-down"></div>
+
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                                            }
+                                        }
+
+            <h3>Le peggiori 3</h3>
+            if (!GetWorstFeedBacks().Any())
+            {
+                <h4 style="text-align: center">Non ci sono abbastanza recensioni utili per questo utente!</h4>
+            }
+            else
+            {
+                foreach (var feedback in GetWorstFeedBacks())
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="padding-bottom: 7px;">
+                            <div class="col-md-1">
+                                <div class="photo message-avatar panel panel-default">
+                                    <img class="img-responsive" src=@feedback.Author.ProfileImageUrl />
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 0.8em;">
+                                @feedback.Author.UserName
+                                <!-- Stelline col rating dell'utente (style.css)-->
+                                <div class="star-container">
+                                    <div class="star-shape">
+                                        <svg viewbox="0 0 61 19">
+                                            <defs>
+                                                <mask id="starmask" x="0" y="0" width="100" height="100">
+                                                    <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                    <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                                </mask>
+                                            </defs>
+                                            <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                            <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                        </svg>
+                                    </div>
+                                    @{ string starWidth2 = ((int)(20 * feedback.Author.FeedbacksMean)).ToString(); }
+                                    <div class="star-colorbar" style="width: @starWidth2 %">
+                                    </div>
+                                </div>
+                                <!-- Fine Stelline col rating dell'utente-->
+
+                            </div>
+                            <div class="col-md-8">
+                                <span style="font-size: 0.7em;">Inviato il: @feedback.DateTime.ToString("dd MMMM yyyy")</span>
+
+                                <span style="float: right; margin-top: -1em;">
+                                    <span>Voto:</span>
+                                    @for (var i = 0; i < feedback.Vote; i++)
+                                    {
+                                        <span style="color: orange; font-size: 2em;">&#x2605;</span>
+                                    }
+                                </span>
+
+                                <div class="panel panel-default">
+
+
+
+                                    <div class="panel-body">
+                                        @feedback.Text
+                                    </div>
+                                </div>
+
+                                <div style="font-size: 0.7em; float: right; margin-top: -10px;">Sei d'accordo? Vota!</div>
+                            </div>
+
+                            <div class="col-md-1">
+                                @if (feedback.AuthorId.Equals(User.GetUserId()))
+                                {
+                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-down"></div>
+
+                                }
+                                else if (!feedback.UserFeedbackScores.Any())
+                                {
+                                    <!-- caso normale non colorati nessuno dei due -->
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-up"></div>
+                                    </a>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-down"></div>
+                                    </a>
+
+                                }
+                                else if (feedback.UserFeedbackScores.First().Useful)
+                                {
+                                    <!-- colora di hover perenne il thumb UP -->
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-down"></div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <!-- colora di hover perenne il thumb DOWN -->
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true">
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-up"></div>
+                                    </a>
+
+                                    <br />
+
+                                    if (feedback.Usefulness > 0)
+                                    {
+                                        <p>+@feedback.Usefulness</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-down"></div>
+
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                                            }
+                                        }
+
+            <h3>Le ultime 3</h3>
+            if (!GetLastFeedBacks().Any())
+            {
+                <h4 style="text-align: center">Non ci sono abbastanza recensioni utili per questo utente!</h4>
+            }
+            else
+            {
+                foreach (var feedback in GetLastFeedBacks())
+                {
+                    <div class="panel panel-default" >
+                        <div class="panel-body" style="padding-bottom: 7px;" >
+                            <div class="col-md-1" >
+                                <div class="photo message-avatar panel panel-default" >
+                                    <img class="img-responsive" src=@feedback.Author.ProfileImageUrl />
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 0.8em;" >
+                                @feedback.Author.UserName
+                                <!-- Stelline col rating dell'utente (style.css)-->
+                                <div class="star-container" >
+                                    <div class="star-shape" >
+                                        <svg viewbox="0 0 61 19" >
+                                            <defs>
+                                                <mask id="starmask" x="0" y="0" width="100" height="100" >
+                                                    <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                    <text text-anchor="middle" x="50%" y="70%" dy="1" > &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                                </mask>
+                                            </defs>
+                                            <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                            <text text-anchor="middle" x="50%" y="70%" dy="1" color="black" > &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                        </svg>
+                                    </div>
+                                    @{ string starWidth2 = ( (int) ( 20 * feedback.Author.FeedbacksMean ) ).ToString(); }
+                                    <div class="star-colorbar" style="width: @starWidth2 %" >
+                                    </div>
+                                </div>
+                                <!-- Fine Stelline col rating dell'utente-->
+
+                            </div>
+                            <div class="col-md-8" >
+                                <span style="font-size: 0.7em;">Inviato il: @feedback.DateTime.ToString( "dd MMMM yyyy" )</span>
+
+                                <span style="float: right; margin-top: -1em;">
+                            <span>Voto:</span>
+                            @for( var i = 0; i < feedback.Vote; i++ ) {
+                                <span style="color: orange; font-size: 2em;">&#x2605;</span>
+                            }
+                        </span>
+
+                                <div class="panel panel-default" >
+
+
+
+                                    <div class="panel-body" >
+                                        @feedback.Text
+                                    </div>
+                                </div>
+
+                                <div style="font-size: 0.7em; float: right; margin-top: -10px;" >Sei d'accordo? Vota!</div>
+                            </div>
+
+                            <div class="col-md-1" >
+                                @if( feedback.AuthorId.Equals( User.GetUserId() ) ) {
+                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up" ></div>
+
+                                    <br />
+
+                                    if( feedback.Usefulness > 0 ) {
+                                        <p>+@feedback.Usefulness</p>
+                                    } else {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-down" ></div>
+
+                                } else if( !feedback.UserFeedbackScores.Any() ) {
+                                    <!-- caso normale non colorati nessuno dei due -->
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true" >
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-up" ></div>
+                                    </a>
+
+                                    <br />
+
+                                    if( feedback.Usefulness > 0 ) {
+                                        <p>+@feedback.Usefulness</p>
+                                    } else {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false" >
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-down" ></div>
+                                    </a>
+
+                                } else if( feedback.UserFeedbackScores.First().Useful ) {
+                                    <!-- colora di hover perenne il thumb UP -->
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up" ></div>
+
+                                    <br />
+
+                                    if( feedback.Usefulness > 0 ) {
+                                        <p>+@feedback.Usefulness</p>
+                                    } else {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false" >
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-down" ></div>
+                                    </a>
+                                } else {
+                                    <!-- colora di hover perenne il thumb DOWN -->
+                                    <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true" >
+                                        <div class="feedback-thumbs glyphicon glyphicon-thumbs-up" ></div>
+                                    </a>
+
+                                    <br />
+
+                                    if( feedback.Usefulness > 0 ) {
+                                        <p>+@feedback.Usefulness</p>
+                                    } else {
+                                        <p>@feedback.Usefulness</p>
+                                    }
+                                    <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-down" ></div>
+
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            }
+        }
+
+
+
+
     </div>
 
 </div>

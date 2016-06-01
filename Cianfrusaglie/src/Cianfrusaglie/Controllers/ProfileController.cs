@@ -48,10 +48,17 @@ namespace Cianfrusaglie.Controllers
             }
             
             var user = _context.Users.Include( u=> u.ReceivedFeedBacks ).First( u => u.Id.Equals( userId ) );
-            foreach( var feedback in user.ReceivedFeedBacks ) {
-                feedback.Author = _context.Users.Single( u => u.Id.Equals( feedback.AuthorId ) );
+            var allFeedbacks = user.ReceivedFeedBacks;
+            foreach (var feedback in allFeedbacks)
+            {
+                feedback.Author = _context.Users.Single(u => u.Id.Equals(feedback.AuthorId));
+                feedback.UserFeedbackScores = _context.UserFeedbackScores.Where(s => s.FeedBackId.Equals(feedback.Id) && s.AuthorId.Equals(User.GetUserId())).ToList();
 
             }
+            ViewData[ "bestFeedbacks"] = allFeedbacks.Where( f=> f.Vote > 3 && f.Usefulness >= 0 ).OrderByDescending( f => f.Usefulness ).Take( 3 ).ToList();
+            ViewData [ "worstFeedbacks" ] = allFeedbacks.Where(f => f.Vote < 3 && f.Usefulness >= 0).OrderByDescending(f => f.Usefulness).Take( 3 ).ToList();
+            ViewData [ "lastFeedbacks" ] = allFeedbacks.OrderByDescending( f => f.DateTime ).Take( 3 ).ToList();
+
             CommonFunctions.SetRootLayoutViewData(this, _context);
             CommonFunctions.SetMacroCategoriesViewData(this, _context);
             return View(user);

@@ -169,3 +169,19 @@ button { padding: 0; }
     max-height: 18em;
     overflow: hidden;
 }
+
+.feedback-thumbs {
+    color: orange; 
+    font-size: 2em; 
+    text-align: center;
+}
+
+.feedback-thumbs:hover {
+    color: dodgerblue;
+}
+
+.feedback-thumbs-permanent-hover {
+    color: dodgerblue;
+    font-size: 2em; 
+    text-align: center;
+}
