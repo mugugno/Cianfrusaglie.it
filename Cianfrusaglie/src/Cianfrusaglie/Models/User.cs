@@ -33,6 +33,7 @@ namespace Cianfrusaglie.Models {
         public virtual ICollection< FeedBack > ReceivedFeedBacks { get; set; }
         public virtual ICollection< AnnounceChosen > ChosenUsers { get; set; }
         public virtual ICollection< UserCategoryPreferences > CategoryPreferenceses { get; set; }
+        public virtual ICollection< UserFeedbackScore > FeedbackScores { get; set; }
         public virtual int FeedbacksCount { get; set; }
         public virtual double FeedbacksMean { get; set; }
         public virtual int FeedbacksSum { get; set; }

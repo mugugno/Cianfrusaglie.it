@@ -24,6 +24,7 @@ namespace Cianfrusaglie.Models {
         public DbSet< UserGatHistogram > UserGatHistograms { get; set; }
         public DbSet< UserCategoryPreferences > UserCategoryPreferenceses { get; set; }
         public DbSet< AnnounceChosen > AnnounceChosenUsers { get; set; }
+        public DbSet<UserFeedbackScore> UserFeedbackScores { get; set; }
 
         protected override void OnModelCreating( ModelBuilder builder ) {
             base.OnModelCreating( builder );

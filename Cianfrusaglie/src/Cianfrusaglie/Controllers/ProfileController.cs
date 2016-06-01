@@ -51,5 +51,29 @@ namespace Cianfrusaglie.Controllers
             CommonFunctions.SetMacroCategoriesViewData(this, _context);
             return View(user);
         }
+
+        public IActionResult VoteFeedbackUsefulness(int feedbackId, bool useful ) {
+           
+            var feedback = _context.FeedBacks.SingleOrDefault(f => f.Id.Equals(feedbackId));
+            if ( feedback == null )
+                return HttpBadRequest();
+            if( !LoginChecker.HasLoggedUser( this ) )
+                return HttpBadRequest();
+            var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
+            var lastScore =
+                _context.UserFeedbackScores.SingleOrDefault(
+                    s => s.AuthorId.Equals( user.Id ) && s.FeedBackId.Equals( feedback.Id ) );
+            if( lastScore != null ) {
+                if( lastScore.Useful.Equals( useful ) )
+                    return HttpBadRequest();
+                lastScore.Useful = useful;
+            } else {
+                var score = new UserFeedbackScore() { Author = user, FeedBack = feedback, Useful = useful };
+                _context.UserFeedbackScores.Add(score);
+            }
+            
+            _context.SaveChanges();
+            return View();
+        }
     }
 }
