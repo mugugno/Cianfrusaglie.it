@@ -214,5 +214,21 @@ namespace Cianfrusaglie.Tests {
             Context.Messages.Add( msg1 );
             Context.SaveChanges();
         }
+
+        protected void SetUserInterestedToAnnounce( Announce announce, User user ) {
+            Context.Interested.Add( new Interested {Announce = announce, DateTime = DateTime.Now, User = user} );
+            Context.SaveChanges();
+        }
+
+        protected void SetUserInterestedToAnnounceAndChoosen( Announce announce, User user, int daysToSubstractToChoosenDateTime ) {
+            SetUserInterestedToAnnounce( announce, user );
+            var interestedUser = Context.Interested.Single( i => i.User.Id.Equals( user.Id ) && i.AnnounceId.Equals( announce.Id ));
+            Context.AnnounceChosenUsers.Add( new AnnounceChosen {
+                Announce = announce,
+                ChosenDateTime = DateTime.Now - new TimeSpan(daysToSubstractToChoosenDateTime, 0, 0, 0),
+                ChosenUser = interestedUser.User
+            } );
+            Context.SaveChanges();
+        }
     }
 }

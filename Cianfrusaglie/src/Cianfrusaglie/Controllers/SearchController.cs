@@ -27,13 +27,15 @@ namespace Cianfrusaglie.Controllers {
          return View();
       }
 
-      /// <summary>
-      ///    Restituisce la pagina con i risultati della ricerca.
-      /// </summary>
-      /// <param name="title">La stringa scritta nella barra di ricerca</param>
-      /// <param name="categories">Le categorie selezionate</param>
-      /// <returns>La View con i risultati della ricerca</returns>
-      public IActionResult Index( string title, IEnumerable< int > categories, int range = 0, int page = 0 ) {
+       /// <summary>
+       ///    Restituisce la pagina con i risultati della ricerca.
+       /// </summary>
+       /// <param name="title">La stringa scritta nella barra di ricerca</param>
+       /// <param name="categories">Le categorie selezionate</param>
+       /// <param name="range">Il range in Kilometri. Di default è 0.</param>
+       /// <param name="page">La pagina da visualizzare.</param>
+       /// <returns>La View con i risultati della ricerca</returns>
+       public IActionResult Index( string title, IEnumerable< int > categories, int range = 0, int page = 0 ) {
          User user = null;
          if( LoginChecker.HasLoggedUser( this ) )
             user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
@@ -172,7 +174,7 @@ namespace Cianfrusaglie.Controllers {
                textTask = Task.Run( () => TitleBasedSearch( title ) );
          }
 
-         var catResults = categoryTask == null ? new List< Announce >() : categoryTask.Result.ToList();
+         var catResults = categoryTask?.Result.ToList() ?? new List< Announce >();
 
          foreach( var ann in catResults )
             ann.Author = _context.Users.Single( u => u.Id == ann.AuthorId );
@@ -212,11 +214,14 @@ namespace Cianfrusaglie.Controllers {
       /// <param name="title">La stringa da utilizzare come confronto</param>
       /// <returns>IEnumerable di Annunci contenente i risultati della ricerca</returns>
       public IEnumerable< Announce > TitleBasedSearch( string title ) {
-         return
-            _context.Announces.Include( a => a.Author ).Where(
-               announce =>
-                  !announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) &&
-                  AreSimilar( announce.Title, title ) );
+          var titleBasedSearch = _context.Announces.Include( a => a.Author ).Include( a => a.AnnouncesGats ).Where(
+              announce =>
+                  (!announce.Closed && ( announce.DeadLine == null || announce.DeadLine > DateTime.Now ) &&
+                  AreSimilar( announce.Title, title )) 
+                  ||
+                  announce.AnnouncesGats.Any(ag => AreSimilar(ag.Gat.Text, title)));
+          
+          return titleBasedSearch;
       }
 
       public IEnumerable< Announce > DistanceSearch( IEnumerable< Announce > announces, double latitude,

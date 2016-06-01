@@ -2,6 +2,7 @@
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
+using Cianfrusaglie.ViewModels.History;
 
 namespace Cianfrusaglie.Models {
     public class ApplicationDbContext : IdentityDbContext< User, IdentityRole, string > {
@@ -109,5 +110,7 @@ namespace Cianfrusaglie.Models {
            builder.Entity< UserCategoryPreferences >().HasOne( uc => uc.User ).WithMany( u => u.CategoryPreferenceses ).OnDelete(
                 DeleteBehavior.Restrict );
       }
+
+        public DbSet<MyHistoryViewModel> MyHistoryViewModel { get; set; }
     }
 }
