@@ -146,7 +146,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                                         </div>
                                     </div>
                                     <div class="col-sm-8">
-                                        @GetAuthor().UserName
+                                        <a href="~/Profile/Index?userId=@GetAuthor().Id">@GetAuthor().UserName</a>
                                     </div>
                                 </dd>
                             }
