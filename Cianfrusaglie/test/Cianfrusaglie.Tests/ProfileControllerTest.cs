@@ -53,8 +53,8 @@ namespace Cianfrusaglie.Tests
         }
 
         [Theory]
-        [InlineData( true ), InlineData( false )]
-        public void UserSetFeedbackIsUsefulAndIsOk(bool useful) {
+        [InlineData( true, 1 ), InlineData( false,-1 )]
+        public void UserSetFeedbackIsUsefulAndIsOk(bool useful, int expected) {
             var announce = Context.Announces.First( a => !a.Closed && a.Author.UserName.Equals( FirstUserName ) );
             var feedbackAuthor = Context.Users.First( a => a.UserName.Equals(SecondUserName));
             var feedback = CreateNewFeedback( announce, feedbackAuthor, announce.Author );
@@ -66,6 +66,7 @@ namespace Cianfrusaglie.Tests
             var vote = Context.UserFeedbackScores.Single( f => f.AuthorId.Equals(thirdUser.Id) && f.FeedBackId.Equals(feedback.Id) );
             Assert.Equal(vote.Useful,useful );
             Assert.IsType< ViewResult >( result );
+            Assert.Equal( feedback.Usefulness, expected );
         }
 
         [Fact]
@@ -89,6 +90,7 @@ namespace Cianfrusaglie.Tests
             var announce = Context.Announces.First(a => !a.Closed && a.Author.UserName.Equals(FirstUserName));
             var feedbackAuthor = Context.Users.First(a => a.UserName.Equals(SecondUserName));
             var feedback = CreateNewFeedback(announce, feedbackAuthor, announce.Author);
+            var oldScore = feedback.Usefulness;
             Context.FeedBacks.Add(feedback);
             Context.SaveChanges();
             var thirdUser = Context.Users.Single( u => u.UserName.Equals( ThirdUserName ) );
@@ -98,6 +100,7 @@ namespace Cianfrusaglie.Tests
             var result = profileController.VoteFeedbackUsefulness(feedback.Id, !choice);
             Assert.Equal(vote.Useful, !choice);
             Assert.IsType<ViewResult>(result);
+            Assert.NotEqual( oldScore, feedback.Usefulness );
         }
 
         [Fact]

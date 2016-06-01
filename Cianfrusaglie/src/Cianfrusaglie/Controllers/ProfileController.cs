@@ -69,8 +69,10 @@ namespace Cianfrusaglie.Controllers
                 if( lastScore.Useful.Equals( useful ) )
                     return HttpBadRequest();
                 lastScore.Useful = useful;
+                feedback.Usefulness += useful ? 2 : -2;
             } else {
                 var score = new UserFeedbackScore() { Author = user, FeedBack = feedback, Useful = useful };
+                feedback.Usefulness += useful ? 1 : -1;
                 _context.UserFeedbackScores.Add(score);
             }
             
