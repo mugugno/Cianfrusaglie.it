@@ -46,7 +46,12 @@ namespace Cianfrusaglie.Controllers
             if( userId == null ) {
                 userId = User.GetUserId();
             }
-            User user = _context.Users.Include( u=> u.ReceivedFeedBacks ).First( u => u.Id.Equals( userId ) );
+            
+            var user = _context.Users.Include( u=> u.ReceivedFeedBacks ).First( u => u.Id.Equals( userId ) );
+            foreach( var feedback in user.ReceivedFeedBacks ) {
+                feedback.Author = _context.Users.Single( u => u.Id.Equals( feedback.AuthorId ) );
+
+            }
             CommonFunctions.SetRootLayoutViewData(this, _context);
             CommonFunctions.SetMacroCategoriesViewData(this, _context);
             return View(user);
