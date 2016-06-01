@@ -119,7 +119,10 @@
                     </div>
 
                     <div class="col-md-1" >
-                        <div href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true" class="glyphicon glyphicon-thumbs-up" style="color: orange; font-size: 2em; text-align: center;"></div>
+                        <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=true">
+                            <div class="glyphicon glyphicon-thumbs-up" style="color: orange; font-size: 2em; text-align: center;" ></div>
+                        </a>
+
                         <br />
                         <!-- inserire feedback.Usefulness -->
                         @if( feedback.Usefulness >= 0 ) {
@@ -127,11 +130,12 @@
                         }
                         else
                         {
-                            <p>-@feedback.Usefulness</p>
+                            <p>@feedback.Usefulness</p>
                         }
-
-                        <div href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false" class="glyphicon glyphicon-thumbs-down" style="color: orange; font-size: 2em; text-align: center;"></div>
-                    </div>
+                        <a href="~/Profile/VoteFeedbackUsefulness?feedbackId=@feedback.Id&useful=false">
+                            <div class="glyphicon glyphicon-thumbs-down" style="color: orange; font-size: 2em; text-align: center;" ></div>
+                        </a>
+</div>
 
                 </div>
             </div>
