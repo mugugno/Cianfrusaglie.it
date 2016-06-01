@@ -38,7 +38,19 @@ namespace Cianfrusaglie.Tests
             Assert.IsType<BadRequestResult>(result);
         }
 
-
+        [Fact]
+        public void UserTriesToVoteForHisFeedbackAndFails()
+        {
+            var announce = Context.Announces.First(a => !a.Closed && a.Author.UserName.Equals(FirstUserName));
+            var feedbackAuthor = Context.Users.First(a => a.UserName.Equals(SecondUserName));
+            var feedback = CreateNewFeedback(announce, feedbackAuthor, announce.Author);
+            var user = Context.Users.Single( u => u.UserName.Equals( feedback.Author.UserName ) );
+            Context.FeedBacks.Add(feedback);
+            Context.SaveChanges();
+            var profileController = CreateProfileController(user.Id);
+            var result = profileController.VoteFeedbackUsefulness(feedback.Id, true);
+            Assert.IsType<BadRequestResult>(result);
+        }
 
         [Theory]
         [InlineData( true ), InlineData( false )]
@@ -48,9 +60,10 @@ namespace Cianfrusaglie.Tests
             var feedback = CreateNewFeedback( announce, feedbackAuthor, announce.Author );
             Context.FeedBacks.Add( feedback );
             Context.SaveChanges();
-            var profileController = CreateProfileController( feedbackAuthor.Id );
+            var thirdUser = Context.Users.Single(u => u.UserName.Equals(ThirdUserName));
+            var profileController = CreateProfileController(thirdUser.Id);
             var result = profileController.VoteFeedbackUsefulness( feedback.Id, useful );
-            var vote = Context.UserFeedbackScores.Single( f => f.AuthorId.Equals(feedbackAuthor.Id) && f.FeedBackId.Equals(feedback.Id) );
+            var vote = Context.UserFeedbackScores.Single( f => f.AuthorId.Equals(thirdUser.Id) && f.FeedBackId.Equals(feedback.Id) );
             Assert.Equal(vote.Useful,useful );
             Assert.IsType< ViewResult >( result );
         }
@@ -62,9 +75,10 @@ namespace Cianfrusaglie.Tests
             var feedback = CreateNewFeedback(announce, feedbackAuthor, announce.Author);
             Context.FeedBacks.Add(feedback);
             Context.SaveChanges();
-            var profileController = CreateProfileController(feedbackAuthor.Id);
+            var thirdUser = Context.Users.Single(u => u.UserName.Equals(ThirdUserName));
+            var profileController = CreateProfileController(thirdUser.Id);
             profileController.VoteFeedbackUsefulness(feedback.Id, true);
-            var vote = Context.UserFeedbackScores.Single(f => f.AuthorId.Equals(feedbackAuthor.Id) && f.FeedBackId.Equals(feedback.Id));
+            var vote = Context.UserFeedbackScores.Single(f => f.AuthorId.Equals(thirdUser.Id) && f.FeedBackId.Equals(feedback.Id));
             var result = profileController.VoteFeedbackUsefulness(feedback.Id, true);
             Assert.IsType<BadRequestResult>(result);
         }
@@ -77,9 +91,10 @@ namespace Cianfrusaglie.Tests
             var feedback = CreateNewFeedback(announce, feedbackAuthor, announce.Author);
             Context.FeedBacks.Add(feedback);
             Context.SaveChanges();
-            var profileController = CreateProfileController(feedbackAuthor.Id);
+            var thirdUser = Context.Users.Single( u => u.UserName.Equals( ThirdUserName ) );
+            var profileController = CreateProfileController(thirdUser.Id);
             profileController.VoteFeedbackUsefulness(feedback.Id, choice);
-            var vote = Context.UserFeedbackScores.Single(f => f.AuthorId.Equals(feedbackAuthor.Id) && f.FeedBackId.Equals(feedback.Id));
+            var vote = Context.UserFeedbackScores.Single(f => f.AuthorId.Equals(thirdUser.Id) && f.FeedBackId.Equals(feedback.Id));
             var result = profileController.VoteFeedbackUsefulness(feedback.Id, !choice);
             Assert.Equal(vote.Useful, !choice);
             Assert.IsType<ViewResult>(result);

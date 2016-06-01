@@ -54,12 +54,14 @@ namespace Cianfrusaglie.Controllers
 
         public IActionResult VoteFeedbackUsefulness(int feedbackId, bool useful ) {
            
-            var feedback = _context.FeedBacks.SingleOrDefault(f => f.Id.Equals(feedbackId));
+            var feedback = _context.FeedBacks.Include(f=>f.Author).SingleOrDefault(f => f.Id.Equals(feedbackId));
             if ( feedback == null )
                 return HttpBadRequest();
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
             var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
+            if(feedback.Author.Id.Equals( user.Id ))
+                return HttpBadRequest();
             var lastScore =
                 _context.UserFeedbackScores.SingleOrDefault(
                     s => s.AuthorId.Equals( user.Id ) && s.FeedBackId.Equals( feedback.Id ) );
