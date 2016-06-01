@@ -16,31 +16,15 @@ namespace Cianfrusaglie.Tests
             return new FeedbackController( Context ) {ActionContext = MockActionContextForLogin( userId )};
         }
 
-        private static FeedBack CreateNewFeedback(Announce announce, User feedbackAuthor, User feedbackReceiver)
-        {
-            return new FeedBack
-            {
-                Announce = announce,
-                AnnounceId = announce.Id,
-                Author = feedbackAuthor,
-                AuthorId = feedbackAuthor.Id,
-                DateTime = DateTime.Now,
-                ReceiverId = feedbackReceiver.Id,
-                Receiver = feedbackReceiver,
-                Vote = 2,
-                Text = "buu"
-            };
-        }
-
         [Fact]
-        public void InterestedUserGivesFeedbackToAuthorAndIsOk() {
-            
-            var announce = Context.Announces.Include( a => a.Interested ).First( a => a.Closed == false && a.DeadLine == null &&  a.Author.UserName.Equals( FirstUserName ) );
-            var interestedUser = Context.Users.First( u => !u.UserName.Equals( FirstUserName ) );
-            SetUserInterestedToAnnounce( announce, interestedUser );
-            var feedbackController = CreateFeedbackController( interestedUser.Id );
-            var actionResult = feedbackController.Create( CreateNewFeedback( announce, interestedUser, announce.Author ) );
-            Assert.IsType< RedirectToActionResult >( actionResult );
+        public void InterestedUserGivesFeedbackToAuthorAndFails()
+        {
+            var announce = Context.Announces.Include(a => a.Interested).First(a => a.Closed == false && a.DeadLine == null && a.Author.UserName.Equals(FirstUserName));
+            var interestedUser = Context.Users.First(u => !u.UserName.Equals(FirstUserName));
+            SetUserInterestedToAnnounce(announce, interestedUser);
+            var feedbackController = CreateFeedbackController(interestedUser.Id);
+            var actionResult = feedbackController.Create(CreateNewFeedback(announce, interestedUser, announce.Author));
+            Assert.IsType<BadRequestResult>(actionResult);
         }
 
         [Fact]

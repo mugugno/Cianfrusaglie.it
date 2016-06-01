@@ -34,10 +34,6 @@ html, body {
 }
 a, h1, h2, h3, h4, h5, h6 {font-family: 'Roboto', sans-serif; }
 
-p {
-   font-family: 'Roboto', sans-serif;
-    color: #909090 !important;
-}
 
 button { padding: 0; }
 #title {
@@ -168,3 +164,8 @@ button { padding: 0; }
                                 </div>
                             </div>
 */
+
+.profile-avatar {
+    max-height: 18em;
+    overflow: hidden;
+}

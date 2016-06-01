@@ -215,6 +215,22 @@ namespace Cianfrusaglie.Tests {
             Context.SaveChanges();
         }
 
+        protected FeedBack CreateNewFeedback(Announce announce, User feedbackAuthor, User feedbackReceiver)
+        {
+            return new FeedBack
+            {
+                Announce = announce,
+                AnnounceId = announce.Id,
+                Author = feedbackAuthor,
+                AuthorId = feedbackAuthor.Id,
+                DateTime = DateTime.Now,
+                ReceiverId = feedbackReceiver.Id,
+                Receiver = feedbackReceiver,
+                Vote = 2,
+                Text = "buu"
+            };
+        }
+
         protected void SetUserInterestedToAnnounce( Announce announce, User user ) {
             Context.Interested.Add( new Interested {Announce = announce, DateTime = DateTime.Now, User = user} );
             Context.SaveChanges();

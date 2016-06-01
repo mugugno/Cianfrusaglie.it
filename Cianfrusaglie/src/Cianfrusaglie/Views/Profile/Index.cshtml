@@ -1,9 +1,149 @@
-﻿@model Cianfrusaglie.Models.User
+﻿@using System.Security.Claims
+@model Cianfrusaglie.Models.User
 
 @{
     ViewData["Title"] = "Profilo di " + Model.UserName;
 }
 
-<div id="wrap" >
-   @Model.UserName
+<div class="container-fluid" >
+    <div class="col-md-2" >
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="photo profile-avatar panel panel-default">
+                            <img class="img-responsive" src=@Model.ProfileImageUrl />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>Profilo di @Model.UserName</h2>
+                        <!-- Stelline col rating dell'utente (style.css)-->
+                        <div class="star-container">
+                            <div class="star-shape">
+                                <svg viewbox="0 0 61 19">
+                                    <defs>
+                                        <mask id="starmask" x="0" y="0" width="100" height="100">
+                                            <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                            <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                        </mask>
+                                    </defs>
+                                    <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                    <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                </svg>
+                            </div>
+                            @{ string starWidth = ((int)(20 * Model.FeedbacksMean)).ToString(); }
+                            <div class="star-colorbar" style="width: @starWidth%">
+                            </div>
+                        </div>
+                        <!-- Fine Stelline col rating dell'utente-->
+                        @($"{Model.FeedbacksMean:N1}") su 5 (@Model.FeedbacksCount recensioni)
+                        <br>
+                        @Model.Name
+                        @Model.Surname
+                        @Model.BirthDate.ToString("dd MMMM yyyy")
+                    </div>
+                    <div class="col-md-3">
+                        @if (User.GetUserId().Equals(Model.Id))
+                        {
+                            <a href="~/Preferences/Index">Cambia le mie preferenze</a>
+                        }
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @foreach (var feedback in Model.ReceivedFeedBacks)
+        {
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-1">
+                        <div class="photo message-avatar panel panel-default">
+                            <img class="img-responsive" src=@feedback.Author.ProfileImageUrl />
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+                        @feedback.Author.UserName
+                        <!-- Stelline col rating dell'utente (style.css)-->
+                        <div class="star-container">
+                            <div class="star-shape">
+                                <svg viewbox="0 0 61 19">
+                                    <defs>
+                                        <mask id="starmask" x="0" y="0" width="100" height="100">
+                                            <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                            <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                        </mask>
+                                    </defs>
+                                    <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                    <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                </svg>
+                            </div>
+                            @{ string starWidth2 = ((int)(20 * feedback.Author.FeedbacksMean)).ToString(); }
+                            <div class="star-colorbar" style="width: @starWidth2%">
+                            </div>
+                        </div>
+                        <!-- Fine Stelline col rating dell'utente-->
+
+                    </div>
+                    <div class="col-md-8" >
+                        <div class="panel panel-default" >
+                            <div class="panel-heading" >
+                                @feedback.DateTime.ToString( "dd MMMM yyyy" )
+                                <!-- aggiungere voto di questo feedback in stelline! -->
+                            </div>
+                            <div class="panel-body" >
+                                @feedback.Text
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md-1" >
+                        <div class="glyphicon glyphicon-thumbs-up" style="color: orange; font-size: 2em; text-align: center;"></div>
+                        <br />
+                        <!-- inserire feedback.Usefulness -->
+                        @if( feedback.Vote >= 0 ) {
+                            <p>+@feedback.Vote</p>
+                        }
+                        else
+                        {
+                            <p>-@feedback.Vote</p>
+                        }
+
+                        <div class="glyphicon glyphicon-thumbs-down" style="color: orange; font-size: 2em; text-align: center;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+                                }
+    </div>
+
 </div>
