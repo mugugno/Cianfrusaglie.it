@@ -27,24 +27,28 @@ namespace Cianfrusaglie.Controllers {
             _environment = environment;
         }
 
-        /// <summary>
-        ///     Genera i Gat a partire da un annuncio.
-        /// </summary>
-        /// <param name="announce">L'annuncio appena creato.</param>
-        /// <returns>I Gat relativi all'annuncio</returns>
-        public IEnumerable< Gat > GenerateGats( Announce announce ) {
-            var formFieldsValues = _context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
-            foreach( var fieldsValue in formFieldsValues ) {
-                yield return new Gat {Text = GetStringFromAnnounceFormField( fieldsValue )};
-            }
-        }
+       /// <summary>
+       ///     Genera i Gat a partire da un annuncio.
+       /// </summary>
+       /// <param name="announce">L'annuncio appena creato.</param>
+       /// <returns>I Gat relativi all'annuncio</returns>
+       public IEnumerable< Gat > GenerateGats( Announce announce ) {
+          return GenerateGats( _context, announce );
+       }
+
+       public static IEnumerable< Gat > GenerateGats( ApplicationDbContext context, Announce announce ) {
+         var formFieldsValues = context.AnnounceFormFieldsValues.Where( a => a.AnnounceId.Equals( announce.Id ) );
+         foreach( var fieldsValue in formFieldsValues ) {
+            yield return new Gat { Text = GetStringFromAnnounceFormField( fieldsValue ) };
+         }
+      } 
 
         /// <summary>
         ///     Dato un AnnounceFormField, genera il corrispettivo valore stringa.
         /// </summary>
         /// <param name="formField">L'announceFormField da trattare.</param>
         /// <returns>Il valore in formato stringa per inserirlo nel DB.</returns>
-        public string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) {
+        public static string GetStringFromAnnounceFormField( AnnounceFormFieldsValues formField ) {
             return formField.Value;
         }
 
