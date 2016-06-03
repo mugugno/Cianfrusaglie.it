@@ -37,8 +37,9 @@ namespace Cianfrusaglie.Controllers {
        /// <returns>La View con i risultati della ricerca</returns>
        public IActionResult Index( string title, IEnumerable< int > categories, int range = 0, int page = 0 ) {
          User user = null;
-         if( LoginChecker.HasLoggedUser( this ) )
+         if( LoginChecker.HasLoggedUser( this ) ) { 
             user = _context.Users.Single( u => User.GetUserId().Equals( u.Id ) );
+             ViewData["loggedUser"] = user;
 
          //TODO QUANDO SI FARANNO I BARATTI
          //ViewData["listExchange"] = _context.Announces.Where();
