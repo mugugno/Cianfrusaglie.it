@@ -7,6 +7,7 @@ using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
+using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -245,7 +246,46 @@ namespace Cianfrusaglie.Controllers {
             return first.Any( f => second.Any( f.Contains ) );
         }
 
-        public IEnumerable<Announce> PerformAdvancedSearch() { return null; }
+        public IEnumerable< Announce > PerformAdvancedSearch(AdvancedSearchViewModel advancedSearchViewModel) {
+            Predicate< Announce > truePredicate = (Announce a) => true;
+
+            var rangeKmPredicate = truePredicate;
+            if ( LoginChecker.HasLoggedUser( this ) ) {
+                var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
+                double min = advancedSearchViewModel.KmRange.Item1;
+                double max = advancedSearchViewModel.KmRange.Item2;
+                if( user.Latitude != null && user.Longitude != null ) {
+                    double ul1 = user.Latitude;
+                    double ul2 = user.Longitude;
+                    rangeKmPredicate =
+                        (Announce a) =>
+                        GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) >= min &&
+                        GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) <= max;
+                }
+                
+            }
+
+            var pricePredicate = advancedSearchViewModel.PriceRange == null? 
+                truePredicate : a =>
+                    a.Price >= advancedSearchViewModel.PriceRange.Item1 &&
+                    a.Price <= advancedSearchViewModel.PriceRange.Item2;
+
+            var feedbackPredicate = advancedSearchViewModel.FeedbackRatingRange == null?
+                truePredicate : a =>
+                    a.Author.FeedbacksMean >= advancedSearchViewModel.FeedbackRatingRange.Item1 &&
+                    a.Author.FeedbacksMean <= advancedSearchViewModel.FeedbackRatingRange.Item2;
+
+            var announces =
+                _context.Announces.Include( a => a.Author ).Where(
+                    a => feedbackPredicate( a ) && pricePredicate( a ) && rangeKmPredicate( a ) ).ToList();
+
+            if( advancedSearchViewModel.Title == null )
+                return announces;
+
+            var titleSearch = TitleBasedSearch( advancedSearchViewModel.Title );
+            announces = announces.Union( titleSearch ).ToList();
+            return announces;
+        }
 
         protected override void Dispose( bool disposing ) {
             if( disposing )
