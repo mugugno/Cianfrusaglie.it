@@ -59,6 +59,7 @@ namespace Cianfrusaglie.Controllers
             ViewData [ "worstFeedbacks" ] = allFeedbacks.Where(f => f.Vote < 3 && f.Usefulness >= 0).OrderByDescending(f => f.Usefulness).Take( 3 ).ToList();
             ViewData [ "lastFeedbacks" ] = allFeedbacks.OrderByDescending( f => f.DateTime ).Take( 3 ).ToList();
 
+            SetReceiverFeedbackToRead(User.GetUserId());
             CommonFunctions.SetRootLayoutViewData(this, _context);
             CommonFunctions.SetMacroCategoriesViewData(this, _context);
             return View(user);
@@ -100,6 +101,19 @@ namespace Cianfrusaglie.Controllers
             
             _context.SaveChanges();
             return RedirectToAction( "Index", new {userId = feedback.ReceiverId} );
+        }
+
+        public void SetReceiverFeedbackToRead(string id)
+        {
+            var feedbacks = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
+            i.TypeNotification == MessageTypeNotification.NewReceivedFeedback);
+
+            foreach (var feedback in feedbacks)
+            {
+                feedback.Read = true;
+            }
+
+            _context.SaveChanges();
         }
     }
 }
