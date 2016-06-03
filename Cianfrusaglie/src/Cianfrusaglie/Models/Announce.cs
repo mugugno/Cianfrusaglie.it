@@ -29,8 +29,8 @@ namespace Cianfrusaglie.Models {
 
         public virtual bool Closed { get; set; }
 
-        public virtual double? Latitude { get; set; }
-        public virtual double? Longitude { get; set; }
+        public virtual double Latitude { get; set; }
+        public virtual double Longitude { get; set; }
 
         [Range( DomainConstraints.AnnounceMeterRangeMinLenght, DomainConstraints.AnnounceMeterRangeMaxLenght )]
         public virtual int MeterRange { get; set; } // in kilometri

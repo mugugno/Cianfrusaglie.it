@@ -37,7 +37,9 @@ namespace Cianfrusaglie.Suggestions
         }
 
         public int CalculateDistanceScore( Announce announce, User user ) {
-            double distance = GeoCoordinate.Distance( announce.Latitude.Value, announce.Longitude.Value, user.Latitude.Value, user.Longitude.Value );
+            double lat = user.Latitude ?? 0;
+            double lon = user.Longitude ?? 0;
+            double distance = GeoCoordinate.Distance( announce.Latitude, announce.Longitude, lat, lon );
             return (int) (100 - Math.Min( 50, distance));
         }
 

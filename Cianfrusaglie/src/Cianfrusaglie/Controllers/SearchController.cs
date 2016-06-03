@@ -233,7 +233,7 @@ namespace Cianfrusaglie.Controllers {
 
         public IEnumerable< Announce > DistanceSearch( IEnumerable< Announce > announces, double latitude,
             double longitude, int range ) {
-            return announces.Where( a => GeoCoordinate.Distance( a.Latitude.Value, a.Longitude.Value, latitude, longitude ) <= range );
+            return announces.Where( a => GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
         }
 
         /// <summary>
@@ -259,8 +259,8 @@ namespace Cianfrusaglie.Controllers {
                 double min = advancedSearchViewModel.KmRange.Item1;
                 double max = advancedSearchViewModel.KmRange.Item2;
                 if( user.Latitude != null && user.Longitude != null ) {
-                    double ul1 = user.Latitude;
-                    double ul2 = user.Longitude;
+                    double ul1 = user.Latitude.Value;
+                    double ul2 = user.Longitude.Value;
                     rangeKmPredicate =
                         (Announce a) =>
                         GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) >= min &&
