@@ -17,7 +17,7 @@ namespace Cianfrusaglie.ViewModels.Account {
 
         [Required,
          StringLength( DomainConstraints.UserPasswordMaxLengh,
-             ErrorMessage = "La password deve contenere almeno 6 caratteri",
+             ErrorMessage = "La password deve contenere almeno 8 caratteri",
              MinimumLength = DomainConstraints.UserPasswordMinLengh ), DataType( DataType.Password ),
          Display( Name = "Password" )]
         public string Password { get; set; }
