@@ -61,7 +61,7 @@ namespace Cianfrusaglie.Models {
          ctx.Users.AddRange( user1, user2, user3, user4 );
          ctx.SaveChanges();
 
-         //TODO popolamente gat e tabelle per l'algoritmo dei suggerimenti (chiamando le funzioni apposite)
+         //TODO tabelle per l'algoritmo dei suggerimenti (chiamando le funzioni apposite)
          var announce1 = new Announce() {
             Author = user1,
             Title = "Telefonino Samsung con Android",
@@ -702,6 +702,194 @@ namespace Cianfrusaglie.Models {
          ctx.SaveChanges();
 
          ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce21 ) );
+         ctx.SaveChanges();
+
+
+         var announce22 = new Announce() {
+            Author = user3,
+            Title = "Regalo Lampada Lava",
+            Description = "Regalo Lampada lava anni 80",
+            PublishDate = DateTime.Now.AddDays( -90 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 9
+         };
+
+         ctx.Announces.Add( announce22 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.AddRange(
+            new AnnounceCategory() { Announce = announce22, Category = ctx.Categories.Single( p => p.Name == "Illuminazione" ) },
+            new AnnounceCategory() { Announce = announce22, Category = ctx.Categories.Single( p => p.Name == "Cianfrusaglie" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce22, FormField = ctx.FormFields.Single( p => p.Name == "Stato" ), Value = "Buono" },
+            new AnnounceFormFieldsValues() { Announce = announce22, FormField = ctx.FormFields.Single( p => p.Name == "Tipo Illuminazione" ), Value = "Lampada da tavolo" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce22, Url = @"/upload/lava.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce22 ) );
+         ctx.SaveChanges();
+
+
+         var announce23 = new Announce() {
+            Author = user2,
+            Title = "Regalo set coltelli Miracle Balse",
+            Description = "Regalo set coltelli Miracle Blade perchè mi occupano troppo spazio e non li uso più",
+            PublishDate = DateTime.Now.AddDays( -90 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 9
+         };
+
+         ctx.Announces.Add( announce23 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce23, Category = ctx.Categories.Single( p => p.Name == "Cucina" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce23, FormField = ctx.FormFields.Single( p => p.Name == "Tipo di oggetto per Cucina" ), Value = "Set coltelli" },
+            new AnnounceFormFieldsValues() { Announce = announce23, FormField = ctx.FormFields.Single( p => p.Name == "Marca" ), Value = "Miracle Blade" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce23, Url = @"/upload/miracleblade.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce23 ) );
+         ctx.SaveChanges();
+
+
+         var announce24 = new Announce() {
+            Author = user3,
+            Title = "Regalo orologio a pendola",
+            Description = "Regalo pendola del nonno. Non funziona più, forse si può riparare... \nSe qualcuno la vuole venga a prendersela!",
+            PublishDate = DateTime.Now.AddDays( -90 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 0
+         };
+
+         ctx.Announces.Add( announce24 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce24, Category = ctx.Categories.Single( p => p.Name == "Arredamento" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce24, FormField = ctx.FormFields.Single( p => p.Name == "Tipo Arredamento" ), Value = "Orologio" },
+            new AnnounceFormFieldsValues() { Announce = announce24, FormField = ctx.FormFields.Single( p => p.Name == "Stato" ), Value = "Scarso" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce24, Url = @"/upload/pendola.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce24 ) );
+         ctx.SaveChanges();
+
+
+         var announce25 = new Announce() {
+            Author = user4,
+            Title = "Regalo set di chiavi a cricchetto",
+            Description = "Regalo set di chiavi a cricchetto. \nSono cinesi e non funzionano molto bene per le cose professionali.",
+            PublishDate = DateTime.Now.AddMonths( -6 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 13
+         };
+
+         ctx.Announces.Add( announce25 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce25, Category = ctx.Categories.Single( p => p.Name == "Fai da te" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce25, FormField = ctx.FormFields.Single( p => p.Name == "Tipo Oggetto" ), Value = "Chiavi cricchetto" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce25, Url = @"/upload/chiavicri.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce25 ) );
+         ctx.SaveChanges();
+
+
+         var announce26 = new Announce() {
+            Author = user2,
+            Title = "Regalo tricot fucsia",
+            Description = "Regalo tricot fucsia. \nNon mi dona",
+            PublishDate = DateTime.Now.AddDays( -6 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 16
+         };
+
+         ctx.Announces.Add( announce26 );
+         ctx.SaveChanges();
+
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce26, Category = ctx.Categories.Single( p => p.Name == "Abbigliamento" && p.OverCategory.Name == "Abbigliamento" ) }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce26, FormField = ctx.FormFields.Single( p => p.Name == "Tipo Abbigliamento" ), Value = "Vestito" },
+            new AnnounceFormFieldsValues() { Announce = announce26, FormField = ctx.FormFields.Single( p => p.Name == "Colore" ), Value = "Fucsia" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce26, Url = @"/upload/tricot.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce26 ) );
+         ctx.SaveChanges();
+
+
+         var announce27 = new Announce() {
+            Author = user3,
+            Title = "Regalo occhiali ray ban",
+            Description = "Regalo occhiali ray ban. \nSono molto validi, ma io ho già il nuovo modello",
+            PublishDate = DateTime.Now.AddDays( -1 ),
+            Latitude = 44.3792927,
+            Longitude = 9.064765299999976,
+            MeterRange = 17
+         };
+
+         ctx.Announces.Add( announce27 );
+         ctx.SaveChanges();
+
+         var abbigliamentoAcessori =
+            ctx.Categories.Single( p => p.Name == "Accessori" && p.OverCategory.Name == "Abbigliamento" );
+         ctx.AnnounceCategories.Add(
+            new AnnounceCategory() { Announce = announce27, Category = abbigliamentoAcessori }
+         );
+         ctx.SaveChanges();
+
+         ctx.AnnounceFormFieldsValues.AddRange(
+            new AnnounceFormFieldsValues() { Announce = announce27, FormField = abbigliamentoAcessori.CategoriesFormFields.Select( p => p.FormField ).Single( p => p.Name == "Accessori" ), Value = "Occhiali" },
+            new AnnounceFormFieldsValues() { Announce = announce27, FormField = ctx.FormFields.Single( p => p.Name == "Marca" ), Value = "Ray Ban" }
+         );
+         ctx.SaveChanges();
+
+         ctx.ImageUrls.Add( new ImageUrl() { Announce = announce27, Url = @"/upload/rayban.jpg" } );
+         ctx.SaveChanges();
+
+         ctx.Gats.AddRange( AnnouncesController.GenerateGats( ctx, announce27 ) );
          ctx.SaveChanges();
       }
    }
