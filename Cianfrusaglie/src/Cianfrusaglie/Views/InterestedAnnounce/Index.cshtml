@@ -49,8 +49,8 @@
                                                 <text text-anchor="middle" x="50%" y="70%" dy="1" color="black" > &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
                                             </svg>
                                         </div>
-                                        @{ string starWidth = ( (int) ( 20 * user.FeedbacksMean ) ).ToString(); }
-                                        <div class="star-colorbar" style="width: @starWidth %" >
+                                        @{ string starWidth = ( (int) ( 20 * user.FeedbacksMean ) )+"%"; }
+                                        <div class="star-colorbar" style="width: @starWidth" >
                                         </div>
                                     </div>
                                     <!-- Fine Stelline col rating dell'utente-->

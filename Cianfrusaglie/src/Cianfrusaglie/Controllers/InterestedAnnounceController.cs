@@ -30,7 +30,6 @@ namespace Cianfrusaglie.Controllers {
                 _context.Interested.Include( i => i.User ).Where( i => i.AnnounceId.Equals( id ) ).Select( u => u.User ).ToList();
             var interestedViewModel = new InterestedAnnounceViewModel() {Announce = announce, InterestedUsers = interested};
 
-
             CommonFunctions.SetRootLayoutViewData( this,_context );
 
             var chosen = announce.ChosenUsers.OrderByDescending( u => u.ChosenDateTime ).FirstOrDefault();
@@ -75,6 +74,12 @@ namespace Cianfrusaglie.Controllers {
                 TypeNotification = MessageTypeNotification.NewFeedback
             });
 
+            _context.NotificationCenter.Add(new Notification
+            {
+                User = _context.Users.Single(u => u.Id.Equals(User.GetUserId())),
+                TypeNotification = MessageTypeNotification.NewFeedback
+            });
+
             var notChooseds = _context.Interested.Where(u => u.AnnounceId.Equals(announceId) && !u.UserId.Equals(userId));
             foreach (var notChoosed in notChooseds)
             {
@@ -103,7 +108,11 @@ namespace Cianfrusaglie.Controllers {
           return RedirectToAction( nameof( Index ), new { id = id } );
        }
 
-
+        
 
     }
+
+
+
+
 }

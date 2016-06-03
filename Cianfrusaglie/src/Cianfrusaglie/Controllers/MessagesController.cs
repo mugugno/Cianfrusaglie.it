@@ -49,7 +49,7 @@ namespace Cianfrusaglie.Controllers {
 		/// Quando l'utente apre le sue conversazioni tutti i messaggi risultano letti
 		/// </summary>
         public void SetMessagesToReadStatus() {
-            var unreadMessages =_context.NotificationCenter.Where( m => m.UserId.Equals( User.GetUserId() ) && !m.Read ).ToList() ;
+            var unreadMessages =_context.NotificationCenter.Where( m => m.UserId.Equals( User.GetUserId() ) && !m.Read && m.TypeNotification.Equals(MessageTypeNotification.NewMessage) ).ToList() ;
             foreach( var message in unreadMessages ) {
                 message.Read = true;
                 _context.SaveChanges();
@@ -68,10 +68,11 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult Index( string id = "" ) {
             if( !LoginChecker.HasLoggedUser( this ) )
                 return HttpBadRequest();
-		    SetRootLayoutViewData(this, _context);
+            SetMessagesToReadStatus();
+            SetRootLayoutViewData(this, _context);
             ViewData[ "allConversations" ] = GetAllConversations();
             ViewData[ "idAfterRefresh" ] = id;
-            SetMessagesToReadStatus();
+            
 		    ViewData[ "MyAvatarUrl" ] = _context.Users.First( u => u.Id.Equals( User.GetUserId() ) ).ProfileImageUrl;
             return View();
         }

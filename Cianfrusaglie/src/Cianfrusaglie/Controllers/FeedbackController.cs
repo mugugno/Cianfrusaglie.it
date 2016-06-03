@@ -60,6 +60,7 @@ namespace Cianfrusaglie.Controllers
             }
             var announce = _context.Announces.SingleOrDefault( a => a.Id.Equals( feedBack.AnnounceId ) );
             if (ModelState.IsValid) {
+                feedBack.DateTime = DateTime.Now;
                 User receiver;
                 // o sei l'autore dell'annuncio che lascia il feedback a un prescelto
                 if (feedBack.AuthorId.Equals(announce.AuthorId))
@@ -73,6 +74,12 @@ namespace Cianfrusaglie.Controllers
                         receiver.FeedbacksCount++;
                         receiver.FeedbacksSum += feedBack.Vote;
                         receiver.FeedbacksMean = (double)receiver.FeedbacksSum / receiver.FeedbacksCount;
+                        _context.SaveChanges();
+                        _context.NotificationCenter.Add(new Notification
+                        {
+                            User = receiver,
+                            TypeNotification = MessageTypeNotification.NewReceivedFeedback
+                        });
                         _context.SaveChanges();
                         return RedirectToAction( nameof(InterestedAnnounceController.Index), "InterestedAnnounce",new {id=announce.Id});
                     }
@@ -88,6 +95,13 @@ namespace Cianfrusaglie.Controllers
                 receiver.FeedbacksCount++;
                 receiver.FeedbacksSum += feedBack.Vote;
                 receiver.FeedbacksMean = (double)receiver.FeedbacksSum / receiver.FeedbacksCount;
+                _context.SaveChanges();
+                var userReceiver = _context.Users.Single(u => u.Id.Equals(announce.AuthorId));
+                _context.NotificationCenter.Add(new Notification
+                {
+                    User = userReceiver,
+                    TypeNotification = MessageTypeNotification.NewReceivedFeedback
+                });
                 _context.SaveChanges();
                 return RedirectToAction(nameof(InterestedInController.Index), "InterestedIn");
             }

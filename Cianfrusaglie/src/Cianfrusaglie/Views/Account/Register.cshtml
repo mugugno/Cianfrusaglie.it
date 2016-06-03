@@ -81,22 +81,25 @@
                 <hr/>
                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
                 <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+                <div class="form-group">
+                    <i>I dati contrassegnati con * sono facoltativi</i>
+                </div>
                 <!--NOME-->
                 <div >
                     <div class="form-group">
-                        <label asp-for="Name" class="control-label">Nome</label><label> *</label><br/>
+                        <label asp-for="Name" class="control-label">Nome </label><label> *</label><br/>
                         <input asp-for="Name" class="form-control"/>
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <!--COGNOME-->
                     <div class="form-group">
-                        <label asp-for="Surname" class="control-label">Cognome</label><label> *</label><br/>
+                        <label asp-for="Surname" class="control-label">Cognome </label><label> *</label><br/>
                         <input asp-for="Surname" class="form-control"/>
                         <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
                     <!--SESSO-->
                     <div class="form-group row">
-                        <label asp-for="Genre" class="control-label">Sesso</label><label> *</label><br/>
+                        <label asp-for="Genre" class="control-label">Sesso </label><label> *</label><br/>
 
                         <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)" class="form-control"/>Uomo</label><br/>
                         <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)" class="form-control"/>Donna</label><br/>
@@ -111,13 +114,11 @@
                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Immagine profilo</label><label> *</label>
+                        <label asp-for="Photo" class="control-label">Immagine profilo </label><label> *</label>
                         <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
                         <span asp-validation-for="Photo" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        I dati contrassegnati con * sono facoltativi
-                    </div>
+                   
                 </div>
                 <div class="form-group">
                     <br/>

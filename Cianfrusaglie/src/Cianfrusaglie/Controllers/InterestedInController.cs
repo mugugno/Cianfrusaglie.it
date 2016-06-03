@@ -35,16 +35,18 @@ namespace Cianfrusaglie.Controllers
         {
             if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
+            SetChoosenToReadStatus(User.GetUserId());
             CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where( u=> u.ChosenUserId.Equals( User.GetUserId() ) ).Select(u => u.AnnounceId).ToList();
             ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where( f => f.AuthorId.Equals( User.GetUserId() ) ).Select( f => f.AnnounceId ).ToList();
             //    _context.Announces.Include( a => a.ChosenUsers ).Select( a => new { a.Id, a.ChosenUsers }).ToDictionary( k=> k.Id, v=> v.ChosenUsers.ToList() );
             //ViewData["feedbackGivenAuthorsId"] = _context.FeedBacks.Where(  )
 
-            SetChoosenToReadStatus(User.GetUserId());
+            
 
             return View(GetLoggedUserInterestedAnnounces());
         }
+
 
         public void SetChoosenToReadStatus(string id)
         {
@@ -57,7 +59,7 @@ namespace Cianfrusaglie.Controllers
                 //_context.SaveChanges();
             }
 
-            var feedbacks = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read && 
+            var feedbacks = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
             i.TypeNotification == MessageTypeNotification.NewFeedback);
 
             foreach (var feedback in feedbacks)
@@ -67,7 +69,6 @@ namespace Cianfrusaglie.Controllers
 
             _context.SaveChanges();
         }
-
 
 
     }

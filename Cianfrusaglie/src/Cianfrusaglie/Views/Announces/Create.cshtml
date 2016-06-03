@@ -99,7 +99,7 @@
                                         <h3 class="panel-title">Informazioni aggiuntive</h3>
                                     </div>
                                     <div class="panel-body" >
-                                        <div>Tutti i campi sono opzionali</div><br/>
+                                        <div><i style="color: grey">Tutti i campi sono facoltativi</i></div><br/>
                                         @{var fieldDefault = (Dictionary< int, List< SelectListItem > >) ViewData[ "formFieldDefaultValue" ];
                                             foreach( var field in GetFormFields() ) {
                                                 switch( field.Type ) {
@@ -164,10 +164,14 @@
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
 
                                         <!-- MediaTypeNames.Text input-->
-                                        <div class="form-group" >
-                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
-                                            <div class="col-md-7" >
-                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
+                                        <div class="form-group">
+                                            <div><i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
+                                                <br /><br />
+                                            </div>
+                                           
+                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
+                                            <div class="col-md-7">
+                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text">
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -234,7 +238,7 @@
                                             </div>
                                         </div>
                                     </fieldset>
-                                    <div>I dati contrassegnati con * sono facoltativi</div>
+                                   
                                 </div>
                             </div>
                         </div>

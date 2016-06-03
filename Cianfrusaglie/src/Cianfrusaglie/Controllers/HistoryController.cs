@@ -21,7 +21,6 @@ namespace Cianfrusaglie.Controllers {
       /// <returns>Restituisce annunci pubblicati dall'utente loggato</returns>
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
          var myAnnounces = _context.Announces.Include( p => p.Images ).Include( p => p.Interested ).Where( a => a.AuthorId == User.GetUserId() );
-         SetInterestedToReadStatus(User.GetUserId());
          return myAnnounces;
       } 
 
@@ -78,6 +77,7 @@ namespace Cianfrusaglie.Controllers {
       public IActionResult Index() {
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
+            SetInterestedToReadStatus(User.GetUserId());
             SetRootLayoutViewData( this, _context );
 
         return View( GetLoggedUserPublishedAnnounces().ToList() );
@@ -92,6 +92,15 @@ namespace Cianfrusaglie.Controllers {
                 interested.Read = true;
                 //_context.SaveChanges();
             }
+
+            var feedbacks = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
+            i.TypeNotification == MessageTypeNotification.NewFeedback);
+
+            foreach (var feedback in feedbacks)
+            {
+                feedback.Read = true;
+            }
+
             _context.SaveChanges();
         }
 
