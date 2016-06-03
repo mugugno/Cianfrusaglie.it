@@ -74,6 +74,12 @@ namespace Cianfrusaglie.Controllers
                         receiver.FeedbacksSum += feedBack.Vote;
                         receiver.FeedbacksMean = (double)receiver.FeedbacksSum / receiver.FeedbacksCount;
                         _context.SaveChanges();
+                        _context.NotificationCenter.Add(new Notification
+                        {
+                            User = receiver,
+                            TypeNotification = MessageTypeNotification.NewReceivedFeedback
+                        });
+                        _context.SaveChanges();
                         return RedirectToAction( nameof(InterestedAnnounceController.Index), "InterestedAnnounce",new {id=announce.Id});
                     }
                 }
@@ -88,6 +94,13 @@ namespace Cianfrusaglie.Controllers
                 receiver.FeedbacksCount++;
                 receiver.FeedbacksSum += feedBack.Vote;
                 receiver.FeedbacksMean = (double)receiver.FeedbacksSum / receiver.FeedbacksCount;
+                _context.SaveChanges();
+                var userReceiver = _context.Users.Single(u => u.Id.Equals(announce.AuthorId));
+                _context.NotificationCenter.Add(new Notification
+                {
+                    User = userReceiver,
+                    TypeNotification = MessageTypeNotification.NewReceivedFeedback
+                });
                 _context.SaveChanges();
                 return RedirectToAction(nameof(InterestedInController.Index), "InterestedIn");
             }
