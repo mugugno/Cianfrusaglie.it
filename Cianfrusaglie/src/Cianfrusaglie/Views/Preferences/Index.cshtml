@@ -56,18 +56,19 @@
 
 </head>
 <body>
-    <div style="text-align:center">
+    <div>
         <form asp-action="Edit" asp-controller="Preferences" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
 
             <div class="panel">
                 <div class="panel-body">
                     <div class="row">
                         <div class="panel panel-default" id="sceltaCategorie">
-                            <h5 id="scelta"><strong>Modifica le tue categorie:</strong></h5>
+                            <h5 id="scelta"><strong>Modifica le tue impostazioni:</strong></h5>
                         </div>
-                        <div class="col-md-6" style="margin-left: 25%">
+                        <div class="col-md-5" style="text-align:center">
 
-                            <div class="panel-group" id="panel-423221" >
+                            <div class="panel-group" id="panel-423221">
+
                                 @foreach (var macroCategory in GetMacroCategories())
                                 {
                                     var userPreferences = (IDictionary<int, bool>)ViewData["userPreferences"];
@@ -80,7 +81,7 @@
                                                 <div class="form-group">
 
                                                     <div class="col-md-12">
-                                                        
+
                                                         @foreach (var category in GetCategories(macroCategory))
                                                         {
 
@@ -110,15 +111,95 @@
 
 
                             </div>
-                            <div class="form-group" style="text-align:center">
-                                <br />
-                                <button class="btn btn-default col-md-12 btn-next" type="submit">Conferma</button>
+
+                        </div>
+                        <div class="col-md-5">
+                            <div class="panel-group">
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="text-align:left">
+                                        @{
+                                            var user = (User)ViewData["user"];
+                                            
+                                        }
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="control-label">Nome</label><br />
+                                            <input asp-for="Name" value="@user.Name" class="form-control" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                        <!--COGNOME-->
+                                        <div class="form-group">
+                                            <label asp-for="Surname" class="control-label">Cognome</label><br />
+                                            <input asp-for="Surname" value="@user.Surname" class="form-control" />
+                                            <span asp-validation-for="Surname" class="text-danger"></span>
+                                        </div>
+                                        <!--SESSO-->
+                                        <div class="form-group">
+                                            <label asp-for="Genre" class="control-label">Sesso</label><br />
+                                            
+                                                @if (user.Genre.Equals(Genre.Male))
+                                                {
+                                                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)" checked />Uomo</label><br />
+                                                }
+                                                else
+                                                {
+                                                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)"  />Uomo</label><br />
+
+                                                }
+                                                @if (user.Genre.Equals(Genre.Female))
+                                                {
+                                                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)"  checked />Donna</label><br />
+                                                }
+                                                else
+                                                {
+                                                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)"  />Donna</label><br />
+
+                                                }
+                                                @if (user.Genre.Equals(Genre.Unspecified))
+                                                {
+                                                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Unspecified)"  checked />Non specificato</label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Unspecified)"  />Non specificato</label>
+
+                                                }
+                                            
+                                            <span asp-validation-for="Genre" class="text-danger"></span>
+                                        </div>
+                                        @*<div class="form-group">
+                                <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
+                                <input id="pac-input"  class="form-control" type="text" placeholder="">
+                                <div id="googleMap" style="display: none;"></div>
+                                <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                                <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Photo" class="control-label">Immagine profilo</label>
+                                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+                                <span asp-validation-for="Photo" class="text-danger"></span>
+                            </div>*@
+
+                                        <div class="form-group">
+                                            <label asp-for="Email" class="control-label">Indirizzo email</label><br />
+                                            <input asp-for="Email" value="@user.Email" type="email" required="" class="form-control" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
+                    
+                    
+            <div class="form-group" style="text-align:center">
+                <br />
+                <button class="btn btn-default  btn-next" type="submit">Conferma</button>
+                <a href="~/Profile" class="btn btn-default  btn-next">Annulla</a>
             </div>
-         </form>
+        </form>
     </div>
 </body>
 </html>
