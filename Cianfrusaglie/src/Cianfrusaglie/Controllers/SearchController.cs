@@ -84,9 +84,12 @@ namespace Cianfrusaglie.Controllers {
 
                 if( user != null && range > 0 ) {
                     var loggedUser = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
-                    result =
-                        DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(
-                            a => RankAlgorithm.CalculateRank( a, user ) ).ToList();
+                    if(loggedUser.Latitude!=null && loggedUser.Longitude!=null)
+                    {
+                        result =
+                              DistanceSearch(result, loggedUser.Latitude.Value, loggedUser.Longitude.Value, range).OrderByDescending(
+                                  a => RankAlgorithm.CalculateRank(a, user)).ToList();
+                    }
                 }
 
                 ViewData[ "numberOfPages" ] = result.Count % resultsPerPage == 0
@@ -230,7 +233,7 @@ namespace Cianfrusaglie.Controllers {
 
         public IEnumerable< Announce > DistanceSearch( IEnumerable< Announce > announces, double latitude,
             double longitude, int range ) {
-            return announces.Where( a => GeoCoordinate.Distance( a.Latitude, a.Longitude, latitude, longitude ) <= range );
+            return announces.Where( a => GeoCoordinate.Distance( a.Latitude.Value, a.Longitude.Value, latitude, longitude ) <= range );
         }
 
         /// <summary>

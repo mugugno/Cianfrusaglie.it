@@ -43,7 +43,7 @@ namespace Cianfrusaglie.Constants
                 context.Announces.Include( a=>a.Author ).Where(
                     a =>
                         !a.AuthorId.Equals( controller.User.GetUserId() ) && !a.Closed &&
-                        GeoCoordinate.Distance( a.Latitude, a.Longitude, user.Latitude, user.Longitude ) <=
+                        GeoCoordinate.Distance( a.Latitude.Value, a.Longitude.Value, user.Latitude.Value, user.Longitude.Value ) <=
                         100 ).OrderByDescending( a => rankAlgorithm.CalculateRank( a, user ) );
         }
 
