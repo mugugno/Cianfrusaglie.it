@@ -229,7 +229,7 @@ namespace Cianfrusaglie.Controllers {
                         announce.AnnouncesGats.Any( ag => AreSimilar( ag.Gat.Text, title ) ) );
 
             return titleBasedSearch;
-        }
+        }   
 
         public IEnumerable< Announce > DistanceSearch( IEnumerable< Announce > announces, double latitude,
             double longitude, int range ) {

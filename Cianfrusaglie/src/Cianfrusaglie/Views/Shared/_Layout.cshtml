@@ -260,7 +260,7 @@
 <li class="dropdown dropdown-large">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
                                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right:0">
-                                                <li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li>
+                                                <a href="~/Profile"><li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li></a>
                                                 <li><a href="~/History/Index">I miei annunci</a></li>
                                                 @*<li><a href="~/InterestedIn/Index" >Annunci che mi interessano</a></li>*@
                                                 <li><a href="~/Profile">Il mio profilo</a></li>
@@ -305,8 +305,8 @@
                     <h4 class="modal-title">Registati o effettua login per utilizzare il nostro sito</h4>
                 </div>
                 <div class="modal-body"  style="height: 6em; text-align: center; vertical-align: middle;">
-                    <button class="btn btn-warning btn-lg"><a href="~/Account/Register" style="color: white">REGISTRATI QUI</a></button>
-                    <button class="btn btn-warning btn-lg"><a href="~/Account/Login" style="color: white">LOGIN</a></button>
+                    <a href="~/Account/Register" style="color: white"><button class="btn btn-warning btn-lg">REGISTRATI QUI</button></a>
+                    <a href="~/Account/Login" style="color: white"><button class="btn btn-warning btn-lg">LOGIN</button></a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
