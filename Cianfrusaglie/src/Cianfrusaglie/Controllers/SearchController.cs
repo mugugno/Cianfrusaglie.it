@@ -7,6 +7,7 @@ using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
+using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -245,7 +246,7 @@ namespace Cianfrusaglie.Controllers {
             return first.Any( f => second.Any( f.Contains ) );
         }
 
-        public IEnumerable<Announce> PerformAdvancedSearch() { return null; }
+        public IEnumerable<Announce> PerformAdvancedSearch(AdvancedSearchViewModel advSearchViewModel) { return null; }
 
         protected override void Dispose( bool disposing ) {
             if( disposing )
