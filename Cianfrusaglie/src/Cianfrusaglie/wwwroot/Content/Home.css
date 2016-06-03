@@ -129,8 +129,8 @@
     text-decoration: none;
 }
 
-.dropdown-menu-large .dropdown-header {
-    color: orange;
+.dropdown-menu-large .dropdown-header{
+    color: orange !important;
     font-size: 18px;
 }
 
@@ -144,8 +144,17 @@
 
     .dropdown-menu-large > li:last-child { margin-bottom: 0; }
 
-    .dropdown-menu-large .dropdown-header { padding: 3px 15px !important; }
+    .dropdown-menu-large .dropdown-header { 
+         padding: 3px 15px !important;
+        color: orange;
+    }
 }
+
+.WantOrange {
+    padding: 3px 15px !important;
+    color: orange !important;
+}
+
 
 .sub-menu {
     bottom: 0;

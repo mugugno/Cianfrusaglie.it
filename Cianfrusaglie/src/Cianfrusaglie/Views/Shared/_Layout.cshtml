@@ -260,18 +260,33 @@
 <li class="dropdown dropdown-large">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
                                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right:0">
-                                                <a href="~/Profile"><li class="dropdown-header"><span class="glyphicon glyphicon-user"></span> Profilo</li></a>
+                                                <li class="dropdown-header">
+                                                    <a href="~/Profile" class="WantOrange">
+                                                        <span class="glyphicon glyphicon-user"></span> 
+                                                        Profilo
+                                                    </a>
+                                                </li>
                                                 <li><a href="~/History/Index">I miei annunci</a></li>
                                                 @*<li><a href="~/InterestedIn/Index" >Annunci che mi interessano</a></li>*@
                                                 <li><a href="~/Profile">Il mio profilo</a></li>
-                                                <li><a href="~/Preferences/Index">Le mie preferenze</a></li>
+                                                <li><a href="~/Preferences/Index">Impostazioni profilo</a></li>
                                                 <li class="divider"></li>
-                                                <li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Messaggi</li>
+                                                <li class="dropdown-header">
+                                                    <a href="~/Messages" class="WantOrange">
+                                                        <span class="glyphicon glyphicon-envelope"></span> 
+                                                        Messaggi
+                                                    </a>
+                                                        </li>
                                                 <li><a href="~/Messages">Le mie conversazioni</a></li>
                                                 <li class="divider"></li>
-                                                <li class="dropdown-header"><span class="glyphicon glyphicon-pencil"></span> Inserisci un annuncio</li>
+                                                <li class="dropdown-header">
+                                                    <a href="~/Messages" class="WantOrange">
+                                                        <span class="glyphicon glyphicon-pencil"></span> 
+                                                        Inserisci un annuncio
+                                                    </a>
+                                                </li>
                                                 <li><a href="~/Announces/Create">Liberati di una cianfrusaglia</a></li>
-                                                <li><a href="">Vendi quello che non ti serve</a></li>
+                                                <li><a href="~/Announces/Create/?vendita=true">Vendi quello che non ti serve</a></li>
                                               <!--  <li><a href="">Baratta</a></li>
                                                 <li><a href="">Stai cercando un oggetto in particolare?</a></li>
                                                   -->
