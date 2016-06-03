@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.GeoPosition;
@@ -83,9 +84,12 @@ namespace Cianfrusaglie.Controllers {
 
                 if( user != null && range > 0 ) {
                     var loggedUser = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
-                    result =
-                        DistanceSearch( result, loggedUser.Latitude, loggedUser.Longitude, range ).OrderByDescending(
-                            a => RankAlgorithm.CalculateRank( a, user ) ).ToList();
+                    if(loggedUser.Latitude!=null && loggedUser.Longitude!=null)
+                    {
+                        result =
+                              DistanceSearch(result, loggedUser.Latitude.Value, loggedUser.Longitude.Value, range).OrderByDescending(
+                                  a => RankAlgorithm.CalculateRank(a, user)).ToList();
+                    }
                 }
 
                 ViewData[ "numberOfPages" ] = result.Count % resultsPerPage == 0
@@ -250,13 +254,13 @@ namespace Cianfrusaglie.Controllers {
             Predicate< Announce > truePredicate = (Announce a) => true;
 
             var rangeKmPredicate = truePredicate;
-            if ( LoginChecker.HasLoggedUser( this ) ) {
+            if ( LoginChecker.HasLoggedUser( this ) && advancedSearchViewModel.KmRange != null ) {
                 var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
                 double min = advancedSearchViewModel.KmRange.Item1;
                 double max = advancedSearchViewModel.KmRange.Item2;
                 if( user.Latitude != null && user.Longitude != null ) {
-                    double ul1 = user.Latitude;
-                    double ul2 = user.Longitude;
+                    double ul1 = user.Latitude.Value;
+                    double ul2 = user.Longitude.Value;
                     rangeKmPredicate =
                         (Announce a) =>
                         GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) >= min &&

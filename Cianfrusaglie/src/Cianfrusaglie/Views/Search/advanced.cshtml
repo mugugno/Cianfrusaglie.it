@@ -37,6 +37,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.mixitup/latest/jquery.mixitup.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
@@ -49,9 +50,9 @@
 <body>
 
 <div id="wrapper-register">
-    <div class="col-md-6 col-lg-offset-3 " style="align-content: center; margin-top: 5em;" >
-        <form class="panel panel-body"  asp-action="SearchRedirect" asp-controller="Search"  method="get">
-            <div id="title" >
+    <div class="col-md-6 col-lg-offset-3 " style="align-content: center; margin-top: 5em;">
+        <form class="panel panel-body" asp-action="SearchRedirect" asp-controller="Search" method="get">
+            <div id="title">
                 <a href="~/">
                     <h1>
                         @CommonStrings.SiteName
@@ -113,10 +114,21 @@
                     <button type="submit" class="btn btn-warning btn-searchadv btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
             </div>
-            
+            <div class="input-group">
+                <div class="row">
+                    <label>Ordinamento crescente</label><input type="checkbox"/>
+                    <label>Ordinamento decrescente</label><input type="checkbox"/>
+                </div>
+                <div class="row">
+                    <label></label>
+                </div>
+            </div>
         </form>
     </div>
-</div>
+
+
+    </div>
+
 
 </body>
 </html>
