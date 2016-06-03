@@ -60,6 +60,7 @@ namespace Cianfrusaglie.Controllers
             }
             var announce = _context.Announces.SingleOrDefault( a => a.Id.Equals( feedBack.AnnounceId ) );
             if (ModelState.IsValid) {
+                feedBack.DateTime = DateTime.Now;
                 User receiver;
                 // o sei l'autore dell'annuncio che lascia il feedback a un prescelto
                 if (feedBack.AuthorId.Equals(announce.AuthorId))
