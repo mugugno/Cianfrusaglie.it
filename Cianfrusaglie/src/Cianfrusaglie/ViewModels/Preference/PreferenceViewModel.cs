@@ -12,16 +12,23 @@ namespace Cianfrusaglie.ViewModels.Preference
         [Required, EmailAddress, Display(Name = "Email")]
         public string Email { get; set; }
 
-        /*[Required,
+        [
          StringLength(DomainConstraints.UserPasswordMaxLengh,
-             ErrorMessage = "La password deve contenere almeno 6 caratteri",
+             ErrorMessage = "La password deve contenere almeno 8 caratteri",
+             MinimumLength = DomainConstraints.UserPasswordMinLengh), DataType(DataType.Password),
+         Display(Name = "Nuova password")]
+        public string VecchiaPassword { get; set; }
+
+        [
+         StringLength(DomainConstraints.UserPasswordMaxLengh,
+             ErrorMessage = "La password deve contenere almeno 8 caratteri",
              MinimumLength = DomainConstraints.UserPasswordMinLengh), DataType(DataType.Password),
          Display(Name = "Nuova password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password), Display(Name = "Conferma password"),
          Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }*/
+        public string ConfirmPassword { get; set; }
 
         [Range((int)Constants.Genre.Unspecified, (int)Constants.Genre.Male)]
         public int Genre { get; set; }

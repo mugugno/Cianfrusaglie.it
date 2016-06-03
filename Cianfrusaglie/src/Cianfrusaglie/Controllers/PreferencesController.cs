@@ -26,10 +26,12 @@ namespace Cianfrusaglie.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public PreferencesController(ApplicationDbContext context)
+        public PreferencesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         // GET: /<controller>/
         public IActionResult Index()
@@ -59,7 +61,7 @@ namespace Cianfrusaglie.Controllers
             return View();
         }
 
-        public IActionResult Edit(PreferenceViewModel model)
+        public async Task<IActionResult> Edit(PreferenceViewModel model)
         {
             var user = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
             var newUserPreferences = model.CategoryDictionary;
@@ -67,7 +69,35 @@ namespace Cianfrusaglie.Controllers
             _context.UserCategoryPreferenceses.RemoveRange(userPreferences);
             _context.SaveChanges();
 
-            if(ModelState.IsValid)
+            if (model.VecchiaPassword != null)
+            {
+                if (model.Password != null && model.ConfirmPassword != null && !model.Password.Equals(model.ConfirmPassword))
+                {
+                    ModelState.AddModelError("Password", "Password e Conferma password devono essere uguali");
+                }
+                else if(model.Password != null && model.ConfirmPassword != null && model.Password.Equals(model.ConfirmPassword))
+                {
+                    var result = await _userManager.ChangePasswordAsync(user, model.VecchiaPassword, model.Password);
+                    if(!result.Succeeded)
+                    {
+                        ModelState.AddModelError("Password", "Errori nel cambio password");
+                    }
+                }
+                else if(model.Password == null || model.ConfirmPassword == null)
+                {
+                    ModelState.AddModelError("Password", "Devi riempire sia Nuova password che conferma password");
+                }
+            }
+            else
+            {
+                if(model.Password != null || model.ConfirmPassword != null)
+                {
+                    ModelState.AddModelError("Password", "Devi inserire la vecchia password");
+                }
+            }
+
+
+            if (ModelState.IsValid)
             {
                 user.Name = model.Name;
                 user.Surname = model.Surname;
@@ -86,25 +116,28 @@ namespace Cianfrusaglie.Controllers
                         break;
                 }
                 _context.SaveChanges();
-            }
-            
-            foreach(var newUserPreference in newUserPreferences)
-            {
-                if (newUserPreference.Value)
-                {
-                    var category = _context.Categories.Single(c => c.Id.Equals(newUserPreference.Key));
-                    _context.UserCategoryPreferenceses.Add(new UserCategoryPreferences
-                    {
-                        User = user,
-                        UserId = user.Id,
-                        Category = category,
-                        CategoryId = category.Id
 
-                    });
+
+
+                foreach (var newUserPreference in newUserPreferences)
+                {
+                    if (newUserPreference.Value)
+                    {
+                        var category = _context.Categories.Single(c => c.Id.Equals(newUserPreference.Key));
+                        _context.UserCategoryPreferenceses.Add(new UserCategoryPreferences
+                        {
+                            User = user,
+                            UserId = user.Id,
+                            Category = category,
+                            CategoryId = category.Id
+
+                        });
+                    }
                 }
+                _context.SaveChanges();
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
-            _context.SaveChanges();
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(PreferencesController.Index));
         }
     }
 }
