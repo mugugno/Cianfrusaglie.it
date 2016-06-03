@@ -69,11 +69,11 @@ button { padding: 0; }
 }
 
 #pageHeader {
-    background-color: white;
+    background-color: #49586d;
     border-bottom: 1px solid;
     border-bottom-color: #FFC107;
     display: inline-block;
-    height: 100px;
+    min-height: 100px;
     padding-left: 0;
     padding-right: 0;
     position: relative;
@@ -81,14 +81,17 @@ button { padding: 0; }
 }
 
 #barraRicerca {
-    position: absolute;
+    /*position: absolute;
     top: 60%;
     transform: translateY( -60% );
     left:50%;
-    margin-left: -20em;
+    margin-left: -20em;+*/
+        margin-top:15px;
 
 }
- 
+ #barraRicerca a{
+     color:#b6c1ca;
+ }
 
 #footer {
     border-top: 1px solid;
