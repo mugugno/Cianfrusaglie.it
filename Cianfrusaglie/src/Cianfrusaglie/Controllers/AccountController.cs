@@ -114,6 +114,16 @@ namespace Cianfrusaglie.Controllers {
         }
 
 
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public bool CheckEmailAlreadyExists(string email)
+        {
+            return _context.Users.Any(u => u.Email.Equals(email));
+        }
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public bool CheckUserNameAlreadyExists(string user)
+        {
+            return _context.Users.Any(u => u.UserName.Equals(user));
+        }
         //
         // POST: /Account/Register
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
