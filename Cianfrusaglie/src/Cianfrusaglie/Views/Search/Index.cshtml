@@ -73,18 +73,20 @@
 
 
                                 <h3>
-                                    @if (announce.Title.Length > 20)
+                                    @if (announce.Title.Length > 15)
                                     {
                                         if (User.Identity.IsAuthenticated)
                                          {
                                              <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
-                                                 <h3>@announce.Title.Substring(0, 15)... </h3>
+                                                 <h3> 
+                                                     @announce.Title.Substring(0, 15)...
+                                                 </h3>
                                              </a>
                                         }
                                         else
                                         {
                                             <a data-toggle="modal" data-target="#myWindow" style="color: black">
-                                                <h3>@announce.Title.Substring(0, 15)... </h3>
+                                                <h3> @announce.Title.Substring(0, 15)...</h3>
                                             </a>
                                         }
                                     }
@@ -99,8 +101,11 @@
                                         else
                                         {
                                             <a data-toggle="modal" data-target="#myWindow" style="color: black">
-                                                <h3>@announce.Title</h3>
-                                            </a>
+                                                <h3>
+                                                    @announce.Title
+                                                </h3>
+
+                                        </a>
                                         }
                                     }
                                 </h3>
