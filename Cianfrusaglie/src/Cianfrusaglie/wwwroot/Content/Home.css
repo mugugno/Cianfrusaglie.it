@@ -28,7 +28,8 @@
 
 .photoThu img {
    width:100%;
-   min-height:100px;
+   min-height:15em;
+   /*height: 15em;*/
 }
 #title h5 {
     color: #FFC107;
@@ -129,8 +130,8 @@
     text-decoration: none;
 }
 
-.dropdown-menu-large .dropdown-header {
-    color: orange;
+.dropdown-menu-large .dropdown-header{
+    color: orange !important;
     font-size: 18px;
 }
 
@@ -144,8 +145,17 @@
 
     .dropdown-menu-large > li:last-child { margin-bottom: 0; }
 
-    .dropdown-menu-large .dropdown-header { padding: 3px 15px !important; }
+    .dropdown-menu-large .dropdown-header { 
+         padding: 3px 15px !important;
+        color: orange;
+    }
 }
+
+.WantOrange {
+    padding: 3px 15px !important;
+    color: orange !important;
+}
+
 
 .sub-menu {
     bottom: 0;
@@ -201,6 +211,7 @@ hr {
     border: 1px solid #E1E1E1;
     border-radius: 5px;
     margin: 15px;
+
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.12),0 2px 10px 0 rgba(0,0,0,0.09);
 }
 
