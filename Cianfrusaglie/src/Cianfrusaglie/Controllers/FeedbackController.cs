@@ -103,7 +103,7 @@ namespace Cianfrusaglie.Controllers
                     TypeNotification = MessageTypeNotification.NewReceivedFeedback
                 });
                 _context.SaveChanges();
-                return RedirectToAction(nameof(InterestedInController.Index), "InterestedIn");
+                return RedirectToAction(nameof(HistoryController.Index), "History");
             }
             ViewData["announce"] = feedBack.AnnounceId;
             ViewData["receiver"] = feedBack.ReceiverId;
