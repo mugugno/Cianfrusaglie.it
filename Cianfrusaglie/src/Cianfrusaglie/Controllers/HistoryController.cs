@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -70,20 +71,41 @@ namespace Cianfrusaglie.Controllers {
         }
 
         /// <summary>
-        ///     Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro)
-      /// </summary>
-      /// <returns>La View di tutti i tuoi annunci</returns>
-      // GET: History
-      public IActionResult Index() {
+        /// Ritorna gli annunci aperti a cui l'utente è interessato
+        /// </summary>
+        /// <returns>gli annunci aperti a cui l'utente è interessato</returns>
+        public List<Announce> GetLoggedUserInterestedAnnounces()
+        {
+            return _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals(User.GetUserId())) && !a.Closed).ToList();
+        }
+
+
+        /// <summary>
+        /// Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro) e con tutti gli annunci a cui è interessato
+        /// </summary>
+        /// <returns>La View di tutti i tuoi annunci</returns>
+        // GET: History
+        public IActionResult Index() {
          if( !LoginChecker.HasLoggedUser( this ) )
             return HttpBadRequest();
             SetInterestedToReadStatus(User.GetUserId());
+            SetChoosenToReadStatus(User.GetUserId());
             SetRootLayoutViewData( this, _context );
-
-        return View( GetLoggedUserPublishedAnnounces().ToList() );
-      }
+            ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where(u => u.ChosenUserId.Equals(User.GetUserId())).Select(u => u.AnnounceId).ToList();
+            ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where(f => f.AuthorId.Equals(User.GetUserId())).Select(f => f.AnnounceId).ToList();
+            var result = new List< IEnumerable< Announce > > {
+                GetLoggedUserPublishedAnnounces(),
+                GetLoggedUserInterestedAnnounces()
+            };
+            return View(result);
+        }
       
-        //TODO SUMMARY
+
+
+        /// <summary>
+        /// L'utente ha visualizzato la notifica (che c'è un nuovo interessato ad un annuncio che ho pubblicato), il db viene aggiornato
+        /// </summary>
+        /// <param name="id">id dell'utente</param>
         public void SetInterestedToReadStatus(string id)
         {
             var newInterested = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read && i.TypeNotification == MessageTypeNotification.NewInterested);
@@ -104,5 +126,31 @@ namespace Cianfrusaglie.Controllers {
             _context.SaveChanges();
         }
 
-   }
+        /// <summary>
+        /// L'utente ha visualizzato la notifica (che sei stato scelto per un annuncio che ti interessa), il db viene aggiornato
+        /// </summary>
+        /// <param name="id">id dell'utente</param>
+        public void SetChoosenToReadStatus(string id)
+        {
+            var newChoosed = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
+            (i.TypeNotification == MessageTypeNotification.NewChoosed ||
+            i.TypeNotification == MessageTypeNotification.NewAnotherChoosed));
+            foreach (var choosed in newChoosed)
+            {
+                choosed.Read = true;
+                //_context.SaveChanges();
+            }
+
+            var feedbacks = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
+            i.TypeNotification == MessageTypeNotification.NewFeedback);
+
+            foreach (var feedback in feedbacks)
+            {
+                feedback.Read = true;
+            }
+
+            _context.SaveChanges();
+        }
+
+    }
 }

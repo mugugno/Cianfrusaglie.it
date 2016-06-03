@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cianfrusaglie.Controllers;
 using Cianfrusaglie.Models;
+using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
@@ -137,6 +138,76 @@ namespace Cianfrusaglie.Tests {
 
             var result = searchController.TitleBasedSearch( "Altra cosa" );
             Assert.DoesNotContain( announce, result );
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingTitleAndIsOk()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            var searchController = CreateResearchController(user.Id);
+            AdvancedSearchViewModel advSearchByTitle = new AdvancedSearchViewModel() {Title = "Halo"};
+            var announce =
+                Context.Announces.Single(ann => ann.Author.UserName == FirstUserName && ann.Title == "Halo 5 Usato");
+            var result = searchController.PerformAdvancedSearch(advSearchByTitle);
+            Assert.Contains(announce, result);
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingPriceRange()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            var searchController = CreateResearchController(user.Id);
+            AdvancedSearchViewModel advSearchByPriceRange = new AdvancedSearchViewModel()
+            {
+                PriceRange = new Tuple<int, int>(500, 1500)
+            };
+            var announce =
+                Context.Announces.Single(
+                    ann => ann.Price == 1000);
+            var result = searchController.PerformAdvancedSearch(advSearchByPriceRange);
+            Assert.Contains(announce, result);
+
+            var wrongAnnounce = Context.Announces.Single(ann => ann.Price == 15);
+            Assert.DoesNotContain(wrongAnnounce, result);
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingKmRange()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            user.Latitude = 0.0;
+            user.Longitude = 0.0;
+            Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            AdvancedSearchViewModel advSearchByKmRange = new AdvancedSearchViewModel()
+            {
+                KmRange = new Tuple<int, int>(0, 10)
+            };
+            var announce = Context.Announces.Single(ann => ann.Title == "Regalo bicicletta arrugginita");
+            var result = searchController.PerformAdvancedSearch(advSearchByKmRange);
+
+            Assert.Contains(announce, result);
+
+            var wrongAnnounce = Context.Announces.Single(ann => ann.Title == "Halo 5 Usato");
+            Assert.DoesNotContain(wrongAnnounce, result);
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingFeedback()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            var user2 = Context.Users.Single(u => u.UserName.Equals(SecondUserName));
+            user.FeedbacksMean = 4.0;
+            user2.FeedbacksMean = 2.0;
+            Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            AdvancedSearchViewModel advSearchByFeedback = new AdvancedSearchViewModel() {FeedbackRatingRange = new Tuple<int, int>(3,5)};
+            var announce = Context.Announces.First(ann => ann.AuthorId.Equals(user.Id));
+            var result = searchController.PerformAdvancedSearch(advSearchByFeedback);
+            var wrongAnnounce = Context.Announces.First(ann => ann.AuthorId.Equals(user2.Id));
+
+            Assert.Contains(announce, result);
+            Assert.DoesNotContain(wrongAnnounce, result);
         }
     }
 

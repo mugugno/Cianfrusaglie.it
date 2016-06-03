@@ -45,9 +45,36 @@
                     <h4 style="text-align: center">La tua ricerca non ha prodotto nessun risultato</h4>
                 </div>
             }
+
+            <!-- Filtri -->
+            <div class="row" style="align-content: center">
+                <div class="col-md-2">
+                    <button onclick="filterGift(true)">In Regalo</button>
+                </div>
+                <div class="col-md-2">
+                    <button onclick="filterGift(false)">In Vendita</button>
+                </div>
+                <div class="col-md-2">
+                    <button>Con i miglior feedback</button>
+                </div>
+                <div class="col-md-2">
+                    <button>Gli ultimi inseriti</button>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="col-md-2">
+                        <button onclick="filterByDistance()">Vicini a me</button>
+                    </div>
+                }
+            </div>
+
             @foreach (var announce in Model)
             {
                 <div class="item active">
+                    <label class="PublishDateHid" style="display: none">@announce.PublishDate</label>
+                    <label class="PriceHid" style="display: none">@announce.Price</label>
+                    <label class="LatHid" style="display: none">@announce.Latitude</label>
+                    <label class="LonHid" style="display: none">@announce.Longitude</label>
                     <div class="">
                         @if (announce.Price == 0)
                         {
@@ -65,7 +92,7 @@
                                 }
                                 else
                                 {
-                                    <a href="#" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@announce.Id)" class="img-responsive" /></a>
+                                    <a href="#" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@announce.Id)" class="img-responsive"/></a>
                                 }
                             </div>
 
@@ -76,10 +103,10 @@
                                     @if (announce.Title.Length > 20)
                                     {
                                         if (User.Identity.IsAuthenticated)
-                                         {
-                                             <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
-                                                 <h3>@announce.Title.Substring(0, 15)... </h3>
-                                             </a>
+                                        {
+                                            <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
+                                                <h3>@announce.Title.Substring(0, 15)... </h3>
+                                            </a>
                                         }
                                         else
                                         {
@@ -126,23 +153,23 @@
                                             <svg viewbox="0 0 61 19">
                                                 <defs>
                                                     <mask id="starmask" x="0" y="0" width="100" height="100">
-                                                        <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                        <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
                                                         <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
                                                     </mask>
                                                 </defs>
-                                                <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                                <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1"/>
                                                 <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
                                             </svg>
                                         </div>
-                                        @{ string starWidth = ((int)(20 * announce.Author.FeedbacksMean)).ToString(); }
+                                        @{ string starWidth = ((int) (20*announce.Author.FeedbacksMean)).ToString(); }
                                         <div class="star-colorbar" style="width: @starWidth%">
                                         </div>
                                     </div>
                                     <!-- Fine Stelline col rating dell'utente-->
                                     <br/>
                                 </div>
-                                
-                                    @*@if (!User.Identity.IsAuthenticated){/*
+
+                                @*@if (!User.Identity.IsAuthenticated){/*
                                         <p class="btn-add">
                                             <i class="fa fa-shopping-cart"></i>
                                             <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
@@ -165,7 +192,7 @@
                                         }*/
                                     }*@
 
-                               
+
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -201,8 +228,34 @@
         navButton[ i ].setAttribute('href', window.location.href.replace(/&page=[^&]+/, "") + "&"+navButton[i].id);
     }
 
+    //Filtro per item in regalo
+    function filterGift(isGift) {
+        display = "inline-block";
+        notDisplay = "none";
+        $("div.item")
+            .each(function(index) {
+                var regalo = $(this).find("label.PriceHid").text();
+                if (parseInt(regalo) === 0)
+                    $(this).css('display', isGift ? display : notDisplay);
+                else {
+                    $(this).css('display', isGift ? notDisplay : display);
+                }
+            });
+    }
 
-</script>
+    //Filtro per distanza
+    function filterByDistance() {
+        $("div.item")
+            .each(function(index) {
+                var lat = @(( (User) ViewData["loggedUser"]).Latitude);
+                var lon = @(( (User) ViewData["loggedUser"]).Longitude);
+                var 
+            });
+    }
+
+
+
+   </script>
 
 
 
