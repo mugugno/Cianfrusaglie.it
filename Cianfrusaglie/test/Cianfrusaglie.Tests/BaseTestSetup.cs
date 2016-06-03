@@ -169,8 +169,8 @@ namespace Cianfrusaglie.Tests {
 
             Context.SaveChanges();
 
-            
-           var announce2 = new Announce {Author = firstUser, Title = "Halo 5 Usato", Description = "Guardiani ovunque", Latitude = 0.1, Longitude = 0.1};
+            /*Annuncio 2*/
+            var announce2 = new Announce {Author = firstUser, Title = "Halo 5 Usato", Description = "Guardiani ovunque", Latitude = 0.1, Longitude = 0.1};
            Context.Announces.Add( announce2 );
 
             var announceCategory2 = new AnnounceCategory {
@@ -179,8 +179,8 @@ namespace Cianfrusaglie.Tests {
             };
             Context.AnnounceCategories.Add( announceCategory2 );
             Context.SaveChanges();
-
-           var announce3 = new Announce {Author = firstUser, Title = "C for Dummies", Description = "Impara il C", DeadLine = DateTime.Now.AddDays(-1)};
+            /*Annuncio 3*/
+            var announce3 = new Announce {Author = firstUser, Title = "C for Dummies", Description = "Impara il C", DeadLine = DateTime.Now.AddDays(-1)};
            Context.Announces.Add( announce3 );
 
             var announceCategory3 = new AnnounceCategory {
@@ -189,8 +189,8 @@ namespace Cianfrusaglie.Tests {
             };
             Context.AnnounceCategories.Add( announceCategory3 );
             Context.SaveChanges();
-
-         var announce4 = new Announce { Author = firstUser, Title = "Libro di Mariangiongiangela", Description = "non gettate il forno dalla finestra", Price = 15, Closed= true };
+            /*Annuncio 4*/
+            var announce4 = new Announce { Author = firstUser, Title = "Libro di Mariangiongiangela", Description = "non gettate il forno dalla finestra", Price = 15, Closed= true };
          Context.Announces.Add( announce4 );
 
          var announceCategory4 = new AnnounceCategory {
@@ -199,25 +199,25 @@ namespace Cianfrusaglie.Tests {
          };
             Context.AnnounceCategories.Add(announceCategory4);
             Context.SaveChanges();
-
+            /*Annuncio 5*/
             var announce5 = new Announce { Author = secondUser, Title = "Vendo una gioia", Description = "Una gioia ogni tanto non fa male", Price = 1000, Closed = false };
             Context.Announces.Add(announce5);
 
             var announceCategory5 = new AnnounceCategory
             {
                 Announce = announce5,
-                Category = Context.Categories.Single(a => a.Name.Equals("Tempo Libero"))
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
             };
             Context.AnnounceCategories.Add( announceCategory5 );
          Context.SaveChanges();
-
+            /*Annuncio 6*/
             var announce6 = new Announce { Author = secondUser, Title = "Regalo bicicletta arrugginita", Description = "Le ruote girano ancora", Latitude = 0.0, Longitude = 0.0, Closed = false };
             Context.Announces.Add(announce6);
 
             var announceCategory6 = new AnnounceCategory
             {
                 Announce = announce6,
-                Category = Context.Categories.Single(a => a.Name.Equals("Tempo Libero"))
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
             };
             Context.AnnounceCategories.Add(announceCategory6);
             Context.SaveChanges();

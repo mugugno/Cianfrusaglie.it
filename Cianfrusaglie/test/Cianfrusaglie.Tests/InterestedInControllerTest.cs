@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Cianfrusaglie.Tests
 {
-    public class InterestedInControllerTest : BaseTestSetup {
+   /* public class InterestedInControllerTest : BaseTestSetup {
 
         protected InterestedInController CreateInterestedInController( string id ) {
             return new InterestedInController( Context ) {
@@ -35,5 +35,5 @@ namespace Cianfrusaglie.Tests
             Assert.IsType<BadRequestResult>(interestedIn.Index());
         }
 
-    }
+    }*/
 }
