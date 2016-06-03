@@ -206,7 +206,7 @@ namespace Cianfrusaglie.Tests {
             var announceCategory5 = new AnnounceCategory
             {
                 Announce = announce5,
-                Category = Context.Categories.Single(a => a.Name.Equals("Tempo Libero"))
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
             };
             Context.AnnounceCategories.Add( announceCategory5 );
          Context.SaveChanges();
@@ -217,7 +217,7 @@ namespace Cianfrusaglie.Tests {
             var announceCategory6 = new AnnounceCategory
             {
                 Announce = announce6,
-                Category = Context.Categories.Single(a => a.Name.Equals("Tempo Libero"))
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
             };
             Context.AnnounceCategories.Add(announceCategory6);
             Context.SaveChanges();

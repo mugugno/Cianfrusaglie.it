@@ -202,9 +202,9 @@ namespace Cianfrusaglie.Tests {
             Context.SaveChanges();
             var searchController = CreateResearchController(user.Id);
             AdvancedSearchViewModel advSearchByFeedback = new AdvancedSearchViewModel() {FeedbackRatingRange = new Tuple<int, int>(3,5)};
-            var announce = Context.Announces.Single(ann => ann.Author == user);
+            var announce = Context.Announces.First(ann => ann.AuthorId.Equals(user.Id));
             var result = searchController.PerformAdvancedSearch(advSearchByFeedback);
-            var wrongAnnounce = Context.Announces.Single(ann => ann.Author == user2);
+            var wrongAnnounce = Context.Announces.First(ann => ann.AuthorId.Equals(user2.Id));
 
             Assert.Contains(announce, result);
             Assert.DoesNotContain(wrongAnnounce, result);

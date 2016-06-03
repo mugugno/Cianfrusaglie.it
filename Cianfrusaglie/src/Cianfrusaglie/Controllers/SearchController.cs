@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Cianfrusaglie.GeoPosition;
@@ -250,7 +251,7 @@ namespace Cianfrusaglie.Controllers {
             Predicate< Announce > truePredicate = (Announce a) => true;
 
             var rangeKmPredicate = truePredicate;
-            if ( LoginChecker.HasLoggedUser( this ) ) {
+            if ( LoginChecker.HasLoggedUser( this ) && advancedSearchViewModel.KmRange != null ) {
                 var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
                 double min = advancedSearchViewModel.KmRange.Item1;
                 double max = advancedSearchViewModel.KmRange.Item2;
