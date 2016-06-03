@@ -5,7 +5,7 @@
     ViewData[ "Title" ] = "Register";
     Layout = "";
 }
-
+@Html.AntiForgeryToken()
 @functions
 {
 
@@ -207,25 +207,25 @@ clickBackButton(2)"><span>1</span>Su di te</span>
 
                     <div class="form-group">
                         <label asp-for="UserName" class="control-label">Username</label><br />
-                        <input asp-for="UserName" required="" minlength="3" class="form-control" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
+                        <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control" />
+                        <span asp-validation-for="UserName" id="unamedanger" class="text-danger"></span>
 
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                        <input asp-for="Email" type="email" required="" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <input asp-for="Email" id="email" type="email" required="" class="form-control" />
+                        <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Password" class="control-label">Password</label><br />
                         <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData"/>
-                        <span asp-validation-for="Password" class="text-danger" data-trigger="hover" rel="popover"></span>
+                        <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
                         <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        <span asp-validation-for="ConfirmPassword" id="wrongpwd" class="text-danger"></span>
 
                     </div>
 
@@ -244,19 +244,51 @@ clickBackButton(2)"><span>1</span>Su di te</span>
     </div>
 
 <script type="text/javascript" >
-    $('#popoverData').change( passwordCheck );
-    $("#confirmPassword").change( passwordCheck );
+    var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+    $('#popoverData').keyup( passwordCheck );
+    $("#confirmPassword").keyup( passwordCheck );
+    $("#uname").focusout(function () {
+        var uname = $('#uname').val();
+        $.post("/Account/CheckUserNameAlreadyExists",
+                           {
+                               user : uname,
+                               __RequestVerificationToken : antiForgeryToken
 
+                           })
+            .success(function(res){
+                if (res) {
+                    $('#unamedanger').html("Il nome utente inserito esiste già.")
+                } else {
+                    $('#unamedanger').html("")
+                }
+            });
+    });
+    $("#email").focusout(function () {
+        var email = $('#email').val();
+        $.post("/Account/CheckEmailAlreadyExists",
+                           {
+                               email: email,
+                               __RequestVerificationToken: antiForgeryToken
+
+                           })
+            .success(function (res) {
+                if (res) {
+                    $('#emaildanger').html("L'email inserita esiste già.")
+                } else {
+                    $('#emaildanger').html("")
+                }
+            });
+    });
     function passwordCheck() {
-        //if( $('#popoverData').val().length < 8 ) 
-        //    $('#popoverData').get(0).setCustomValidity('La password deve contenere almeno 8 caratteri!');
-        //else
-        //    $('#popoverData').get(0).setCustomValidity('');
-
-        if( $("#popoverData").val() != $("#confirmPassword").val() )
-            $("#confirmPassword").get(0).setCustomValidity('La password di conferma è diversa dalla password!');
+        if( $('#popoverData').val().length < 8 ) 
+            $('#pwdlen').html('La password deve contenere almeno 8 caratteri!');
         else
-            $("#confirmPassword").get(0).setCustomValidity('');
+            $('#pwdlen').html('');
+        
+        if( $("#popoverData").val() != $("#confirmPassword").val() )
+            $("#wrongpwd").html('La password di conferma è diversa dalla password!');
+        else
+            $("#wrongpwd").html('');
     }
 
     function clickNextButton(tmp) {
