@@ -34,11 +34,14 @@ namespace Cianfrusaglie.Controllers
             _userManager = userManager;
         }
         // GET: /<controller>/
-        public IActionResult Index()
+        
+
+
+        public IActionResult Index(string passwordError)
         {
-            CommonFunctions.SetRootLayoutViewData( this, _context );
-            CommonFunctions.SetMacroCategoriesViewData( this,_context );
-           
+            CommonFunctions.SetRootLayoutViewData(this, _context);
+            CommonFunctions.SetMacroCategoriesViewData(this, _context);
+
             var userCategories = _context.UserCategoryPreferenceses.Where(c => c.UserId.Equals(User.GetUserId()));
             var userPreferences = new Dictionary<int, bool>();
             foreach (var category in _context.Categories.ToList())
@@ -58,8 +61,15 @@ namespace Cianfrusaglie.Controllers
             }
             ViewData["user"] = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
             ViewData["userPreferences"] = userPreferences;
+            if (passwordError == null)
+                ViewData["errorePassword"] = "";
+            else
+                ViewData["errorePassword"] = passwordError;
             return View();
         }
+
+
+
 
         public async Task<IActionResult> Edit(PreferenceViewModel model)
         {
@@ -68,12 +78,14 @@ namespace Cianfrusaglie.Controllers
             var userPreferences = _context.UserCategoryPreferenceses.Where(c => c.UserId.Equals(User.GetUserId()));
             _context.UserCategoryPreferenceses.RemoveRange(userPreferences);
             _context.SaveChanges();
+            string stringaErrorePassword="";
 
             if (model.VecchiaPassword != null)
             {
                 if (model.Password != null && model.ConfirmPassword != null && !model.Password.Equals(model.ConfirmPassword))
                 {
                     ModelState.AddModelError("Password", "Password e Conferma password devono essere uguali");
+                    stringaErrorePassword = "Password e Conferma password devono essere uguali";
                 }
                 else if(model.Password != null && model.ConfirmPassword != null && model.Password.Equals(model.ConfirmPassword))
                 {
@@ -81,11 +93,13 @@ namespace Cianfrusaglie.Controllers
                     if(!result.Succeeded)
                     {
                         ModelState.AddModelError("Password", "Errori nel cambio password");
+                        stringaErrorePassword = "Errori nel cambio password";
                     }
                 }
                 else if(model.Password == null || model.ConfirmPassword == null)
                 {
                     ModelState.AddModelError("Password", "Devi riempire sia Nuova password che conferma password");
+                    stringaErrorePassword="Devi riempire sia Nuova password che conferma password";
                 }
             }
             else
@@ -93,6 +107,7 @@ namespace Cianfrusaglie.Controllers
                 if(model.Password != null || model.ConfirmPassword != null)
                 {
                     ModelState.AddModelError("Password", "Devi inserire la vecchia password");
+                    stringaErrorePassword = "Devi inserire la vecchia password";
                 }
             }
 
@@ -137,7 +152,7 @@ namespace Cianfrusaglie.Controllers
                 _context.SaveChanges();
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
-            return RedirectToAction(nameof(PreferencesController.Index));
+            return RedirectToAction(nameof(PreferencesController.Index),new { passwordError = stringaErrorePassword });
         }
     }
 }

@@ -186,6 +186,15 @@
                                         </div>
                                         
                                         <div class="form-group">
+                                            @{
+                                                var errorePassword = ViewData["errorePassword"];
+
+                                                if (!errorePassword.Equals(""))
+                                                {
+                                                   <span style="color:red">@errorePassword</span><br />
+
+                                                }
+                                            }
                                             <label asp-for="VecchiaPassword" class="control-label">Vecchia password</label><br />
                                             <input asp-for="VecchiaPassword"  type="password"  class="form-control" />
                                             <span asp-validation-for="VecchiaPassword" class="text-danger"></span>
