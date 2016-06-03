@@ -54,7 +54,7 @@ namespace Cianfrusaglie.Controllers
                 if (check == 0)
                     userPreferences.Add(category.Id, false);
             }
-
+            ViewData["user"] = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
             ViewData["userPreferences"] = userPreferences;
             return View();
         }
@@ -66,6 +66,28 @@ namespace Cianfrusaglie.Controllers
             var userPreferences = _context.UserCategoryPreferenceses.Where(c => c.UserId.Equals(User.GetUserId()));
             _context.UserCategoryPreferenceses.RemoveRange(userPreferences);
             _context.SaveChanges();
+
+            if(ModelState.IsValid)
+            {
+                user.Name = model.Name;
+                user.Surname = model.Surname;
+                user.Email = model.Email;
+                user.BirthDate = model.BirthDate;
+                switch (model.Genre)
+                {
+                    case 1:
+                        user.Genre = Genre.Female;
+                        break;
+                    case 2:
+                        user.Genre = Genre.Male;
+                        break;
+                    case 3:
+                        user.Genre = Genre.Unspecified;
+                        break;
+                }
+                _context.SaveChanges();
+            }
+            
             foreach(var newUserPreference in newUserPreferences)
             {
                 if (newUserPreference.Value)
