@@ -16,8 +16,8 @@ namespace Cianfrusaglie.Models {
 
         public virtual Genre Genre { get; set; }
 
-        public virtual double Latitude { get; set; }
-        public virtual double Longitude { get; set; }
+        public virtual double? Latitude { get; set; }
+        public virtual double? Longitude { get; set; }
 
         public bool RememberMe { get; set; }
 
