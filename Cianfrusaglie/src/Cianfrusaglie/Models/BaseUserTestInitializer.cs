@@ -881,7 +881,8 @@ namespace Cianfrusaglie.Models {
          ctx.SaveChanges();
 
          ctx.AnnounceFormFieldsValues.AddRange(
-            new AnnounceFormFieldsValues() { Announce = announce27, FormField = abbigliamentoAcessori.CategoriesFormFields.Select( p => p.FormField ).Single( p => p.Name == "Accessori" ), Value = "Occhiali" },
+            new AnnounceFormFieldsValues() { Announce = announce27, FormField = abbigliamentoAcessori.CategoriesFormFields.Select( p => p.FormField )
+               .Single( p => p.Name == "Tipo Accessorio" ), Value = "Occhiali" },
             new AnnounceFormFieldsValues() { Announce = announce27, FormField = ctx.FormFields.Single( p => p.Name == "Marca" ), Value = "Ray Ban" }
          );
          ctx.SaveChanges();
