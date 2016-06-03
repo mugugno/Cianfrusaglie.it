@@ -29,7 +29,7 @@
 .photoThu img {
    width:100%;
    min-height:15em;
-   height: 15em;
+   /*height: 15em;*/
 }
 #title h5 {
     color: #FFC107;
