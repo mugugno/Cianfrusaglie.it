@@ -17,20 +17,20 @@ namespace Cianfrusaglie.Controllers {
         public HistoryController( ApplicationDbContext context ) { _context = context; }
 
       /// <summary>
-        ///     Ritorna un IEnumerable contenente gli annunci dell'utente loggato.
+      /// Ritorna un IEnumerable contenente gli annunci aperi dell'utente loggato.
       /// </summary>
-      /// <returns>Restituisce annunci pubblicati dall'utente loggato</returns>
+      /// <returns>Restituisce annunci, ancora aperti, pubblicati dall'utente loggato</returns>
       public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
-         var myAnnounces = _context.Announces.Include( p => p.Images ).Include( p => p.Interested ).Where( a => a.AuthorId == User.GetUserId() );
+         var myAnnounces = _context.Announces.Include( p => p.Images ).Include( p => p.Interested ).Where( a => a.AuthorId == User.GetUserId() && !a.Closed );
          return myAnnounces;
       } 
 
-      /// <summary>
+        /// <summary>
         /// Ritorna gli annunci chiusi pubblicati dall'utente.
         /// </summary>
         /// <returns>Gli annunci chiusi pubblicati dall'utente</returns>
         public IEnumerable< Announce > GetLoggedUserClosedAnnounces() {
-            return _context.Announces.Where( announce => announce.Closed && announce.AuthorId.Equals( User.GetUserId() ) );
+            return _context.Announces.Include( a => a.Images ).Where( announce => announce.Closed && announce.AuthorId.Equals( User.GetUserId() ) );
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>Gli annunci chiusi vinti dall'utente</returns>
         public IEnumerable< Announce > GetLoggedUserWonClosedAnnounces() {
             string userId = User.GetUserId();
-            var loggedUserWonClosedAnnounces = _context.Announces.Include( a => a.ChosenUsers ).Where(
+            var loggedUserWonClosedAnnounces = _context.Announces.Include( a => a.ChosenUsers ).Include( a=> a.Images ).Where(
                 announce =>
                     announce.Closed && userId.Equals(announce.ChosenUsers.OrderByDescending(a => a.ChosenDateTime).FirstOrDefault().ChosenUserId) );
             return
@@ -51,7 +51,7 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>Gli annunci chiusi interessati all'utente</returns>
         private IEnumerable< Announce > GetLoggedUserInterestedClosedAnnounce() {
-            foreach( var entity in _context.Announces.Include( a => a.Interested ) ) {
+            foreach( var entity in _context.Announces.Include( a => a.Interested ).Include(a => a.Images)) {
                 if( entity.Closed  ) {
                     foreach( var interested in entity.Interested ) {
                         if( interested.UserId.Equals( User.GetUserId() ) ) {
@@ -99,7 +99,24 @@ namespace Cianfrusaglie.Controllers {
             };
             return View(result);
         }
-      
+
+        /// <summary>
+        /// Questo metodo carica la pagina con tutti gli annunci, ormai chiusi, dell'utente loggato (membro) che ha vinto, perso, o inserito lui stesso
+        /// </summary>
+        /// <returns>La View degli annunci ormai chiusi</returns>
+        public IActionResult MyHistory()
+        {
+            if (!LoginChecker.HasLoggedUser(this))
+                return HttpBadRequest();
+            SetRootLayoutViewData(this, _context);
+            var model = new MyHistoryViewModel
+            {
+                LostClosedAnnounces = GetLoggedUserLostAnnounces().ToList(),
+                PublishedClosedAnnounces = GetLoggedUserClosedAnnounces().ToList(),
+                WonClosedAnnounces = GetLoggedUserWonClosedAnnounces().ToList()
+            };
+            return View(model);
+        }
 
 
         /// <summary>

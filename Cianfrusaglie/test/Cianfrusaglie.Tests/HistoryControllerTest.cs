@@ -34,7 +34,7 @@ namespace Cianfrusaglie.Tests {
         public void HistoryFunctionIsOk() {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var history = CreateHistoryController( usr.Id );
-            var announces = Context.Announces.Where( a => a.AuthorId.Equals( usr.Id ) );
+            var announces = Context.Announces.Where( a => a.AuthorId.Equals( usr.Id ) && !a.Closed);
             var result = history.GetLoggedUserPublishedAnnounces();
             Assert.Equal( result, announces );
         }

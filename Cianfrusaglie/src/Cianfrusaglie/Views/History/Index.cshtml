@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="my-conversations">
+                        <div class="panel-heading panel-centered">
                             <h2>I miei annunci</h2>
                         </div>
                         <div class="panel-body">
@@ -64,18 +64,18 @@
                 <div class="col-md-6">
                     <div class="panel panel-default">
 
-                        <div class="panel-heading" id="my-conversations">
+                        <div class="panel-heading panel-centered">
                             <h2>Gli annunci che mi interessano</h2>
                         </div>
                         <div class="panel-body">
-                            <div class="panel-group" id="panel-524234">
+                            <div class="panel-group" id="panel-524235">
                                 @if (Model.Any())
                                 {
 
                                     foreach (var item in Model[1])
                                     {
                                         <div class="panel panel-default">
-                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer">
+                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524235" href="#announce-number-@item.Id" style="cursor: pointer">
 
 
                                                 <span style="float: right"> @item.PublishDate.ToString("d MMM yyyy") </span>

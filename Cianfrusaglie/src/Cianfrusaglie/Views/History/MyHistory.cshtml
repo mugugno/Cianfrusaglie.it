@@ -4,11 +4,144 @@
     ViewData["Title"] = "Il mio storico";
 }
 
-<h2>MyHistory</h2>
+<div class="container-fluid" >
+    <div class="col-md-1"></div>
+    <div class="col-md-10" >
+        <div>
+            <div class="panel panel-default" >
+                <div class="panel-heading panel-centered" >
+                    <h2>Il mio storico</h2>
+                </div>
+                <div class="panel-body" >
+                    
+                    <div >
+                        <ul class="nav nav-tabs centered" >
+                            <li class="active" ><a data-toggle="tab" href="#home" style="font-size: 1.2em;">I miei vecchi annunci</a></li>
+                            <li><a data-toggle="tab" href="#menu1" style="font-size: 1.2em;">Oggetti che ho preso</a></li>
+                            <li><a data-toggle="tab" href="#menu2" style="font-size: 1.2em;">Oggetti che ho perso</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" >
+                <div class="panel-body" >
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane fade in active" >
+                            <div class="panel-group" id="panel-524234" >
+                                @if( Model.PublishedClosedAnnounces.Any() ) {
+                                    foreach( var item in Model.PublishedClosedAnnounces ) {
+                                        <div class="panel panel-default" >
+                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer" >
 
-<div>
-    <h4>MyHistoryViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-    </dl>
+                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString( "d MMM yyyy" ) </span>
+                                                <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
+
+                                            </div>
+                                            <div id="announce-number-@item.Id" class="panel-collapse collapse" >
+                                                <div class="panel-body" >
+                                                    <div class="form-group" >
+                                                        <div class="col-md-4" >
+                                                            @if( item.Images.Any() ) {
+                                                                <div class="photo" >
+                                                                    <img class="img-responsive" src="@item.Images.First().Url" />
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        <div class="col-md-7" >
+
+                                                            <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
+                                                            <a href="~/InterestedAnnounce/?id=@item.Id" >Visualizza utenti che erano interessati</a>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                } else {
+                                    <div>Non hai ancora alcun annuncio chiuso!</div>
+                                }
+                            </div>
+                        </div>
+                        <div id="menu1" class="tab-pane fade" >
+                            <div class="panel-group" id="panel-524235" >
+                                @if( Model.WonClosedAnnounces.Any() ) {
+                                    foreach( var item in Model.WonClosedAnnounces ) {
+                                        <div class="panel panel-default" >
+                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524235" href="#announce-number-@item.Id" style="cursor: pointer" >
+
+                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString( "d MMM yyyy" ) </span>
+                                                <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
+
+                                            </div>
+                                            <div id="announce-number-@item.Id" class="panel-collapse collapse" >
+                                                <div class="panel-body" >
+                                                    <div class="form-group" >
+                                                        <div class="col-md-4" >
+                                                            @if( item.Images.Any() ) {
+                                                                <div class="photo" >
+                                                                    <img class="img-responsive" src="@item.Images.First().Url" />
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        <div class="col-md-7" >
+
+                                                            <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
+                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                } else {
+                                    <div>Non hai ancora vinto alcun oggetto!</div>
+                                }
+                            </div>
+                        </div>
+                        <div id="menu2" class="tab-pane fade" >
+                            <div class="panel-group" id="panel-524236" >
+                                @if( Model.LostClosedAnnounces.Any() ) {
+                                    foreach( var item in Model.LostClosedAnnounces ) {
+                                        <div class="panel panel-default" >
+                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524236" href="#announce-number-@item.Id" style="cursor: pointer" >
+
+                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString( "d MMM yyyy" ) </span>
+                                                <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
+
+                                            </div>
+                                            <div id="announce-number-@item.Id" class="panel-collapse collapse" >
+                                                <div class="panel-body" >
+                                                    <div class="form-group" >
+                                                        <div class="col-md-4" >
+                                                            @if( item.Images.Any() ) {
+                                                                <div class="photo" >
+                                                                    <img class="img-responsive" src="@item.Images.First().Url" />
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        <div class="col-md-7" >
+
+                                                            <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
+                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                } else {
+                                    <div>Non hai ancora perso alcun oggetto!</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
