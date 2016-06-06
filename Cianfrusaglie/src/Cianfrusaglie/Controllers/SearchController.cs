@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
@@ -11,9 +12,11 @@ using Cianfrusaglie.Suggestions;
 using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Internal;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
+
     public class SearchController : Controller {
         private readonly ApplicationDbContext _context;
         private readonly int resultsPerPage = 12;
@@ -281,14 +284,25 @@ namespace Cianfrusaglie.Controllers {
 
             var announces =
                 _context.Announces.Include( a => a.Author ).Where(
-                    a => feedbackPredicate( a ) && pricePredicate( a ) && rangeKmPredicate( a ) ).ToList();
+                    a => feedbackPredicate( a ) && pricePredicate( a ) && rangeKmPredicate( a ) );
 
-            if( advancedSearchViewModel.Title == null )
-                return announces;
+            if (!advancedSearchViewModel.ShowGifts)
+                announces = announces.Where(a => a.Price != 0);
 
-            var titleSearch = TitleBasedSearch( advancedSearchViewModel.Title );
-            announces = announces.Union( titleSearch ).ToList();
-            return announces;
+            if (!advancedSearchViewModel.ShowOnSale)
+                announces = announces.Where(a => a.Price == 0);
+
+            if ( advancedSearchViewModel.Title != null ) {
+                var titleSearch = TitleBasedSearch(advancedSearchViewModel.Title);
+                announces = announces.Union( titleSearch );
+            }
+
+            if( advancedSearchViewModel.OrderByDate )
+                announces = announces.OrderByDescending( a => a.PublishDate );
+
+            announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending( a => a.Price ) : announces.OrderBy( a => a.Price );
+
+            return announces.ToList();
         }
 
         protected override void Dispose( bool disposing ) {
@@ -296,5 +310,9 @@ namespace Cianfrusaglie.Controllers {
                 _context.Dispose();
             base.Dispose( disposing );
         }
+
+        
     }
+
+
 }

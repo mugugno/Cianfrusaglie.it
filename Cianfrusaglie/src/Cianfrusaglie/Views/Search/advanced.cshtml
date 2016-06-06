@@ -50,77 +50,118 @@
 <body>
 
 <div id="wrapper-register">
-    <div class="col-md-6 col-lg-offset-3 " style="align-content: center; margin-top: 5em;">
-        <form class="panel panel-body" asp-action="SearchRedirect" asp-controller="Search" method="get">
-            <div id="title">
-                <a href="~/">
-                    <h1>
-                        @CommonStrings.SiteName
-                    </h1>
-                    <h5>Il posto giusto per le tue cianfrusaglie</h5>
+    <div class="col-md-6 col-lg-offset-3" style="align-content: center; margin-top: 5em;">
+            <form class="panel panel-default" asp-action="SearchRedirect" asp-controller="Search" method="get">
+                <div id="title" class="panel panel-heading" style="background-color: #49586d">
+                    <a href="~/">
+                        <h1>
+                            @CommonStrings.SiteName
+                        </h1>
+                        <h5>Il posto giusto per le tue cianfrusaglie</h5>
 
-                </a>
-                <br/>
-            </div>
-            <br/>
-            <div class="input-group">
-                <span class="input-group-btn">
-                    
-                        <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie <span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-large">
-                            @foreach (var macro in GetCategories())
-                            {
-                                <li>
-                                    <a href="~/Search?categories=@macro.Id">@macro.Name</a>
-                                    @if (GetSubCategories(@macro.Name).ToList().Count > 0)
-                                    {
-                                        if (@macro.Name.Equals("MisteryBox"))
+                    </a>
+                </div>
+               
+                <div class="panel panel-body" style="background: #eee; margin-bottom:0">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+
+                            <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie <span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-large">
+                                @foreach (var macro in GetCategories())
+                                {
+                                    <li>
+                                        <a href="~/Search?categories=@macro.Id">@macro.Name</a>
+                                        @if (GetSubCategories(@macro.Name).ToList().Count > 0)
                                         {
-                                            <ul class="dropdown-menu sub-menu">
-                                                <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
-                                                <li class="divider"></li>
-                                                <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
-                                                <li class="divider"></li>
-                                                @foreach (var sub in GetSubCategories(@macro.Name))
-                                                {
-                                                    <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                            if (@macro.Name.Equals("MisteryBox"))
+                                            {
+                                                <ul class="dropdown-menu sub-menu">
+                                                    <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
                                                     <li class="divider"></li>
-                                                    <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;"><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
-                                                }
-                                            </ul>
+                                                    <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                                    <li class="divider"></li>
+                                                    @foreach (var sub in GetSubCategories(@macro.Name))
+                                                    {
+                                                        <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                        <li class="divider"></li>
+                                                        <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;"><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <ul class="dropdown-menu sub-menu">
+                                                    <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                                    <li class="divider"></li>
+                                                    @foreach (var sub in GetSubCategories(@macro.Name))
+                                                    {
+                                                        <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                    }
+                                                </ul>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <ul class="dropdown-menu sub-menu">
-                                                <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
-                                                <li class="divider"></li>
-                                                <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
-                                                <li class="divider"></li>
-                                                @foreach (var sub in GetSubCategories(@macro.Name))
-                                                {
-                                                    <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
-                                                }
-                                            </ul>
-                                        }
-                                    }
-                                </li>
-                            }
-                        </ul>
-                      
-                </span>
-                
-                <input type="text" name="title" class="form-control input-lg" placeholder="Cerca">
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-warning btn-searchadv btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
-                </span>
-            </div>
-           
-        </form>
+                                    </li>
+                                }
+                            </ul>
+
+                        </span>
+
+                        <input type="text" name="title" class="form-control input-lg" placeholder="Cerca">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-warning btn-searchadv btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label>Data di pubblicazione: &nbsp;</label>
+                        <label class="radio-inline"><input type="radio" name="optDate" checked="checked"> Più recenti</label>
+                        <label class="radio-inline"><input type="radio" name="optDate"> Più datati</label>
+                        </div>
+                    <br/>
+                    <div class="input-group">
+                        <label>Prezzo: &nbsp;</label>
+                        <label class="radio-inline"><input type="radio" name="optPrice" checked="checked"> Più economici</label>
+                        <label class="radio-inline"><input type="radio" name="optPrice"> Più costosi</label>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label class="checkbox-inline"><input type="checkbox" name="optDistance"/> Mostra prima gli annunci più vicini a me</label>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label class="checkbox-inline"><input type="checkbox"/><input type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
+                        <label class="checkbox-inline"><input type="checkbox"/><input type="checkbox" checked="checked" id="salesON" onclick="showRange()"/> Mostra oggetti in vendita</label>
+                    </div>
+                    <div class="input-group" id="priceRange">
+                        <br />
+                        <label class="radio-inline">Mostra annunci compresi tra: <input type="number" style="width: 100px;" min="0"/> € e <input type="number" style="width: 100px;"/> €</label>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label>Mostra annunci di utenti con rating: </label><br/>
+                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605</label>
+                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605</label>
+                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605 &#x2605</label>
+                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605 &#x2605 &#x2605</label>
+                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
-
-    </div>
-
-
+<script>
+    function showRange() {
+        if ($('#salesON').checked) {
+            $('#priceRange').show();
+}
+        else {
+            $('#priceRange').hide();
+}
+    }
+</script>
 </body>
 </html>
