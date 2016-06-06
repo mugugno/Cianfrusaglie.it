@@ -13,10 +13,18 @@ namespace Cianfrusaglie.ViewModels.Search
 
         public bool? OrderByDateDescending { get; set; }
 
+        public bool OrderByPrice { get; set; }
+
+        public bool OrderByDistance { get; set; }
+
         public Tuple<int, int> KmRange { get; set; }
 
         public Tuple<int, int> PriceRange { get; set; }
 
         public Tuple<int, int> FeedbackRatingRange { get; set; }
+
+        public bool ShowGifts { get; set; }
+
+        public bool ShowOnSale { get; set; }
     }
 }
