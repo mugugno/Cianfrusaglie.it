@@ -297,8 +297,8 @@ namespace Cianfrusaglie.Controllers {
                 announces = announces.Union( titleSearch );
             }
 
-            if( advancedSearchViewModel.OrderByDate )
-                announces = announces.OrderByDescending( a => a.PublishDate );
+            //if( advancedSearchViewModel.OrderByDate )
+            //    announces = announces.OrderByDescending( a => a.PublishDate );
 
             announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending( a => a.Price ) : announces.OrderBy( a => a.Price );
 

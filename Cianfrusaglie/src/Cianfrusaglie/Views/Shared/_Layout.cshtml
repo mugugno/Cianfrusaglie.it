@@ -272,11 +272,11 @@
                         @* Menù profilo *@
                     <li class="dropdown dropdown-large" >
                         <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" >
-                            <span class="col-md-1" style="padding-left: 0px; padding-right: 3em; max-height: 2em;">
+                            <div class="col-md-1" style="padding-left: 0px; padding-right: 3em; max-height: 2em;">
                                 <div class="photo navbar-avatar panel panel-default" style="margin-top: -4px;">
                                     <img class="img-responsive" src=@ViewData[ "MyAvatar" ] as string />
                                 </div>
-                            </span>
+                            </div>
                             @User.Identity.Name <b class="caret" ></b>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
