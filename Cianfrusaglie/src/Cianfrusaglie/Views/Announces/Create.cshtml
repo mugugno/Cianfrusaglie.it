@@ -47,9 +47,6 @@
 
 }
 
-<script src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script>
-<script src="/js/googleMaps.js"></script>
-
 <div>
     <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
         
@@ -198,6 +195,14 @@
                                             </div>
                                         }
 
+                                        <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+                                        <div class="form-group">
+                                            <label class="col-md-4">Dove si trova l'oggetto?</label>
+                                            <div class="col-md-6">
+                                                <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo">
+                                            </div>
+                                        </div>
+
                                         <div class="form-group" >
                                             <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
                                             <div class="col-md-7" >
@@ -215,7 +220,6 @@
                                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
 
                                         <div class="form-group" >
-
                                             <label class="col-md-4 control-label" for="photos" >Immagini</label>
                                             <div class="col-md-6" >
                                                 <input asp-for="Photos" required="" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
@@ -223,14 +227,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-
-                                        <div class="form-group" >
-                                            <label class="col-md-4" >Dove si trova l'oggetto?</label>
-                                            <div class="col-md-6" >
-                                                <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
-                                            </div>
-                                        </div>
                                         <div class="form-group" >
                                             <div class="col-md-4" ></div>
                                             <div class="col-md-7" >
@@ -254,6 +250,9 @@
     </form>
 </div>
 
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="/js/googleMaps.js"></script>
+<script src="/js/createAnnounce.js"></script>
 <script>
     clickForwardButton();
     // TODO spostare tutto in un file js
@@ -261,102 +260,52 @@
     $("#range-input").val(1);
     setFieldsVisibility();
 
-                                           var mapLoaded= false;
-
-                                           function setFieldsVisibility() {
-        $(".category-form-fields").hide(0);
-                                               var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-                                               for( var i = 0; i < checkboxesArray.length; i++ ) {
-                                                   var checkbox = checkboxesArray[ i ];
-                                                   if( checkbox.checked ) {
-                                                   var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
-                                                   for( var j = 0; j < categoryFormFieldsArray.length; j++ )
-                                                       categoryFormFieldsArray[ j ].style.display = "block";
-                                               }
-                                           }
-     }
-
+    var mapLoaded= false;
 
     // 500 sono i millisecondi di durata della transizione
     var transitionTime = 350;
-                                           function disableForward(){
-                                               if (!atLeastOneCategorySelected()) {
-            $("#forward-button").addClass("disabled");
-                                               } else {
-            $("#forward-button").removeClass("disabled");
-                                               }
-                                           }
+
     disableForward();
-    $(".category-checkboxes").change(function () {
-                                               disableForward();
-                                           });
+    $(".category-checkboxes").change(disableForward);
     function clickForwardButton() {
-                                               if( !atLeastOneCategorySelected() ) {
-                                                   //$('#createError').show(0);
-                                                   //TODO mostrare errore nessuna categoria scelta
-                                                   return;
-                                               }
+        if( !atLeastOneCategorySelected() ) {
+            //$('#createError').show(0);
+            //TODO mostrare errore nessuna categoria scelta
+            return;
+        }
 
-                                               if (document.getElementById("forward-button").innerHTML === "Pubblica") {
+        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
             //aggiungiamo al form la posizione di google maps
-            $("#latitudeInput").val( marker.position.lat() );
-            $("#longitudeInput").val( marker.position.lng() );
+            if( GMapsOnline() ) {
+                $("#latitudeInput").val(marker.position.lat());
+                $("#longitudeInput").val(marker.position.lng());
+            } else { //offline
+                $("#latitudeInput").val(0);
+                $("#longitudeInput").val(0);
+            }
 
-                                                   document.getElementById("forward-button").setAttribute("type", "submit");
-                                               } else
-                                                   document.getElementById("forward-button").innerHTML = "Pubblica";
+            document.getElementById("forward-button").setAttribute("type", "submit");
+        } else
+            document.getElementById("forward-button").innerHTML = "Pubblica";
 
         $('#page1').hide(transitionTime);
         $('#page2').show(transitionTime);
         $('#back-button').show(0);
 
-                                               if (mapLoaded)
-                                                   return;
-        @{
-                                                   var loggedUser= (User) ViewData[ "loggedUser" ];
-                                               }
-                                               var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
-                                               var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
-                                               var position = new google.maps.LatLng(latitude, longitude);
-                                               initialize(1, position);
-                                               mapLoaded= true;
-                                           }
-
-                                           function clickBackButton() {
-        $('#page1').show(transitionTime);
-        $('#page2').hide(transitionTime);
-        $('#back-button').hide(0);
-
-                                               document.getElementById("forward-button").innerHTML = "Avanti";
-                                               document.getElementById("forward-button").setAttribute("type", "button");
-                                           }
-
-                                           function clickRangeButton() {
-                                               var checkbox = document.getElementById("range-checkbox");
-                                               var rangeInput = document.getElementById("range-input");
-                                               if( checkbox.checked ) {
-                                                       rangeInput.removeAttribute("disabled");
-                                                       rangeInput.value = 1;
-                                                       setCircle(marker.position, 1);
-                                                   } else {
-                                                       rangeInput.setAttribute("disabled", "");
-                                                       rangeInput.value = 0;
-                                                       cityCircle.setMap(null);
-                                                   }
-                                                   }
-
-                                               function atLeastOneCategorySelected() {
-                                                   var categoriesCheckBoxes = document.getElementsByClassName("category-checkboxes");
-                                                   for(var i = 0; i< categoriesCheckBoxes.length; i++)
-                                                       if( categoriesCheckBoxes[ i ].checked )
-                return true;
-                                                   return false;
-                                               }
+        if( mapLoaded || !GMapsOnline() )
+            return;
+        @{ var loggedUser= (User) ViewData[ "loggedUser" ]; }
+        var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
+        var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initialize(1, position);
+        mapLoaded= true;
+    }
 
     //google maps
     $("#range-input").change(function () {
-                                                   var range = $("#range-input").val();
-                                                   setCircle(marker.position, range);
-                                               });
-                                               clickForwardButton();
+        var range = $("#range-input").val();
+        setCircle(marker.position, range);
+    });
+    clickForwardButton();
 </script>

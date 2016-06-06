@@ -109,3 +109,7 @@ function placeMarker(location, title) {
 
     map.setCenter(location);
 }
+
+function GMapsOnline() {
+    return marker != null;
+}
