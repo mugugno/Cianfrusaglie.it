@@ -198,8 +198,8 @@
                                         <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                                         <div class="form-group">
                                             <label class="col-md-4">Dove si trova l'oggetto?</label>
-                                            <div class="col-md-6">
-                                                <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo">
+                                            <div class="col-md-7" >
+                                                <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo" >
                                             </div>
                                         </div>
 
@@ -216,23 +216,23 @@
                                             </div>
                                         </div>
 
-                                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
-                                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                                       
 
+                                        <br />
                                         <div class="form-group" >
                                             <label class="col-md-4 control-label" for="photos" >Immagini</label>
-                                            <div class="col-md-6" >
-                                                <input asp-for="Photos" required="" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
+                                            <div class="col-md-7" >
+                                                <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*" >
                                                 <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
 
                                         <div class="form-group" >
-                                            <div class="col-md-4" ></div>
-                                            <div class="col-md-7" >
-                                                <div id="googleMap" style="width: 500px; height: 380px;" ></div>
-                                            </div>
+                                            <div id="googleMap"></div>
                                         </div>
+
+                                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
                                     </fieldset>
                                    
                                 </div>
@@ -267,33 +267,8 @@
 
     disableForward();
     $(".category-checkboxes").change(disableForward);
-    function clickForwardButton() {
-        if( !atLeastOneCategorySelected() ) {
-            //$('#createError').show(0);
-            //TODO mostrare errore nessuna categoria scelta
-            return;
-        }
 
-        if (document.getElementById("forward-button").innerHTML === "Pubblica") {
-            //aggiungiamo al form la posizione di google maps
-            if( GMapsOnline() ) {
-                $("#latitudeInput").val(marker.position.lat());
-                $("#longitudeInput").val(marker.position.lng());
-            } else { //offline
-                $("#latitudeInput").val(0);
-                $("#longitudeInput").val(0);
-            }
-
-            document.getElementById("forward-button").setAttribute("type", "submit");
-        } else
-            document.getElementById("forward-button").innerHTML = "Pubblica";
-
-        $('#page1').hide(transitionTime);
-        $('#page2').show(transitionTime);
-        $('#back-button').show(0);
-
-        if( mapLoaded || !GMapsOnline() )
-            return;
+    function loadGmap() {
         @{ var loggedUser= (User) ViewData[ "loggedUser" ]; }
         var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
         var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");

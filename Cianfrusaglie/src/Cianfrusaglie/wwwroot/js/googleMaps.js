@@ -68,7 +68,14 @@ function initializeGMaps(position, onlyView, radius) {
                 placeMarker(event.latLng);
                 if( radius > 0 )
                     setCircle(marker.position, $("#range-input").val());
-            });
+        });
+
+        // Resize stuff...
+        google.maps.event.addDomListener(window, "resize", function () {
+            var center = map.getCenter();
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(center);
+        });
     } else if( radius > 0 ) {
         //creo un cerchio intorno alla posizione
         setCircle(marker.position, radius);
