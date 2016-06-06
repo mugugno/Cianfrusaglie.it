@@ -274,6 +274,8 @@
         var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
         var position = new google.maps.LatLng(latitude, longitude);
         initialize(1, position);
+
+        geocodePosition(position);
         mapLoaded= true;
     }
 
@@ -283,4 +285,15 @@
         setCircle(marker.position, range);
     });
     clickForwardButton();
+
+    var geocoder = new google.maps.Geocoder();
+    function geocodePosition(pos) {
+        geocoder.geocode({
+            latLng: pos
+        }, function (responses) {
+            if (responses && responses.length > 0) {
+                $("#pac-input").val(responses[ 0 ].formatted_address);
+            } 
+        });
+    }
 </script>
