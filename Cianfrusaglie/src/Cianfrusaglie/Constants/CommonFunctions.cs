@@ -6,6 +6,7 @@ using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Suggestions;
 using Microsoft.AspNet.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.Entity;
 
 namespace Cianfrusaglie.Constants
@@ -27,6 +28,8 @@ namespace Cianfrusaglie.Constants
             controller.ViewData["IsNewFeedbackRequired"] = IsNewFeedbackRequired(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewFeedback"] = IsThereNewFeedback(controller.User.GetUserId(), context);
             controller.ViewData["IsThereAnyNotification"] = IsThereAnyNotification(controller.User.GetUserId(), context);
+            var loggedUser = context.Users.FirstOrDefault( u => u.Id.Equals( controller.User.GetUserId() ) );
+            controller.ViewData[ "MyAvatar" ] = loggedUser == null ? "" : loggedUser.ProfileImageUrl;
 
         }
 
