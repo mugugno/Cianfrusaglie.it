@@ -97,13 +97,13 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-        <div class="collapse navbar-collapse js-navbar-collapse">
+        <div class="collapse navbar-collapse js-navbar-collapse" id="websiteNavbar">
             <ul class="nav navbar-nav">
                 <li class="dropdown dropdown-large">
-                    <a href="~/"><span class="glyphicon glyphicon-home"></span> Home</a>
+                    <a href="~/" class="navbar-item"><span class="glyphicon glyphicon-home"></span> Home</a>
                 </li>
                 <li class="dropdown dropdown-large" >
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" >Cerca per categoria <b class="caret" ></b></a>
+                    <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" ><span class="glyphicon glyphicon-search"></span> Cerca per categoria <b class="caret" ></b></a>
                     <ul class="dropdown-menu dropdown-menu-large" >
                         @foreach( var macro in GetCategories() ) {
                             <li>
@@ -143,14 +143,19 @@
                         }
                     </ul>
                 </li>
-                
+                <li class="dropdown dropdown-large" >
+                    <a href="~/History/Index" class="navbar-item" ><span class="glyphicon glyphicon-gift"></span> I miei annunci</a>
+                </li>
+                <li class="dropdown dropdown-large">
+                    <a href="~/Messages" class="navbar-item"><span class="glyphicon glyphicon-envelope"></span> Messaggi</a>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav" id="menuRight">
                 @if (!User.Identity.IsAuthenticated)
                 {
                     <li>
-                        <a href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
+                        <a class="navbar-item" href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
                     </li>
                 }
                 else
@@ -160,8 +165,10 @@
                         @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
                         @if (ViewData["IsThereAnyNotification"] as bool? ?? false)
                         {
-                            Sentences sent= new Sentences();
-                            <a href="#" class="dropdown-toggle glyphicon glyphicon-flag" data-toggle="dropdown" style="font-size: 2em; color: red;"><b class="caret"></b></a>
+                            Sentences sent = new Sentences();
+                            <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
+                                Notifiche <span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span> <b class="caret"></b>
+                            </a>
                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
                                 @if ((int)ViewData["IsThereNewMessages"]==1)
                                 {
@@ -248,7 +255,11 @@
                                     }
                                     else
                                     {
-                                        <a href="#" class="dropdown-toggle glyphicon glyphicon-inbox" data-toggle="dropdown" style="font-size: 2em"><b class="caret"></b></a>
+                            <!-- Nessuna nuova notifica -->
+                            <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
+                                Notifiche <span class="glyphicon glyphicon-fire" style="font-size: 2.2em; color: silver; vertical-align: middle"></span> <b class="caret" ></b>
+                            </a>
+
                                         <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
                                             <li style="text-align: center; padding: 1em">
                                                 <span>Nessuna notifica</span>
@@ -258,52 +269,59 @@
                         </li>
 
                         @* Menù profilo *@
-<li class="dropdown dropdown-large">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Benvenuto/a @User.Identity.Name <b class="caret"></b></a>
-                                            <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right:0">
-                                                <li class="dropdown-header">
-                                                    <a href="~/Profile" class="WantOrange">
-                                                        <span class="glyphicon glyphicon-user"></span> 
-                                                        Profilo
-                                                    </a>
-                                                </li>
-                                                <li><a href="~/History/Index">I miei annunci</a></li>
-                                                <li><a href="~/History/MyHistory" >Il mio storico</a></li>
-                                                <li><a href="~/Profile">Il mio profilo</a></li>
-                                                <li><a href="~/Preferences/Index">Impostazioni profilo</a></li>
-                                                <li class="divider"></li>
-                                                <li class="dropdown-header">
-                                                    <a href="~/Messages" class="WantOrange">
-                                                        <span class="glyphicon glyphicon-envelope"></span> 
-                                                        Messaggi
-                                                    </a>
-                                                        </li>
-                                                <li><a href="~/Messages">Le mie conversazioni</a></li>
-                                                <li class="divider"></li>
-                                                <li class="dropdown-header">
-                                                    <a href="~/Messages" class="WantOrange">
-                                                        <span class="glyphicon glyphicon-pencil"></span> 
-                                                        Inserisci un annuncio
-                                                    </a>
-                                                </li>
-                                                <li><a href="~/Announces/Create">Liberati di una cianfrusaglia</a></li>
-                                                <li><a href="~/Announces/Create/?vendita=true">Vendi quello che non ti serve</a></li>
-                                              <!--  <li><a href="">Baratta</a></li>
-                                                <li><a href="">Stai cercando un oggetto in particolare?</a></li>
-                                                  -->
-                                            </ul>
-                                        </li>
+                    <li class="dropdown dropdown-large" >
+                        <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" >
+                            <div class="col-md-1" style="padding-left: 0px; padding-right: 3em; max-height: 2em;">
+                                <div class="photo navbar-avatar panel panel-default" style="margin-top: -4px;">
+                                    <img class="img-responsive" src=@ViewData[ "MyAvatar" ] as string />
+                                </div>
+                            </div>
+                            @User.Identity.Name <b class="caret" ></b>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0" >
+                            <li class="dropdown-header" >
+                                <a href="~/Profile" class="WantOrange" >
+                                    <span class="glyphicon glyphicon-user"></span> 
+                                    Profilo
+                                </a>
+                            </li>
+                            <li><a href="~/History/Index" >I miei annunci</a></li>
+                            <li><a href="~/History/MyHistory" >Il mio storico</a></li>
+                            <li><a href="~/Profile" >Il mio profilo</a></li>
+                            <li><a href="~/Preferences/Index" >Impostazioni profilo</a></li>
+                            <li class="divider" ></li>
+                            <li class="dropdown-header" >
+                                <a href="~/Messages" class="WantOrange" >
+                                    <span class="glyphicon glyphicon-envelope"></span> 
+                                    Messaggi
+                                </a>
+                            </li>
+                            <li><a href="~/Messages" >Le mie conversazioni</a></li>
+                            <li class="divider" ></li>
+                            <li class="dropdown-header" >
+                                <a href="~/Messages" class="WantOrange" >
+                                    <span class="glyphicon glyphicon-pencil"></span> 
+                                    Inserisci un annuncio
+                                </a>
+                            </li>
+                            <li><a href="~/Announces/Create" >Liberati di una cianfrusaglia</a></li>
+                            <li><a href="~/Announces/Create/?vendita=true" >Vendi quello che non ti serve</a></li>
+                            <!-- <li><a href="" >Baratta</a></li>
+                            <li><a href="" >Stai cercando un oggetto in particolare?</a></li>
+                            -->
+                        </ul>
+                    </li>
                                         }
                 @if (!User.Identity.IsAuthenticated)
                 {
                     <li>
-                        <a href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                        <a class="navbar-item" href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                     </li>
                 }
                 else
                 {
                     <li>
-                        <a href="~/Account/LogOff"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                        <a class="navbar-item" href="~/Account/LogOff"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
                     </li>
                 }
             </ul>

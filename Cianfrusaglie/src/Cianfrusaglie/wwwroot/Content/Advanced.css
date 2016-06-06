@@ -11,3 +11,7 @@ wrapper-advanced div {
     transform: translate(-50%, -50%) 
 
 }
+
+#priceRange{
+ display: none;
+}
