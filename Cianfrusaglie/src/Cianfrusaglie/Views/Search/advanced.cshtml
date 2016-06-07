@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Cianfrusaglie.Constants
+@model Cianfrusaglie.ViewModels.Search.AdvancedSearchViewModel
 @{
     Layout = "";
 }
@@ -51,7 +52,7 @@
 
 <div id="wrapper-register">
     <div class="col-md-6 col-lg-offset-3" style="align-content: center; margin-top: 5em;">
-            <form class="panel panel-default" asp-action="SearchRedirect" asp-controller="Search" method="get">
+            <form class="panel panel-default" asp-action="SearchRedirect" asp-controller="Search" method="get" role="form" onsubmit="return ">
                 <div id="title" class="panel panel-heading" style="background-color: #49586d">
                     <a href="~/">
                         <h1>
@@ -117,23 +118,23 @@
                     <br/>
                     <div class="input-group">
                         <label>Data di pubblicazione: &nbsp;</label>
-                        <label class="radio-inline"><input type="radio" name="optDate" checked="checked"> Più recenti</label>
-                        <label class="radio-inline"><input type="radio" name="optDate"> Più datati</label>
+                        <label asp-for="OrderByDateAscending" class="radio-inline"><input asp-for="OrderByDateAscending" type="radio" name="optDate" checked="checked"> Più recenti</label>
+                        <label asp-for="OrderByDateDescending" class="radio-inline"><input asp-for="OrderByDateDescending" type="radio" name="optDate"> Più datati</label>
                         </div>
                     <br/>
                     <div class="input-group">
                         <label>Prezzo: &nbsp;</label>
-                        <label class="radio-inline"><input type="radio" name="optPrice" checked="checked"> Più economici</label>
-                        <label class="radio-inline"><input type="radio" name="optPrice"> Più costosi</label>
+                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" name="optPrice" checked="checked"> Più economici</label>
+                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" name="optPrice"> Più costosi</label>
                     </div>
                     <br/>
                     <div class="input-group">
-                        <label class="checkbox-inline"><input type="checkbox" name="optDistance"/> Mostra prima gli annunci più vicini a me</label>
+                        <label asp-for="OrderByDistance" class="checkbox-inline"><input asp-for="OrderByDistance" type="checkbox" name="optDistance"/> Mostra prima gli annunci più vicini a me</label>
                     </div>
                     <br/>
                     <div class="input-group">
-                        <label class="checkbox-inline"><input type="checkbox"/><input type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
-                        <label class="checkbox-inline"><input type="checkbox"/><input type="checkbox" checked="checked" id="salesON" onclick="showRange()"/> Mostra oggetti in vendita</label>
+                        <label asp-for="ShowGifts" class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowGifts" type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
+                        <label asp-for="ShowOnSale" class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowOnSale" type="checkbox" checked="checked" id="salesON" onchange="showRange()" onclick="showRange()"/> Mostra oggetti in vendita</label>
                     </div>
                     <div class="input-group" id="priceRange">
                         <br />
@@ -157,8 +158,7 @@
     function showRange() {
         if ($('#salesON').checked) {
             $('#priceRange').show();
-}
-        else {
+        } else {
             $('#priceRange').hide();
 }
     }
