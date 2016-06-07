@@ -3,6 +3,7 @@
 @using System.Security.Claims
 @using System.Threading.Tasks
 @using Cianfrusaglie.Constants
+@inject SignInManager<User> SignInManager
 @functions
 {
 
@@ -42,7 +43,7 @@
     <script src="~/js/StarRatingFunctions.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="~/Content/bootstrap-social.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Home.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Advanced.css" rel="stylesheet" type="text/css" />
@@ -152,6 +153,27 @@
             <ul class="nav navbar-nav" id="menuRight">
                 @if (!User.Identity.IsAuthenticated)
                 {
+                    <li>
+                        @{
+
+                            var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                            if (loginProviders.Count != 0)
+                            {
+
+                                <form asp-controller="Account" asp-action="ExternalLogin" style="margin-top:10px;"asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                                    <div>
+                                        <p>
+                                            @foreach (var provider in loginProviders)
+                                            {
+                                                <button type="submit" class="btn btn-block btn-social btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account"><span class="fa fa-facebook"></span> Login con Facebook</button>
+
+                                            }
+                                        </p>
+                                    </div>
+                                </form>
+                            }
+                        }
+                    </li>
                     <li>
                         <a class="navbar-item" href="~/Account/Register" id="regLink"><span class="glyphicon glyphicon-user"></span> Registrazione</a>
                     </li>
@@ -312,6 +334,7 @@
                                         }
                 @if (!User.Identity.IsAuthenticated)
                 {
+                    
                     <li>
                         <a class="navbar-item" href="~/Account/Login" id="logLink"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                     </li>

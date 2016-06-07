@@ -78,11 +78,9 @@
                 @{
 
                     var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
-                    if (loginProviders.Count == 0)
+                    if (loginProviders.Count != 0)
                     {
-                    }
-                    else
-                    {
+
                         <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
                             <div>
                                 <p>
