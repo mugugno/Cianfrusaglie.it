@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Cianfrusaglie.Constants;
 using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
@@ -13,6 +14,7 @@ using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Internal;
+using Microsoft.Data.Entity.Metadata.Internal;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
@@ -253,34 +255,43 @@ namespace Cianfrusaglie.Controllers {
             return first.Any( f => second.Any( f.Contains ) );
         }
 
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult AdvancedSearch(AdvancedSearchViewModel model) {
+            var result = PerformAdvancedSearch( model );
+            return View();
+        }
+
         public IEnumerable< Announce > PerformAdvancedSearch(AdvancedSearchViewModel advancedSearchViewModel) {
             Predicate< Announce > truePredicate = (Announce a) => true;
 
             var rangeKmPredicate = truePredicate;
-            if ( LoginChecker.HasLoggedUser( this ) && advancedSearchViewModel.KmRange != null ) {
+
+            if ( LoginChecker.HasLoggedUser( this ) ) {
                 var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
-                double min = advancedSearchViewModel.KmRange.Item1;
-                double max = advancedSearchViewModel.KmRange.Item2;
-                if( user.Latitude != null && user.Longitude != null ) {
+                double min = advancedSearchViewModel.KmRangeMin;
+                double? max = advancedSearchViewModel.KmRangeMax;
+
+                if ( user.Latitude != null && user.Longitude != null ) {
                     double ul1 = user.Latitude.Value;
                     double ul2 = user.Longitude.Value;
+                    double upper = max ?? double.MaxValue;
                     rangeKmPredicate =
                         (Announce a) =>
                         GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) >= min &&
-                        GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) <= max;
+                        GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) <= upper;
                 }
                 
             }
 
-            var pricePredicate = advancedSearchViewModel.PriceRange == null? 
-                truePredicate : a =>
-                    a.Price >= advancedSearchViewModel.PriceRange.Item1 &&
-                    a.Price <= advancedSearchViewModel.PriceRange.Item2;
+            int upperPrice = advancedSearchViewModel.PriceRangeMax ?? int.MaxValue;
+            Predicate<Announce> pricePredicate =  a =>
+                    a.Price >= advancedSearchViewModel.PriceRangeMin &&
+                    a.Price <= upperPrice;
+            int upperFeedback = advancedSearchViewModel.FeedbackRangeMax ?? 5;
 
-            var feedbackPredicate = advancedSearchViewModel.FeedbackRatingRange == null?
-                truePredicate : a =>
-                    a.Author.FeedbacksMean >= advancedSearchViewModel.FeedbackRatingRange.Item1 &&
-                    a.Author.FeedbacksMean <= advancedSearchViewModel.FeedbackRatingRange.Item2;
+            Predicate<Announce> feedbackPredicate = a =>
+                    a.Author.FeedbacksMean >= advancedSearchViewModel.FeedbackRangeMin &&
+                    a.Author.FeedbacksMean <= upperFeedback;
 
             var announces =
                 _context.Announces.Include( a => a.Author ).Where(
@@ -292,15 +303,28 @@ namespace Cianfrusaglie.Controllers {
             if (!advancedSearchViewModel.ShowOnSale)
                 announces = announces.Where(a => a.Price == 0);
 
+
             if ( advancedSearchViewModel.Title != null ) {
                 var titleSearch = TitleBasedSearch(advancedSearchViewModel.Title);
-                announces = announces.Union( titleSearch );
+                announces = announces.Where( a => titleSearch.Select( i => i.Id ).Contains( a.Id ) );
             }
 
-            //if( advancedSearchViewModel.OrderByDate )
-            //    announces = announces.OrderByDescending( a => a.PublishDate );
-
-            announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending( a => a.Price ) : announces.OrderBy( a => a.Price );
+            if( advancedSearchViewModel.OrderByDate)
+                announces = announces.OrderByDescending( a => a.PublishDate );
+            else if( advancedSearchViewModel.OrderByDistance ) {
+                if( !LoginChecker.HasLoggedUser( this ) )
+                    return announces.ToList();
+                var user = _context.Users.Single( i => i.Id.Equals( User.GetUserId() ) );
+                if( !user.Latitude.HasValue || !user.Longitude.HasValue )
+                    return announces.ToList();
+                double lat = user.Latitude.Value;
+                double lon = user.Longitude.Value;
+                announces =
+                    announces.OrderBy(a => GeoCoordinate.Distance(lat, lon, a.Latitude, a.Longitude));
+            }
+            else {
+                announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending(a => a.Price) : announces.OrderBy(a => a.Price);
+            }   
 
             return announces.ToList();
         }

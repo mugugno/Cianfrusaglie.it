@@ -38,7 +38,7 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>Gli annunci chiusi vinti dall'utente</returns>
         public IEnumerable< Announce > GetLoggedUserWonClosedAnnounces() {
             string userId = User.GetUserId();
-            var loggedUserWonClosedAnnounces = _context.Announces.Include( a => a.ChosenUsers ).Include( a=> a.Images ).Where(
+            var loggedUserWonClosedAnnounces = _context.Announces.Include( a => a.ChosenUsers ).Include( a=> a.Images ).Include( a => a.FeedBacks ).Where(
                 announce =>
                     announce.Closed && userId.Equals(announce.ChosenUsers.OrderByDescending(a => a.ChosenDateTime).FirstOrDefault().ChosenUserId) );
             return
@@ -50,7 +50,7 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns>Gli annunci chiusi interessati all'utente</returns>
         private IEnumerable< Announce > GetLoggedUserInterestedClosedAnnounce() {
-            foreach( var entity in _context.Announces.Include( a => a.Interested ).Include(a => a.Images)) {
+            foreach( var entity in _context.Announces.Include( a => a.Interested ).Include(a => a.Images).Include(a => a.FeedBacks)) {
                 if( entity.Closed  ) {
                     foreach( var interested in entity.Interested ) {
                         if( interested.UserId.Equals( User.GetUserId() ) ) {

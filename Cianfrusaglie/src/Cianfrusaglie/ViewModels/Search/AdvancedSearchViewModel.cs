@@ -9,19 +9,20 @@ namespace Cianfrusaglie.ViewModels.Search
     {
         public string Title { get; set; }
 
-        public bool? OrderByDateAscending { get; set; }
-
-        public bool? OrderByDateDescending { get; set; }
+        public bool OrderByDate { get; set; }
 
         public bool OrderByPrice { get; set; }
 
         public bool OrderByDistance { get; set; }
 
-        public Tuple<int, int> KmRange { get; set; }
+        public int KmRangeMin { get; set; }
+        public int? KmRangeMax { get; set; }
 
-        public Tuple<int, int> PriceRange { get; set; }
+        public int PriceRangeMin { get; set; }
+        public int? PriceRangeMax { get; set; }
 
-        public Tuple<int, int> FeedbackRatingRange { get; set; }
+        public int FeedbackRangeMin { get; set; }
+        public int? FeedbackRangeMax { get; set; }
 
         public bool ShowGifts { get; set; }
 

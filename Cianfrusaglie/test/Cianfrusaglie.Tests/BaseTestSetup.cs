@@ -277,5 +277,13 @@ namespace Cianfrusaglie.Tests {
             } );
             Context.SaveChanges();
         }
+
+        protected void CloseAnnounce( int announceId ) {
+            var announce = Context.Announces.SingleOrDefault( a => a.Id.Equals( announceId ) );
+            if( announce != null ) {
+                announce.Closed = true;
+                Context.SaveChanges();
+            }
+        }
     }
 }
