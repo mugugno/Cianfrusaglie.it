@@ -71,5 +71,17 @@ namespace Cianfrusaglie.Tests
             var actionResult = feedbackController.Create(CreateNewFeedback(announce, author, interestedUser));
             Assert.IsType<BadRequestResult>(actionResult);
         }
+
+        [Fact]
+        public void ChoosenUserGivesFeedbackToClosedAnnounceAnIsOk() {
+            var announce = Context.Announces.Include(a => a.Interested).First(a => a.Closed == false && a.DeadLine == null && a.Author.UserName.Equals(FirstUserName));
+            var author = announce.Author;
+            var choosenUser = Context.Users.First(u => !u.UserName.Equals(FirstUserName));
+            SetUserInterestedToAnnounceAndChoosen( announce, choosenUser, 0 );
+            CloseAnnounce( announce.Id );
+            var feedbackController = CreateFeedbackController( choosenUser.Id );
+            var actionResult = feedbackController.Create(CreateNewFeedback(announce, choosenUser, author));
+            Assert.IsType< RedirectToActionResult >(actionResult);
+        }
     }
 }

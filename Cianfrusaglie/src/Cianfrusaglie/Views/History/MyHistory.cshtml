@@ -1,7 +1,16 @@
+@using System.Security.Claims
 @model Cianfrusaglie.ViewModels.History.MyHistoryViewModel
 
 @{
     ViewData["Title"] = "Il mio storico";
+}
+
+@functions {
+
+    private bool FeedbackExists( Announce announce, string receiverId ) { return announce.FeedBacks.Any( feedBack => feedBack.AnnounceId.Equals( announce.Id ) && feedBack.ReceiverId.Equals( announce.AuthorId ) && feedBack.AuthorId.Equals( User.GetUserId() ) ); }
+
+    private bool IsUserChoosenForTheAnnounce( Announce announce ) { return announce.ChosenUsers.Any( announceChosen => announceChosen.ChosenUserId.Equals( User.GetUserId() ) ); }
+
 }
 
 <div class="container-fluid" >
@@ -87,8 +96,12 @@
                                                         <div class="col-md-7" >
 
                                                             <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
-                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a>
-
+                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a> <br />
+                                                            @if( !FeedbackExists( item, item.AuthorId ) ) {
+                                                                <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId" >Lascia un feedback all'autore</a>
+                                                            } else {
+                                                                <p>Hai gi&agrave; lasciato un feedback all'autore</p>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
@@ -124,8 +137,20 @@
                                                         <div class="col-md-7" >
 
                                                             <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
-                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a>
-
+                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a> <br />
+                                                            @if (IsUserChoosenForTheAnnounce(item))
+                                                            {
+                                                                if (!FeedbackExists(item, item.AuthorId))
+                                                                {
+                                                                    <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId">Lascia un feedback all'autore</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>Hai gi&agrave; lasciato un feedback all'autore</p>
+                                                                }
+                       
+                                                            }
+                                  
                                                         </div>
                                                     </div>
                                                 </div>

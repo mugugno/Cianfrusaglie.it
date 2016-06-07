@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Cianfrusaglie.Constants
+@model Cianfrusaglie.ViewModels.Search.AdvancedSearchViewModel
 @{
     Layout = "";
 }
@@ -42,7 +43,8 @@
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/Home.css" rel ="stylesheet" type="text/css"/>
-    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Search.css" rel="stylesheet" type="text/css"/>
+    <link href="~/Content/StarRating.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 
 
@@ -51,7 +53,7 @@
 
 <div id="wrapper-register">
     <div class="col-md-6 col-lg-offset-3" style="align-content: center; margin-top: 5em;">
-            <form class="panel panel-default" asp-action="SearchRedirect" asp-controller="Search" method="get">
+            <form class="panel panel-default" asp-action="AdvancedSearch" asp-controller="Search" method="post" role="form">
                 <div id="title" class="panel panel-heading" style="background-color: #49586d">
                     <a href="~/">
                         <h1>
@@ -116,37 +118,60 @@
                     </div>
                     <br/>
                     <div class="input-group">
-                        <label>Data di pubblicazione: &nbsp;</label>
-                        <label class="radio-inline"><input type="radio" name="optDate" checked="checked"> Più recenti</label>
-                        <label class="radio-inline"><input type="radio" name="optDate"> Più datati</label>
-                        </div>
-                    <br/>
-                    <div class="input-group">
-                        <label>Prezzo: &nbsp;</label>
-                        <label class="radio-inline"><input type="radio" name="optPrice" checked="checked"> Più economici</label>
-                        <label class="radio-inline"><input type="radio" name="optPrice"> Più costosi</label>
+                        <label>Mostra prima: &nbsp;</label>
+                        <label asp-for="OrderByDate" class="radio-inline"><input asp-for="OrderByDate" type="radio" name="optFirst" checked value="true"> Più recenti</label>
+                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" name="optFirst" value="true"> Più economici</label>
+                        <label asp-for="OrderByDistance" class="radio-inline"><input asp-for="OrderByDistance" type="radio" name="optFirst" value="true"/> Più vicini a me</label>
                     </div>
                     <br/>
-                    <div class="input-group">
-                        <label class="checkbox-inline"><input type="checkbox" name="optDistance"/> Mostra prima gli annunci più vicini a me</label>
+                    <!--Se utente non loggato deve sparire-->
+                    <div class="input-group" id="kmRange">
+                        <label>Mostra annunci compresi tra:</label>
+                        <label class="radio-inline"><input asp-for="KmRangeMin" type="number" style="width: 100px;" min="0" value="0"/> Km e <input asp-for="KmRangeMax" type="number" style="width: 100px;"/> Km</label>
                     </div>
+                    <!---->
                     <br/>
                     <div class="input-group">
-                        <label class="checkbox-inline"><input type="checkbox"/><input type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
-                        <label class="checkbox-inline"><input type="checkbox"/><input type="checkbox" checked="checked" id="salesON" onclick="showRange()"/> Mostra oggetti in vendita</label>
+                        <label class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowGifts" type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
+                        <label class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowOnSale" type="checkbox" checked="checked" id="salesON"/> Mostra oggetti in vendita</label>
                     </div>
                     <div class="input-group" id="priceRange">
                         <br />
-                        <label class="radio-inline">Mostra annunci compresi tra: <input type="number" style="width: 100px;" min="0"/> € e <input type="number" style="width: 100px;"/> €</label>
+                        <label class="radio-inline">Mostra annunci compresi tra: <input asp-for="PriceRangeMin" type="number" style="width: 100px;" min="0" value="0"/> € e <input asp-for="PriceRangeMax" type="number" style="width: 100px;"/> €</label>
                     </div>
                     <br/>
                     <div class="input-group">
                         <label>Mostra annunci di utenti con rating: </label><br/>
-                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605</label>
-                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605</label>
-                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605 &#x2605</label>
-                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605 &#x2605 &#x2605</label>
-                        <label class="checkbox-inline" style="color: orange; font-size: 1.2em"><input type="checkbox"/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="1"/> &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="2"/> &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="3"/> &#x2605 &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="4"/> &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5"/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
+                        <br/>
+                        <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none" />
+                        <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMin" value="1" type="number" style="display: none"/>
+                        <label>Mostra annunci con rating compreso tra: </label>
+                        <div>
+                            <div class="acidjs-rating-stars">
+                                <div>
+                                    <input type="radio" name="group-1" id="group-1-0" value="5" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-0"></label>
+                                    <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-1"></label>
+                                    <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-2"></label>
+                                    <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-3"></label>
+                                    <input type="radio" name="group-1" id="group-1-4" value="1" checked="checked" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-4"></label>
+                                </div>
+                            </div>
+                        <label> e </label>
+                            <div class="acidjs-rating-stars">
+                                <div>
+                                    <input type="radio" name="group-2" id="group-2-0" value="5" checked="checked" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-2-0"></label>
+                                    <input type="radio" name="group-2" id="group-2-1" value="4" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-1"></label>
+                                    <input type="radio" name="group-2" id="group-2-2" value="3" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-2"></label>
+                                    <input type="radio" name="group-2" id="group-2-3" value="2" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-3"></label>
+                                    <input type="radio" name="group-2" id="group-2-4" value="1" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-4"></label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -154,13 +179,20 @@
     </div>
 
 <script>
-    function showRange() {
-        if ($('#salesON').checked) {
-            $('#priceRange').show();
-}
-        else {
-            $('#priceRange').hide();
-}
+    $('#salesON')
+        .click(function() {
+            $('#priceRange').toggle();
+        });
+    
+    function onStarClickMin(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        document.getElementById("AspStarRatingValueMin").value = target.value;
+    }
+    function onStarClickMax(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        document.getElementById("AspStarRatingValueMax").value = target.value;
     }
 </script>
 </body>

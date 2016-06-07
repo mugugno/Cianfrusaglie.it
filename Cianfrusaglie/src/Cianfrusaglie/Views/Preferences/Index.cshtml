@@ -53,11 +53,23 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="/js/googleMaps.js"></script>
+    <script>
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function onRegisterSubmit() {
+            $("#latitudeInput").attr("value", marker.position.lat());
+            $("#longitudeInput").attr("value", marker.position.lng());
+
+            return true;
+        }
+    </script>
+    @{ var user = (User)ViewData["user"];}
+    
 
 </head>
 <body>
     <div>
-        <form asp-action="Edit" asp-controller="Preferences" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
+        <form asp-action="Edit" asp-controller="Preferences" role="form" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post" onsubmit="return onRegisterSubmit()">
 
             <div class="panel">
                 <div class="panel-body">
@@ -117,10 +129,6 @@
                             <div class="panel-group">
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="text-align:left">
-                                        @{
-                                            var user = (User)ViewData["user"];
-                                            
-                                        }
                                         <div class="form-group">
                                             <label asp-for="Name" class="control-label">Nome</label><br />
                                             <input asp-for="Name" value="@user.Name" class="form-control" />
@@ -166,18 +174,31 @@
                                             
                                             <span asp-validation-for="Genre" class="text-danger"></span>
                                         </div>
-                                        @*<div class="form-group">
-                                <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
-                                <input id="pac-input"  class="form-control" type="text" placeholder="">
-                                <div id="googleMap" style="display: none;"></div>
-                                <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
-                                <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Photo" class="control-label">Immagine profilo</label>
-                                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
-                                <span asp-validation-for="Photo" class="text-danger"></span>
-                            </div>*@
+
+
+
+                                        <div class="form-group">
+                                            <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
+                                            <input id="pac-input"  name="maps"  class="form-control" type="text" placeholder="">
+                                            <div id="googleMap" style="display: none;"></div>
+                                            <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                                            <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label asp-for="Photo" class="control-label">Immagine profilo</label><br />
+
+                                            <div class="col-md-3">
+                                                <div class="photo profile-avatar panel panel-default">
+                                                    <img class="img-responsive" id="imgProfile" name="imgProfile" src=@user.ProfileImageUrl />
+                                                    
+                                                </div>
+                                            </div>
+                                            <input asp-for="Photo" style="margin-top:4em; margin-left:2em" class="input-file" id="photo" name="photo" type="file" accept="image/*"><br /><br />
+                                            <span asp-validation-for="Photo" class="text-danger"></span>
+                                        </div>
 
                                         <div class="form-group">
                                             <label asp-for="Email" class="control-label">Indirizzo email</label><br />
@@ -185,6 +206,8 @@
                                             <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
                                         </div>
                                         
+
+
                                         <div class="form-group">
                                             @{
                                                 var errorePassword = ViewData["errorePassword"];
@@ -196,7 +219,7 @@
                                                 }
                                             }
                                             <label asp-for="VecchiaPassword" class="control-label">Vecchia password</label><br />
-                                            <input asp-for="VecchiaPassword"  type="password"  class="form-control" />
+                                            <input asp-for="VecchiaPassword" type="password"  class="form-control" />
                                             <span asp-validation-for="VecchiaPassword" class="text-danger"></span>
                                         </div>
 
@@ -238,6 +261,24 @@
     $("#confirmPassword").keyup(passwordCheck);
 
 
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgProfile').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#photo").change(function () {
+        readURL(this);
+    });
+
+
     $("#email").focusout(function () {
         var email = $('#email').val();
         $.post("/Account/CheckEmailAlreadyExists",
@@ -265,4 +306,35 @@
         else
             $("#wrongpwd").html('');
     }
+</script>
+
+<script>
+
+    loadAddress();
+
+
+        
+    function geocodePosition(pos) {
+        var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+            latLng: pos
+            }, function (responses) {
+                if (responses && responses.length > 0) {
+                    $("#pac-input").val(responses[0].formatted_address);
+                }
+            });
+        }
+
+    function loadAddress(){
+        var latitude = parseFloatIgnoreCommas("@user.Latitude");
+        var longitude = parseFloatIgnoreCommas("@user.Longitude");
+
+           var position= new google.maps.LatLng(latitude,longitude);
+            initialize(1, position);
+
+            geocodePosition(position);
+            mapLoaded= true;
+
+
+        }
 </script>
