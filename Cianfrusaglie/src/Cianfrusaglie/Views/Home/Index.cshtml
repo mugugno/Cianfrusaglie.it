@@ -156,14 +156,27 @@
 
 
                         <!--titolo su una linea sola-->
-
-                        <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
-                            @if( annuncio.Title.Length > 17 ) {
-                                <h3>@annuncio.Title.Substring( 0, 17 )... </h3>
-                            } else {
+                        @if( User.Identity.IsAuthenticated ) {
+                            <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
+                                @if( annuncio.Title.Length > 17 ) {
+                                    <h3>@annuncio.Title.Substring( 0, 17 )... </h3>
+                                } else {
+                                    <h3>@annuncio.Title</h3>
+                                }
+                            </a>
+                        }
+                        else {
+                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
+                            @if (annuncio.Title.Length > 17)
+                            {
+                                <h3>@annuncio.Title.Substring(0, 17)... </h3>
+                            }
+                            else
+                            {
                                 <h3>@annuncio.Title</h3>
                             }
-                        </a>
+                        </a> 
+                        }
 
 
                         @if( @annuncio.Price == 0 ) {
