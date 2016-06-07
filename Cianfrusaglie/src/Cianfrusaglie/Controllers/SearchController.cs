@@ -253,6 +253,13 @@ namespace Cianfrusaglie.Controllers {
             return first.Any( f => second.Any( f.Contains ) );
         }
 
+        [HttpPost]
+        public IActionResult AdvancedSearch(AdvancedSearchViewModel model)
+        {
+            var result = PerformAdvancedSearch(model);
+            return View();
+        }
+
         public IEnumerable< Announce > PerformAdvancedSearch(AdvancedSearchViewModel advancedSearchViewModel) {
             Predicate< Announce > truePredicate = (Announce a) => true;
 
