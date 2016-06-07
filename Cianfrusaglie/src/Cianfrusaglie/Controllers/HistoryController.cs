@@ -83,7 +83,11 @@ namespace Cianfrusaglie.Controllers {
         /// </summary>
         /// <returns> la lista degli annunci aperti a cui l'utente è interessato ed è attualmente l'ultimo chosen</returns>
         public IEnumerable< Announce > GetLoggedUserOpenAnnouncesHeIsWinning() {
-           return _context.Announces.Where(a => !a.Closed && a.ChosenUsers.OrderBy(c => c.ChosenDateTime).Last().ChosenUser.Id.Equals(User.GetUserId()));
+            var tmp = _context.Announces.Where( a => a.ChosenUsers.Any( c=> c.ChosenUserId.Equals( User.GetUserId() )));
+            return tmp.Where(
+                a =>
+                    a.ChosenUsers.OrderByDescending(c => c.ChosenDateTime).First().ChosenUserId.Equals(
+                        User.GetUserId())).ToList();
         }
 
         /// <summary>
