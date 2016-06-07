@@ -49,8 +49,6 @@
 
 <div>
     <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
-        
-        
         <div class="panel">
                 <div class="panel-body"> 
                     <div  class="row" id="page1">
@@ -216,10 +214,8 @@
                                             </div>
                                         </div>
 
-                                       
-
                                         <br />
-                                        <div class="form-group" >
+                                        <div class="form-group" style="margin-top: 6px;">
                                             <label class="col-md-4 control-label" for="photos" >Immagini</label>
                                             <div class="col-md-7" >
                                                 <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*" >
@@ -285,15 +281,4 @@
         setCircle(marker.position, range);
     });
     clickForwardButton();
-
-    var geocoder = new google.maps.Geocoder();
-    function geocodePosition(pos) {
-        geocoder.geocode({
-            latLng: pos
-        }, function (responses) {
-            if (responses && responses.length > 0) {
-                $("#pac-input").val(responses[ 0 ].formatted_address);
-            } 
-        });
-    }
 </script>
