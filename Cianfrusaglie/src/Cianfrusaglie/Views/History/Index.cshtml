@@ -42,20 +42,23 @@
                                             <div id="announce-number-@item.Id" class="panel-collapse collapse" >
                                                 <div class="panel-body" >
                                                     <div class="form-group" >
-                                                        <div class="col-md-4" >
+                                                        <div class="col-md-3" >
                                                             @if( item.Images.Any() ) {
                                                                 <div class="photo" >
                                                                     <img class="img-responsive" src="@item.Images.First().Url" />
                                                                 </div>
                                                             }
                                                         </div>
-                                                        <div class="col-md-3" >
+                                                        <span class="col-md-3" style="margin-top: 13em;"> <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>    Visualizza</a></span>
+                                                        <span class="col-md-3" style="margin-top: 13em;"> <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>    Utenti interessati</a></span>
+                                                        <span class="col-md-3" style="margin-top: 13em;"><a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>    Elimina</a></span>
+                                                        @*<div class="col-md-3" >
 
                                                             <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
                                                             <a href="~/Announces/Delete/?id=@item.Id" >Elimina annuncio</a> <br />
                                                             <a href="~/InterestedAnnounce/?id=@item.Id" >Visualizza utenti interessati</a> <br />
                                                             <a href="#" onclick="announceCloseConfirm(@item.Id)" >Chiudi annuncio</a>
-                                                        </div>
+                                                        </div>*@
                                                         @if( item.Interested.Count == 0 ) {
                                                             <p>Non c'è ancora nessun interessato</p>
                                                         } else if( !item.ChosenUsers.Any()) {
