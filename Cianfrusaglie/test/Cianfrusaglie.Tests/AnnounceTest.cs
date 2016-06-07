@@ -6,15 +6,18 @@ using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels.Announce;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.ViewFeatures;
 using Moq;
 using Xunit;
 
 namespace Cianfrusaglie.Tests {
     public class AnnounceTest : BaseTestSetup {
         protected AnnouncesController CreateAnnounceController( string id ) {
+            var mockTempData = new Mock< ITempDataDictionary >();
             return new AnnouncesController( Context, HostingEnvironment ) {
                 ActionContext = MockActionContextForLogin( id ),
-                Url = new Mock< IUrlHelper >().Object
+                Url = new Mock< IUrlHelper >().Object,
+                TempData = mockTempData.Object
             };
         }
 
@@ -23,16 +26,17 @@ namespace Cianfrusaglie.Tests {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var announceController = CreateAnnounceController( usr.Id );
             var announce = new Announce {Author = usr, Title = "Un annuncio bello bello", Description = "Sono bello"};
+            var photos = new List< IFormFile >();
             var announceViewModel = new CreateAnnounceViewModel {
                 Title = announce.Title,
                 Description = announce.Description,
-                Photos = new List< IFormFile >()
+                Photos = new List<IFormFile>()
             };
             var res = announceController.Create( announceViewModel ).Result;
             Assert.True(
                 Context.Announces.Any(
                     a =>
-                        a.Author.Equals( usr ) && a.Title.Equals( announce.Title ) &&
+                        a.AuthorId.Equals( usr.Id ) && a.Title.Equals( announce.Title ) &&
                         a.Description.Equals( announce.Description ) ) );
             Assert.IsNotType< BadRequestResult >( res );
         }
