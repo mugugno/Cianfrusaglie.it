@@ -197,17 +197,19 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                                 </dd>
                             }
                         </dl>
-                        <dl class="dl-horizontal">
+                        @if( !Model.AuthorId.Equals( User.GetUserId() ) ) {
+                            <dl class="dl-horizontal" >
 
-                            <dt>
-                                <div class="icon-detail">
-                                    Hai domande per @GetAuthor().UserName?
-                                </div>
-                            </dt>
-                            <dd>
-                                <a class="btn btn-info btn-det" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
-                            </dd>
-                        </dl>
+                                <dt>
+                                    <div class="icon-detail" >
+                                        Hai domande per @GetAuthor().UserName?
+                                    </div>
+                                </dt>
+                                <dd>
+                                    <a class="btn btn-info btn-det" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" >Contatta</a>
+                                </dd>
+                            </dl>
+                        }
             </div>
         </div>
         <div class="col-md-4">
@@ -240,7 +242,7 @@ Nascondere tasto nnon lo voglio più     uando sono stato scelto
                         {
                             <a href="~/InterestedAnnounce?id=@Model.Id">
                                 <button class="btn btn-success lovoglio">
-                                    <span class="text-det">VIsualizza interessati</span>
+                                    <span class="text-det">Visualizza interessati</span>
                                 </button>
                             </a>
                         }

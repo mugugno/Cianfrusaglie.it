@@ -151,9 +151,9 @@
                             </div>
 
                             <div class="col-md-1">
-                                @if (feedback.AuthorId.Equals(User.GetUserId()))
+                                @if (feedback.AuthorId.Equals(User.GetUserId()) || feedback.ReceiverId.Equals( User.GetUserId() ))
                                 {
-                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <!-- l'autore sono io oppure sono io il destinatario, non posso autovotarmi, tutti e due colorati -->
                                     <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
 
                                     <br />
@@ -301,9 +301,9 @@
                             </div>
 
                             <div class="col-md-1">
-                                @if (feedback.AuthorId.Equals(User.GetUserId()))
+                                @if (feedback.AuthorId.Equals(User.GetUserId()) || feedback.ReceiverId.Equals(User.GetUserId()))
                                 {
-                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <!-- l'autore sono io oppure sono io il destinatario, non posso autovotarmi, tutti e due colorati -->
                                     <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
 
                                     <br />
@@ -450,8 +450,8 @@
                             </div>
 
                             <div class="col-md-1" >
-                                @if( feedback.AuthorId.Equals( User.GetUserId() ) ) {
-                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                @if(feedback.AuthorId.Equals(User.GetUserId()) || feedback.ReceiverId.Equals(User.GetUserId())) {
+                                    <!-- l'autore sono io oppure sono io il destinatario, non posso autovotarmi, tutti e due colorati -->
                                     <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up" ></div>
 
                                     <br />

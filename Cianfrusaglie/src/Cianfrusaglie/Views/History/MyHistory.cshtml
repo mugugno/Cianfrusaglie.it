@@ -23,7 +23,7 @@
                 </div>
                 <div class="panel-body" >
                     
-                    <div >
+                    <div>
                         <ul class="nav nav-tabs centered" >
                             <li class="active" ><a data-toggle="tab" href="#home" style="font-size: 1.2em;">I miei vecchi annunci</a></li>
                             <li><a data-toggle="tab" href="#menu1" style="font-size: 1.2em;">Oggetti che ho preso</a></li>
@@ -99,8 +99,9 @@
                                                             <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a> <br />
                                                             @if( !FeedbackExists( item, item.AuthorId ) ) {
                                                                 <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId" >Lascia un feedback all'autore</a>
+                                                            } else {
+                                                                <p>Hai gi&agrave; lasciato un feedback all'autore</p>
                                                             }
-                                                            <p>Hai gi&agrave; lasciato un feedback all'autore</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -139,9 +140,17 @@
                                                             <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a> <br />
                                                             @if (IsUserChoosenForTheAnnounce(item))
                                                             {
-                                                                <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId">Lascia un feedback all'autore</a>
+                                                                if (!FeedbackExists(item, item.AuthorId))
+                                                                {
+                                                                    <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId">Lascia un feedback all'autore</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>Hai gi&agrave; lasciato un feedback all'autore</p>
+                                                                }
+                       
                                                             }
-                                                            <p>Hai gi&agrave; lasciato un feedback all'autore</p>
+                                  
                                                         </div>
                                                     </div>
                                                 </div>

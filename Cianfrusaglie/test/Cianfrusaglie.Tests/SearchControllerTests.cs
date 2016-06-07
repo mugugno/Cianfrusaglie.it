@@ -164,7 +164,8 @@ namespace Cianfrusaglie.Tests {
             var searchController = CreateResearchController(user.Id);
             var advSearchByPriceRange = new AdvancedSearchViewModel()
             {
-                PriceRange = new Tuple<int, int>(500, 1500),
+                PriceRangeMin = 500,
+                PriceRangeMax = 1500,
                 ShowGifts = true,
                 ShowOnSale = true
             };
@@ -188,7 +189,8 @@ namespace Cianfrusaglie.Tests {
             var searchController = CreateResearchController(user.Id);
             var advSearchByKmRange = new AdvancedSearchViewModel()
             {
-                KmRange = new Tuple<int, int>(0, 10),
+                KmRangeMin = 0,
+                KmRangeMax = 10,
                 ShowGifts = true,
                 ShowOnSale = true
             };
@@ -211,7 +213,8 @@ namespace Cianfrusaglie.Tests {
             Context.SaveChanges();
             var searchController = CreateResearchController(user.Id);
             var advSearchByFeedback = new AdvancedSearchViewModel() {
-                FeedbackRatingRange = new Tuple<int, int>(3,5),
+                FeedbackRangeMin = 3,
+                FeedbackRangeMax = 5,
                 ShowGifts = true,
                 ShowOnSale = true
             };
@@ -231,7 +234,7 @@ namespace Cianfrusaglie.Tests {
             user.Longitude = 0.0;
             var advOrderDate = new AdvancedSearchViewModel()
             {
-                //OrderByDate = true,
+                OrderByDate = true,
                 ShowGifts = true,
                 ShowOnSale = true
             };
@@ -295,15 +298,23 @@ namespace Cianfrusaglie.Tests {
         }
 
         [Fact]
-        public void UserRequestSearchResultOrderdByRangeAscendingAndIsOk()
+        public void UserRequestSearchResultOrderdByDistanceAndIsOk()
         {
-
-        }
-
-        [Fact]
-        public void UserRequestSearchResultOrderdDescendingByDistanceAndIsOk()
-        {
-
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            user.Latitude = 0.1;
+            user.Longitude = 0.1;
+            Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var adv = new AdvancedSearchViewModel()
+            {
+                OrderByDistance = true,
+                ShowGifts = true,
+                ShowOnSale = true
+            };
+            var result = searchController.PerformAdvancedSearch(adv).Select(a => a.Id).ToList();
+            int id = 2; //Annuncio più vicino all'utente
+            bool res = result.First().Equals( id );
+            Assert.True( res );
         }
 
         [Fact]
