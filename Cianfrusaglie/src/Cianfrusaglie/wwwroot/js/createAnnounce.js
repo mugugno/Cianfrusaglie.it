@@ -56,6 +56,7 @@ function clickForwardButton() {
         return;
     }
 
+    $(document).scrollTop(0);
     if (document.getElementById("forward-button").innerHTML === "Pubblica") {
         //aggiungiamo al form la posizione di google maps
         if (GMapsOnline()) {
