@@ -8,13 +8,24 @@
     <div class="col-md-1"></div>
     <div id="wrap" class="col-md-10">
         <div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-centered">
-                            <h2>I miei annunci</h2>
-                        </div>
-                        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-centered">
+                    <h2>I miei annunci</h2>
+                </div>
+                <div class="panel-body">
+
+                    <div>
+                        <ul class="nav nav-tabs centered">
+                            <li class="active"><a data-toggle="tab" href="#home" style="font-size: 1.2em;">Annunci che ho pubblicato</a></li>
+                            <li><a data-toggle="tab" href="#menu1" style="font-size: 1.2em;">Annunci che mi interessano</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane fade in active">
                             <div class="panel-group" id="panel-524234">
                                 @if (Model.Any())
                                 {
@@ -39,12 +50,12 @@
                                                                 </div>
                                                             }
                                                         </div>
-                                                        <div class="col-md-7">
+                                                        <div class="col-md-3">
 
                                                             <a href="~/Announces/Details/?id=@item.Id">Visualizza annuncio</a> <br />
                                                             <a href="~/Announces/Delete/?id=@item.Id">Elimina annuncio</a> <br />
-                                                            <a href="~/InterestedAnnounce/?id=@item.Id">Visualizza utenti interessati</a>
-
+                                                            <a href="~/InterestedAnnounce/?id=@item.Id">Visualizza utenti interessati</a> <br />
+                                                            <a href="~/Announces/Delete/?id=@item.Id" style="text-align: right; position: absolute">Elimina</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -58,16 +69,9 @@
                                 }
 
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-default">
 
-                        <div class="panel-heading panel-centered">
-                            <h2>Gli annunci che mi interessano</h2>
                         </div>
-                        <div class="panel-body">
+                        <div id="menu1" class="tab-pane fade">
                             <div class="panel-group" id="panel-524235">
                                 @if (Model.Any())
                                 {
@@ -129,8 +133,6 @@
                 </div>
             </div>
 
-
-
-        </div>
-    </div>
-</div>
+                        </div>
+                </div>
+            </div>
