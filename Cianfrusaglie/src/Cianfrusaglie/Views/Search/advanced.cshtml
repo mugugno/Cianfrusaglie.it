@@ -119,9 +119,9 @@
                     <br/>
                     <div class="input-group">
                         <label>Mostra prima: &nbsp;</label>
-                        <label asp-for="OrderByDate" class="radio-inline"><input asp-for="OrderByDate" type="radio" name="optFirst" checked value="true"> Più recenti</label>
-                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" name="optFirst" value="true"> Più economici</label>
-                        <label asp-for="OrderByDistance" class="radio-inline"><input asp-for="OrderByDistance" type="radio" name="optFirst" value="true"/> Più vicini a me</label>
+                        <label asp-for="OrderByDate" class="radio-inline"><input asp-for="OrderByDate" type="radio" id="LastFirst" name="optFirst" checked onchange="setFirst()" value="true"/> Più recenti</label>
+                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" id="CheaperFirst" name="optFirst" onchange="setFirst()" value="false"/> Più economici</label>
+                        <label asp-for="OrderByDistance" class="radio-inline"><input asp-for="OrderByDistance" type="radio" id="DistanceFirst" name="optFirst" onchange="setFirst()" value="false"/> Più vicini a me</label>
                     </div>
                     <br/>
                     <!--Se utente non loggato deve sparire-->
@@ -146,7 +146,7 @@
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="2"/> &#x2605 &#x2605</label><br/>
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="3"/> &#x2605 &#x2605 &#x2605</label><br/>
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="4"/> &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5"/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5" checked/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
                         <br/>
                         <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none" />
                         <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMin" value="1" type="number" style="display: none"/>
@@ -183,7 +183,14 @@
         .click(function() {
             $('#priceRange').toggle();
         });
-    
+
+    function setFirst() {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        document.getElementById("DistanceFirst").value = target.value;
+        alert("value = " + document.getElementById("DistanceFirst").value);
+    }
+
     function onStarClickMin(e) {
         e = e || window.event;
         var target = e.target || e.srcElement;
