@@ -27,14 +27,36 @@ namespace Cianfrusaglie.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IHostingEnvironment _environment;
 
-        public PreferencesController(ApplicationDbContext context, UserManager<User> userManager)
+
+        public PreferencesController(ApplicationDbContext context, UserManager<User> userManager, IHostingEnvironment environment)
         {
             _context = context;
             _userManager = userManager;
+            _environment = environment;
         }
         // GET: /<controller>/
-        
+
+
+
+        private async Task<string> UploadProfileImage(IFormFile formFile, User user)
+        {
+            string uploads = Path.Combine(_environment.WebRootPath, "upload");
+
+            if (formFile.ContentType == "image/png" || formFile.ContentType == "image/jpeg")
+            {
+                if (formFile.Length > 0)
+                {
+                    string fileName = ContentDispositionHeaderValue.Parse(formFile.ContentDisposition).FileName.Trim('"');
+                    fileName = user.Id + Path.GetExtension(fileName);
+                    await formFile.SaveAsAsync(Path.Combine(uploads, fileName));
+
+                    return @"/upload/" + fileName;
+                }
+            }
+            return null;
+        }
 
 
         public IActionResult Index(string passwordError)
@@ -59,7 +81,10 @@ namespace Cianfrusaglie.Controllers
                 if (check == 0)
                     userPreferences.Add(category.Id, false);
             }
-            ViewData["user"] = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
+            var user = _context.Users.Single(u => u.Id.Equals(User.GetUserId()));
+            ViewData["user"] = user;
+            ViewData["lat"] = user.Latitude;
+            ViewData["long"] = user.Longitude;
             ViewData["userPreferences"] = userPreferences;
             if (passwordError == null)
                 ViewData["errorePassword"] = "";
@@ -111,13 +136,38 @@ namespace Cianfrusaglie.Controllers
                 }
             }
 
-
-            if (ModelState.IsValid)
+            if (model.Photo != null)
             {
+
+
+                if (model.Photo.ContentType != "image/png" && model.Photo.ContentType != "image/jpeg")
+                    ModelState.AddModelError("Photos", "I file devono essere delle immagini!");
+                if (model.Photo.Length > DomainConstraints.AnnouncePhotosMaxLenght)
+                {
+                    ModelState.AddModelError("Photos",
+                        "Non puoi inserire immagini superiori a " + DomainConstraints.AnnouncePhotosMaxLenght / 1000000 +
+                        " MB");
+                }
+            }
+
+
+                if (ModelState.IsValid)
+                {
+
+                    if (model.Photo != null)
+                    {
+                        string imageUrl = "";
+                        var deleteUrl = _context.ImageUrls.Single(i => i.Url.Equals(user.ProfileImageUrl));
+                        _context.ImageUrls.Remove(deleteUrl);
+                        imageUrl = await UploadProfileImage(model.Photo, user);
+                        user.ProfileImageUrl = imageUrl;
+                    }
                 user.Name = model.Name;
                 user.Surname = model.Surname;
                 user.Email = model.Email;
                 user.BirthDate = model.BirthDate;
+                user.Latitude = double.Parse(model.Latitude ?? "0", CultureInfo.InvariantCulture);
+                user.Longitude = double.Parse(model.Longitude ?? "0", CultureInfo.InvariantCulture);
                 switch (model.Genre)
                 {
                     case 1:
