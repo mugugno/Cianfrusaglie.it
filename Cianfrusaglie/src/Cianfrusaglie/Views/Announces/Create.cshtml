@@ -157,17 +157,25 @@
                                     <fieldset>
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
-
+                                        <div>
+                                            <i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
+                                            <br /><br />
+                                        </div>
                                         <!-- MediaTypeNames.Text input-->
-                                        <div class="form-group">
-                                            <div><i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
-                                                <br /><br />
-                                            </div>
-                                           
-                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
-                                            <div class="col-md-7">
-                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text">
+                                        <div class="form-group" >
+                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                            <div class="col-md-7" >
+                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <br />
+                                        <div class="form-group" style="margin-top: 6px;">
+                                            <label class="col-md-4 control-label" for="photos">Immagini</label>
+                                            <div class="col-md-7">
+                                                <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*">
+                                                <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
 
@@ -204,22 +212,13 @@
                                         <div class="form-group" >
                                             <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
                                             <div class="col-md-7" >
-                                                <div class="input-group" >
+                                                <div class="input-group" style="margin-bottom: 11px;">
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
                                                     <input asp-for="Range" class="form-control inputMargin" id="range-input" placeholder="di quanti km?" style="padding-left: 12px" type="number" min="0" >
                                                     <span class="input-group-addon">Km</span>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <br />
-                                        <div class="form-group" style="margin-top: 6px;">
-                                            <label class="col-md-4 control-label" for="photos" >Immagini</label>
-                                            <div class="col-md-7" >
-                                                <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*" >
-                                                <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
 

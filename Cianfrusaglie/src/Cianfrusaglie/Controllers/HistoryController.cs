@@ -141,6 +141,7 @@ namespace Cianfrusaglie.Controllers {
         {
             if (!LoginChecker.HasLoggedUser(this))
                 return HttpBadRequest();
+            SetCloseAnnounceToRead(User.GetUserId());
             SetRootLayoutViewData(this, _context);
             var model = new MyHistoryViewModel
             {
@@ -178,6 +179,19 @@ namespace Cianfrusaglie.Controllers {
             _context.SaveChanges();
         }
 
+
+        //TODO summary
+        public void SetCloseAnnounceToRead(string id)
+        {
+            var notifications = _context.NotificationCenter.Where(u=>u.UserId.Equals(id) && !u.Read && u.TypeNotification==MessageTypeNotification.NewAnotherChoosed);
+            foreach(var notification in notifications)
+            {
+                notification.Read = true;
+            }
+            _context.SaveChanges();
+
+        }
+
         /// <summary>
         /// L'utente ha visualizzato la notifica (che sei stato scelto per un annuncio che ti interessa), il db viene aggiornato
         /// </summary>
@@ -185,8 +199,7 @@ namespace Cianfrusaglie.Controllers {
         public void SetChoosenToReadStatus(string id)
         {
             var newChoosed = _context.NotificationCenter.Where(i => i.UserId.Equals(id) && !i.Read &&
-            (i.TypeNotification == MessageTypeNotification.NewChoosed ||
-            i.TypeNotification == MessageTypeNotification.NewAnotherChoosed));
+            (i.TypeNotification == MessageTypeNotification.NewChoosed));
             foreach (var choosed in newChoosed)
             {
                 choosed.Read = true;

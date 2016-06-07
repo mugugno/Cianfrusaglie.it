@@ -13,7 +13,7 @@ namespace Cianfrusaglie.Constants
             { (int) MessageTypeNotification.NewChoosed,new List<string>() { "Sei stato scelto per uno o più annunci", "/History/Index" } },
             { (int) MessageTypeNotification.NewFeedback,new List<string>(){ "Ricordati di inserire i feedback", "/History/Index" }},
             { (int) MessageTypeNotification.NewMoreMessages,new List<string>(){ "Hai nuovi messaggi", "/Messages"} },
-            { (int) MessageTypeNotification.NewAnotherChoosed,new List<string>() {"È stato scelto un altro utente ", "/History/Index" }},
+            { (int) MessageTypeNotification.NewAnotherChoosed,new List<string>() {"Sono stati chiusi degli annunci", "/History/MyHistory" }},
             { (int) MessageTypeNotification.NewReceivedFeedback,new List<string>() {"Hai ricevuto nuovi feedback", "/Profile" }}
         };
      

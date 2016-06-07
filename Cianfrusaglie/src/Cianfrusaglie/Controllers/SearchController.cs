@@ -256,9 +256,15 @@ namespace Cianfrusaglie.Controllers {
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult AdvancedSearch(AdvancedSearchViewModel model) {
-            var result = PerformAdvancedSearch( model );
-            return View();
+        public IActionResult AdvancedSearch(AdvancedSearchViewModel model)
+        {
+            var result = PerformAdvancedSearch(model);
+                SetRootLayoutViewData(this, _context);
+            ViewData["listImages"] = _context.ImageUrls.ToList();
+
+            ViewData["pageNumber"] = 0;
+            ViewData["numberOfPages"] = 1;
+            return View(nameof(Index), result);
         }
 
         public IEnumerable< Announce > PerformAdvancedSearch(AdvancedSearchViewModel advancedSearchViewModel) {
@@ -288,9 +294,9 @@ namespace Cianfrusaglie.Controllers {
                     a.Price >= advancedSearchViewModel.PriceRangeMin &&
                     a.Price <= upperPrice;
             int upperFeedback = advancedSearchViewModel.FeedbackRangeMax ?? 5;
-
+            int lowerFeedback = advancedSearchViewModel.FeedbackRangeMin ?? 0;
             Predicate<Announce> feedbackPredicate = a =>
-                    a.Author.FeedbacksMean >= advancedSearchViewModel.FeedbackRangeMin &&
+                    a.Author.FeedbacksMean >= lowerFeedback &&
                     a.Author.FeedbacksMean <= upperFeedback;
 
             var announces =

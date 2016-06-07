@@ -119,9 +119,9 @@
                     <br/>
                     <div class="input-group">
                         <label>Mostra prima: &nbsp;</label>
-                        <label asp-for="OrderByDate" class="radio-inline"><input asp-for="OrderByDate" type="radio" name="optFirst" checked value="true"> Più recenti</label>
-                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" name="optFirst" value="true"> Più economici</label>
-                        <label asp-for="OrderByDistance" class="radio-inline"><input asp-for="OrderByDistance" type="radio" name="optFirst" value="true"/> Più vicini a me</label>
+                        <label asp-for="OrderByDate" class="radio-inline"><input asp-for="OrderByDate" type="radio" id="LastFirst" name="optFirst" checked onchange="setFirst()" value="true"/> Più recenti</label>
+                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" id="CheaperFirst" name="optFirst" onchange="setFirst()" value="false"/> Più economici</label>
+                        <label asp-for="OrderByDistance" class="radio-inline"><input asp-for="OrderByDistance" type="radio" id="DistanceFirst" name="optFirst" onchange="setFirst()" value="false"/> Più vicini a me</label>
                     </div>
                     <br/>
                     <!--Se utente non loggato deve sparire-->
@@ -146,10 +146,10 @@
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="2"/> &#x2605 &#x2605</label><br/>
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="3"/> &#x2605 &#x2605 &#x2605</label><br/>
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="4"/> &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5"/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5" checked/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
                         <br/>
-                        <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none" />
-                        <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMin" value="1" type="number" style="display: none"/>
+                        <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMin" value="0" type="number" style="display: none" />
+                        <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none"/>
                         <label>Mostra annunci con rating compreso tra: </label>
                         <div>
                             <div class="acidjs-rating-stars">
@@ -158,7 +158,7 @@
                                     <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-1"></label>
                                     <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-2"></label>
                                     <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-3"></label>
-                                    <input type="radio" name="group-1" id="group-1-4" value="1" checked="checked" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-4"></label>
+                                    <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-4"></label>
                                 </div>
                             </div>
                         <label> e </label>
@@ -183,7 +183,14 @@
         .click(function() {
             $('#priceRange').toggle();
         });
-    
+
+    function setFirst() {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        document.getElementById("DistanceFirst").value = target.value;
+        alert("value = " + document.getElementById("DistanceFirst").value);
+    }
+
     function onStarClickMin(e) {
         e = e || window.event;
         var target = e.target || e.srcElement;

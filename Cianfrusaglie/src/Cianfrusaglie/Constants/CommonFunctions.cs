@@ -25,6 +25,7 @@ namespace Cianfrusaglie.Constants
             controller.ViewData["IsThereNewMessages"] = IsThereNewMessages(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewInterested"] = IsThereNewInterested(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewAnnouncesWhereIAmChoosed"] = IsThereNewAnnouncesWhereIAmChoosed(controller.User.GetUserId(), context);
+            controller.ViewData["IsThereNewAnnouncesWhereIAmNotChoosed"] = IsThereNewAnnouncesWhereIAmNotChoosed(controller.User.GetUserId(), context);
             controller.ViewData["IsNewFeedbackRequired"] = IsNewFeedbackRequired(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewFeedback"] = IsThereNewFeedback(controller.User.GetUserId(), context);
             controller.ViewData["IsThereAnyNotification"] = IsThereAnyNotification(controller.User.GetUserId(), context);
