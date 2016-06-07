@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Cianfrusaglie.Constants
+@inject SignInManager<User> SignInManager
 @model Cianfrusaglie.ViewModels.Account.RegisterViewModel
 @{
     ViewData[ "Title" ] = "Register";
@@ -38,6 +39,8 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
     <link href= "https://fonts.googleapis.com/css?family=Source+Sans+Pro"  rel="stylesheet" type="text/css" >
     <link href= "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="~/Content/bootstrap-social.css" rel="stylesheet" type="text/css" />
     <link href= "~/Content/Register.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Style.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Search.css"  rel="stylesheet" type="text/css" />
@@ -60,7 +63,6 @@
 </head>
 <body>
     <div id="wrapper-register">
-        <form asp-action="Register" asp-controller="Account" id="formRegister" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
             
             <div id="register" class="form-horizontal form-register form-register1" id="tabellaForm">
                 <h1>
@@ -71,61 +73,86 @@
                 <h2>
                     <!--<i class="glyphicon glyphicon-user"></i>-->
                 </h2>
-                <hr/>
-                <div class="row top-reg">
-                    <span class="btn-warning btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
-                    <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
-                    <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
+                <hr />
+                <br />
+                @{
 
-                </div>
-                <hr/>
-                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
-                <div class="form-group">
-                    <i>I dati contrassegnati con * sono facoltativi</i>
-                </div>
-                <!--NOME-->
-                <div >
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label">Nome </label><label> *</label><br/>
-                        <input asp-for="Name" class="form-control"/>
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                    <!--COGNOME-->
-                    <div class="form-group">
-                        <label asp-for="Surname" class="control-label">Cognome </label><label> *</label><br/>
-                        <input asp-for="Surname" class="form-control"/>
-                        <span asp-validation-for="Surname" class="text-danger"></span>
-                    </div>
-                    <!--SESSO-->
-                    <div class="form-group row">
-                        <label asp-for="Genre" class="control-label">Sesso </label><label> *</label><br/>
+                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                    if (loginProviders.Count == 0)
+                    {
+                    }
+                    else
+                    {
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                            <div>
+                                <p>
+                                    @foreach (var provider in loginProviders)
+                                    {
+                                        <button type="submit" class="btn btn-block btn-social btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account"><span class="fa fa-facebook"></span> Login con Facebook</button>
 
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)" class="form-control"/>Uomo</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)" class="form-control"/>Donna</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Unspecified)" class="form-control"/>Non specificato</label>
-                        <span asp-validation-for="Genre" class="text-danger"></span>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+                <hr/>
+                <form asp-action="Register" asp-controller="Account" id="formRegister" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
+
+                    <div class="row top-reg">
+                        <span class="btn-warning btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
+                        <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
+                        <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
+
+                    </div>
+                    <hr />
+                    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                    <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+                    <div class="form-group">
+                        <i>I dati contrassegnati con * sono facoltativi</i>
+                    </div>
+                    <!--NOME-->
+                    <div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label">Nome </label><label> *</label><br />
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <!--COGNOME-->
+                        <div class="form-group">
+                            <label asp-for="Surname" class="control-label">Cognome </label><label> *</label><br />
+                            <input asp-for="Surname" class="form-control" />
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                        </div>
+                        <!--SESSO-->
+                        <div class="form-group row">
+                            <label asp-for="Genre" class="control-label">Sesso </label><label> *</label><br />
+
+                            <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)" class="form-control" />Uomo</label><br />
+                            <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)" class="form-control" />Donna</label><br />
+                            <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Unspecified)" class="form-control" />Non specificato</label>
+                            <span asp-validation-for="Genre" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
+                            <input id="pac-input" class="form-control" type="text" placeholder="">
+                            <div id="googleMap" style="display: none;"></div>
+                            <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
+                            <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Photo" class="control-label">Immagine profilo </label><label> *</label>
+                            <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+                            <span asp-validation-for="Photo" class="text-danger"></span>
+                        </div>
+
                     </div>
                     <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
-                        <input id="pac-input" class="form-control" type="text" placeholder="">
-                        <div id="googleMap" style="display: none;"></div>
-                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
-                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
+                        <br />
+                        <span class="btn btn-default col-md-8 btn-next" onclick="clickNextButton(1)">Avanti</span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Immagine profilo </label><label> *</label>
-                        <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
-                        <span asp-validation-for="Photo" class="text-danger"></span>
-                    </div>
-                   
-                </div>
-                <div class="form-group">
-                    <br/>
-                    <span class="btn btn-default col-md-8 btn-next" onclick="clickNextButton(1)">Avanti</span>
-                </div>
-                <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
-            </div>
+                    <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
+</div>
             <!------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
             <div id="register" class="form-horizontal form-register form-register2" id="tabellaForm">
                 <h1>
