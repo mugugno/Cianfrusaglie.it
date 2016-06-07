@@ -149,7 +149,8 @@ namespace Cianfrusaglie.Tests {
             var advSearchByTitle = new AdvancedSearchViewModel() {
                 Title = "Halo",
                 ShowGifts = true,
-                ShowOnSale = true
+                ShowOnSale = true,
+                OrderByDate = true
             };
             var announce =
                 Context.Announces.Single(ann => ann.Author.UserName == FirstUserName && ann.Title == "Halo 5 Usato");

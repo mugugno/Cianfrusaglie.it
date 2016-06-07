@@ -100,7 +100,7 @@
         <div class="form-group" id="linkVendi" >
             @if( !User.Identity.IsAuthenticated ) {
                 <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="~/Announces/Create?vendita=true" role="button" >
-                    <span class="glyphicon glyphicon-random"></span></a>
+                    <span class="glyphicon glyphicon-eur"></span></a>
             } else {
                 <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create/?vendita=true" role="button" >
                     <span class="glyphicon glyphicon-eur"></span></a>
@@ -112,7 +112,7 @@
         </div>
         <div class="form-group" id="linkCerca" >
             @if( !User.Identity.IsAuthenticated ) {
-                <a class="btn btn-warning btn-lg btn-round" href="#" role="button" >
+                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
                     <span class="glyphicon glyphicon-search"></span></a>
             } else {
                 <a class="btn btn-warning btn-lg btn-round" href="~/Search/Advanced" role="button" >
