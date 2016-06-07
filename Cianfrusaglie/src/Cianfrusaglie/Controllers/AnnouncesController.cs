@@ -538,7 +538,9 @@ namespace Cianfrusaglie.Controllers {
             var im = _context.ImageUrls.Where( i => i.AnnounceId.Equals( announce.Id ) );
             _context.ImageUrls.RemoveRange( im );
             _context.Interested.RemoveRange( _context.Interested.Where( i => i.AnnounceId == announce.Id ) );
+            _context.FeedBacks.RemoveRange(_context.FeedBacks.Where(f => f.AnnounceId == announce.Id));
             _context.Announces.Remove( announce );
+
 
             _context.SaveChanges();
             return RedirectToAction( nameof( HistoryController.Index ), "History" );

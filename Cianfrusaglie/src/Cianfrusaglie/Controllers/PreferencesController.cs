@@ -158,8 +158,8 @@ namespace Cianfrusaglie.Controllers
                     {
                         string imageUrl = "";
                         var deleteUrl = _context.ImageUrls.Single(i => i.Url.Equals(user.ProfileImageUrl));
-                        _context.ImageUrls.Remove(deleteUrl);
                         imageUrl = await UploadProfileImage(model.Photo, user);
+                        deleteUrl.Url = imageUrl;
                         user.ProfileImageUrl = imageUrl;
                     }
                 user.Name = model.Name;
