@@ -40,10 +40,10 @@ namespace Cianfrusaglie.ViewModels.Preference
 
         public string Surname { get; set; }
 
-       /* public IFormFile Photo { get; set; }
+        public IFormFile Photo { get; set; }
 
         public string Latitude { get; set; }
-        public string Longitude { get; set; }*/
+        public string Longitude { get; set; }
         public Dictionary<int, bool> CategoryDictionary { get; set; }
     }
 }
