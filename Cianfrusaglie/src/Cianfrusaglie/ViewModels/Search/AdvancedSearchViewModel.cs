@@ -21,7 +21,7 @@ namespace Cianfrusaglie.ViewModels.Search
         public int PriceRangeMin { get; set; }
         public int? PriceRangeMax { get; set; }
 
-        public int FeedbackRangeMin { get; set; }
+        public int? FeedbackRangeMin { get; set; }
         public int? FeedbackRangeMax { get; set; }
 
         public bool ShowGifts { get; set; }

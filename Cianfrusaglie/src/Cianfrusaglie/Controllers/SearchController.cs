@@ -294,9 +294,9 @@ namespace Cianfrusaglie.Controllers {
                     a.Price >= advancedSearchViewModel.PriceRangeMin &&
                     a.Price <= upperPrice;
             int upperFeedback = advancedSearchViewModel.FeedbackRangeMax ?? 5;
-
+            int lowerFeedback = advancedSearchViewModel.FeedbackRangeMin ?? 0;
             Predicate<Announce> feedbackPredicate = a =>
-                    a.Author.FeedbacksMean >= advancedSearchViewModel.FeedbackRangeMin &&
+                    a.Author.FeedbacksMean >= lowerFeedback &&
                     a.Author.FeedbacksMean <= upperFeedback;
 
             var announces =

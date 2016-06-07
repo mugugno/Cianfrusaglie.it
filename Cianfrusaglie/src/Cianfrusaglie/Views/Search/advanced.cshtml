@@ -148,8 +148,8 @@
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="4"/> &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
                         <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5" checked/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
                         <br/>
-                        <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none" />
-                        <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMin" value="1" type="number" style="display: none"/>
+                        <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMin" value="0" type="number" style="display: none" />
+                        <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none"/>
                         <label>Mostra annunci con rating compreso tra: </label>
                         <div>
                             <div class="acidjs-rating-stars">
@@ -158,7 +158,7 @@
                                     <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-1"></label>
                                     <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-2"></label>
                                     <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-3"></label>
-                                    <input type="radio" name="group-1" id="group-1-4" value="1" checked="checked" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-4"></label>
+                                    <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-4"></label>
                                 </div>
                             </div>
                         <label> e </label>
