@@ -231,7 +231,7 @@ namespace Cianfrusaglie.Tests {
             user.Longitude = 0.0;
             var advOrderDate = new AdvancedSearchViewModel()
             {
-                OrderByDate = true,
+                //OrderByDate = true,
                 ShowGifts = true,
                 ShowOnSale = true
             };
@@ -250,7 +250,7 @@ namespace Cianfrusaglie.Tests {
             user.Longitude = 0.0;
             var advOrderDate = new AdvancedSearchViewModel()
             {
-                OrderByDate = false,
+                //OrderByDate = false,
                 ShowGifts = true,
                 ShowOnSale = true
             };

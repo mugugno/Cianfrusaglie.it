@@ -44,15 +44,6 @@ function initializeGMaps(position, onlyView, radius) {
                 if( places.length == 0 )
                     return;
 
-                var bounds = new google.maps.LatLngBounds();
-
-                if( places[ 0 ].geometry.viewport ) {
-                    bounds.union(places[ 0 ].geometry.viewport);
-                } else {
-                    bounds.extend(places[ 0 ].geometry.location);
-                }
-                map.fitBounds(bounds);
-
                 placeMarker(places[0].geometry.location, places[0].title);
 
                 var range = $("#range-input").val();
@@ -66,10 +57,18 @@ function initializeGMaps(position, onlyView, radius) {
         google.maps.event.addListener(map, 'click',
             function (event) {
                 placeMarker(event.latLng);
+                geocodePosition(event.latLng);
                 if( radius > 0 )
                     setCircle(marker.position, $("#range-input").val());
-            });
-    } else if( radius > 0 ) {
+        });
+
+        // Resize stuff...
+        google.maps.event.addDomListener(window, "resize", function () {
+            var center = map.getCenter();
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(center);
+        });
+      } else if( radius > 0 ) {
         //creo un cerchio intorno alla posizione
         setCircle(marker.position, radius);
     }
@@ -108,4 +107,8 @@ function placeMarker(location, title) {
     });
 
     map.setCenter(location);
+}
+
+function GMapsOnline() {
+    return marker != null;
 }

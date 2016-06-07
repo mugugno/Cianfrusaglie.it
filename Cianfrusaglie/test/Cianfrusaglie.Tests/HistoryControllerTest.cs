@@ -17,14 +17,6 @@ namespace Cianfrusaglie.Tests {
             };
         }
 
-        private void CloseAnnounce( int announceId ) {
-            var announce = Context.Announces.SingleOrDefault( a => a.Id.Equals( announceId ) );
-            if( announce != null ) {
-                announce.Closed = true;
-                Context.SaveChanges();
-            }
-        }
-
         private IEnumerable< IEnumerable< Announce > > PartitionAnnounces( IEnumerable< Announce > announces, int size ) {
             for (int i = 0; i < Math.Ceiling(announces.Count() / (Double)size); i++)
                 yield return new List<Announce>(announces.Skip(size * i).Take(size));
