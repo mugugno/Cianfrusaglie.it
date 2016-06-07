@@ -292,15 +292,17 @@ namespace Cianfrusaglie.Controllers {
             if (!advancedSearchViewModel.ShowOnSale)
                 announces = announces.Where(a => a.Price == 0);
 
+
             if ( advancedSearchViewModel.Title != null ) {
                 var titleSearch = TitleBasedSearch(advancedSearchViewModel.Title);
-                announces = announces.Union( titleSearch );
+                announces = announces.Where( a => titleSearch.Select( i => i.Id ).Contains( a.Id ) );
             }
 
             if( advancedSearchViewModel.OrderByDate )
                 announces = announces.OrderByDescending( a => a.PublishDate );
-
-            announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending( a => a.Price ) : announces.OrderBy( a => a.Price );
+            else {
+                announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending(a => a.Price) : announces.OrderBy(a => a.Price);
+            }   
 
             return announces.ToList();
         }
