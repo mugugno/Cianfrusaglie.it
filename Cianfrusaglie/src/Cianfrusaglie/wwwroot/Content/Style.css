@@ -67,7 +67,10 @@ button { padding: 0; }
     box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.03 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.18 );
     z-index: 20;
 }
-
+.btn-facebook, .btn-facebook:hover{
+    color:white;
+    text-align:center;
+}
 #pageHeader {
     background-color: #49586d;
     border-bottom: 1px solid;
