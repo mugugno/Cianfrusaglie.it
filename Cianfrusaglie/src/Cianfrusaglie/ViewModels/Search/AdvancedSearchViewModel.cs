@@ -9,9 +9,7 @@ namespace Cianfrusaglie.ViewModels.Search
     {
         public string Title { get; set; }
 
-        public bool? OrderByDateAscending { get; set; }
-
-        public bool? OrderByDateDescending { get; set; }
+        public bool OrderByDate { get; set; }
 
         public bool OrderByPrice { get; set; }
 

@@ -146,7 +146,11 @@ namespace Cianfrusaglie.Tests {
         {
             var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
             var searchController = CreateResearchController(user.Id);
-            var advSearchByTitle = new AdvancedSearchViewModel() {Title = "Halo"};
+            var advSearchByTitle = new AdvancedSearchViewModel() {
+                Title = "Halo",
+                ShowGifts = true,
+                ShowOnSale = true
+            };
             var announce =
                 Context.Announces.Single(ann => ann.Author.UserName == FirstUserName && ann.Title == "Halo 5 Usato");
             var result = searchController.PerformAdvancedSearch(advSearchByTitle);
@@ -160,7 +164,9 @@ namespace Cianfrusaglie.Tests {
             var searchController = CreateResearchController(user.Id);
             var advSearchByPriceRange = new AdvancedSearchViewModel()
             {
-                PriceRange = new Tuple<int, int>(500, 1500)
+                PriceRange = new Tuple<int, int>(500, 1500),
+                ShowGifts = true,
+                ShowOnSale = true
             };
             var announce =
                 Context.Announces.Single(
@@ -182,7 +188,9 @@ namespace Cianfrusaglie.Tests {
             var searchController = CreateResearchController(user.Id);
             var advSearchByKmRange = new AdvancedSearchViewModel()
             {
-                KmRange = new Tuple<int, int>(0, 10)
+                KmRange = new Tuple<int, int>(0, 10),
+                ShowGifts = true,
+                ShowOnSale = true
             };
             var announce = Context.Announces.Single(ann => ann.Title == "Regalo bicicletta arrugginita");
             var result = searchController.PerformAdvancedSearch(advSearchByKmRange);
@@ -202,7 +210,11 @@ namespace Cianfrusaglie.Tests {
             user2.FeedbacksMean = 2.0;
             Context.SaveChanges();
             var searchController = CreateResearchController(user.Id);
-            var advSearchByFeedback = new AdvancedSearchViewModel() {FeedbackRatingRange = new Tuple<int, int>(3,5)};
+            var advSearchByFeedback = new AdvancedSearchViewModel() {
+                FeedbackRatingRange = new Tuple<int, int>(3,5),
+                ShowGifts = true,
+                ShowOnSale = true
+            };
             var announce = Context.Announces.First(ann => ann.AuthorId.Equals(user.Id));
             var result = searchController.PerformAdvancedSearch(advSearchByFeedback);
             var wrongAnnounce = Context.Announces.First(ann => ann.AuthorId.Equals(user2.Id));
@@ -223,9 +235,9 @@ namespace Cianfrusaglie.Tests {
                 ShowGifts = true,
                 ShowOnSale = true
             };
-            var result = searchController.PerformAdvancedSearch(advOrderDate);
+            var result = searchController.PerformAdvancedSearch(advOrderDate).Select(a=>a.Id).ToList();
             var announces = Context.Announces
-                .OrderBy( a=>a.PublishDate ).ToList();
+                .OrderByDescending( a=>a.PublishDate ).Select(a => a.Id).ToList();
             Assert.Equal( announces, result );
         }
 
@@ -260,7 +272,7 @@ namespace Cianfrusaglie.Tests {
             };
             var result = searchController.PerformAdvancedSearch(advOrderDate).Select(a => a.Id).ToList();
             var announces = Context.Announces
-                .OrderBy(a => a.Price).Select(a => a.Id).ToList();
+                .OrderByDescending(a => a.Price).Select(a => a.Id).ToList();
             Assert.Equal(announces, result);
         }
 
@@ -277,7 +289,7 @@ namespace Cianfrusaglie.Tests {
             };
             var result = searchController.PerformAdvancedSearch(advOrderDate).Select(a=>a.Id).ToList();
             var announces = Context.Announces
-                .OrderByDescending(a => a.Price).Select(a => a.Id).ToList();
+                .OrderBy(a => a.Price).Select(a => a.Id).ToList();
             Assert.Equal(announces, result);
 
         }
@@ -316,8 +328,8 @@ namespace Cianfrusaglie.Tests {
             {
                 ShowOnSale = true
             };
-            var result = searchController.PerformAdvancedSearch(adv).Select(a => a.Id).ToList();
-            var announces = Context.Announces.Where(a => a.Price != 0).Select(a => a.Id).ToList();
+            var result = searchController.PerformAdvancedSearch( adv ).OrderBy(u=>u.Id).Select( a => a.Id ).ToList();
+            var announces = Context.Announces.Where(a => a.Price != 0).OrderBy(u => u.Id).Select(a => a.Id).ToList();
             Assert.Equal(announces, result);
         }
     }
