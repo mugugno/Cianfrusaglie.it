@@ -27,7 +27,7 @@ namespace Cianfrusaglie.ViewModels.Preference
         public string Password { get; set; }
 
         [DataType(DataType.Password), Display(Name = "Conferma password"),
-         Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+         Compare("Password", ErrorMessage = "La password e la password di conferma non sono uguali")]
         public string ConfirmPassword { get; set; }
 
         [Range((int)Constants.Genre.Unspecified, (int)Constants.Genre.Male)]
