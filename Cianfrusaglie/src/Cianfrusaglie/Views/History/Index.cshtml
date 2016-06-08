@@ -149,13 +149,15 @@
 
                                                 <span style="float: right"> @item.PublishDate.ToString("d/MM/yyyy") </span>
                                                 <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
-                                                <div class="" style="text-align: center; padding-top: 5px">
-                                                    @if (Model[3].Contains(item))
-                                                    {
-                                                        <span class="label label-success" style="font-size: 1em; border-radius: 1em; font-weight: normal;">Sei stato scelto per questo annuncio!</span>
-                                                    }
+                                               <!-- <div class="" style="text-align: center; padding-top: 5px">-->
+                                                        @if (Model[3].Contains(item))
+                                                        {
+                                                            <p style="color: green; float: right;"><span class="glyphicon glyphicon-ok"></span>Sei stato scelto!</p>
+                                                        <!--<span class="label label-success" style="font-size: 1em; border-radius: 1em; font-weight: normal;">Sei stato scelto per questo annuncio!</span>
+                                                        -->
+                                                            }
 
-                                                </div>
+                                              <!--  </div>-->
                                             </div>
                                             <div id="announce-number-@item.Id" class="panel-collapse collapse">
                                                 <div class="panel-body">
@@ -173,16 +175,20 @@
                                                             @if (!Model[3].Contains(item))
                                                             {
                                                                 <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
-                                                                    <p>Se verrai scelto riceverai una notifica. Se hai domande contatta il <a href="~/Messages/Details/?id=@item.AuthorId">proprietario</a>
+                                                                    <p>Se verrai scelto riceverai una notifica. Se hai domande contatta il <a href="~/Profile?id=@item.AuthorId">proprietario</a>
                                                                     </p>
                                                                 </div>
 
                                                             }
-                                                            else if (Model[2].Contains(item))
+                                                            else if (Model[2].Contains(item) && !Model[4].Contains(item))
                                                             {
                                                                 <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
-                                                                    <p>Sei stato scelto! Accordati con il proprietario e poi lascia il feedback</p>
-                                                                    <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId">Lascia il tuo feedback</a>
+                                                                    <p>
+                                                                        Accordati con il proprietario e poi lascia il tuo
+                                                                        <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId">
+                                                                            feedback
+                                                                        </a> sulla transazione appena conclusa.
+                                                                    </p>
                                                                 </div>
                                                             }
                                                             else if (Model[4].Contains(item))
@@ -194,23 +200,24 @@
                                                             else
                                                             {
                                                                 <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
-                                                                    <p>Non sei più il vincitore. Lascia comunque un tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId">feedback</a></p>
+                                                                    <p>@item.AuthorId ha deciso di scegliere un altro utente per questo oggetto. <br/>
+                                                                     Lascia comunque un tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId">feedback</a></p>
                                                                 </div>
                                                              }
 
                                                           
                                                                         </div>
                                                         <div class="row">
-                                                            @if(!Model[4].Contains(item) || !Model[3].Contains(item))
+                                                            @if(Model[4].Contains(item) || !Model[3].Contains(item))
                                                             {
                                                                 <span class="col-md-6" style="margin-top: 1em; text-align: right"> <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>    Visualizza</a></span>
-                                                                <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>    Utenti interessati</a></span>
+                                                                <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/Messages/Details/?id=@item.AuthorId"><span class="glyphicon glyphicon-envelope"></span>    Contatta</a></span>
                                                             }
                                                             else
                                                             {
                                                                 <span class="col-md-6" style="margin-top: 1em; text-align: right"> <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>    Visualizza</a></span>
-                                                                <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>    Utenti interessati</a></span>
-                                                                <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-star"></span>    Feedback</a></span>
+                                                                <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/Messages/Details/?id=@item.AuthorId"><span class="glyphicon glyphicon-envelope"></span>    Contatta</a></span>
+                                                                <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId"><span class="glyphicon glyphicon-star"></span>    Feedback</a></span>
                                                             }
                                                         </div>
 

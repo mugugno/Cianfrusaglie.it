@@ -116,11 +116,16 @@ namespace Cianfrusaglie.Controllers {
             var announces = _context.Announces.Where(a => a.AuthorId.Equals(User.GetUserId()));
             var announceChoosen = new Dictionary<int, User>();
             foreach (var announce1 in announces)
-            {
-                var choosen = _context.AnnounceChosenUsers.Where(ac => ac.AnnounceId.Equals(announce1.Id)).OrderByDescending(ac => ac.ChosenDateTime).Last();
-                var user = _context.Users.Single(u => u.Id.Equals(choosen.ChosenUserId));
-                announceChoosen.Add(announce1.Id, user);
-
+           {
+                var choosen =
+                    _context.AnnounceChosenUsers.Where(ac => ac.AnnounceId.Equals(announce1.Id))
+                        .OrderByDescending(a => a.ChosenDateTime)
+                        .FirstOrDefault();
+                if (choosen != null)
+                {
+                    var user = _context.Users.SingleOrDefault(u => u.Id.Equals(choosen.ChosenUserId));
+                    announceChoosen.Add(announce1.Id, user);
+                }
             }
             return announceChoosen;
         }
