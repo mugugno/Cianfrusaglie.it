@@ -139,7 +139,7 @@
         @foreach( var annuncio in GetAnnounce() ) {
             <div class="col-sm-5 col-md-4" >
 
-                <div class="col-item" style="width: 264px;height: 396px">
+                <div class="col-item santinoHome" >
 
                     <div class="photoThu" >
                         @if( !User.Identity.IsAuthenticated ) {
@@ -158,29 +158,34 @@
 
                         <!--titolo su una linea sola-->
                         @{
-                            int maxLength = 35;
+                            int maxLength = 30;
                         }
                         @if( User.Identity.IsAuthenticated ) {
-                            <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
-                                
-                                @if (annuncio.Title.Length > maxLength)
-                                {
-                                    <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
-                                }
-                                else {
-                                    <h3>@annuncio.Title</h3>
-                                }
-                            </a>
+                            <div class="fixedTitle">
+                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+
+                                    @if (annuncio.Title.Length > maxLength)
+                                    {
+                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
+                                    }
+                                    else {
+                                        <h3>@annuncio.Title</h3>
+                                    }
+                                </a>  
+                            </div>
+                            
                         }
                         else {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
-                                @if (annuncio.Title.Length > maxLength)
-                                {
-                                    <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
-                                }
-                                else {
-                                    <h3>@annuncio.Title</h3>
-                                }
+                            <a style="word-wrap:break-word" title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
+                                <div class="fixedTitle">
+                                    @if (annuncio.Title.Length > maxLength)
+                                    {
+                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
+                                    }
+                                    else {
+                                        <h3>@annuncio.Title</h3>
+                                    }
+                                </div>
                         </a> 
                         }
 
@@ -241,15 +246,15 @@
         
             foreach( var annuncio in GetSuggestedAnnounce() ) {
                 <div class="col-sm-5 col-md-4" >
-                    <div class="col-item" style="width: 264px;height: 396px" >
+                    <div class="col-item santinoHome"  >
                         
                         <div class="photoThu" >
                             @if( !User.Identity.IsAuthenticated ) {
-                                <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href="" >
+                                <a style="word-wrap:break-word" title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href="" >
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             } else {
-                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
+                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             }
@@ -260,17 +265,21 @@
 
 
                             <!--titolo su una linea sola-->
-                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
+                            <div class="fixedTitle">
+                                <a style="word-wrap: normal" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
 
                                     @{
-                                        int maxLength = 35;
+                                        int maxLength = 30;
                                     }
-                                    @if( annuncio.Title.Length > maxLength ) {
-                                        <h3>@annuncio.Title.Substring( 0, maxLength )... </h3>
-                                    } else {
+                                    @if (annuncio.Title.Length > maxLength)
+                                    {
+                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
+                                    }
+                                    else {
                                         <h3>@annuncio.Title</h3>
                                     }
                                 </a>
+                            </div>
                             @{
                                 bool hasDistance = false;
                                 int distance = 0;

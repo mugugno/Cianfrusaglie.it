@@ -4,6 +4,7 @@
 }
 
 .fixedTitle {
+    word-wrap: break-word;
     height: 54px;
 }
 
