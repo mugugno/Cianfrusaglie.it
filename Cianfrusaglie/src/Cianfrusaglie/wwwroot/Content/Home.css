@@ -214,6 +214,12 @@ hr {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.12),0 2px 10px 0 rgba(0,0,0,0.09);
 }
 
+.col-item .santinoHome {
+    width: 264px;
+    height: 396px;
+    text-wrap: normal;
+}
+
 .col-item .photo img {
     margin: 0 auto;
     width: 100%;
