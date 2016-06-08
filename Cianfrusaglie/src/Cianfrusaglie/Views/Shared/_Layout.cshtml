@@ -40,7 +40,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
     <script src="~/js/site.js" ></script>
-    <script src="~/js/StarRatingFunctions.js"></script>
+    <script src="~/js/StarRatingFunctions.js" ></script>
+    <script src="~/dist/spin.min.js"></script>
+    <script src="~/dist/ladda.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -55,7 +57,9 @@
     <link href="~/Content/Search.css"  rel="stylesheet" type="text/css" />
     <link href="~/Content/Messages.css"  rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href= 'https://fonts.googleapis.com/css?family=Roboto'  rel='stylesheet' type='text/css' >
+    <link rel="stylesheet" href="~/dist/ladda-themeless.min.css">
+    
 
    @RenderSection("scripts", required: false) 
 </head>
@@ -428,6 +432,15 @@
 <script type="text/javascript">
     $('#popoverData').popover({ html: true });
 </script>
+
+    <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+    <script type="text/javascript">
+    window.cookieconsent_options = {"message":"Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.","dismiss":"Ho capito!","learnMore":"More info","link":null,"theme":"dark-top"};
+    </script>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
+    <!-- End Cookie Consent plugin -->
+
 
 </body>
 </html>

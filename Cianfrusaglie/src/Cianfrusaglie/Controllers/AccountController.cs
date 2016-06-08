@@ -247,6 +247,7 @@ namespace Cianfrusaglie.Controllers {
             string genre = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Gender);
             string username = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Name);
             
+            
             return View( "ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel {Email = email, Name=name, Surname= surname, UserName=username.Replace(" ","")} );
         }
 
@@ -287,10 +288,34 @@ namespace Cianfrusaglie.Controllers {
                     Latitude = double.Parse(model.Latitude ?? "0", CultureInfo.InvariantCulture),
                     Longitude = double.Parse(model.Longitude ?? "0", CultureInfo.InvariantCulture)
                 };
-                var result = await _userManager.CreateAsync( user );
+                string imageUrl = "";
+                if (model.Photo != null)
+                {
+                    imageUrl = await UploadProfileImage(model.Photo, user);
+                }
+                else
+                {
+                    imageUrl = CommonStrings.DefaultProfileImageUrl;
+                }
+                user.ProfileImageUrl = imageUrl;
+
+                    var result = await _userManager.CreateAsync( user );
                 if( result.Succeeded ) {
                     result = await _userManager.AddLoginAsync( user, info );
-                    if( result.Succeeded ) {
+                    if (model.CategoryDictionary != null)
+                        foreach (var kvPair in model.CategoryDictionary)
+                        {
+                            if (kvPair.Value)
+                            {
+                                _context.UserCategoryPreferenceses.Add(new UserCategoryPreferences
+                                {
+                                    CategoryId = kvPair.Key,
+                                    UserId = user.Id
+                                });
+                            }
+                        }
+                    _context.SaveChanges();
+                    if ( result.Succeeded ) {
                         await _signInManager.SignInAsync( user, false );
                         _logger.LogInformation( 6, "User created an account using {Name} provider.", info.LoginProvider );
                         return RedirectToLocal( returnUrl );
