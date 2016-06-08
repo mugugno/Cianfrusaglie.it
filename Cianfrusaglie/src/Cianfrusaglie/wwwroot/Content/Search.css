@@ -3,6 +3,10 @@
     padding:2em;
 }
 
+.fixedTitle {
+    height: 54px;
+}
+
 .container-search .item{
     min-width: 20em !important;
     width:20em;
