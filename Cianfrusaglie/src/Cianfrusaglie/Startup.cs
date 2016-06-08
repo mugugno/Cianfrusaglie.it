@@ -104,8 +104,8 @@ namespace Cianfrusaglie {
             app.UseIdentity();
             app.UseFacebookAuthentication(options =>
             {
-                options.AppId = Configuration["Authentication:Facebook:AppId"];
-                options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                options.AppId = "228034747580137";
+                options.AppSecret = "00da0b603fe8c817f4cd509eaab00b3b";
             });
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
