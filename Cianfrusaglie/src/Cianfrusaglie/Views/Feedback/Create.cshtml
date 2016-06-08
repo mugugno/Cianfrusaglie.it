@@ -52,14 +52,14 @@
                         <br />
                         <br />
 
+                        <div class="form-group">
+                            <div class="col-md-4">&nbsp;</div>
+                            <div id="text_feedback" class="col-md-7" style="text-align: right;"></div>
+                        </div>
+
                         <div style="align-content: center" >
                             <textarea asp-for="Text" id="text" maxlength="@DomainConstraints.FeedBackTextMaxLenght" class="form-control " rows="5" style="margin-left: 1em" ></textarea>
                             <span asp-validation-for="Text" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group" >
-                            <div class="col-md-4" >&nbsp;</div>
-                            <div id="text_feedback" class="col-md-7" style="text-align: right;" ></div>
                         </div>
 
                     </div>
