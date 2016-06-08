@@ -8,6 +8,7 @@
 /// <reference path="js/googlemaps.js" />
 /// <reference path="js/jquery.menu-aim.js" />
 /// <reference path="js/ladda.js" />
+/// <reference path="js/passwordmeter.js" />
 /// <reference path="js/prism.js" />
 /// <reference path="js/site.js" />
 /// <reference path="js/spin.js" />
