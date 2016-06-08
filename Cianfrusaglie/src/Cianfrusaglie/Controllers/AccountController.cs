@@ -247,6 +247,7 @@ namespace Cianfrusaglie.Controllers {
             string genre = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Gender);
             string username = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Name);
             
+            
             return View( "ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel {Email = email, Name=name, Surname= surname, UserName=username.Replace(" ","")} );
         }
 
@@ -298,7 +299,6 @@ namespace Cianfrusaglie.Controllers {
                 }
                 user.ProfileImageUrl = imageUrl;
 
-                var bob = "bob";
                     var result = await _userManager.CreateAsync( user );
                 if( result.Succeeded ) {
                     result = await _userManager.AddLoginAsync( user, info );
