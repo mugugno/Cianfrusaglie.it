@@ -32,6 +32,7 @@ namespace Cianfrusaglie.Constants
             controller.ViewData["IsThereNewFeedback"] = IsThereNewFeedback(controller.User.GetUserId(), context);
             controller.ViewData["IsThereAnyNotification"] = IsThereAnyNotification(controller.User.GetUserId(), context);
             var loggedUser = context.Users.FirstOrDefault( u => u.Id.Equals( controller.User.GetUserId() ) );
+            controller.ViewData[ "LoggedUser" ] = loggedUser;
             controller.ViewData[ "MyAvatar" ] = loggedUser == null ? "" : loggedUser.ProfileImageUrl;
 
         }
