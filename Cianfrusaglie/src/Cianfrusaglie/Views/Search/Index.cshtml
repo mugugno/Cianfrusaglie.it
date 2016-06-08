@@ -5,6 +5,7 @@
 @using System.Collections.Immutable
 @using System.Net
 @using System.Net.Configuration
+@using Cianfrusaglie.GeoPosition
 @using Cianfrusaglie.Models
 @model  IEnumerable< Announce > 
 
@@ -58,7 +59,7 @@
                         {
                             idDiv = "sale";
                         }
-                        <div class="col-item" id="@idDiv">
+                        <div class="col-item" style="height: 420px; width: 270px;" id="@idDiv">
                             <div class="photoThu">
                                 @if (User.Identity.IsAuthenticated)
                                 {
@@ -74,46 +75,76 @@
 
 
                                 <h3>
-                                    @if (announce.Title.Length > 15)
-                                    {
-                                        if (User.Identity.IsAuthenticated)
-                                        {
-                                            <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
-                                                <h3>@announce.Title.Substring(0, 15)... </h3>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a data-toggle="modal" data-target="#myWindow" style="color: black">
-                                                <h3>@announce.Title.Substring(0, 15)... </h3>
-                                            </a>
-                                        }
+
+                                    @{
+                                        int maxLength = 30;
                                     }
-                                    else
-                                    {
-                                        if (User.Identity.IsAuthenticated)
-                                        {
-                                            <a href="~/Announces/Details/?id=@announce.Id" style="color: black">
-                                                <h3>@announce.Title</h3>
-                                            </a>
+                                    @if( announce.Title.Length > maxLength ) {
+                                        if( User.Identity.IsAuthenticated ) {
+                                            <div class="fixedTitle" >
+                                                <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
+                                                    <h3>@announce.Title.Substring( 0, maxLength )... </h3>
+                                                </a>
+                                            </div>
+                                        } else {
+                                            <div class="fixedTitle" >
+                                                <a data-toggle="modal" data-target="#myWindow" style="color: black" >
+                                                    <h3>@announce.Title.Substring( 0, maxLength )... </h3>
+                                                </a>
+                                            </div>
+
                                         }
-                                        else
-                                        {
-                                            <a data-toggle="modal" data-target="#myWindow" style="color: black">
-                                                <h3>@announce.Title</h3>
-                                            </a>
+                                    } else {
+                                        if( User.Identity.IsAuthenticated ) {
+                                            <div class="fixedTitle" >
+                                                <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
+                                                    <h3>@announce.Title</h3>
+                                                </a>
+                                            </div>
+                                        } else {
+                                            <div class="fixedTitle" >
+                                                <a data-toggle="modal" data-target="#myWindow" style="color: black" >
+                                                    <h3>@announce.Title</h3>
+                                                </a>
+                                            </div>
                                         }
                                     }
                                 </h3>
-                                @if (@announce.Price == 0)
+                                @{
+                                    bool hasDistance = false;
+                                    int distance = 0;
+                                    if( User.Identity.IsAuthenticated ) {
+                                        var user = (User) ViewData["LoggedUser"];
+                                        if( user.Latitude.HasValue && user.Longitude.HasValue ) {
+                                            distance = (int)GeoCoordinate.Distance( user.Latitude.Value, user.Longitude.Value, announce.Latitude, announce.Longitude );
+                                            hasDistance = true;
+                                        }
+
+                                    }
+                                }
+                                @if (announce.Price == 0)
                                 {
-                                    <h5 class="price-text-color">IN REGALO</h5>
+                                    if (hasDistance)
+                                    {
+                                        <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                                    }
+                                    else {
+                                        <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
+                                    }
+
                                     <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                                 }
                                 else
                                 {
+                                    if (hasDistance)
+                                    {
+                                        <h5 class="price-text-color" style="margin-left: 0" >Prezzo: <b>@announce.Price €</b> a <b>@distance Km</b> da te</h5>
+                                    }
+                                    else {
+                                        <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@announce.Price €</b></h5>
+                                    }
                                     <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                    <h5 class="price-text-color">Prezzo: @announce.Price €</h5>
+                                    
                                 }
 
 

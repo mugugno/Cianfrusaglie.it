@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using Cianfrusaglie.GeoPosition
 @functions {
 
     public IEnumerable< Announce > GetAnnounce() {
@@ -138,7 +139,7 @@
         @foreach( var annuncio in GetAnnounce() ) {
             <div class="col-sm-5 col-md-4" >
 
-                <div class="col-item" >
+                <div class="col-item santinoHome" >
 
                     <div class="photoThu" >
                         @if( !User.Identity.IsAuthenticated ) {
@@ -156,36 +157,46 @@
 
 
                         <!--titolo su una linea sola-->
+                        @{
+                            int maxLength = 30;
+                        }
                         @if( User.Identity.IsAuthenticated ) {
-                            <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
-                                @if( annuncio.Title.Length > 17 ) {
-                                    <h3>@annuncio.Title.Substring( 0, 17 )... </h3>
-                                } else {
-                                    <h3>@annuncio.Title</h3>
-                                }
-                            </a>
+                            <div class="fixedTitle">
+                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+
+                                    @if (annuncio.Title.Length > maxLength)
+                                    {
+                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
+                                    }
+                                    else {
+                                        <h3>@annuncio.Title</h3>
+                                    }
+                                </a>  
+                            </div>
+                            
                         }
                         else {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
-                            @if (annuncio.Title.Length > 17)
-                            {
-                                <h3>@annuncio.Title.Substring(0, 17)... </h3>
-                            }
-                            else
-                            {
-                                <h3>@annuncio.Title</h3>
-                            }
+                            <a style="word-wrap:break-word" title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
+                                <div class="fixedTitle">
+                                    @if (annuncio.Title.Length > maxLength)
+                                    {
+                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
+                                    }
+                                    else {
+                                        <h3>@annuncio.Title</h3>
+                                    }
+                                </div>
                         </a> 
                         }
 
 
                         @if( @annuncio.Price == 0 ) {
-                            <h5 class="price-text-color" >IN REGALO</h5>
-                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                        } else {
-                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                            <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                            <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
                         }
+                        else {
+                            <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
+                        }
+                           
 
 
                         <div class="price" >
@@ -235,15 +246,15 @@
         
             foreach( var annuncio in GetSuggestedAnnounce() ) {
                 <div class="col-sm-5 col-md-4" >
-                    <div class="col-item" >
+                    <div class="col-item santinoHome"  >
                         
                         <div class="photoThu" >
                             @if( !User.Identity.IsAuthenticated ) {
-                                <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href="" >
+                                <a style="word-wrap:break-word" title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href="" >
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             } else {
-                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
+                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             }
@@ -254,20 +265,56 @@
 
 
                             <!--titolo su una linea sola-->
-                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black" >
-                                    @if( annuncio.Title.Length > 20 ) {
-                                        <h3>@annuncio.Title.Substring( 0, 17 )... </h3>
-                                    } else {
+                            <div class="fixedTitle">
+                                <a style="word-wrap: normal" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+
+                                    @{
+                                        int maxLength = 30;
+                                    }
+                                    @if (annuncio.Title.Length > maxLength)
+                                    {
+                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
+                                    }
+                                    else {
                                         <h3>@annuncio.Title</h3>
                                     }
                                 </a>
+                            </div>
+                            @{
+                                bool hasDistance = false;
+                                int distance = 0;
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    var user = (User)ViewData["LoggedUser"];
+                                    if (user.Latitude.HasValue && user.Longitude.HasValue)
+                                    {
+                                        distance = (int)GeoCoordinate.Distance(user.Latitude.Value, user.Longitude.Value, annuncio.Latitude, annuncio.Longitude);
+                                        hasDistance = true;
+                                    }
 
-                            @if( @annuncio.Price == 0 ) {
-                                <h5 class="price-text-color" >IN REGALO</h5>
+                                }
+                            }
+                            @if (@annuncio.Price == 0)
+                            {
+                                if (hasDistance)
+                                {
+                                    <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                                }
+                                else {
+                                    <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
+                                }
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
-                            } else {
+                            }
+                            else {
+                                if (hasDistance)
+                                {
+                                    <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
+                                }
+                                else {
+                                    <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
+                                }
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                <h5 class="price-text-color" >Prezzo: @annuncio.Price €</h5>
+                                
                             }
 
 
