@@ -236,7 +236,7 @@
                     <div class="nextprev">
                         <button class="btn btn-warning" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
 
-                        <button class="btn btn-warning disabled" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
+                        <button class="btn btn-warning disabled ladda-button" data-style="zoom-in" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
                     </div>
                 </div>
             </div>
@@ -279,4 +279,9 @@
         setCircle(marker.position, range);
     });
     clickForwardButton();
+
+    $("#tabellaForm").submit(function (event) {
+        var l = Ladda.create(document.querySelector("#forward-button"));
+        l.start();
+    });
 </script>

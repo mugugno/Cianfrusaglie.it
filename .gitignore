@@ -243,6 +243,8 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-Cianfrusaglie/src/Cianfrusaglie/wwwroot/images/
+Cianfrusaglie/src/Cianfrusaglie/wwwroot/upload/
 /Cianfrusaglie/src/Cianfrusaglie/Properties/PublishProfiles
-/Cianfrusaglie/src/Cianfrusaglie/wwwroot
+/Cianfrusaglie/src/Cianfrusaglie/wwwroot/images/Thumbs.db
+/Cianfrusaglie/src/Cianfrusaglie/wwwroot/js/site.min.js
+/Cianfrusaglie/src/Cianfrusaglie/wwwroot/css/site.min.css
