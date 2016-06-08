@@ -44,8 +44,8 @@
     <link href= "~/Content/Register.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Style.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Search.css"  rel="stylesheet" type="text/css" />
+    <link href="~/Content/meter.css" rel="stylesheet" type="text/css" />
     <link href= "https://fonts.googleapis.com/css?family=Lato"  rel="stylesheet" type="text/css" >
-    <link href="~/css/maps.css" rel="stylesheet" type="text/css" />
 
     <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="/js/googleMaps.js" ></script>
@@ -132,7 +132,7 @@
                             <span asp-validation-for="Genre" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
+                            <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
                             <input id="pac-input" class="form-control" type="text" placeholder="">
                             <div id="googleMap" style="display: none;"></div>
                             <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
@@ -160,8 +160,7 @@
 
                 <hr />
                 <div class="row top-reg">
-                    <span class="btn-gr btn" onclick="
-clickBackButton(2)"><span>1</span>Su di te</span>
+                    <span class="btn-gr btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
                     <span class="btn-warning btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
                     <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
 
@@ -237,23 +236,29 @@ clickBackButton(2)"><span>1</span>Su di te</span>
 
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                        <input asp-for="Email" id="email" type="email" required="" class="form-control" />
-                        <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label">Password</label><br />
-                        <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData"/>
-                        <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
-                    </div>
-                    <div class="form-group">
+        <div class="form-group" >
+            <label asp-for="Email" class="control-label" >Indirizzo email</label><br />
+            <input asp-for="Email" id="email" type="email" required="" class="form-control" />
+            <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" >
+            <label asp-for="Password" class="control-label" >Password</label><br />
+            <input asp-for="Password" type="password" required="" minlength="8" autocomplete="false" class="form-control" id="popoverData" />
+            <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
+                        
+        </div>
+
+        <div class="form-group" >
+            <meter max="4" value="0" id="password-strength-meter"></meter>
+            <p id="password-strength-text" ></p>
+        </div>
+
+        <div class="form-group">
                         <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
-                        <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control" />
+                        <input asp-for="ConfirmPassword" type="password" required="" autocomplete="false" id="confirmPassword" class="form-control" />
                         <span asp-validation-for="ConfirmPassword" id="wrongpwd" class="text-danger"></span>
-
                     </div>
-
 
                     <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
 
@@ -268,6 +273,8 @@ clickBackButton(2)"><span>1</span>Su di te</span>
 </form>
     </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js" ></script>
+<script src="/js/passwordMeter.js"></script>
 <script type="text/javascript" >
     var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
     $('#popoverData').keyup( passwordCheck );

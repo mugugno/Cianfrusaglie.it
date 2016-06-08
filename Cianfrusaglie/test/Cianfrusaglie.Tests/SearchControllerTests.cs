@@ -276,26 +276,8 @@ namespace Cianfrusaglie.Tests {
             };
             var result = searchController.PerformAdvancedSearch(advOrderDate).Select(a => a.Id).ToList();
             var announces = Context.Announces
-                .OrderByDescending(a => a.Price).Select(a => a.Id).ToList();
-            Assert.Equal(announces, result);
-        }
-
-        [Fact]
-        public void UserRequestSearchResultOrderdDescendingByPriceAndIsOk()
-        {
-            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
-            var searchController = CreateResearchController(user.Id);
-            var advOrderDate = new AdvancedSearchViewModel()
-            {
-                OrderByPrice = false,
-                ShowGifts = true,
-                ShowOnSale = true
-            };
-            var result = searchController.PerformAdvancedSearch(advOrderDate).Select(a=>a.Id).ToList();
-            var announces = Context.Announces
                 .OrderBy(a => a.Price).Select(a => a.Id).ToList();
             Assert.Equal(announces, result);
-
         }
 
         [Fact]
