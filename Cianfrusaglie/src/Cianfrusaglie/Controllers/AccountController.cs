@@ -82,17 +82,17 @@ namespace Cianfrusaglie.Controllers {
                 var result =
                     await _signInManager.PasswordSignInAsync( model.UserName, model.Password, model.RememberMe, false );
                 if( result.Succeeded ) {
-                    _logger.LogInformation( 1, "User logged in." );
+                    _logger.LogInformation( 1, "L'utente si è loggato" );
                     return RedirectToLocal( returnUrl );
                 }
                 if( result.RequiresTwoFactor ) {
                     return RedirectToAction( nameof( SendCode ), new {ReturnUrl = returnUrl, model.RememberMe} );
                 }
                 if( result.IsLockedOut ) {
-                    _logger.LogWarning( 2, "User account locked out." );
+                    _logger.LogWarning( 2, "Troppi tentativi immessi: account bloccato" );
                     return View( "Lockout" );
                 }
-                ModelState.AddModelError( string.Empty, "Invalid login attempt." );
+                ModelState.AddModelError( string.Empty, "Username o password errati" );
                 return View( model );
             }
 
@@ -188,7 +188,7 @@ namespace Cianfrusaglie.Controllers {
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     await _signInManager.SignInAsync( user, false );
-                    _logger.LogInformation( 3, "User created a new account with password." );
+                    _logger.LogInformation( 3, "Un utente si è registrato con una nuova coppia (username, password)" );
                     return RedirectToAction( nameof( HomeController.Index ), "Home" );
                 }
                 AddErrors( result );
@@ -202,7 +202,7 @@ namespace Cianfrusaglie.Controllers {
         // POST: /Account/LogOff
         public async Task< IActionResult > LogOff() {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation( 4, "User logged out." );
+            _logger.LogInformation( 4, "L'utente si è sloggato" );
             return RedirectToAction( nameof( HomeController.Index ), "Home" );
         }
 
@@ -228,7 +228,7 @@ namespace Cianfrusaglie.Controllers {
             // Sign in the user with this external login provider if the user already has a login.
             var result = await _signInManager.ExternalLoginSignInAsync( info.LoginProvider, info.ProviderKey, false );
             if( result.Succeeded ) {
-                _logger.LogInformation( 5, "User logged in with {Name} provider.", info.LoginProvider );
+                _logger.LogInformation( 5, "L'utente si è loggato mediante {Name}.", info.LoginProvider );
                 return RedirectToLocal( returnUrl );
             }
             if( result.RequiresTwoFactor ) {
@@ -265,7 +265,7 @@ namespace Cianfrusaglie.Controllers {
                     result = await _userManager.AddLoginAsync( user, info );
                     if( result.Succeeded ) {
                         await _signInManager.SignInAsync( user, false );
-                        _logger.LogInformation( 6, "User created an account using {Name} provider.", info.LoginProvider );
+                        _logger.LogInformation( 6, "L'utente ha creato un account mediante {Name}", info.LoginProvider );
                         return RedirectToLocal( returnUrl );
                     }
                 }
@@ -438,10 +438,10 @@ namespace Cianfrusaglie.Controllers {
                 return RedirectToLocal( model.ReturnUrl );
             }
             if( result.IsLockedOut ) {
-                _logger.LogWarning( 7, "User account locked out." );
+                _logger.LogWarning( 7, "Troppi tentativi di login, account bloccato." );
                 return View( "Lockout" );
             }
-            ModelState.AddModelError( "", "Invalid code." );
+            ModelState.AddModelError( "", "Codice invalido" );
             return View( model );
         }
 
