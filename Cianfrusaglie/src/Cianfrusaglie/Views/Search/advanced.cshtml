@@ -119,9 +119,9 @@
                     <br/>
                     <div class="input-group">
                         <label>Mostra prima: &nbsp;</label>
-                        <label asp-for="OrderByDate" class="radio-inline"><input asp-for="OrderByDate" type="radio" id="LastFirst" name="optFirst" checked onchange="setFirst()" value="true"/> Più recenti</label>
-                        <label asp-for="OrderByPrice" class="radio-inline"><input asp-for="OrderByPrice" type="radio" id="CheaperFirst" name="optFirst" onchange="setFirst()" value="false"/> Più economici</label>
-                        <label asp-for="OrderByDistance" class="radio-inline"><input asp-for="OrderByDistance" type="radio" id="DistanceFirst" name="optFirst" onchange="setFirst()" value="false"/> Più vicini a me</label>
+                        <label asp-for="OrderByDate" class="checkbox-inline"><input asp-for="OrderByDate" type="checkbox" id="LastFirst" name="optFirst" onclick="DateFirst()"/> Più recenti</label>
+                        <label asp-for="OrderByPrice" class="checkbox-inline"><input asp-for="OrderByPrice" type="checkbox" id="CheaperFirst" name="optFirst" onclick="PriceFirst()"/> Più economici</label>
+                        <label asp-for="OrderByDistance" class="checkbox-inline"><input asp-for="OrderByDistance" type="checkbox" id="DistanceFirst" name="optFirst" onclick="KmFirst()"/> Più vicini a me</label>
                     </div>
                     <br/>
                     <!--Se utente non loggato deve sparire-->
@@ -184,12 +184,26 @@
             $('#priceRange').toggle();
         });
 
-    function setFirst() {
-        e = e || window.event;
-        var target = e.target || e.srcElement;
-        document.getElementById("DistanceFirst").value = target.value;
-        alert("value = " + document.getElementById("DistanceFirst").value);
-    }
+    function DateFirst() {
+        if ($('#LastFirst').prop('checked')) {
+            $('#DistanceFirst').prop('checked', false);
+            $('#CheaperFirst').prop('checked', false);
+        }
+    };
+    
+    function KmFirst() {
+        if ($('#DistanceFirst').prop('checked')) {
+            $('#LastFirst').prop('checked', false);
+            $('#CheaperFirst').prop('checked', false);
+        }
+    };
+
+    function PriceFirst() {
+        if($('#CheaperFirst').prop('checked')) {
+            $('#LastFirst').prop('checked', false);
+            $('#DistanceFirst').prop('checked', false);
+        }
+    };
 
     function onStarClickMin(e) {
         e = e || window.event;
