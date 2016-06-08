@@ -238,25 +238,31 @@ setFieldsVisibility();"/>
                 </div>
 
 
-                <hr/>
+                <hr />
 
                 <div class="form-group">
-                    <label asp-for="UserName" class="control-label">Username</label><br/>
-                    <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control"/>
+                    <label asp-for="UserName" class="control-label">Username</label><br />
+                    <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control" />
                     <span asp-validation-for="UserName" id="unamedanger" class="text-danger"></span>
 
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Email" class="control-label">Indirizzo email</label><br/>
-                    <input asp-for="Email" id="email" type="email" required="" class="form-control"/>
+                    <label asp-for="Email" class="control-label">Indirizzo email</label><br />
+                    <input asp-for="Email" id="email" type="email" required="" class="form-control" />
                     <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Password" class="control-label">Password</label><br/>
-                    <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData"/>
+                    <label asp-for="Password" class="control-label">Password</label><br />
+                    <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData" />
                     <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
                 </div>
+
+                <div class="form-group" >
+                    <meter max="4" value="0" id="password-strength-meter"></meter>
+                    <p id="password-strength-text"></p>
+                </div>
+
                 <div class="form-group">
                     <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br/>
                     <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control"/>
@@ -269,8 +275,7 @@ setFieldsVisibility();"/>
 
                 <div class="form-group">
                     <br/>
-                    <span class="btn btn-default col-md-5 btn-back" onclick="
-clickBackButton(3)">Indietro</span>
+                    <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(3)">Indietro</span>
                     <button class="btn btn-default col-md-5 btn-next" type="submit">Crea il tuo account</button>
                 </div>
                 <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
@@ -279,8 +284,9 @@ clickBackButton(3)">Indietro</span>
 
     </form>
 </div>
-       
-    <script type="text/javascript">
+
+<script src="/js/passwordMeter.js"></script>
+<script>
     var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
     $('#popoverData').keyup( passwordCheck );
     $("#confirmPassword").keyup( passwordCheck );
@@ -294,9 +300,9 @@ clickBackButton(3)">Indietro</span>
                            })
             .success(function(res){
                 if (res) {
-                    $('#unamedanger').html("Il nome utente inserito esiste già.")
+                    $('#unamedanger').html("Il nome utente inserito esiste già.");
                 } else {
-                    $('#unamedanger').html("")
+                    $('#unamedanger').html("");
                 }
             });
     });
@@ -310,9 +316,9 @@ clickBackButton(3)">Indietro</span>
                            })
             .success(function (res) {
                 if (res) {
-                    $('#emaildanger').html("L'email inserita esiste già.")
+                    $('#emaildanger').html("L'email inserita esiste già.");
                 } else {
-                    $('#emaildanger').html("")
+                    $('#emaildanger').html("");
                 }
             });
     });
