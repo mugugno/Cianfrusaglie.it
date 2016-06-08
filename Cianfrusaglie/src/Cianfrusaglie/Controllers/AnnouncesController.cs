@@ -84,38 +84,14 @@ namespace Cianfrusaglie.Controllers {
             }
         }
 
-        /// <summary>
-        ///     Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie
-        ///     associate
-        ///     ad un FormField.
-        /// </summary>
-        private void SetViewDataWithFormFieldCategoryDictionary() {
-            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
-            foreach( var formField in _context.FormFields.ToList() ) {
-                var categories =
-                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
-                        .ToList();
-                formField2CategoriesDictionary.Add( formField.Id, categories );
-            }
-            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
-        }
-
-
         private void SetViewDataForCreate( bool vendita ) {
-           CommonFunctions.SetRootLayoutViewData( this, _context );
-            //ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "formFields" ] = _context.FormFields.ToList();
-            ViewData[ "formFieldDefaultValue" ] = _context.FormFields.ToList().ToDictionary( field => field.Id,
-                field => ( from defaultValue in _context.FieldDefaultValues.ToList()
-                    where field.Id.Equals( defaultValue.FormFieldId )
-                    select new SelectListItem {Text = defaultValue.Value, Value = defaultValue.Value} ).ToList() );
+            ViewData[ "formFields" ] = _context.FormFields.Include( p => p.DefaultValues ).Include( p => p.CategoriesFormFields ).ToList();
             CommonFunctions.SetMacroCategoriesViewData( this, _context );
             ViewData[ "isVendita" ] = vendita;
 
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
-            SetViewDataWithFormFieldCategoryDictionary();
         }
 
         /// <summary>
@@ -438,7 +414,9 @@ namespace Cianfrusaglie.Controllers {
                 Title = announce.Title,
                 AuthorId = announce.AuthorId
             };
-            SetViewDataWithFormFieldCategoryDictionary();
+
+            ViewData[ "formFields" ] = _context.FormFields.Include( p => p.DefaultValues ).Include( p => p.CategoriesFormFields ).ToList();
+
             return View( editAnnounce );
         }
 
