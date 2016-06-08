@@ -62,7 +62,7 @@
 </head>
 <body>
     <div id="wrapper-register">
-        <form asp-controller="Account" asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData[ "ReturnUrl" ]" method="post" class="form-horizontal" role="form">
+        <form asp-controller="Account" asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData[ "ReturnUrl" ]" method="post" class="form-horizontal" enctype="multipart/form-data" role="form">
             <div id="register" class="form-horizontal form-register form-register1" id="tabellaForm">
                 <h1>
                     <a href="~/">@CommonStrings.SiteName</a>
@@ -115,7 +115,7 @@
                         <span asp-validation-for="Genre" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
+                        <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
                         <input id="pac-input" class="form-control" type="text" placeholder="">
                         <div id="googleMap" style="display: none;"></div>
                         <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
