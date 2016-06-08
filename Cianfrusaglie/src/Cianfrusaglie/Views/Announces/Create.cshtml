@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="panel-body" >
                                         <div><i style="color: grey">Tutti i campi sono facoltativi</i></div><br/>
-                                        @{var fieldDefault = (Dictionary< int, List< SelectListItem > >) ViewData[ "formFieldDefaultValue" ];
+                                        @{ //var fieldDefault = (Dictionary< int, List< SelectListItem > >) ViewData[ "formFieldDefaultValue" ];
                                             foreach( var field in GetFormFields() ) {
                                                 switch( field.Type ) {
                                                     case FormFieldType.Checkbox:
@@ -112,8 +112,11 @@
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
                                                             <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
 
-                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]" >
+                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control">
                                                                 <option selected="selected" value="" >&nbsp;</option>
+                                                                @foreach( var o in field.DefaultValues ) {
+                                                                    <option>@o.Value</option>
+                                                                }
                                                             </select>
                                                         </div>
                                                         break;
