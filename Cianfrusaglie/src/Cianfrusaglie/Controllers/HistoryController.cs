@@ -12,18 +12,17 @@ using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
    public class HistoryController : Controller {
-      private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public HistoryController( ApplicationDbContext context ) { _context = context; }
 
-      /// <summary>
-      /// Ritorna un IEnumerable contenente gli annunci aperi dell'utente loggato.
-      /// </summary>
-      /// <returns>Restituisce annunci, ancora aperti, pubblicati dall'utente loggato</returns>
-      public IEnumerable< Announce > GetLoggedUserPublishedAnnounces() {
-         var myAnnounces = _context.Announces.Include( p => p.Images ).Include( p => p.Interested ).Where( a => a.AuthorId == User.GetUserId() && !a.Closed );
-         return myAnnounces;
-      } 
+         /// <summary>
+         /// Ritorna un IEnumerable contenente gli annunci aperti dell'utente loggato.
+         /// </summary>
+         /// <returns>Restituisce annunci, ancora aperti, pubblicati dall'utente loggato</returns>
+        public IEnumerable< Announce > GetLoggedUserOpenPublishedAnnounces() {
+            return _context.Announces.Include( a => a.Images ).Include(a => a.Interested).Include( a=> a.ChosenUsers ).Where( a => a.AuthorId == User.GetUserId() && !a.Closed );
+        } 
 
         /// <summary>
         /// Ritorna gli annunci chiusi pubblicati dall'utente.
@@ -74,11 +73,41 @@ namespace Cianfrusaglie.Controllers {
         /// Ritorna gli annunci aperti a cui l'utente è interessato
         /// </summary>
         /// <returns>gli annunci aperti a cui l'utente è interessato</returns>
-        public List<Announce> GetLoggedUserInterestedAnnounces()
+        public IEnumerable<Announce> GetLoggedUserOpenInterestedAnnounces()
         {
-            return _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals(User.GetUserId())) && !a.Closed).ToList();
+           return _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals(User.GetUserId())) && !a.Closed);
         }
 
+        /// <summary>
+        /// Ritorna gli annunci aperti a cui l'utente è interessato ed è attualmente l'ultimo chosen (cioè è il vincitore temporaneo)
+        /// </summary>
+        /// <returns> la lista degli annunci aperti a cui l'utente è interessato ed è attualmente l'ultimo chosen</returns>
+        public IEnumerable< Announce > GetLoggedUserOpenAnnouncesHeIsWinning() {
+            var tmp = _context.Announces.Where( a => a.ChosenUsers.Any( c=> c.ChosenUserId.Equals( User.GetUserId() )));
+            return tmp.Where(
+                a =>
+                    a.ChosenUsers.OrderByDescending(c => c.ChosenDateTime).First().ChosenUserId.Equals(
+                        User.GetUserId())).ToList();
+        }
+
+        /// <summary>
+        /// Ritorna gli annunci aperti a cui l'utente è interessato, ed è stato scelto (ora potrebbe anche essere stato rimosso), per cui deve dare il feedback (o lo ha già fatto)
+        /// </summary>
+        /// <returns>gli annunci aperti in cui l'utente è nella chosen list</returns>
+        public IEnumerable< Announce > GetLoggedUserOpenAnnouncesHeHasToGiveFeedback() {
+           return _context.AnnounceChosenUsers.Where(u => u.ChosenUserId.Equals(User.GetUserId())).Select(u => u.Announce);
+       }
+
+        /// <summary>
+        /// Ritorna gli annunci aperti di cui l'utente è proprietario o interessato, in ogni caso ha già dato il suo feedback
+        /// </summary>
+        /// <returns>gli annunci di cui l'utente ha già dato il feedback</returns>
+       public IEnumerable< Announce > GetLoggedUserOpenAnnouncesHeAlreadyGaveFeedback() {
+           return _context.FeedBacks.Where( f => f.AuthorId.Equals( User.GetUserId() ) ).Select( f => f.Announce );
+       } 
+        
+        /* AZIONI DEL CONTROLLER */
+        
 
         /// <summary>
         /// Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro) e con tutti gli annunci a cui è interessato
@@ -91,11 +120,15 @@ namespace Cianfrusaglie.Controllers {
             SetInterestedToReadStatus(User.GetUserId());
             SetChoosenToReadStatus(User.GetUserId());
             SetRootLayoutViewData( this, _context );
-            ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where(u => u.ChosenUserId.Equals(User.GetUserId())).Select(u => u.AnnounceId).ToList();
-            ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where(f => f.AuthorId.Equals(User.GetUserId())).Select(f => f.AnnounceId).ToList();
+            //ViewData["announcesImWinning"] = _context.Announces.Where(a => a.ChosenUsers.OrderBy(c => c.ChosenDateTime).Last().ChosenUser.Id.Equals(User.GetUserId())).Select(a => a.Id).ToList();
+            //ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where(u => u.ChosenUserId.Equals(User.GetUserId())).Select(u => u.Announce)
+            //ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where(f => f.AuthorId.Equals(User.GetUserId())).Select(f => f.AnnounceId).ToList();
             var result = new List< IEnumerable< Announce > > {
-                GetLoggedUserPublishedAnnounces(),
-                GetLoggedUserInterestedAnnounces()
+                GetLoggedUserOpenPublishedAnnounces(),
+                GetLoggedUserOpenInterestedAnnounces(),
+                GetLoggedUserOpenAnnouncesHeIsWinning(),
+                GetLoggedUserOpenAnnouncesHeHasToGiveFeedback(),
+                GetLoggedUserOpenAnnouncesHeAlreadyGaveFeedback()
             };
             return View(result);
         }
@@ -118,6 +151,8 @@ namespace Cianfrusaglie.Controllers {
             };
             return View(model);
         }
+
+        /* NOTIFICHE */
 
 
         /// <summary>

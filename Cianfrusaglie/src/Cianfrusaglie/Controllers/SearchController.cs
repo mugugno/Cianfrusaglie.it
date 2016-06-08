@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Cianfrusaglie.Constants;
 using Cianfrusaglie.GeoPosition;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
@@ -13,8 +10,6 @@ using Cianfrusaglie.Suggestions;
 using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Internal;
-using Microsoft.Data.Entity.Metadata.Internal;
 using static Cianfrusaglie.Constants.CommonFunctions;
 
 namespace Cianfrusaglie.Controllers {
@@ -294,9 +289,9 @@ namespace Cianfrusaglie.Controllers {
                     a.Price >= advancedSearchViewModel.PriceRangeMin &&
                     a.Price <= upperPrice;
             int upperFeedback = advancedSearchViewModel.FeedbackRangeMax ?? 5;
-
+            int lowerFeedback = advancedSearchViewModel.FeedbackRangeMin ?? 0;
             Predicate<Announce> feedbackPredicate = a =>
-                    a.Author.FeedbacksMean >= advancedSearchViewModel.FeedbackRangeMin &&
+                    a.Author.FeedbacksMean >= lowerFeedback &&
                     a.Author.FeedbacksMean <= upperFeedback;
 
             var announces =
@@ -328,8 +323,8 @@ namespace Cianfrusaglie.Controllers {
                 announces =
                     announces.OrderBy(a => GeoCoordinate.Distance(lat, lon, a.Latitude, a.Longitude));
             }
-            else {
-                announces = advancedSearchViewModel.OrderByPrice ? announces.OrderByDescending(a => a.Price) : announces.OrderBy(a => a.Price);
+            else if(advancedSearchViewModel.OrderByPrice) {
+                announces = announces.OrderBy(a => a.Price);
             }   
 
             return announces.ToList();

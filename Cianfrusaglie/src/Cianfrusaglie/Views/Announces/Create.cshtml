@@ -12,38 +12,35 @@
 }
 
 @functions {
-    private IEnumerable< Category > GetMacroCategories() {
-        for( int i = 0; i < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); i++ ) {
-            var categories = ViewData[ "formMacroCategories" ] as List< Category >;
-            if( categories != null && categories[ i ].OverCategory == null )
-                yield return categories[ i ];
-        }
-    }
+   private IEnumerable< Category > GetMacroCategories() {
+       for( int i = 0; i < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); i++ ) {
+           var categories = ViewData[ "formMacroCategories" ] as List< Category >;
+           if( categories != null && categories[ i ].OverCategory == null )
+               yield return categories[ i ];
+       }
+   }
 
 
-    private IEnumerable< Category > GetCategories( Category macro ) {
-        for( int j = 0; j < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); j++ ) {
-            var subCat = ViewData[ "formMacroCategories" ] as List< Category >;
-            if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Id == macro.Id )
-                yield return subCat[ j ];
-        }
-    }
+   private IEnumerable< Category > GetCategories( Category macro ) {
+       for( int j = 0; j < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); j++ ) {
+           var subCat = ViewData[ "formMacroCategories" ] as List< Category >;
+           if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Id == macro.Id )
+               yield return subCat[ j ];
+       }
+   }
 
-    private IEnumerable< FormField > GetFormFields() {
-        return (IEnumerable< FormField >) ViewData[ "formFields" ];
-    }
+   private IEnumerable< FormField > GetFormFields() {
+       return (IEnumerable< FormField >) ViewData[ "formFields" ];
+   }
 
-    private string StringifyCategoriesFromFormField( int formFieldId ) {
-        string result = "";
-        var dictionary = ViewData[ "formField2CategoriesDictionary" ] as Dictionary< int, List< Category > >;
-        if( dictionary == null )
-            return result;
+   private string StringifyCategoriesFromFormField( FormField formFieldId ) {
+       string result = "";
 
-        foreach( var category in dictionary[ formFieldId ] ) {
-            result += category.Id + " ";
-        }
-        return result;
-    }
+       foreach( var category in formFieldId.CategoriesFormFields )
+           result += category.CategoryId + " ";
+
+       return result;
+   }
 
 }
 
@@ -95,11 +92,10 @@
                                     </div>
                                     <div class="panel-body" >
                                         <div><i style="color: grey">Tutti i campi sono facoltativi</i></div><br/>
-                                        @{var fieldDefault = (Dictionary< int, List< SelectListItem > >) ViewData[ "formFieldDefaultValue" ];
-                                            foreach( var field in GetFormFields() ) {
+                                        @{ foreach( var field in GetFormFields() ) {
                                                 switch( field.Type ) {
                                                     case FormFieldType.Checkbox:
-                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none" >
                                                             <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label" >
 
                                                                 <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField" >
@@ -109,24 +105,27 @@
                                                         break;
 
                                                     case FormFieldType.Select:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none" >
                                                             <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
 
-                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]" >
+                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control">
                                                                 <option selected="selected" value="" >&nbsp;</option>
+                                                                @foreach( var o in field.DefaultValues ) {
+                                                                    <option>@o.Value</option>
+                                                                }
                                                             </select>
                                                         </div>
                                                         break;
 
                                                     case FormFieldType.Text:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none" >
                                                             <label asp-for="FormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
                                                             <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
                                                         </div>
                                                         break;
 
                                                    case FormFieldType.Number:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none">
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
                                                             <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
                                                             <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
                                                         </div>

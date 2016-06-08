@@ -27,7 +27,7 @@ namespace Cianfrusaglie.Tests {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var history = CreateHistoryController( usr.Id );
             var announces = Context.Announces.Where( a => a.AuthorId.Equals( usr.Id ) && !a.Closed);
-            var result = history.GetLoggedUserPublishedAnnounces();
+            var result = history.GetLoggedUserOpenPublishedAnnounces();
             Assert.Equal( result, announces );
         }
 
