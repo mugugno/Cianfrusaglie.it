@@ -246,7 +246,7 @@
                     
             <div class="form-group" style="text-align:center">
                 <br />
-                <button class="btn btn-default  btn-next" type="submit">Conferma</button>
+                <button class="btn btn-default  btn-next ladda-button" data-style="zoom-in" id="submit-button" type="submit">Conferma</button>
                 <a href="~/Profile" class="btn btn-default  btn-next">Annulla</a>
             </div>
         </form>
@@ -312,7 +312,10 @@
 
     loadAddress();
 
-
+    $("#tabellaForm").submit(function (event) {
+        var l = Ladda.create(document.querySelector("#submit-button"));
+        l.start();
+    });
         
     function geocodePosition(pos) {
         var geocoder = new google.maps.Geocoder();
