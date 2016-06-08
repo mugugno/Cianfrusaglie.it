@@ -8,7 +8,7 @@
 
     background: -ms-radial-gradient( circle, #fff, #EAEAEA );*/
     /*Leggero gradiente*/
-    background-color: #EAEAEA;
+   
     /*background-position: center center;
     background-repeat: no-repeat;*/
     bottom: 0;
@@ -41,11 +41,11 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.2 ), 0 6px 20px 0 rgba( 0, 0, 0, 0.19 );
     font-size: 1em;
-    padding: 1.5em;
+    /*padding: 1.5em;
     padding-left: 4em;
     padding-right: 4em;
     padding-top: 4em;
-    padding-bottom: 2em;
+    padding-bottom: 2em;*/
     position:absolute;
     left: 0;
     right: 0;
@@ -70,6 +70,12 @@
 
 #register h1 a {
     color: #FFC107;
+    text-decoration: none;
+}
+
+#title a {
+    color: #f0ad4e;
+    text-align: center;
     text-decoration: none;
 }
 
@@ -118,7 +124,7 @@
     font-weight: 100;
 }
 
-./*form-register button[ type = "submit" ] {
+/*form-register button[ type = "submit" ] {
     background: #FFC107;
     background: -webkit-linear-gradient( #FFC107, #FFD6A0 ); 
     background: -webkit-linear-gradient( #FFC107, #FFD6A0 );
