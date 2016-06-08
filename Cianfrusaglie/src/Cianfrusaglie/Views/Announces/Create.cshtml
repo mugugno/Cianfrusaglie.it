@@ -182,7 +182,7 @@
                                         <div class="form-group" >
                                             <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione*</label>
                                             <div class="col-md-7" >
-                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description" ></textarea>
+                                                <textarea asp-for="Description" maxlength="@DomainConstraints.AnnounceDescriptionMaxLenght" class="form-control inputMargin" id="description" name="description" ></textarea>
                                             </div>
                                         </div>
 
