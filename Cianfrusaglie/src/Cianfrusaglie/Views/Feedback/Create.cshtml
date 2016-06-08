@@ -1,70 +1,84 @@
 @using System.Security.Claims
+@using Cianfrusaglie.Constants
 @model Cianfrusaglie.Models.FeedBack
 
 @{
     ViewData["Title"] = "Scrivi una recensione";
 }
-<div class="panel panel-body">
-    <form asp-action="Create">
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+<div class="panel panel-body" >
+    <form asp-action="Create" >
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger" ></div>
         @{
-            var receiver = (User)ViewData["receiver"];
+            var receiver = (User) ViewData[ "receiver" ];
 
         }
-        <div class="panel panel-default">
+        <div class="panel panel-default" >
 
-            <div class="panel-heading" id="my-conversations">
-                <div class="panel-group" id="panel-524234">
-                    <h3>Scrivi una recensione a <strong>@receiver.UserName</strong></h3>
+            <div class="panel-heading" id="my-conversations" >
+                <div class="panel-group" id="panel-524234" >
+                    <h3>Scrivi una recensione a <strong>@receiver.UserName</strong>
+                    </h3>
                 </div>
             </div>
 
-            
+
             <div class="panel panel-body" >
-                <div hidden>
-                    <input asp-for="AnnounceId" value="@(((int) ViewData["announce"]))" />
+                <div hidden >
+                    <input asp-for="AnnounceId" value="@(( (int) ViewData[ "announce" ] ))" />
                     <input asp-for="ReceiverId" value="@receiver.Id" />
                     <input asp-for="AuthorId" value="@User.GetUserId()" />
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-11" style="margin-left:2em ">
+                <div class="row" >
+                    <div class="form-group col-md-11" style="margin-left: 2em" >
                         <!--IMMAGINE DEL RECEIVER-->
-                        <div class="col-md-1">
-                            <div class="photo">
-                                <img class="img-responsive" src="@receiver.ProfileImageUrl"/>
+                        <div class="col-md-1" >
+                            <div class="photo" >
+                                <img class="img-responsive" src="@receiver.ProfileImageUrl" />
                             </div>
                         </div>
                         <input asp-for="Vote" class="form-control" id="AspStarRatingValue" value="5" type="number" style="display: none" />
-                        <div style="margin-left:1em">Dai il tuo voto da 1 a 5</div>
+                        <div style="margin-left: 1em" >Dai il tuo voto da 1 a 5</div>
                         <div>
-                            <div class="acidjs-rating-stars">
+                            <div class="acidjs-rating-stars" >
                                 <div>
-                                    <input type="radio" name="group-1" id="group-1-0" value="5" checked="checked" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-0"></label>
-                                    <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-1"></label>
-                                    <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-2"></label>
-                                    <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-3"></label>
-                                    <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-4"></label>
+                                    <input type="radio" name="group-1" id="group-1-0" value="5" checked="checked" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-0" ></label>
+                                    <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-1" ></label>
+                                    <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-2" ></label>
+                                    <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-3" ></label>
+                                    <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-1-4" ></label>
                                 </div>
                             </div>
                         </div>
                         <br />
                         <br />
 
-                        <div style="align-content: center">
-                            <textarea asp-for="Text" class="form-control " rows="5" style="margin-left: 1em"></textarea>
+                        <div style="align-content: center" >
+                            <textarea asp-for="Text" id="text" maxlength="@DomainConstraints.FeedBackTextMaxLenght" class="form-control " rows="5" style="margin-left: 1em" ></textarea>
                             <span asp-validation-for="Text" class="text-danger"></span>
                         </div>
+
+                        <div class="form-group" >
+                            <div class="col-md-4" >&nbsp;</div>
+                            <div id="text_feedback" class="col-md-7" style="text-align: right;" ></div>
+                        </div>
+
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" >
                     <input type="submit" style="float: right; margin-right: 5em" value="Invia" class="btn btn-warning" />
                 </div>
             </div>
-                <div>
-                    <a href="~/InterestedAnnounce/?id=@(((int) ViewData["announce"]))" style="float: right;">Torna ai miei Annunci</a>
-                </div>
-            
+            <div>
+                <a href="~/InterestedAnnounce/?id=@(( (int) ViewData[ "announce" ] ))" style="float: right;" >Torna ai miei Annunci</a>
+            </div>
+
         </div>
     </form>
 
 </div>
+
+<script>
+    $(document).ready(function() {
+        displayTextMaxLen(@DomainConstraints.FeedBackTextMaxLenght, $("#text"), $("#text_feedback"));
+    });
+</script>
