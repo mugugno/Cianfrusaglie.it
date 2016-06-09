@@ -207,7 +207,7 @@
 
 
                         <div class="price" >
-                            <h5>Autore: @annuncio.Author.UserName</h5>
+                            <h5>Autore:<a href="~/Profile?id=@annuncio.AuthorId"> @annuncio.Author.UserName</a></h5>
                             <!-- Stelline col rating dell'utente (style.css)-->
                             <div class="star-container" >
                                 <div class="star-shape" >
@@ -330,7 +330,7 @@
 
 
                                     <div class="price">
-                                        <h5>Autore: @annuncio.Author.UserName</h5>
+                                        <h5>Autore: <a href="~/Profile?id=@annuncio.AuthorId">@annuncio.Author.UserName</a></h5>
                                         <!-- Stelline col rating dell'utente (style.css)-->
                                         <div class="star-container">
                                             <div class="star-shape">
