@@ -86,14 +86,7 @@
                         <button type="submit" class="btn btn-warning btn-search"><span class="glyphicon glyphicon-search"></span></button>
                     </div>
 
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="#" data-toggle="modal" data-target="#myWindow" style="margin-left:1em;">Ricerca Avanzata</a>
-                    }
-                    else
-                    {
                         <a href="~/Search/Advanced" class="slow-action" style="margin-left:1em;">Ricerca Avanzata</a>
-                    }
                 </div>
             </div>
         </form>
