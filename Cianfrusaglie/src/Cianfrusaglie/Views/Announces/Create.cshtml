@@ -47,81 +47,85 @@
 <div>
     <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
         <div class="panel">
-                <div class="panel-body"> 
-                    <div  class="row" id="page1">
-                        <div class="panel panel-default" id="sceltaCategorie">
-                            <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
-                        </div>
-                        <div class="col-md-6">
+                <div class="panel-body">
+                    <div class="row" id="page1" >
+                        <div class="col-md-6 col-md-offset-3 col-xs-12 col-sm-10 col-sm-offset-1">
+                            <div class="panel panel-default" id="sceltaCategorie">
+                                <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
 
-                            <div class="panel-group" id="panel-423221">
-                               
-                                @foreach (var macroCategory in GetMacroCategories()) {
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
-                                            @macroCategory.Name
-                                        </div>
-                                        <div id="category-@macroCategory.Id" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <div class="form-group">
+                                <div class="panel-group" id="panel-423221">
 
-                                                    <div class="col-md-12">
-                                                        @foreach (var category in GetCategories(macroCategory)) {
-                                                            <div class="checkbox">
-                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
-                                                                    <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
-                                                                    @category.Name
-                                                                </label>
-                                                            </div>
+                                    @foreach( var macroCategory in GetMacroCategories() ) {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
+                                                @macroCategory.Name
+                                            </div>
+                                            <div id="category-@macroCategory.Id" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-12">
+                                                            @foreach( var category in GetCategories( macroCategory ) ) {
+                                                                <div class="checkbox">
+                                                                    <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                        <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
+                                                                        @category.Name
+                                                                    </label>
+                                                                </div>
                                                         }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                 }
 
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel-group">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">Informazioni aggiuntive</h3>
-                                    </div>
-                                    <div class="panel-body" >
-                                        <div><i style="color: grey">Tutti i campi sono facoltativi</i></div><br/>
-                                        @{ foreach( var field in GetFormFields() ) {
+                            <div class="col-md-6 col-xs-12">
+                                <div class="panel-group">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Informazioni aggiuntive</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <i style="color: grey">Tutti i campi sono facoltativi</i>
+                                            </div><br />
+                                            @{
+                                            foreach( var field in GetFormFields() ) {
                                                 switch( field.Type ) {
                                                     case FormFieldType.Checkbox:
-                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none" >
-                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label" >
+                                                            <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
 
-                                                                <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField" >
-                                                                @field.Name
-                                                            </label>
-                                                        </div>
+                                                                    <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
+                                                                    @field.Name
+                                                                </label>
+                                                            </div>
                                                         break;
 
                                                     case FormFieldType.Select:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none" >
-                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
+                                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
 
-                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control">
-                                                                <option selected="selected" value="" >&nbsp;</option>
-                                                                @foreach( var o in field.DefaultValues ) {
-                                                                    <option>@o.Value</option>
+                                                                <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control">
+                                                                    <option selected="selected" value="">&nbsp;</option>
+                                                                    @foreach( var o in field.DefaultValues ) {
+                                                                        <option>@o.Value</option>
                                                                 }
-                                                            </select>
-                                                        </div>
+                                                                </select>
+                                                            </div>
                                                         break;
 
                                                     case FormFieldType.Text:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none" >
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
-                                                            <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
-                                                        </div>
+                                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                                <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                            </div>
                                                         break;
 
                                                    case FormFieldType.Number:
@@ -143,25 +147,25 @@
                                                        break;
                                                }
 
-                                                @*
-                                                <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                    <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                    <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
-                                                </div>
-                                                *@
+                                                    @*
+                                    <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                        <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                        <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
+                                    </div>
+                                                    *@
                                             }
-                                           }
+                                            }
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                    
                     <div class="row" id="page2" style="display: none;">
 
-                        <div class="">
+                        <div class="col-md-6 col-md-offset-3 col-xs-12 col-sm-10 col-sm-offset-1">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <fieldset>
@@ -191,9 +195,14 @@
 
                                         <!-- Textarea -->
                                         <div class="form-group" >
+                                            <div class="col-md-4" >&nbsp;</div>
+                                            <div id="description_feedback" class="col-md-7" style="text-align: right;" ></div>
+                                        </div>
+
+                                        <div class="form-group" >
                                             <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione*</label>
                                             <div class="col-md-7" >
-                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description" ></textarea>
+                                                <textarea asp-for="Description" maxlength="@DomainConstraints.AnnounceDescriptionMaxLenght" class="form-control inputMargin" id="description" name="description" ></textarea>
                                             </div>
                                         </div>
 
@@ -246,7 +255,7 @@
                     <div class="nextprev">
                         <button class="btn btn-warning" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
 
-                        <button class="btn btn-warning disabled" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
+                        <button class="btn btn-warning disabled ladda-button" data-style="zoom-in" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
                     </div>
                 </div>
             </div>
@@ -258,6 +267,10 @@
 <script src="/js/googleMaps.js"></script>
 <script src="/js/createAnnounce.js"></script>
 <script>
+    $(document).ready(function() {
+        displayTextMaxLen(@DomainConstraints.AnnounceDescriptionMaxLenght, $("#description"), $("#description_feedback"));
+    });
+
     clickForwardButton();
     // TODO spostare tutto in un file js
     $("#announce-navbar").attr("data-offset-top", document.getElementById("pageHeader").offsetHeight);
@@ -289,4 +302,9 @@
         setCircle(marker.position, range);
     });
     clickForwardButton();
+
+    $("#tabellaForm").submit(function (event) {
+        var l = Ladda.create(document.querySelector("#forward-button"));
+        l.start();
+    });
 </script>

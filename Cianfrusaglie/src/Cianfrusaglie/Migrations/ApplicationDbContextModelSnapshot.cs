@@ -143,7 +143,7 @@ namespace Cianfrusaglie.Migrations
                         .IsRequired();
 
                     b.Property<string>("Text")
-                        .HasAnnotation("MaxLength", 99);
+                        .HasAnnotation("MaxLength", 350);
 
                     b.Property<int>("Usefulness");
 
@@ -238,7 +238,8 @@ namespace Cianfrusaglie.Migrations
                         .IsRequired();
 
                     b.Property<string>("Text")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 999);
 
                     b.HasKey("Id");
                 });

@@ -1,6 +1,7 @@
 @using System.Security.Claims
 @using System.Threading.Tasks
 @using System.Collections.Generic
+@using Cianfrusaglie.Constants
 @using Cianfrusaglie.Models
 @model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
@@ -25,7 +26,7 @@
                 <h2>Le mie conversazioni</h2>
             </div>
 
-            <div id="all-conversations-box" style="max-height: 61.4%; overflow-y: auto;" >
+            <div id="all-conversations-box" >
 
                 @foreach( var kvPair in GetUserAndMessagesDictionary() ) {
                     <div class="panel panel-default panel-message @(( kvPair.Key.Equals( GetUserAndMessagesDictionary().Keys.First() ) && GetIdAfterRefresh().Equals( "" ) ) || kvPair.Key.Id.Equals( GetIdAfterRefresh() ) ? "first-message-panel" : "")" onclick='showConversation("@kvPair.Key.Id", this)' >
@@ -58,7 +59,7 @@
                                         <span style="float: left">@kvPair.Key.UserName </span>
                                     </h6>
                                     <br />
-                                    <div id="messageSent" >
+                                    <div id="messageSent" style="word-wrap: break-word">
                                         @lastMessage.Text.Substring( 0, Math.Min( 125, length ) )
                                         @if( length > 100 ) {
                                             <span>...</span>
@@ -72,7 +73,7 @@
                                         <span style="float: left"> @User.GetUserName() </span>
                                     </h6>
                                     <br />
-                                    <div id="messageReceived" >
+                                    <div id="messageReceived" style="word-wrap: break-word">
                                         @lastMessage.Text.Substring( 0, Math.Min( 125, length ) )
                                         @if( length > 100 ) {
                                             <span>...</span>
@@ -109,19 +110,19 @@
                                         @if (messageUserPair.Value.Id.Equals(User.GetUserId()))
                                         {
                                             <div class="row">
-                                                <div class="col-md-11">
+                                                <div class="col-md-8 col-md-offset-3 col-xs-10">
                                                     <div class="triangle-isosceles right" id="balloonSentMeMessage">
                                                         <h6>
                                                             <span style="float: right">@messageUserPair.Key.DateTime</span>
                                                             <span style="float: left"> @otherUser.UserName </span>
                                                         </h6>
                                                         <br />
-                                                        <div id="messageSent">
+                                                        <div id="messageSent" style="word-wrap: break-word">
                                                             @messageUserPair.Key.Text
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-1 col-xs-1">
                                                     <div class="photo message-avatar panel panel-default">
                                                         <img class="img-responsive" src="@kvPair.Key.ProfileImageUrl" />
                                                     </div>
@@ -131,19 +132,19 @@
                                         else
                                         {
                                             <div class="row">
-                                                <div class="col-md-1">
+                                                <div class="col-md-1 col-xs-1">
                                                     <div class="photo message-avatar panel panel-default">
                                                         <img class="img-responsive" src=@GetMyAvatar() />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-11">
+                                                <div class="col-md-8 col-xs-10">
                                                     <div class="triangle-isosceles left" id="balloonISentMessage">
                                                         <h6>
                                                             <span style="float: right">@messageUserPair.Key.DateTime</span>
                                                             <span style="float: left"> @User.GetUserName() </span>
                                                         </h6>
                                                         <br />
-                                                        <div id="messageReceived">
+                                                        <div id="messageReceived" style="word-wrap: break-word">
                                                             @messageUserPair.Key.Text
                                                         </div>
                                                     </div>
@@ -164,7 +165,8 @@
                         <div class="row" >
                             <div class="form-group" >
                                 <div class="col-md-11" >
-                                    <textarea asp-for="Text" class="form-control" rows="4" ></textarea>
+                                    <div id="text_feedback" style="text-align: right;"></div>
+                                    <textarea asp-for="Text" id="text" maxlength="@DomainConstraints.MessageMaxLenght" class="form-control" rows="4" ></textarea>
                                     <span asp-validation-for="Text" class="text-danger"></span>
 
                                     <input asp-for="ReceiverId" type="hidden" value="@kvPair.Key.Id" class="form-control" />
@@ -199,6 +201,10 @@
 
 
 <script>
+    $(document).ready(function() {
+        displayTextMaxLen(@DomainConstraints.MessageMaxLenght, $("#text"), $("#text_feedback"));
+    });
+
     /* Esecuzione onload: nasconde tutte le conversazioni tranne l'ultima, 
     imposta il colore di sfondo e scorre la scrollbar fino in fondo, così che si veda l'ultimo messaggio */
     $("#wrap").css("padding-bottom", "30px");

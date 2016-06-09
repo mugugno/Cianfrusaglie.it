@@ -9,10 +9,11 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.Entity;
 
-namespace Cianfrusaglie.Constants
-{
-    public static class CommonFunctions
-    {
+namespace Cianfrusaglie.Constants{
+    public static class CommonFunctions {
+
+        private static List< Category > _categoryList ;
+        private static bool _initDone = false;
 
         /// <summary>
         /// Dato un controller e un contesto dati, imposta i dati da mostrare nella navbar della view _Layout.cshtml
@@ -20,8 +21,9 @@ namespace Cianfrusaglie.Constants
         /// <param name="controller">Il controller a cui passare i dati</param>
         /// <param name="context">Il context da cui prendere i dati</param>
         public static void SetRootLayoutViewData( Controller controller, ApplicationDbContext context ) {
-            controller.ViewData["formCategories"] = context.Categories.ToList();
-            controller.ViewData["numberOfCategories"] = context.Categories.ToList().Count;
+            var cat = GetCategoryList( context );
+            controller.ViewData[ "formCategories" ] = cat;
+            controller.ViewData[ "numberOfCategories" ] = cat.Count;
             controller.ViewData["IsThereNewMessages"] = IsThereNewMessages(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewInterested"] = IsThereNewInterested(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewAnnouncesWhereIAmChoosed"] = IsThereNewAnnouncesWhereIAmChoosed(controller.User.GetUserId(), context);
@@ -30,8 +32,18 @@ namespace Cianfrusaglie.Constants
             controller.ViewData["IsThereNewFeedback"] = IsThereNewFeedback(controller.User.GetUserId(), context);
             controller.ViewData["IsThereAnyNotification"] = IsThereAnyNotification(controller.User.GetUserId(), context);
             var loggedUser = context.Users.FirstOrDefault( u => u.Id.Equals( controller.User.GetUserId() ) );
+            controller.ViewData[ "LoggedUser" ] = loggedUser;
             controller.ViewData[ "MyAvatar" ] = loggedUser == null ? "" : loggedUser.ProfileImageUrl;
 
+        }
+
+        public static List< Category > GetCategoryList(ApplicationDbContext context) {
+            if( !_initDone ) {
+                _initDone = true;
+                return _categoryList = context.Categories.ToList();
+            } else {
+                return _categoryList;
+            }
         }
 
         public static void SetMacroCategoriesViewData(Controller controller, ApplicationDbContext context)

@@ -28,58 +28,63 @@
 </head>
 <body>
 <div id="wrapper-register" >
-    <div id="register" >
-        <div class="form-register">
-            <form asp-action="Login" asp-controller="Account" class="form-horizontal" id="tabellaForm" method="post" role="form">
-                <h1>
-                    <a href="~/">@CommonStrings.SiteName</a>
-                </h1>
-                <h5>Il posto giusto per le tue cianfrusaglie</h5>
-                <hr />
+    <div id="register">
+        <div class="panel panel-default form-register">
+            <form asp-action="Login" asp-controller="Account" class="form-horizontal" id="tabellaForm" method="post" role="form" style="margin-top: 0; margin-bottom: 0;">
+                <div id="title" class="panel panel-heading" style="background-color: #49586d; margin-bottom: 0; border-bottom: orange;">
+                    <h1 style="margin-bottom:0">
+                        <a href="~/">@CommonStrings.SiteName</a>
+                    </h1>
+                    <h5 style="margin-top:0">Il posto giusto per le tue cianfrusaglie</h5>
+                </div>
+                <div class="panel panel-body" style="background: #eee; margin-bottom: 0; align-content: center; padding-left: 30px;">
+                    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label">Username</label><br />
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label">Password</label><br />
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <br /><button class="btn btn-warning" type="submit">Accedi</button>
+                    </div>
 
-                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="UserName" class="control-label">Username</label><br />
-                    <input asp-for="UserName" class="form-control" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+                    <span id="sottoForm"><h5>Se non sei ancora registrato, <a href="~/Account/Register">clicca qui</a></h5></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label">Password</label><br />
-                    <input asp-for="Password" class="form-control" type="password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <br /><button class="btn btn-warning" type="submit">Accedi</button>
-                </div>
-
-                <span id="sottoForm"><h5>Se non sei ancora registrato, <a href="~/Account/Register">clicca qui</a></h5></span>
             </form>
-            <hr />
-            <br />
-            @{
+            <div class="panel panel-footer" style="margin-bottom: 0; padding-top: 2px;">
+                <br/>
+                @{
 
-                var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
-                if (loginProviders.Count == 0)
-                {
-                }
-                else
-                {
-                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                        <div>
-                            <p>
-                                @foreach (var provider in loginProviders)
-                                {
-                                    <button type="submit" class="btn btn-block btn-social btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account"><span class="fa fa-facebook"></span> Login con Facebook</button>
+                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                    if (loginProviders.Count == 0)
+                    {
+                    }
+                    else
+                    {
+                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                            <div>
+                                <p>
+                                    @foreach (var provider in loginProviders)
+                                    {
+                                        <button type="submit" class="btn btn-block btn-social btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account"><span class="fa fa-facebook"></span> Login con Facebook</button>
 
-                                }
-                            </p>
-                        </div>
-                    </form>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
                 }
-            }
+            </div>
         </div>
-       
+            
+        </div>
     </div>
-</div>
+  
+
 </body>
 </html>
