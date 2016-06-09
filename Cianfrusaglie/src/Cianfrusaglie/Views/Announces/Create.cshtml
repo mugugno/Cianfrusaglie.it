@@ -161,14 +161,19 @@
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
                                         <div>
-                                            <i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
+                                            <i style="color: grey" >I dati contrassegnati con * sono facoltativi</i>
                                             <br /><br />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">&nbsp;</div>
+                                            <div id="title_feedback" class="col-md-7" style="text-align: right;"></div>
                                         </div>
                                         <!-- MediaTypeNames.Text input-->
                                         <div class="form-group" >
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
                                             <div class="col-md-7" >
-                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
+                                                <input asp-for="Title" required="" maxlength="@DomainConstraints.AnnounceTitleMaxLenght" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -259,6 +264,7 @@
 <script>
     $(document).ready(function() {
         displayTextMaxLen(@DomainConstraints.AnnounceDescriptionMaxLenght, $("#description"), $("#description_feedback"));
+        displayTextMaxLen(@DomainConstraints.AnnounceTitleMaxLenght, $("#title-mandatory"), $("#title_feedback"));
     });
 
     clickForwardButton();
