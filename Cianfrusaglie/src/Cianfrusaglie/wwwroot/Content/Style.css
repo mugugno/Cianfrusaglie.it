@@ -29,6 +29,7 @@ html, body {
    height:20px;
    width:20px;
    font-size:1.1em;
+   font-family: 'Montserrat', sans-serif ;
   }
 
 #footer, #wrap:after {
