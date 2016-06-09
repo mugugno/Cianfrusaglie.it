@@ -82,13 +82,13 @@
                                     @if( announce.Title.Length > maxLength ) {
                                         if( User.Identity.IsAuthenticated ) {
                                             <div class="fixedTitle" >
-                                                <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
+                                                <a href="~/Announces/Details/?id=@announce.Id" class="announceTitleSantino" >
                                                     <h3>@announce.Title.Substring( 0, maxLength )... </h3>
                                                 </a>
                                             </div>
                                         } else {
                                             <div class="fixedTitle" >
-                                                <a data-toggle="modal" data-target="#myWindow" style="color: black" >
+                                                <a data-toggle="modal" data-target="#myWindow" class="announceTitleSantino">
                                                     <h3>@announce.Title.Substring( 0, maxLength )... </h3>
                                                 </a>
                                             </div>
@@ -97,13 +97,13 @@
                                     } else {
                                         if( User.Identity.IsAuthenticated ) {
                                             <div class="fixedTitle" >
-                                                <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
+                                                <a href="~/Announces/Details/?id=@announce.Id" class="announceTitleSantino" >
                                                     <h3>@announce.Title</h3>
                                                 </a>
                                             </div>
                                         } else {
                                             <div class="fixedTitle" >
-                                                <a data-toggle="modal" data-target="#myWindow" style="color: black" >
+                                                <a data-toggle="modal" data-target="#myWindow" class="announceTitleSantino" >
                                                     <h3>@announce.Title</h3>
                                                 </a>
                                             </div>
