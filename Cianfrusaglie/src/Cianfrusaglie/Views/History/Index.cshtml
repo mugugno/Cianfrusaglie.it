@@ -48,14 +48,9 @@
                                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer">
 
                                                 <div class="row">
-                                                    <span class="col-md-2" style="float: right;">
-                                                        @{
-                                                            var root = ViewData["rootFacebook"];
-                                                            var rootForFacebook = root + "/../../Announces/Details/?id=" + item.Id;
-                                                         
-                                                        }
+                                                    <span class="col-md-1" style="float: right;">
                                                         <script>
-                                                            document.write("<iframe src=\"https://www.facebook.com/plugins/share_button.php?href=" + "@rootForFacebook" + "&layout=button_count&mobile_iframe=true&appId=228034747580137&width=115&height=20\" width=\"115\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
+                                                          document.write("    <iframe src=\"https://www.facebook.com/plugins/share_button.php?href="+window.location+"&layout=button_count&mobile_iframe=true&appId=228034747580137&width=115&height=20\" width=\"115\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
                                                         </script>
                                                     </span>
 
@@ -69,7 +64,7 @@
                                                         <span style="float: right; margin-right: 1em; margin-left: 1em;">@item.Interested.Count interessati,</span>
                                                     }
 
-                                                    <div class="col-md-8" style="font-size: 1.2em; display: block; word-wrap: break-word; float: left;"><b>@item.Title</b></div>
+                                                    <div class="col-md-8" style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></div>
 
                                                 </div>
                                             </div>
@@ -319,4 +314,71 @@
         $('#AnnounceCloseConfirm').modal({ backdrop : 'static', keyboard : false })
             .one('click', '#confirmbtn', function(err) { window.location.href = "/InterestedAnnounce/Close?id="+id; });
     }
+
+
+        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+        $('button[name="loVoglio"]').on('click', function (e) {
+            var $form = $(this).closest('form');
+            e.preventDefault();
+            var tmp = @ViewData["IdAnnounce"];
+
+            $('#confirm')
+                .modal({ backdrop : 'static', keyboard : false })
+                .one('click',
+                    '#confirmbtn',
+                    function(err) {
+                        var numu=parseInt($('.utentInteressati').text(),10)+1;
+                        $('.utentInteressati').text(numu);
+                        $('button[name="loVoglio"]').hide();
+                        $('button[name="nonLoVoglio"]').show();
+                        $('span[name="spanGliphNonLoVoglioPiu"]').show();
+                        $('span[name="seiInteressato"]').show();
+                        $.post("/Announces/Interested",
+                            {
+                                AnnounceId : tmp,
+                                __RequestVerificationToken : antiForgeryToken
+
+                            })
+                            .fail(function() { alert("error"); });
+                    });
+        });
+
+        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+        $('button[name="nonLoVoglio"]')
+            .on('click',
+                function(e) {
+                    var $form = $(this).closest('form');
+                    e.preventDefault();
+                    var isChoosen = '@ViewData["choosen"]' === '@true';
+            var tmp = @ViewData["IdAnnounce"];
+
+            if( !isChoosen ) {
+                $('#notConfirm')
+                    .modal({ backdrop : 'static', keyboard : false })
+                    .one('click',
+                        '#confirmbtn',
+                        function(err) {
+                            var numu=parseInt($('.utentInteressati').text(),10)-1;
+                            $('.utentInteressati').text(numu);
+                            $('button[name="nonLoVoglio"]').hide();
+                            $('button[name="loVoglio"]').show();
+                            $('span[name="spanGliphNonLoVoglioPiu"]').hide();
+                            $('span[name="seiInteressato"]').hide();
+
+                            $.post("/Announces/Interested",
+                                {
+                                    AnnounceId : tmp,
+                                    __RequestVerificationToken : antiForgeryToken
+                                })
+                                .fail(function() { alert("error"); });
+                        });
+            } else {
+                $('#choosen').modal({ backdrop : 'static', keyboard : false });
+            }
+        });
+
+
+
+
+
 </script>
