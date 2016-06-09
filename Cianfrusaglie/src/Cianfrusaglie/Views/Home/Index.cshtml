@@ -89,7 +89,7 @@
                 <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
                     <span class="glyphicon glyphicon-gift"></span></a>
             } else {
-                <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create" role="button" >
+                <a class="btn btn-warning btn-lg btn-round slow-action" href="~/Announces/Create" role="button" >
                     <span class="glyphicon glyphicon-gift"></span></a>
             }
             <br />
@@ -101,10 +101,10 @@
         </div>
         <div class="form-group" id="linkVendi" >
             @if( !User.Identity.IsAuthenticated ) {
-                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="~/Announces/Create?vendita=true" role="button" >
+                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
                     <span class="glyphicon glyphicon-eur"></span></a>
             } else {
-                <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create/?vendita=true" role="button" >
+                <a class="btn btn-warning btn-lg btn-round slow-action" href="~/Announces/Create/?vendita=true" role="button" >
                     <span class="glyphicon glyphicon-eur"></span></a>
             }
             <br />
@@ -113,13 +113,10 @@
             </h4>
         </div>
         <div class="form-group" id="linkCerca" >
-            @if( !User.Identity.IsAuthenticated ) {
-                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
+            
+                <a class="btn btn-warning btn-lg btn-round slow-action" href="~/Search/Advanced" role="button" >
                     <span class="glyphicon glyphicon-search"></span></a>
-            } else {
-                <a class="btn btn-warning btn-lg btn-round" href="~/Search/Advanced" role="button" >
-                    <span class="glyphicon glyphicon-search"></span></a>
-            }
+            
             <br />
             <h4>
                 <strong>CERCA<br />UN OGGETTO</strong>
@@ -144,7 +141,7 @@
 
                     <div class="photoThu" >
                         
-                            <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
+                            <a title="@annuncio.Title" class="slow-action" href="~/Announces/Details/?id=@annuncio.Id" >
                                 <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                             </a>
                     </div>
@@ -157,7 +154,7 @@
                             int maxLength = 30;
                         }
                             <div class="fixedTitle">
-                                <a style="color: blue;word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id">
+                                <a style="word-wrap:break-word" class="announceTitleSantino slow-action" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id">
 
                                     @if (annuncio.Title.Length > maxLength)
                                     {
@@ -195,7 +192,7 @@
                             else {
                                 <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
                             }
-                            <a href="~/Announces/Details/?id=@annuncio.Id">
+                            <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action">
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                             </a>
                         }
@@ -207,7 +204,7 @@
                             else {
                                 <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
                             }
-                            <a href="~/Announces/Details/?id=@annuncio.Id">
+                            <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action">
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
                             </a>
                         }
@@ -282,7 +279,7 @@
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             } else {
-                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
+                                <a style="word-wrap:break-word" class="slow-action" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             }
@@ -294,7 +291,7 @@
 
                             <!--titolo su due linee-->
                             <div class="fixedTitle">
-                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" class="announceTitleSantino">
+                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" class="announceTitleSantino slow-action">
 
                                     @{
                                         int maxLength = 30;
@@ -328,7 +325,7 @@
                                 } else {
                                     <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
                                 }
-                                <a href="~/Announces/Details/?id=@annuncio.Id" >
+                                <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action" >
                                     <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                                 </a>
                             } else {
@@ -337,7 +334,7 @@
                                 } else {
                                     <h5 class="price-text-color" style="margin-left: 0" >Prezzo: <b>@annuncio.Price €</b></h5>
                                 }
-                                <a href="~/Announces/Details/?id=@annuncio.Id" >
+                                <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action" >
                                     <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
                                 </a>
                             }
