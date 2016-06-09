@@ -28,6 +28,8 @@ Nascondere tasto non lo voglio più quando sono stato scelto
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script src="/js/googleMaps.js" ></script>
 <script>
+    document.title = "CianfrusAPP.net - @Model.Title";
+
     $(document).ready( function() {
         var latitude = parseFloatIgnoreCommas("@Model.Latitude");
         var longitude = parseFloatIgnoreCommas("@Model.Longitude");
