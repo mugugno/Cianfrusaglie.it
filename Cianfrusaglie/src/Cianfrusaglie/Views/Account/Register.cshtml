@@ -37,6 +37,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+    <script src="~/dist/spin.min.js"></script>
+    <script src="~/dist/ladda.min.js"></script>
     <link href= "https://fonts.googleapis.com/css?family=Source+Sans+Pro"  rel="stylesheet" type="text/css" >
     <link href= "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -46,6 +48,7 @@
     <link href= "~/Content/Search.css"  rel="stylesheet" type="text/css" />
     <link href="~/Content/meter.css" rel="stylesheet" type="text/css" />
     <link href= "https://fonts.googleapis.com/css?family=Lato"  rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="~/dist/ladda-themeless.min.css">
 
     <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="/js/googleMaps.js" ></script>
@@ -276,7 +279,7 @@ setFieldsVisibility();"/>
                 <div class="form-group">
                     <br/>
                     <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(3)">Indietro</span>
-                    <button class="btn btn-default col-md-5 btn-next" type="submit">Crea il tuo account</button>
+                    <button class="btn btn-default col-md-5 btn-next ladda-button" data-style="zoom-in" id="submit-button" type="submit">Crea il tuo account</button>
                 </div>
                 <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
             </div>
@@ -359,6 +362,11 @@ setFieldsVisibility();"/>
             $('.form-register3').hide();
         }
     }
+
+    $("#formRegister").submit(function (event) {
+        var l = Ladda.create(document.querySelector("#submit-button"));
+        l.start();
+    });
     </script>
 </body>
 </html>
