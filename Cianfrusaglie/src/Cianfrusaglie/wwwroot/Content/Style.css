@@ -242,7 +242,7 @@ button { padding: 0; }
 }
 
 .announceTitleSantino {
-    color: blue;
+    color: rgba(38, 68, 250, 0.72);
     word-wrap: break-word;
     cursor: pointer;
 }
