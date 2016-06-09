@@ -49,7 +49,7 @@
                                                             <div class="col-md-3">
                                                                 @if (item.Images.Any())
                                                                 {
-                                                                    <div class="photo">
+                                                                    <div class="photo" style="max-height:38em;overflow-y:hidden;">
                                                                         <img class="img-responsive" src="@item.Images.First().Url"/>
                                                                     </div>
                                                                 }
@@ -66,7 +66,7 @@
 
                                                             @if (item.Interested.Count == 0)
                                                             {
-                                                                    <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                    <div class="alert alert-info alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                         <p>Non c'&egrave ancora nessun interessato per questo annuncio</p>
                                                                     </div>
                                                             }
@@ -82,13 +82,13 @@
                                                                 {
                                                                     if (Model[4].Contains(item))
                                                                     {
-                                                                        <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                        <div class="alert alert-info alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                             <p>Hai gi&agrave lasciato il tuo feedback</p>
                                                                         </div>
                                                                     }
                                                                    else
                                                                    {
-                                                                       <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                       <div class="alert alert-info alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                            @{
                                                                                var announceChoosen =(Dictionary<int,User>) ViewData["announceChoosen"];
                                                                                 
@@ -106,19 +106,19 @@
                                                             @if((item.Interested.Count != 0) && (item.ChosenUsers.Any()))
                                                             {
                                                                 <div class="row">
-                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: right"> <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>    Visualizza</a></span>
-                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>    Utenti interessati</a></span>
+                                                                    <span class="col-md-4" style="margin-top: 1em; text-align: right">   <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>     Visualizza</a></span>
+                                                                    <span class="col-md-4" style="margin-top: 1em; text-align: center">   <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>      Utenti interessati</a></span>
                                                                     
-                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: right"><a onclick="announceCloseConfirm()"><span><i class="fa fa-lock" aria-hidden="true"></i></span>Chiudi</a></span>
-                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: right"><a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>    Elimina</a></span>
+                                                                    <span class="col-md-2" style="margin-top: 1em; text-align: right">  <a onclick="announceCloseConfirm()"><span><i class="fa fa-lock" aria-hidden="true"></i></span>   Chiudi</a></span>
+                                                                    <span class="col-md-2" style="margin-top: 1em; text-align: right">  <a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>      Elimina</a></span>
                                                                 </div>
                                                             }
                                                             else
                                                             {
                                                                 <div class="row">
-                                                                    <span class="col-md-6" style="margin-top: 1em; text-align: right"> <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>    Visualizza</a></span>
-                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: center"> <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>    Utenti interessati</a></span>
-                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: right"><a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>    Elimina</a></span>
+                                                                    <span class="col-md-6" style="margin-top: 1em; text-align: right">   <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>      Visualizza</a></span>
+                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: center">   <a href="~/InterestedAnnounce/?id=@item.Id"><span class="glyphicon glyphicon-tags"></span>      Utenti interessati</a></span>
+                                                                    <span class="col-md-3" style="margin-top: 1em; text-align: right">  <a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>      Elimina</a></span>
                                                                 </div>
                                                             }
 
@@ -145,18 +145,27 @@
                                     {
                                         <div class="panel panel-default">
                                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524235" href="#announce-number-@item.Id" style="cursor: pointer">
-
-
-                                                <span style="float: right"> @item.PublishDate.ToString("d/MM/yyyy") </span>
-                                                <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
-                                               <!-- <div class="" style="text-align: center; padding-top: 5px">-->
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
+                                                    </div>
+                                                    <!-- <div class="" style="text-align: center; padding-top: 5px">-->
+                                                    <div class="col-md-2">
+                                                        <div style="float: right"> @item.PublishDate.ToString("d/MM/yyyy") </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2" style="float: right;">
                                                         @if (Model[3].Contains(item))
                                                         {
-                                                            <p style="color: green; float: right;"><span class="glyphicon glyphicon-ok"></span>Sei stato scelto!</p>
-                                                        <!--<span class="label label-success" style="font-size: 1em; border-radius: 1em; font-weight: normal;">Sei stato scelto per questo annuncio!</span>
-                                                        -->
-                                                            }
-
+                                                            <div style="color: green; font-family: 'Roboto', sans-serif;">
+                                                                <span class="glyphicon glyphicon-ok"></span>Sei stato scelto!
+                                                            </div>
+                                                            <!--<span class="label label-success" style="font-size: 1em; border-radius: 1em; font-weight: normal;">Sei stato scelto per questo annuncio!</span>
+                -->
+                                                        }
+                                                    </div>
+                                                </div>
                                               <!--  </div>-->
                                             </div>
                                             <div id="announce-number-@item.Id" class="panel-collapse collapse">
@@ -166,7 +175,7 @@
                                                             <div class="col-md-3">
                                                                 @if (item.Images.Any())
                                                                 {
-                                                                    <div class="photo">
+                                                                    <div class="photo" style="max-height:38em; overflow-y:hidden;">
                                                                         <img class="img-responsive" src="@item.Images.First().Url"/>
                                                                     </div>
                                                                 }
@@ -174,7 +183,7 @@
 
                                                             @if (!Model[3].Contains(item))
                                                             {
-                                                                <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                <div class="alert alert-info alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                     <p>Se verrai scelto riceverai una notifica. Se hai domande contatta il <a href="~/Profile?id=@item.AuthorId">proprietario</a>
                                                                     </p>
                                                                 </div>
@@ -193,13 +202,13 @@
                                                             }
                                                             else if (Model[4].Contains(item))
                                                             {
-                                                                <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                <div class="alert alert-info alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                     <p>Hai gi&agrave; lasciato il tuo feedback!</p>
                                                                 </div>
                                                             }
                                                             else
                                                             {
-                                                                <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                <div class="alert alert-warning alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                     <p>@item.AuthorId ha deciso di scegliere un altro utente per questo oggetto. <br/>
                                                                      Lascia comunque un tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@item.AuthorId">feedback</a></p>
                                                                 </div>

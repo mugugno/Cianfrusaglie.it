@@ -381,12 +381,33 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Registati o effettua login per utilizzare il nostro sito</h4>
                 </div>
-                <div class="modal-body"  style="height: 6em; text-align: center; vertical-align: middle;">
-                    <a href="~/Account/Register" style="color: white"><button class="btn btn-warning btn-lg">REGISTRATI QUI</button></a>
-                    <a href="~/Account/Login" style="color: white"><button class="btn btn-warning btn-lg">LOGIN</button></a>
+                <div class="modal-body" style="height: 7em; text-align: center;">
+                    <a href="~/Account/Register" style="color: white"><button class="btn btn-warning btn-md">Registrati</button></a>
+                    <a href="~/Account/Login" style="color: white"><button class="btn btn-warning btn-md">Accedi</button></a>
+                    @{
+
+                        var loginProviders2 = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                        if (loginProviders2.Count != 0)
+                        {
+
+                            <form asp-controller="Account" asp-action="ExternalLogin" style="margin-top: 10px; text-align: center" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                                
+                                    
+                                        @foreach (var provider in loginProviders2)
+                                        {
+                                            <button type="submit" class="btn btn-social btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account" style="width: auto"><span class="fa fa-facebook"></span> Registrati con Facebook</button>
+
+                                        }
+                                    
+                                
+                            </form>
+                        }
+                    }
+                    
+                
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
                 </div>
             </div>
 

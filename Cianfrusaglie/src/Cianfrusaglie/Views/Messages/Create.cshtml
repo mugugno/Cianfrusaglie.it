@@ -1,4 +1,5 @@
-﻿@model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
+﻿@using Cianfrusaglie.Constants
+@model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
 @functions {
 
@@ -12,13 +13,15 @@
                 <h3>Invia un messaggio a @GetUser().UserName</h3>
             </div>
         </div>
-        <form asp-action="Create" asp-controller="Messages"  id="send-message" method="post" role="form" >
+        <form asp-action="Create" asp-controller="Messages" id="send-message" method="post" role="form" >
 
             <div asp-validation-summary="ValidationSummary.All" class="text-danger" ></div>
             <div class="row" >
                 <div class="form-group" >
+
                     <div class="col-md-10" >
-                        <textarea asp-for="Text" class="form-control" rows="8" ></textarea>
+                        <div id="text_feedback" style="text-align: right;" ></div>
+                        <textarea asp-for="Text" id="text" class="form-control" rows="8" ></textarea>
                         <span asp-validation-for="Text" class="text-danger"></span>
 
                         <input asp-for="ReceiverId" type="hidden" value="@GetUser().Id" class="form-control" />
@@ -33,3 +36,9 @@
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        displayTextMaxLen(@DomainConstraints.MessageMaxLenght, $("#text"), $("#text_feedback"));
+    });
+</script>

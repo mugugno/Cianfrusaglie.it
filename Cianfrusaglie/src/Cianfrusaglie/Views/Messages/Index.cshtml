@@ -1,6 +1,7 @@
 @using System.Security.Claims
 @using System.Threading.Tasks
 @using System.Collections.Generic
+@using Cianfrusaglie.Constants
 @using Cianfrusaglie.Models
 @model  Cianfrusaglie.ViewModels.MessageCreateViewModel 
 
@@ -164,7 +165,8 @@
                         <div class="row" >
                             <div class="form-group" >
                                 <div class="col-md-11" >
-                                    <textarea asp-for="Text" class="form-control" rows="4" ></textarea>
+                                    <div id="text_feedback" style="text-align: right;"></div>
+                                    <textarea asp-for="Text" id="text" maxlength="@DomainConstraints.MessageMaxLenght" class="form-control" rows="4" ></textarea>
                                     <span asp-validation-for="Text" class="text-danger"></span>
 
                                     <input asp-for="ReceiverId" type="hidden" value="@kvPair.Key.Id" class="form-control" />
@@ -199,6 +201,10 @@
 
 
 <script>
+    $(document).ready(function() {
+        displayTextMaxLen(@DomainConstraints.MessageMaxLenght, $("#text"), $("#text_feedback"));
+    });
+
     /* Esecuzione onload: nasconde tutte le conversazioni tranne l'ultima, 
     imposta il colore di sfondo e scorre la scrollbar fino in fondo, così che si veda l'ultimo messaggio */
     $("#wrap").css("padding-bottom", "30px");
