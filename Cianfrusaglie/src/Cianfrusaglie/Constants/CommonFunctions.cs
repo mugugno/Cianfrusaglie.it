@@ -23,7 +23,7 @@ namespace Cianfrusaglie.Constants{
         public static void SetRootLayoutViewData( Controller controller, ApplicationDbContext context ) {
             var cat = GetCategoryList( context );
             controller.ViewData[ "formCategories" ] = cat;
-            controller.ViewData[ "numberOfCategories" ] = cat.Count;
+            controller.ViewData[ "numberOfCategories" ] = (cat != null)? cat.Count : 0;
             controller.ViewData["IsThereNewMessages"] = IsThereNewMessages(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewInterested"] = IsThereNewInterested(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewAnnouncesWhereIAmChoosed"] = IsThereNewAnnouncesWhereIAmChoosed(controller.User.GetUserId(), context);

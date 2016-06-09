@@ -122,7 +122,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
-                            <input id="pac-input" class="form-control" type="text" placeholder="">
+                            <input id="pac-input" class="form-control" type="text" placeholder="" data-toggle="popover" data-content="Indirizzo non valido">
                             <div id="googleMap" style="display: none;"></div>
                             <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
                             <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
@@ -255,79 +255,6 @@
         </form>
     </div>
 
- <script type="text/javascript">
-    var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
-    $('#popoverData').keyup( passwordCheck );
-    $("#confirmPassword").keyup( passwordCheck );
-    $("#uname").focusout(function () {
-        var uname = $('#uname').val();
-        $.post("/Account/CheckUserNameAlreadyExists",
-                           {
-                               user : uname,
-                               __RequestVerificationToken : antiForgeryToken
-
-                           })
-            .success(function(res){
-                if (res) {
-                    $('#unamedanger').html("Il nome utente inserito esiste già.")
-                } else {
-                    $('#unamedanger').html("")
-                }
-            });
-    });
-    $("#email").focusout(function () {
-        var email = $('#email').val();
-        $.post("/Account/CheckEmailAlreadyExists",
-                           {
-                               email: email,
-                               __RequestVerificationToken: antiForgeryToken
-
-                           })
-            .success(function (res) {
-                if (res) {
-                    $('#emaildanger').html("L'email inserita esiste già.")
-                } else {
-                    $('#emaildanger').html("")
-                }
-            });
-    });
-    function passwordCheck() {
-        if( $('#popoverData').val().length < 8 )
-            $('#pwdlen').html('La password deve contenere almeno 8 caratteri!');
-        else
-            $('#pwdlen').html('');
-
-        if( $("#popoverData").val() != $("#confirmPassword").val() )
-            $("#wrongpwd").html('La password di conferma è diversa dalla password!');
-        else
-            $("#wrongpwd").html('');
-    }
-
-    function clickNextButton(tmp) {
-        if (tmp === 1) {
-            $('.form-register1').hide();
-            $('.form-register3').hide();
-            $('.form-register2').show();
-        }
-        else if (tmp === 2) {
-            $('.form-register2').hide();
-            $('.form-register1').hide();
-            $('.form-register3').show();
-        }
-    }
-
-    function clickBackButton(tmp) {
-        if (tmp === 2) {
-            $('.form-register1').show();
-            $('.form-register2').hide();
-            $('.form-register3').hide();
-        }
-        else if (tmp === 3) {
-            $('.form-register2').show();
-            $('.form-register1').hide();
-            $('.form-register3').hide();
-        }
-    }
-    </script>
+    <script src="/js/register.js"></script>
 </body>
 </html>
