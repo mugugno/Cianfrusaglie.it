@@ -106,7 +106,7 @@ namespace Cianfrusaglie.Controllers {
             }
             _context.SaveChanges();
 
-            return RedirectToAction( nameof( Index ), new { id = id } );
+            return RedirectToAction( nameof(HistoryController.Index),"History" );
        }
 
         
