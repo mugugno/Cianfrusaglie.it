@@ -169,20 +169,8 @@
                                 </a>  
                             </div>
                             
-                        }
-                        else {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" class="announceTitleSantino">
-                                <div class="fixedTitle">
-                                    @if (annuncio.Title.Length > maxLength)
-                                    {
-                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
-                                    }
-                                    else {
-                                        <h3>@annuncio.Title</h3>
-                                    }
-                                </div>
-                        </a> 
-                        }
+                        
+                        
 
                         @{
                             bool hasDistance = false;
