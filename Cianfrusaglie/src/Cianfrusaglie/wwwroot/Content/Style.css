@@ -21,6 +21,17 @@ html, body {
   content: "";
   display: block;
 }
+.badge-notify{
+   background:red;
+   position:relative;
+   top: -10px;
+   left: -30px;
+   height:20px;
+   width:20px;
+   font-size:1.1em;
+   font-family: 'Montserrat', sans-serif ;
+  }
+
 #footer, #wrap:after {
   /* .push must be the same height as footer */
 	height: 142px; 
@@ -227,4 +238,9 @@ button { padding: 0; }
 
 .panel-centered {
     text-align: center;
+}
+
+.announceTitleSantino {
+    color: blue;
+    word-wrap: break-word;
 }

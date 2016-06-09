@@ -4,10 +4,10 @@
 }
 
 function displayTextMaxLen(maxLen, input, feedback) {
-    feedback.html(maxLen + " caratteri rimanenti");
+    feedback.html(maxLen +"/"+ maxLen);
 
     input.keyup(function () {
         var text_remaining = maxLen - input.val().length;
-        feedback.html(text_remaining + " caratteri rimanenti");
+        feedback.html(text_remaining + "/"+ maxLen);
     });
 }

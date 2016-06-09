@@ -74,13 +74,13 @@
                                     }
                                     @if( announce.Title.Length > maxLength ) {
                                             <div class="fixedTitle" >
-                                                <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
+                                                <a href="~/Announces/Details/?id=@announce.Id" class="announceTitleSantino" >
                                                     <h3>@announce.Title.Substring( 0, maxLength )... </h3>
                                                 </a>
                                             </div>
                                     } else {
                                             <div class="fixedTitle" >
-                                                <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
+                                                <a href="~/Announces/Details/?id=@announce.Id" class="announceTitleSantino" >
                                                     <h3>@announce.Title</h3>
                                                 </a>
                                             </div>
@@ -108,7 +108,9 @@
                                         <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
                                     }
 
-                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                                    <a href="~/Announces/Details/?id=@announce.Id">
+                                        <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                                    </a>
                                 }
                                 else
                                 {
@@ -119,63 +121,64 @@
                                     else {
                                         <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@announce.Price €</b></h5>
                                     }
-                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                    
-                                }
+                                    <a href="~/Announces/Details/?id=@announce.Id">
+                                        <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                    </a>
+                                        }
 
 
-                                <!--DI quale categoria fa parte-->
-                                <div class="price">
-                                    <br/>
-                                    <h5>Autore: @announce.Author.UserName</h5>
-                                    <!-- Stelline col rating dell'utente (style.css)-->
-                                    <div class="star-container">
-                                        <div class="star-shape">
-                                            <svg viewbox="0 0 61 19">
-                                                <defs>
-                                                    <mask id="starmask" x="0" y="0" width="100" height="100">
-                                                        <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
-                                                        <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
-                                                    </mask>
-                                                </defs>
-                                                <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1"/>
-                                                <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
-                                            </svg>
+                                        <!--DI quale categoria fa parte-->
+                                        <div class="price">
+                                            <br />
+                                            <h5>Autore: <a href="~/Profile?id=@announce.AuthorId"></a>@announce.Author.UserName</h5>
+                                            <!-- Stelline col rating dell'utente (style.css)-->
+                                            <div class="star-container">
+                                                <div class="star-shape">
+                                                    <svg viewbox="0 0 61 19">
+                                                        <defs>
+                                                            <mask id="starmask" x="0" y="0" width="100" height="100">
+                                                                <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                                <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                                            </mask>
+                                                        </defs>
+                                                        <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                                        <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                                    </svg>
+                                                </div>
+                                                @{ string starWidth = ((int)(20 * announce.Author.FeedbacksMean)).ToString(); }
+                                                <div class="star-colorbar" style="width: @starWidth%">
+                                                </div>
+                                            </div>
+                                            <!-- Fine Stelline col rating dell'utente-->
+                                            <br />
                                         </div>
-                                        @{ string starWidth = ((int) (20*announce.Author.FeedbacksMean)).ToString(); }
-                                        <div class="star-colorbar" style="width: @starWidth%">
-                                        </div>
-                                    </div>
-                                    <!-- Fine Stelline col rating dell'utente-->
-                                    <br/>
-                                </div>
 
-                                @*@if (!User.Identity.IsAuthenticated){/*
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
-                                        </p>
-                                        <p class="btn-details">
-                                            <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
-                                        </p>
-                                    }
-                                    else
-                                    {
-                                        <p class="btn-add">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            <a href="~/Announces/Details/?id=@announce.Id" class="">Dettagli</a>
-                                        </p>
-                                        if (announce.AuthorId != User.GetUserId())
-                                        {
-                                            <p class="btn-details">
-                                                <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@announce.AuthorId" class="">Contatta</a>
-                                            </p>
-                                        }*/
-                                    }*@
+                                        @*@if (!User.Identity.IsAuthenticated){/*
+                                                <p class="btn-add">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    <a href="#" data-toggle="modal" data-target="#myWindow">Dettagli</a>
+                                                </p>
+                                                <p class="btn-details">
+                                                    <i class="fa fa-list"></i><a href="#" data-toggle="modal" data-target="#myWindow" class="">Contatta</a>
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="btn-add">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    <a href="~/Announces/Details/?id=@announce.Id" class="">Dettagli</a>
+                                                </p>
+                                                if (announce.AuthorId != User.GetUserId())
+                                                {
+                                                    <p class="btn-details">
+                                                        <i class="fa fa-list"></i><a href="~/Messages/Details/?id=@announce.AuthorId" class="">Contatta</a>
+                                                    </p>
+                                                }*/
+                                            }*@
 
 
-                                <div class="clearfix"></div>
-                            </div>
+                                        <div class="clearfix"></div>
+</div>
                         </div>
 
                     </div>

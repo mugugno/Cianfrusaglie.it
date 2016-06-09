@@ -93,7 +93,11 @@
                                         </div>
                                         <div class="panel-body">
                                             <div>
-                                                <i style="color: grey">Tutti i campi sono facoltativi</i>
+                                                <div class="alert alert-info alert-dismissible" role="alert" style="align-content: initial">
+
+                                                    <i>Tutti i campi sono facoltativi</i>
+                                                
+                                            </div>
                                             </div><br />
                                             @{
                                             foreach( var field in GetFormFields() ) {
@@ -172,44 +176,52 @@
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
                                         <div>
-                                            <i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
+                                            <i style="color: grey" >I dati contrassegnati con * sono obbligatori</i>
                                             <br /><br />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">&nbsp;</div>
+                                            <div id="title_feedback" class="col-md-7" style="text-align: right;"></div>
                                         </div>
                                         <!-- MediaTypeNames.Text input-->
                                         <div class="form-group" >
-                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo *</label>
                                             <div class="col-md-7" >
-                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
+                                                <input asp-for="Title" required="" maxlength="@DomainConstraints.AnnounceTitleMaxLenght" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
 
-                                        <br />
-                                        <div class="form-group" style="margin-top: 6px;">
-                                            <label class="col-md-4 control-label" for="photos">Immagini</label>
-                                            <div class="col-md-7">
-                                                <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*">
-                                                <span asp-validation-for="Photos" class="text-danger"></span>
-                                            </div>
-                                        </div>
+                                        
 
                                         <!-- Textarea -->
                                         <div class="form-group" >
                                             <div class="col-md-4" >&nbsp;</div>
                                             <div id="description_feedback" class="col-md-7" style="text-align: right;" ></div>
                                         </div>
+                                        <!--Descrizione-->
+                                        <div class="form-group">
+                                            <label asp-for="Description" class="col-md-4 control-label" for="description">Descrizione</label>
+                                            <div class="col-md-7">
+                                                <textarea asp-for="Description" maxlength="@DomainConstraints.AnnounceDescriptionMaxLenght" class="form-control inputMargin" id="description" name="description"></textarea>
+                                            </div>
+                                        </div>
 
-                                        <div class="form-group" >
-                                            <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione*</label>
-                                            <div class="col-md-7" >
-                                                <textarea asp-for="Description" maxlength="@DomainConstraints.AnnounceDescriptionMaxLenght" class="form-control inputMargin" id="description" name="description" ></textarea>
+                                        <br />
+                                        <!--Immagini-->
+                                        <div class="form-group" style="margin-top: 6px;">
+                                            <label class="col-md-4 control-label" for="photos">Immagini * </label>
+                                            <div class="col-md-7">
+                                                <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*">
+                                                <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
 
                                         <!-- Prezzo -->
                                         @if( ViewData[ "isVendita" ] as bool? ?? false ) {
                                             <div class="form-group" >
-                                                <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
+                                                <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo *</label>
                                                 <div class="col-md-7" >
                                                     <div class="input-group inputMargin " >
                                                         <input type="number" asp-for="Price" value="1" required="" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
@@ -218,17 +230,17 @@
                                                 </div>
                                             </div>
                                         }
-
+                                        
                                         <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                                         <div class="form-group">
-                                            <label class="col-md-4 control-label">Dove si trova l'oggetto?</label>
+                                            <label class="col-md-4 control-label">Dov'&egrave; l'oggetto? *</label>
                                             <div class="col-md-7" >
                                                 <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo" >
                                             </div>
                                         </div>
-
+                                        <!--Sei disposto a spostarti?-->
                                         <div class="form-group" >
-                                            <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
+                                            <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti? *</label>
                                             <div class="col-md-7" >
                                                 <div class="input-group" style="margin-bottom: 11px;">
                                                     <span class="input-group-addon">
@@ -269,6 +281,7 @@
 <script>
     $(document).ready(function() {
         displayTextMaxLen(@DomainConstraints.AnnounceDescriptionMaxLenght, $("#description"), $("#description_feedback"));
+        displayTextMaxLen(@DomainConstraints.AnnounceTitleMaxLenght, $("#title-mandatory"), $("#title_feedback"));
     });
 
     clickForwardButton();
