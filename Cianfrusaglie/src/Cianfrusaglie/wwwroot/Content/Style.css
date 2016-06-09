@@ -239,3 +239,8 @@ button { padding: 0; }
 .panel-centered {
     text-align: center;
 }
+
+.announceTitleSantino {
+    color: blue;
+    word-wrap: break-word;
+}
