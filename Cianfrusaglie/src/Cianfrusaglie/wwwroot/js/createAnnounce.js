@@ -67,7 +67,9 @@ function clickForwardButton() {
             $("#longitudeInput").val(0);
         }
 
-        document.getElementById("forward-button").setAttribute("type", "submit");
+        checkValidAddress();
+        if( validAddress )
+            document.getElementById("forward-button").setAttribute("type", "submit");
     } else
         document.getElementById("forward-button").innerHTML = "Pubblica";
 

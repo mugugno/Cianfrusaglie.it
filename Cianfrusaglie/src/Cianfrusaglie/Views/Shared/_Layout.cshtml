@@ -70,8 +70,10 @@
         <form class="navbar-form" role="search" asp-action="SearchRedirect" asp-controller="Search" method="get">
             <div class="row container-fluid">
                 <div id="title" class="col-md-4 col-sm-12">
+                    
                     <a href="~/">
                         <h1>
+                            <img src="~/Logo/Logo-512.png" class="" height="60px" />
                             @CommonStrings.SiteName
                         </h1>
                         <h5>Il posto giusto per le tue cianfrusaglie</h5>
@@ -467,18 +469,47 @@
         </div>
     </div>
 
-    
 
-    
-    
-            <div id="footer" class="panel-footer">
-                Copyright © 2016 Mugugno / All rights reserved.
-            </div>
+
+
+
+<div id="footer" class="panel-footer" >
+    Copyright © 2016 Mugugno / All rights reserved. <a href="../Privacy/index.html" >Cookie Policy</a>
+</div>
+
+    <div id="loading">
+        <div id="loadingcontent">
+            <p id="loadingspinner">
+                Caricamento...
+            </p>
+        </div>
+    </div>
 
 <script src="~/js/AnnounceDetails.js"></script>
-<script type="text/javascript">
-    $('#popoverData').popover({ html: true });
+<script type="text/javascript" >
+    $('#popoverData').popover({ html : true });
 </script>
+
+    <script type="text/javascript">
+    $(function () {
+        $(".slow-action").click(function () {
+            $("#loading").fadeIn();
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 7, // The length of each line
+                width: 4, // The line thickness
+                radius: 10, // The radius of the inner circle
+                color: '#000', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 60, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('loading');
+            var spinner = new Spinner(opts).spin(target);
+        });
+    });
+    </script>
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">

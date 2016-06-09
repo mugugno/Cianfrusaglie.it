@@ -143,15 +143,10 @@
                 <div class="col-item santinoHome" >
 
                     <div class="photoThu" >
-                        @if( !User.Identity.IsAuthenticated ) {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href >
-                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
-                            </a>
-                        } else {
+                        
                             <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
                                 <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                             </a>
-                        }
                     </div>
 
                     <div class="info" >
@@ -161,7 +156,6 @@
                         @{
                             int maxLength = 30;
                         }
-                        @if( User.Identity.IsAuthenticated ) {
                             <div class="fixedTitle">
                                 <a style="color: blue;word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id">
 
@@ -175,20 +169,8 @@
                                 </a>  
                             </div>
                             
-                        }
-                        else {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" class="announceTitleSantino">
-                                <div class="fixedTitle">
-                                    @if (annuncio.Title.Length > maxLength)
-                                    {
-                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
-                                    }
-                                    else {
-                                        <h3>@annuncio.Title</h3>
-                                    }
-                                </div>
-                        </a> 
-                        }
+                        
+                        
 
                         @{
                             bool hasDistance = false;
