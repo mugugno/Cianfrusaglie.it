@@ -333,7 +333,9 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                             var imgUrl = ( (IEnumerable< ImageUrl >) ViewData[ "Images" ] ).First().Url;
                             imgUrl = "http://cianfrusapp.net" + imgUrl;
                         }
-                        <button onclick="fbShare();">share on Facebook</button>
+
+                        <button onclick="fbShare();" class="btn btn-block btn-social btn-facebook"><span class="fa fa-facebook"></span> Condividi</button>
+
 
                     </div>
                 </div>
