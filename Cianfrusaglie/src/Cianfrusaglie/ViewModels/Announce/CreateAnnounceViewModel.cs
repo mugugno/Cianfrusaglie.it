@@ -14,7 +14,7 @@ namespace Cianfrusaglie.ViewModels.Announce {
              MinimumLength = DomainConstraints.AnnounceTitleMinLenght ), Display( Name = "Titolo" )]
         public string Title { get; set; }
 
-        [Display( Name = "Descrizione" ), StringLength( DomainConstraints.AnnounceDescriptionMaxLenght )]
+        [Display( Name = "Descrizione" ), MaxLength( DomainConstraints.AnnounceDescriptionMaxLenght )]
         public string Description { get; set; }
 
         public string Latitude { get; set; }

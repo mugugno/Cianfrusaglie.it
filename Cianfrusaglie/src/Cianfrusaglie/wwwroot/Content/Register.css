@@ -165,3 +165,30 @@
 .left-addon input { padding-left: 30px; }
 
 .right-addon input { padding-right: 30px; }
+
+#register {
+    padding-top: 0;
+    border: 0;
+    margin-bottom: 30px;
+}
+
+#register .panel-heading  {
+    margin-bottom: 0;
+    border: 0;
+}
+
+
+
+#register .panel-footer {
+    padding-top: 12px;
+    margin-bottom: 0;
+    border-bottom: 1px solid white;
+}
+
+#register .panel-body {
+    padding-left: 30px;
+    border-top: 1px;
+    background: #eee;
+    margin-bottom: 0;
+
+}

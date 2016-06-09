@@ -145,7 +145,12 @@ namespace Cianfrusaglie.Controllers {
 
             //ViewData Dato un annuncio ho tutti i nomi delle categorie di cui fa parte
             var announces = _context.Announces.Include(u => u.AnnounceCategories).Include(p=>p.Author).Single(a => a.Id == announce.Id);
-            ViewData["nameAnnounceCategories"] = announces.AnnounceCategories.ToList();
+
+            var annCat = announces.AnnounceCategories.ToList();
+            foreach( var ac in annCat )
+              ac.Category = _context.Categories.Single( c => c.Id == ac.CategoryId );
+            ViewData["nameAnnounceCategories"] = annCat;
+            
             ViewData["numInterested"] = announce.Interested.Count;
             ViewData[ "choosen" ] = IsUserChoosenForTheAnnounce( (int) id, User.GetUserId() );
             ViewData["someoneIsChoosen"] = announce.Interested.Where(u => u.ChooseDate != null).SingleOrDefault();
@@ -491,6 +496,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
 
             CommonFunctions.SetRootLayoutViewData( this,_context );
+            TempData["announceDeleted"] = true;
             return View( announce );
         }
 

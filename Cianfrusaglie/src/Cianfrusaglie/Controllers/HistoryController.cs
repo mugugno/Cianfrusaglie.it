@@ -104,10 +104,33 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>gli annunci di cui l'utente ha già dato il feedback</returns>
        public IEnumerable< Announce > GetLoggedUserOpenAnnouncesHeAlreadyGaveFeedback() {
            return _context.FeedBacks.Where( f => f.AuthorId.Equals( User.GetUserId() ) ).Select( f => f.Announce );
-       } 
-        
+       }
+
+
+        /// <summary>
+        /// prende il "prescelto"
+        /// </summary>
+        /// <returns>ritorna l'utente scelto dall'annunciatore</returns>
+        public Dictionary<int, User> GetChosenUserForAnnounceOfUser()
+        {
+            var announces = _context.Announces.Where(a => a.AuthorId.Equals(User.GetUserId()));
+            var announceChoosen = new Dictionary<int, User>();
+            foreach (var announce1 in announces)
+           {
+                var choosen =
+                    _context.AnnounceChosenUsers.Where(ac => ac.AnnounceId.Equals(announce1.Id))
+                        .OrderByDescending(a => a.ChosenDateTime)
+                        .FirstOrDefault();
+                if (choosen != null)
+                {
+                    var user = _context.Users.SingleOrDefault(u => u.Id.Equals(choosen.ChosenUserId));
+                    announceChoosen.Add(announce1.Id, user);
+                }
+            }
+            return announceChoosen;
+        }
         /* AZIONI DEL CONTROLLER */
-        
+
 
         /// <summary>
         /// Questo metodo carica la pagina con tutti gli annunci pubblicati dall'utente loggato (membro) e con tutti gli annunci a cui è interessato
@@ -123,6 +146,7 @@ namespace Cianfrusaglie.Controllers {
             //ViewData["announcesImWinning"] = _context.Announces.Where(a => a.ChosenUsers.OrderBy(c => c.ChosenDateTime).Last().ChosenUser.Id.Equals(User.GetUserId())).Select(a => a.Id).ToList();
             //ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where(u => u.ChosenUserId.Equals(User.GetUserId())).Select(u => u.Announce)
             //ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where(f => f.AuthorId.Equals(User.GetUserId())).Select(f => f.AnnounceId).ToList();
+            ViewData["announceChoosen"] = GetChosenUserForAnnounceOfUser();
             var result = new List< IEnumerable< Announce > > {
                 GetLoggedUserOpenPublishedAnnounces(),
                 GetLoggedUserOpenInterestedAnnounces(),
