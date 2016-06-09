@@ -243,8 +243,16 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                         }else{
                             //Aperta
                         }
-                        <h5 ><span class="utentInteressati">@ViewData["numInterested"]</span> utenti interessati </h5>
-                        
+                        @{ var NumberOfInterested = ViewData["numInterested"];
+                            if (NumberOfInterested.ToString().Count() == 1)
+                            {
+                                <h5><span class="utentInteressati">@NumberOfInterested</span> utente interessato </h5>
+                            }
+                            else
+                            {
+                                <h5><span class="utentInteressati">@NumberOfInterested</span> utenti interessati </h5>
+                            }
+                        }
                     </div>
                     <div class="right-butt">
                         @if (Model.AuthorId.Equals(User.GetUserId()))
