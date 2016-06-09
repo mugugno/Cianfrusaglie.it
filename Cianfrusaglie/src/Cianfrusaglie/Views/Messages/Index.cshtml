@@ -166,7 +166,7 @@
                             <div class="form-group" >
                                 <div class="col-md-11" >
                                     <div id="text_feedback" style="text-align: right;"></div>
-                                    <textarea asp-for="Text" id="text" maxlength="@DomainConstraints.MessageMaxLenght" class="form-control" rows="4" ></textarea>
+                                    <textarea asp-for="Text" id="text" required="" maxlength="@DomainConstraints.MessageMaxLenght" class="form-control" rows="4" ></textarea>
                                     <span asp-validation-for="Text" class="text-danger"></span>
 
                                     <input asp-for="ReceiverId" type="hidden" value="@kvPair.Key.Id" class="form-control" />

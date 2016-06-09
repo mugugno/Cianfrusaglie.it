@@ -21,6 +21,16 @@ html, body {
   content: "";
   display: block;
 }
+.badge-notify{
+   background:red;
+   position:relative;
+   top: -10px;
+   left: -30px;
+   height:20px;
+   width:20px;
+   font-size:1.1em;
+  }
+
 #footer, #wrap:after {
   /* .push must be the same height as footer */
 	height: 142px; 

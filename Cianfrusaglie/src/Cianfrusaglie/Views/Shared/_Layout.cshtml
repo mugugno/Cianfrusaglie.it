@@ -163,7 +163,8 @@
                     if (ViewData["IsThereAnyNotification"] as bool? ?? false)
                     {
                         <li class="visible-xs-block dropdown dropdown-large">
-                            <a class="navbar-item"><span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span>&nbsp;&nbsp;Ci sono notifiche!</a>
+                            <a class="navbar-item"><span class="fa fa-bell-o" style="font-size: 2em; vertical-align: middle"></span>&nbsp;&nbsp;Ci sono notifiche!</a>
+                            <span class="badge badge-notify">!</span>
                         </li>
                     }
                 }
@@ -208,7 +209,8 @@
                         {
                             Sentences sent = new Sentences();
                             <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;" >
-                                Notifiche <span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span> <b class="caret" ></b>
+                                Notifiche <span class="fa fa-bell-o " style="font-size: 2em; vertical-align: middle"></span> <b class="caret" ></b>
+                                <span class="badge badge-notify">!</span>
                             </a>
                             
                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
@@ -262,7 +264,7 @@
                                     if (ViewData["IsThereNewAnnouncesWhereIAmNotChoosed"] as bool? ?? false)
                                     {
                                         <li class="dropdown-header">
-                                            <span class="glyphicon glyphicon-fire"></span>
+                                            <span class="fa fa-bell-o"></span>
                                             <span>
                                                 <a href=@sent.Sentence[(int) MessageTypeNotification.NewAnotherChoosed].Last()>
                                                     @sent.Sentence[(int) MessageTypeNotification.NewAnotherChoosed].First()
@@ -299,7 +301,7 @@
                                     {
                             <!-- Nessuna nuova notifica -->
                             <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
-                                Notifiche <span class="glyphicon glyphicon-fire" style="font-size: 2.2em; color: silver; vertical-align: middle"></span> <b class="caret" ></b>
+                                Notifiche <span class="fa fa-bell-o" style="font-size: 2em; color: white; vertical-align: middle"></span> <b class="caret" ></b>
                             </a>
 
                                         <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
