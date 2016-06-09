@@ -124,12 +124,12 @@
                         <label asp-for="OrderByDistance" class="checkbox-inline"><input asp-for="OrderByDistance" type="checkbox" id="DistanceFirst" name="optFirst" onclick="KmFirst()"/> Più vicini a me</label>
                     </div>
                     <br/>
-                    <!--Se utente non loggato deve sparire-->
+                    
                     <div class="input-group" id="kmRange">
                         <label>Mostra annunci compresi tra:</label>
                         <label class="radio-inline"><input asp-for="KmRangeMin" type="number" style="width: 100px;" min="0" value="0"/> Km e <input asp-for="KmRangeMax" type="number" style="width: 100px;"/> Km</label>
                     </div>
-                    <!---->
+                  
                     <br/>
                     <div class="input-group">
                         <label class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowGifts" type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
@@ -141,13 +141,6 @@
                     </div>
                     <br/>
                     <div class="input-group">
-                        <label>Mostra annunci di utenti con feedback: </label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="1"/> &#x2605</label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="2"/> &#x2605 &#x2605</label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="3"/> &#x2605 &#x2605 &#x2605</label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="4"/> &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
-                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5" checked/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
-                        <br/>
                         <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMin" value="0" type="number" style="display: none" />
                         <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none"/>
                         <label>Mostra annunci con feedback compreso tra: </label>

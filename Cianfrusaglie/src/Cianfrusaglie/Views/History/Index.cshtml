@@ -47,10 +47,26 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer">
 
-                                                <span style="float: right">@item.PublishDate.ToString("d/MM/yyyy") </span>
-                                                <span style="float: right; margin-right: 1em; margin-left: 1em;">@item.Interested.Count interessati,</span>
-                                                <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
+                                                <div class="row">
+                                                    <span class="col-md-1" style="float: right;">
+                                                        <script>
+                                                          document.write("    <iframe src=\"https://www.facebook.com/plugins/share_button.php?href="+window.location+"&layout=button_count&mobile_iframe=true&appId=228034747580137&width=115&height=20\" width=\"115\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
+                                                        </script>
+                                                    </span>
 
+                                                    <div class="col-md-1" style="float: right">@item.PublishDate.ToString("d/MM/yyyy") </div>
+                                                    @if (item.Interested.Count() == 1)
+                                                    {
+                                                        <span style="float: right; margin-right: 1em; margin-left: 1em;">@item.Interested.Count interessato,</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span style="float: right; margin-right: 1em; margin-left: 1em;">@item.Interested.Count interessati,</span>
+                                                    }
+
+                                                    <div class="col-md-8" style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></div>
+
+                                                </div>
                                             </div>
                                             <div id="announce-number-@item.Id" class="panel-collapse collapse">
                                                 <div class="panel-body">
@@ -82,7 +98,13 @@
                                                             }
                                                             else
                                                             {
-                                                                if (!item.ChosenUsers.Any())
+                                                                if (item.ChosenUsers.Count() == 1)
+                                                                {
+                                                                    <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
+                                                                        <p>C'&egrave; @item.Interested.Count <a href="~/InterestedAnnounce/?id=@item.Id">utente interessato, vuoi sceglierlo come destinatario?</a> destinare il tuo oggetto</p>
+                                                                    </div>
+                                                                }
+                                                                else if (item.ChosenUsers.Count() > 1)
                                                                 {
                                                                     <div class="alert alert-success alert-dismissible col-md-6" role="alert" style="align-content: initial">
                                                                         <p>Scegli a chi dei @item.Interested.Count <a href="~/InterestedAnnounce/?id=@item.Id">utenti interessati</a> destinare il tuo oggetto</p>
@@ -103,7 +125,9 @@
                                                                                var announceChoosen =(Dictionary<int,User>) ViewData["announceChoosen"];
                                                                                 
                                                                                 <p>
-                                                                                    Lascia il tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@announceChoosen[item.Id].Id">feedback</a> a <a href="~/Profile?id=@announceChoosen[item.Id].Id">@announceChoosen[item.Id].UserName</a> e dopo <a onclick="announceCloseConfirm()">chiudi l'annuncio</a>
+                                                                                    Lascia il tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@announceChoosen[item.Id].Id">
+                                                                                        <u>feedback</u></a> a <a href="~/Profile?id=@announceChoosen[item.Id].Id">@announceChoosen[item.Id].UserName
+                                                                                    </a> e dopo <a onclick="announceCloseConfirm()" style="cursor: pointer"><u>chiudi l'annuncio</u></a>
                                                                                 </p>
                                                                                }
                                                                         
@@ -121,6 +145,13 @@
                                                                     
                                                                     <span class="col-md-2" style="margin-top: 1em; text-align: right">  <a onclick="announceCloseConfirm()"><span><i class="fa fa-lock" aria-hidden="true"></i></span>   Chiudi</a></span>
                                                                     <span class="col-md-2" style="margin-top: 1em; text-align: right">  <a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>      Elimina</a></span>
+                                                                </div>
+                                                            }
+                                                            else if (item.Interested.Count == 0)
+                                                            {
+                                                                <div class="row">
+                                                                    <span class="col-md-6" style="margin-top: 1em; text-align: right">   <a href="~/Announces/Details/?id=@item.Id"><span class="glyphicon glyphicon-eye-open"></span>      Visualizza</a></span>
+                                                                    <span class="col-md-6" style="margin-top: 1em; text-align: right">  <a href="~/Announces/Delete/?id=@item.Id"><span class="glyphicon glyphicon-scissors"></span>      Elimina</a></span>
                                                                 </div>
                                                             }
                                                             else
@@ -278,9 +309,76 @@
         </div>
     </div>
 </div>
-<script>
+<script type="text/javascript">
     function announceCloseConfirm(id) {
         $('#AnnounceCloseConfirm').modal({ backdrop : 'static', keyboard : false })
             .one('click', '#confirmbtn', function(err) { window.location.href = "/InterestedAnnounce/Close?id="+id; });
     }
+
+
+        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+        $('button[name="loVoglio"]').on('click', function (e) {
+            var $form = $(this).closest('form');
+            e.preventDefault();
+            var tmp = @ViewData["IdAnnounce"];
+
+            $('#confirm')
+                .modal({ backdrop : 'static', keyboard : false })
+                .one('click',
+                    '#confirmbtn',
+                    function(err) {
+                        var numu=parseInt($('.utentInteressati').text(),10)+1;
+                        $('.utentInteressati').text(numu);
+                        $('button[name="loVoglio"]').hide();
+                        $('button[name="nonLoVoglio"]').show();
+                        $('span[name="spanGliphNonLoVoglioPiu"]').show();
+                        $('span[name="seiInteressato"]').show();
+                        $.post("/Announces/Interested",
+                            {
+                                AnnounceId : tmp,
+                                __RequestVerificationToken : antiForgeryToken
+
+                            })
+                            .fail(function() { alert("error"); });
+                    });
+        });
+
+        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+        $('button[name="nonLoVoglio"]')
+            .on('click',
+                function(e) {
+                    var $form = $(this).closest('form');
+                    e.preventDefault();
+                    var isChoosen = '@ViewData["choosen"]' === '@true';
+            var tmp = @ViewData["IdAnnounce"];
+
+            if( !isChoosen ) {
+                $('#notConfirm')
+                    .modal({ backdrop : 'static', keyboard : false })
+                    .one('click',
+                        '#confirmbtn',
+                        function(err) {
+                            var numu=parseInt($('.utentInteressati').text(),10)-1;
+                            $('.utentInteressati').text(numu);
+                            $('button[name="nonLoVoglio"]').hide();
+                            $('button[name="loVoglio"]').show();
+                            $('span[name="spanGliphNonLoVoglioPiu"]').hide();
+                            $('span[name="seiInteressato"]').hide();
+
+                            $.post("/Announces/Interested",
+                                {
+                                    AnnounceId : tmp,
+                                    __RequestVerificationToken : antiForgeryToken
+                                })
+                                .fail(function() { alert("error"); });
+                        });
+            } else {
+                $('#choosen').modal({ backdrop : 'static', keyboard : false });
+            }
+        });
+
+
+
+
+
 </script>
