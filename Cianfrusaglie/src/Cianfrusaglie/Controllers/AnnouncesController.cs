@@ -496,6 +496,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
 
             CommonFunctions.SetRootLayoutViewData( this,_context );
+            TempData["announceDeleted"] = true;
             return View( announce );
         }
 

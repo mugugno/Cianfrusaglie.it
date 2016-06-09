@@ -39,6 +39,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <script src="~/js/site.js" ></script>
     <script src="~/js/StarRatingFunctions.js" ></script>
     <script src="~/dist/spin.min.js"></script>
@@ -163,13 +164,15 @@
                     if (ViewData["IsThereAnyNotification"] as bool? ?? false)
                     {
                         <li class="visible-xs-block dropdown dropdown-large">
-                            <a class="navbar-item"><span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span>&nbsp;&nbsp;Ci sono notifiche!</a>
+                            <a class="navbar-item"><span class="fa fa-bell-o" style="font-size: 2em; vertical-align: middle"></span>&nbsp;&nbsp;Ci sono notifiche!</a>
+                            <span class="badge badge-notify"><i class="fa fa-exclamation" aria-hidden="true"></i></span>
+                            
                         </li>
                     }
                 }
             </ul>
 
-            <ul class="nav navbar-nav" id="menuRight">
+            <ul class="nav navbar-nav navbar-right" >
                 @if (!User.Identity.IsAuthenticated)
                 {
                     <li>
@@ -208,7 +211,8 @@
                         {
                             Sentences sent = new Sentences();
                             <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;" >
-                                Notifiche <span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span> <b class="caret" ></b>
+                                Notifiche <span class="fa fa-bell-o " style="font-size: 2em; vertical-align: middle"></span> <b class="caret" ></b>
+                                <span class="badge badge-notify"><i class="fa fa-exclamation" aria-hidden="true"></i></span>
                             </a>
                             
                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
@@ -262,7 +266,7 @@
                                     if (ViewData["IsThereNewAnnouncesWhereIAmNotChoosed"] as bool? ?? false)
                                     {
                                         <li class="dropdown-header">
-                                            <span class="glyphicon glyphicon-fire"></span>
+                                            <span class="fa fa-bell-o"></span>
                                             <span>
                                                 <a href=@sent.Sentence[(int) MessageTypeNotification.NewAnotherChoosed].Last()>
                                                     @sent.Sentence[(int) MessageTypeNotification.NewAnotherChoosed].First()
@@ -299,7 +303,7 @@
                                     {
                             <!-- Nessuna nuova notifica -->
                             <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
-                                Notifiche <span class="glyphicon glyphicon-fire" style="font-size: 2.2em; color: silver; vertical-align: middle"></span> <b class="caret" ></b>
+                                Notifiche <span class="fa fa-bell-o" style="font-size: 2em; color: white; vertical-align: middle"></span> <b class="caret" ></b>
                             </a>
 
                                         <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
@@ -462,6 +466,10 @@
             </div>
         </div>
     </div>
+
+    
+
+    
     
             <div id="footer" class="panel-footer">
                 Copyright © 2016 Mugugno / All rights reserved.
@@ -474,7 +482,13 @@
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
-    window.cookieconsent_options = {"message":"Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.","dismiss":"Ho capito!","learnMore":"More info","link":null,"theme":"dark-top"};
+        window.cookieconsent_options = {
+            "message": "Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.",
+            "dismiss": "Ho capito!",
+            "learnMore": "Più informazioni",
+            "link": "/Privacy/index.html",
+            "theme": "dark-bottom"
+        };
     </script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>

@@ -9,8 +9,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.Entity;
 
-namespace Cianfrusaglie.Constants
-{
+namespace Cianfrusaglie.Constants{
     public static class CommonFunctions {
 
         private static List< Category > _categoryList ;
@@ -22,8 +21,9 @@ namespace Cianfrusaglie.Constants
         /// <param name="controller">Il controller a cui passare i dati</param>
         /// <param name="context">Il context da cui prendere i dati</param>
         public static void SetRootLayoutViewData( Controller controller, ApplicationDbContext context ) {
-            controller.ViewData[ "formCategories" ] = GetCategoryList( context );
-            controller.ViewData[ "numberOfCategories" ] = GetCategoryList( context ).Count;
+            var cat = GetCategoryList( context );
+            controller.ViewData[ "formCategories" ] = cat;
+            controller.ViewData[ "numberOfCategories" ] = cat.Count;
             controller.ViewData["IsThereNewMessages"] = IsThereNewMessages(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewInterested"] = IsThereNewInterested(controller.User.GetUserId(), context);
             controller.ViewData["IsThereNewAnnouncesWhereIAmChoosed"] = IsThereNewAnnouncesWhereIAmChoosed(controller.User.GetUserId(), context);
