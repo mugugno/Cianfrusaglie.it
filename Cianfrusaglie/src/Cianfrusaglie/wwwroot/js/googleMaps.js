@@ -12,7 +12,21 @@ function unableToGeoLocalize(positionError) {
     initializeGMaps(new google.maps.LatLng(44.40678, 8.93391));
 }
 
-var map, marker, cityCircle;
+var map, marker, cityCircle, validAddress= false;
+
+function checkValidAddress() {
+    var geocoder = new google.maps.Geocoder();
+
+    // Geocode the address
+    geocoder.geocode({ 'address': $("#pac-input").val() }, function (results, status) {
+        if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
+            // set it ot he correct, formatted address if it's vadlid
+            $("#pac-input").val(results[0].formatted_address);
+            validAddress= true;
+        } else
+            validAddress= false;
+    });
+}
 
 /// inizializza Google Maps alla posizione position
 /// onlyView è true se non si può modificare la posizione del marker (usato con onlyView = true in visualizza annuncio o profilo utente)
@@ -33,11 +47,11 @@ function initializeGMaps(position, onlyView, radius) {
     placeMarker(position);
 
     if( !onlyView ) { //parte di input della posizione e click utente per riposizionare il marker
-        var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
+        var input = $("#pac-input");
+        var searchBox = new google.maps.places.SearchBox(input.get(0));
        // map.controls[ google.maps.ControlPosition.TOP_LEFT ].push(input);
 
-        searchBox.addListener('places_changed',
+        searchBox.addListener("places_changed",
             function () {
                 var places = searchBox.getPlaces();
 
@@ -49,12 +63,15 @@ function initializeGMaps(position, onlyView, radius) {
                 var range = $("#range-input").val();
                 if( range > 0 )
                     setCircle(marker.position, range);
-        });
+            });
+
+        //address check
+        input.change(checkValidAddress);
 
         if (radius > 0)
             setCircle(marker.position, 1);
 
-        google.maps.event.addListener(map, 'click',
+        google.maps.event.addListener(map, "click",
             function (event) {
                 placeMarker(event.latLng);
                 geocodePosition(event.latLng);
@@ -79,10 +96,10 @@ function setCircle(position, radius) {
         cityCircle.setMap(null); //eliminare vecchio cerchio
 
     cityCircle = new google.maps.Circle({
-        strokeColor: '#FF0000',
+        strokeColor: "#FF0000",
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: '#FF0000',
+        fillColor: "#FF0000",
         fillOpacity: 0,
         map: map,
         center: position,

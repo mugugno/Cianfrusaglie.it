@@ -127,17 +127,18 @@
                         <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
                     <!--SESSO-->
-                    <div class="form-group row">
-                        <label asp-for="Genre" class="control-label">Sesso </label><label> *</label><br/>
+                    <div class="form-group row" >
+                        <label asp-for="Genre" class="control-label" >Sesso </label><label> *</label><br />
 
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control"/>Uomo</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control"/>Donna</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Unspecified)" class="form-control"/>Non specificato</label>
+                        <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control" />Uomo</label><br />
+                        <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control" />Donna</label><br />
+                        <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Unspecified)" class="form-control" />Non specificato</label>
                         <span asp-validation-for="Genre" class="text-danger"></span>
                     </div>
+                    <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                     <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
-                        <input id="pac-input" class="form-control" type="text" placeholder="">
+                        <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
+                        <input id="pac-input" class="form-control" type="text" placeholder="" data-toggle="popover" data-trigger="focus" data-content="Indirizzo non valido">
                         <div id="googleMap" style="display: none;"></div>
                         <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
@@ -271,9 +272,6 @@
 
                 </div>
 
-
-                <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-
                 <div class="form-group">
                     <br/>
                     <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(3)">Indietro</span>
@@ -294,11 +292,11 @@
     $("#uname").focusout(function () {
         var uname = $('#uname').val();
         $.post("/Account/CheckUserNameAlreadyExists",
-                           {
-                               user : uname,
-                               __RequestVerificationToken : antiForgeryToken
+            {
+                user : uname,
+                __RequestVerificationToken : antiForgeryToken
 
-                           })
+            })
             .success(function(res){
                 if (res) {
                     $('#unamedanger').html("Il nome utente inserito esiste già.");
@@ -310,11 +308,11 @@
     $("#email").focusout(function () {
         var email = $('#email').val();
         $.post("/Account/CheckEmailAlreadyExists",
-                           {
-                               email: email,
-                               __RequestVerificationToken: antiForgeryToken
+            {
+                email: email,
+                __RequestVerificationToken: antiForgeryToken
 
-                           })
+            })
             .success(function (res) {
                 if (res) {
                     $('#emaildanger').html("L'email inserita esiste già.");
@@ -337,9 +335,14 @@
 
     function clickNextButton(tmp) {
         if (tmp === 1) {
-            $('.form-register1').hide();
-            $('.form-register3').hide();
-            $('.form-register2').show();
+            checkValidAddress();
+            if( $("#pac-input").val().length === 0 || validAddress ) {
+                $("#pac-input").popover("hide");
+                $('.form-register1').hide();
+                $('.form-register3').hide();
+                $('.form-register2').show();
+            } else
+                $("#pac-input").popover("show");
         }
         else if (tmp === 2) {
             $('.form-register2').hide();
@@ -365,6 +368,6 @@
         var l = Ladda.create(document.querySelector("#submit-button"));
         l.start();
     });
-    </script>
+</script>
 </body>
 </html>
