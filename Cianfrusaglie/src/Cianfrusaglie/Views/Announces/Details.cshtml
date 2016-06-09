@@ -269,8 +269,8 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                         }
                         else if (ViewData["choosen"].Equals(true))
                         {
-                            <a href="~/Feedback/Create?announceId=@Model.Id&receiverId=@Model.AuthorId">
-                                <button class="btn btn-success lovoglio">
+                            <a href="~/Feedback/Create?announceId=@Model.Id&receiverId=@Model.AuthorId" >
+                                <button class="btn btn-success lovoglio" style="margin-bottom: 0.5em;">
                                     <span class="text-det">Lascia un feedback</span>
                                 </button>
                             </a>
@@ -280,14 +280,14 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                         {
                             if (!User.Identity.IsAuthenticated)
                             {
-                                       <button name="loVoglioNoAutenticato" data-target="#myWindow" data-toggle="modal" class="btn btn-success lovoglio">
+                                       <button name="loVoglioNoAutenticato" style="margin-bottom: 0.5em;" data-target="#myWindow" data-toggle="modal" class="btn btn-success lovoglio">
                                             <span class="text-det">Lo voglio</span>
                                         </button>
                             }
                             else
                             {
                                 <form action="#" method="POST" style="vertical-align: text-bottom">
-                                    <button name="loVoglio" class="btn btn-success lovoglio">
+                                    <button name="loVoglio" class="btn btn-success lovoglio" style="margin-bottom: 0.5em;">
                                         <span class="text-det">Lo voglio</span>
                                     </button>
 
@@ -321,7 +321,7 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                                         <span class="text-det">Non lo voglio pi&ugrave;</span>
                                     </button>
                                 </div>
-                                <button name="loVoglio" class="btn btn-success lovoglio" style="display: none"><span class="text-det">Lo voglio</span></button>
+                                <button name="loVoglio" class="btn btn-success lovoglio" style="display: none" style="margin-bottom: 0.8em;"><span class="text-det">Lo voglio</span></button>
 
                             </form>
                             @*<div class="icon-detail">
