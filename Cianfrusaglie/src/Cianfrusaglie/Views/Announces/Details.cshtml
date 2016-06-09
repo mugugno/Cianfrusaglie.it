@@ -328,10 +328,13 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                 <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]">Contatta</a>
                 </div>*@
                         }
-                        <script>
-                            document.write("    <br /><iframe src=\"https://www.facebook.com/plugins/share_button.php?href="+window.location+"&layout=button_count&mobile_iframe=true&appId=228034747580137&width=115&height=20\" width=\"115\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
-                        </script>
-                        
+
+                        @{
+                            var imgUrl = ( (IEnumerable< ImageUrl >) ViewData[ "Images" ] ).First().Url;
+                            imgUrl = "http://cianfrusapp.net" + imgUrl;
+                        }
+                        <button onclick="fbShare();">share on Facebook</button>
+
                     </div>
                 </div>
             </div>
@@ -405,69 +408,73 @@ Nascondere tasto non lo voglio più quando sono stato scelto
     @*    </p>*@
 </div>
 
-
+<script>
+    function fbShare() {
+        openFbPopUp( window.location, "@imgUrl", "@Model.Title", "@Model.Description" );
+    }
+</script>
 <script type="text/javascript">
 
-        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
-        $('button[name="loVoglio"]').on('click', function (e) {
-            var $form = $(this).closest('form');
-            e.preventDefault();
-            var tmp = @ViewData["IdAnnounce"];
+    var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+    $('button[name="loVoglio"]').on('click', function (e) {
+        var $form = $(this).closest('form');
+        e.preventDefault();
+        var tmp = @ViewData["IdAnnounce"];
 
-            $('#confirm')
-                .modal({ backdrop : 'static', keyboard : false })
-                .one('click',
-                    '#confirmbtn',
-                    function(err) {
-                        var numu=parseInt($('.utentInteressati').text(),10)+1;
-                        $('.utentInteressati').text(numu);
-                        $('button[name="loVoglio"]').hide();
-                        $('button[name="nonLoVoglio"]').show();
-                        $('span[name="spanGliphNonLoVoglioPiu"]').show();
-                        $('span[name="seiInteressato"]').show();
-                        $.post("/Announces/Interested",
-                            {
-                                AnnounceId : tmp,
-                                __RequestVerificationToken : antiForgeryToken
+        $('#confirm')
+            .modal({ backdrop : 'static', keyboard : false })
+            .one('click',
+                '#confirmbtn',
+                function(err) {
+                    var numu=parseInt($('.utentInteressati').text(),10)+1;
+                    $('.utentInteressati').text(numu);
+                    $('button[name="loVoglio"]').hide();
+                    $('button[name="nonLoVoglio"]').show();
+                    $('span[name="spanGliphNonLoVoglioPiu"]').show();
+                    $('span[name="seiInteressato"]').show();
+                    $.post("/Announces/Interested",
+                        {
+                            AnnounceId : tmp,
+                            __RequestVerificationToken : antiForgeryToken
 
-                            })
-                            .fail(function() { alert("error"); });
-                    });
-        });
+                        })
+                        .fail(function() { alert("error"); });
+                });
+    });
 
-        var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
-        $('button[name="nonLoVoglio"]')
-            .on('click',
-                function(e) {
-                    var $form = $(this).closest('form');
-                    e.preventDefault();
-                    var isChoosen = '@ViewData["choosen"]' === '@true';
-            var tmp = @ViewData["IdAnnounce"];
+    var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
+    $('button[name="nonLoVoglio"]')
+        .on('click',
+            function(e) {
+                var $form = $(this).closest('form');
+                e.preventDefault();
+                var isChoosen = '@ViewData["choosen"]' === '@true';
+                var tmp = @ViewData["IdAnnounce"];
 
-            if( !isChoosen ) {
-                $('#notConfirm')
-                    .modal({ backdrop : 'static', keyboard : false })
-                    .one('click',
-                        '#confirmbtn',
-                        function(err) {
-                            var numu=parseInt($('.utentInteressati').text(),10)-1;
-                            $('.utentInteressati').text(numu);
-                            $('button[name="nonLoVoglio"]').hide();
-                            $('button[name="loVoglio"]').show();
-                            $('span[name="spanGliphNonLoVoglioPiu"]').hide();
-                            $('span[name="seiInteressato"]').hide();
+                if( !isChoosen ) {
+                    $('#notConfirm')
+                        .modal({ backdrop : 'static', keyboard : false })
+                        .one('click',
+                            '#confirmbtn',
+                            function(err) {
+                                var numu=parseInt($('.utentInteressati').text(),10)-1;
+                                $('.utentInteressati').text(numu);
+                                $('button[name="nonLoVoglio"]').hide();
+                                $('button[name="loVoglio"]').show();
+                                $('span[name="spanGliphNonLoVoglioPiu"]').hide();
+                                $('span[name="seiInteressato"]').hide();
 
-                            $.post("/Announces/Interested",
-                                {
-                                    AnnounceId : tmp,
-                                    __RequestVerificationToken : antiForgeryToken
-                                })
-                                .fail(function() { alert("error"); });
-                        });
-            } else {
-                $('#choosen').modal({ backdrop : 'static', keyboard : false });
-            }
-        });
+                                $.post("/Announces/Interested",
+                                    {
+                                        AnnounceId : tmp,
+                                        __RequestVerificationToken : antiForgeryToken
+                                    })
+                                    .fail(function() { alert("error"); });
+                            });
+                } else {
+                    $('#choosen').modal({ backdrop : 'static', keyboard : false });
+                }
+            });
 
 
 
