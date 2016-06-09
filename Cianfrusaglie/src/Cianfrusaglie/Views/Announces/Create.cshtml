@@ -126,7 +126,18 @@
 
                                                    case FormFieldType.Number:
                                                         <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                            @if (field.Name.Equals("Altezza")
+                                                                || field.Name.Equals("Profondita'")
+                                                                || field.Name.Equals("Larghezza"))
+                                                            {
+                                                                <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name in cm</label>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                            }
+                                                            
                                                             <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
                                                         </div>
                                                        break;
@@ -191,8 +202,7 @@
                                             <div class="form-group" >
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
                                                 <div class="col-md-7" >
-                                                    <div class="input-group" >
-
+                                                    <div class="input-group inputMargin " >
                                                         <input type="number" asp-for="Price" value="1" required="" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
                                                     </div>
@@ -202,7 +212,7 @@
 
                                         <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                                         <div class="form-group">
-                                            <label class="col-md-4">Dove si trova l'oggetto?</label>
+                                            <label class="col-md-4 control-label">Dove si trova l'oggetto?</label>
                                             <div class="col-md-7" >
                                                 <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo" >
                                             </div>

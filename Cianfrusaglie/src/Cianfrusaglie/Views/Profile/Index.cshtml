@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <!-- Fine Stelline col rating dell'utente-->
-                        @($"{Model.FeedbacksMean:N1}") su 5 (@Model.FeedbacksCount recensioni)
+                        @($"{Model.FeedbacksMean:N1}") su 5 (@Model.FeedbacksCount feedback)
                         <br>
                         <h4>
                             @Model.Name
@@ -78,20 +78,20 @@
 
 
 
-    <h3 style="text-align: center" >Recensioni ricevute</h3>
+    <h3 style="text-align: center" >Feedback ricevuti</h3>
 
         @if( !Model.ReceivedFeedBacks.Any() ) {
             <br />
-            <h4 style="text-align: center" >Non ci sono ancora recensioni per questo utente!</h4>
+            <h4 style="text-align: center" >Non ci sono ancora feedback per questo utente!</h4>
         } else {
 
 
 
 
-            <h3 >Le migliori 3</h3>
+            <h3 >I migliori 3</h3>
             if (!GetBestFeedBacks().Any())
             {
-                <h4 style="text-align: center">Non ci sono abbastanza recensioni utili per questo utente!</h4>
+                <h4 style="text-align: center">Non ci sono abbastanza feedback utili per questo utente!</h4>
             }
             else
             {
@@ -238,10 +238,10 @@
                                             }
                                         }
 
-            <h3>Le peggiori 3</h3>
+            <h3>I peggiori 3</h3>
             if (!GetWorstFeedBacks().Any())
             {
-                <h4 style="text-align: center">Non ci sono abbastanza recensioni utili per questo utente!</h4>
+                <h4 style="text-align: center">Non ci sono abbastanza feedback utili per questo utente!</h4>
             }
             else
             {
@@ -388,10 +388,10 @@
                                             }
                                         }
 
-            <h3>Le pi&ugrave; recenti</h3>
+            <h3>I pi&ugrave; recenti</h3>
             if (!GetLastFeedBacks().Any())
             {
-                <h4 style="text-align: center">Non ci sono abbastanza recensioni utili per questo utente!</h4>
+                <h4 style="text-align: center">Non ci sono abbastanza feedback utili per questo utente!</h4>
             }
             else
             {
