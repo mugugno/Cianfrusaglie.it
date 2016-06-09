@@ -59,8 +59,9 @@ button { padding: 0; }
 }
 #title a {
     color: #f0ad4e;
-    text-align: center;
+    text-align: left;
     text-decoration: none;
+    display: inline-block;
 }
 
 .input-search input{
