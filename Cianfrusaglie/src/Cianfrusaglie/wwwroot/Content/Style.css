@@ -244,4 +244,5 @@ button { padding: 0; }
 .announceTitleSantino {
     color: blue;
     word-wrap: break-word;
+    cursor: pointer;
 }
