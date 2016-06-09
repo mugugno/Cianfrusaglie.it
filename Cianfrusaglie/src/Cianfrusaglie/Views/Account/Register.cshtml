@@ -33,8 +33,6 @@
 }
 <html>
 <head>
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
     <script src="~/dist/spin.min.js"></script>
@@ -111,24 +109,24 @@
                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
                 
                 <div class="form-group">
-                    <i style="color: gray">I dati contrassegnati con * sono facoltativi</i>
+                    <i style="color: gray">I dati contrassegnati con * obbligatori</i>
                 </div>
                 <!--NOME-->
                 <div>
                     <div class="form-group">
-                        <label asp-for="Name" class="control-label">Nome </label><label> *</label><br/>
+                        <label asp-for="Name" class="control-label">Nome </label><br/>
                         <input asp-for="Name" class="form-control"/>
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <!--COGNOME-->
                     <div class="form-group">
-                        <label asp-for="Surname" class="control-label">Cognome </label><label> *</label><br/>
+                        <label asp-for="Surname" class="control-label">Cognome </label><br/>
                         <input asp-for="Surname" class="form-control"/>
                         <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
                     <!--SESSO-->
                     <div class="form-group row" >
-                        <label asp-for="Genre" class="control-label" >Sesso </label><label> *</label><br />
+                        <label asp-for="Genre" class="control-label" >Sesso </label><br />
 
                         <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control" />Uomo</label><br />
                         <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control" />Donna</label><br />
@@ -137,14 +135,14 @@
                     </div>
                     <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                     <div class="form-group">
-                        <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
+                        <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
                         <input id="pac-input" class="form-control" type="text" placeholder="" data-toggle="popover" data-content="Indirizzo non valido">
                         <div id="googleMap" style="display: none;"></div>
                         <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Immagine profilo </label><label> *</label>
+                        <label asp-for="Photo" class="control-label">Immagine profilo </label>
                         <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
                         <span asp-validation-for="Photo" class="text-danger"></span>
                     </div>
@@ -243,19 +241,19 @@
                 <hr />
 
                 <div class="form-group">
-                    <label asp-for="UserName" class="control-label">Username</label><br />
+                    <label asp-for="UserName" class="control-label">Username</label><label> *</label><br />
                     <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control" />
                     <span asp-validation-for="UserName" id="unamedanger" class="text-danger"></span>
 
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Email" class="control-label">Indirizzo email</label><br />
+                    <label asp-for="Email" class="control-label">Indirizzo email</label><label> *</label><br />
                     <input asp-for="Email" id="email" type="email" required="" class="form-control" />
                     <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Password" class="control-label">Password</label><br />
+                    <label asp-for="Password" class="control-label">Password</label><label> *</label><br />
                     <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData" />
                     <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
                 </div>
@@ -266,7 +264,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br/>
+                    <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><label> *</label><br/>
                     <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control"/>
                     <span asp-validation-for="ConfirmPassword" id="wrongpwd" class="text-danger"></span>
 
