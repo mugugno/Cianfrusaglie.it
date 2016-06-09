@@ -89,72 +89,79 @@
 
     <form asp-action="Register" asp-controller="Account" id="formRegister" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
         <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
-        <div id="register" class="panel panel-default form-horizontal form-register form-register1" id="tabellaForm">
-            <div class="panel panel-heading" style="background-color: #49586d;">
-                <h1 style="margin-bottom: 0">
-                    <a href="~/">@CommonStrings.SiteName</a>
-                </h1>
-                <h5 style="margin-top: 0">Il posto giusto per le tue cianfrusaglie</h5>
-            </div>
-
-            <div class="panel panel-body">
-
-                <div class="row top-reg" style="text-align: center">
-                    <span class="btn-warning btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
-                    <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
-                    <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
-                </div>
-
-                <hr/>
-                <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                
-                <div class="form-group">
-                    <i style="color: gray">I dati contrassegnati con * obbligatori</i>
-                </div>
-                <!--NOME-->
-                <div>
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label">Nome </label><br/>
-                        <input asp-for="Name" class="form-control"/>
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                    <!--COGNOME-->
-                    <div class="form-group">
-                        <label asp-for="Surname" class="control-label">Cognome </label><br/>
-                        <input asp-for="Surname" class="form-control"/>
-                        <span asp-validation-for="Surname" class="text-danger"></span>
-                    </div>
-                    <!--SESSO-->
-                    <div class="form-group row" >
-                        <label asp-for="Genre" class="control-label" >Sesso </label><br />
-
-                        <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control" />Uomo</label><br />
-                        <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control" />Donna</label><br />
-                        <label class="radio-inline" ><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Unspecified)" class="form-control" />Non specificato</label>
-                        <span asp-validation-for="Genre" class="text-danger"></span>
-                    </div>
-                    <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-                    <div class="form-group">
-                        <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
-                        <input id="pac-input" class="form-control" type="text" placeholder="" data-toggle="popover" data-content="Indirizzo non valido">
-                        <div id="googleMap" style="display: none;"></div>
-                        <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
-                        <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Photo" class="control-label">Immagine profilo </label>
-                        <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
-                        <span asp-validation-for="Photo" class="text-danger"></span>
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <br/>
-                    <span class="btn btn-default col-md-8 btn-next" onclick="clickNextButton(1)">Avanti</span>
-                </div>
-                <span id="sottoForm"><h5> <a href="~/Account/Login"><strong>Effettua l'accesso</strong></a></h5></span>
-            </div>
+    <div id="register" class="panel panel-default form-horizontal form-register form-register1" id="tabellaForm">
+        <div class="panel panel-heading" style="background-color: #49586d;">
+            <h1 style="margin-bottom: 0">
+                <a href="~/">@CommonStrings.SiteName</a>
+            </h1>
+            <h5 style="margin-top: 0">Il posto giusto per le tue cianfrusaglie</h5>
         </div>
+
+        <div class="panel panel-body">
+
+            <div class="row top-reg" style="text-align: center">
+                <span class="btn-warning btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
+                <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
+                <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
+            </div>
+
+            <hr/>
+            <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+
+            <div class="form-group">
+                <div>
+                    <div class="alert alert-info alert-dismissible col-md-11" role="alert" style="align-content: center">
+
+                        <i>Tutti i campi sono facoltativi</i>
+
+                    </div>
+                </div><br/>
+            </div>
+            <!--NOME-->
+            <div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Nome </label><br/>
+                    <input asp-for="Name" class="form-control"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <!--COGNOME-->
+                <div class="form-group">
+                    <label asp-for="Surname" class="control-label">Cognome </label><br/>
+                    <input asp-for="Surname" class="form-control"/>
+                    <span asp-validation-for="Surname" class="text-danger"></span>
+                </div>
+                <!--SESSO-->
+                <div class="form-group row">
+                    <label asp-for="Genre" class="control-label">Sesso </label><br/>
+
+                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control"/>Uomo</label><br/>
+                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control"/>Donna</label><br/>
+                    <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Unspecified)" class="form-control"/>Non specificato</label>
+                    <span asp-validation-for="Genre" class="text-danger"></span>
+                </div>
+                <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+                <div class="form-group">
+                    <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
+                    <input id="pac-input" class="form-control" type="text" placeholder="" data-toggle="popover" data-content="Indirizzo non valido">
+                    <div id="googleMap" style="display: none;"></div>
+                    <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
+                    <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;"/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Photo" class="control-label">Immagine profilo </label>
+                    <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <br/>
+                <span class="btn btn-default col-md-8 btn-next" onclick="clickNextButton(1)">Avanti</span>
+            </div>
+            <span id="sottoForm"><h5> <a href="~/Account/Login"><strong>Effettua l'accesso</strong></a></h5></span>
+        </div>
+    </div>
+
         <!------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
         <div id="register" class="panel panel-default form-horizontal form-register form-register2" id="tabellaForm">
             <div class="panel panel-heading" style="background-color: #49586d;">
@@ -239,6 +246,11 @@
 
 
                 <hr />
+
+                <div>
+                    <i style="color: grey">I dati contrassegnati con * sono obbligatori</i>
+                    <br /><br />
+                </div>
 
                 <div class="form-group">
                     <label asp-for="UserName" class="control-label">Username</label><label> *</label><br />

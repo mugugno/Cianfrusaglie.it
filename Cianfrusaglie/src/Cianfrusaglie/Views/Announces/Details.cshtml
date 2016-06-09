@@ -278,7 +278,7 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                         }
                         else if (ViewData["interested"].Equals(false))
                         {
-                            @if (!User.Identity.IsAuthenticated)
+                            if (!User.Identity.IsAuthenticated)
                             {
                                        <button name="loVoglioNoAutenticato" data-target="#myWindow" data-toggle="modal" class="btn btn-success lovoglio">
                                             <span class="text-det">Lo voglio</span>
