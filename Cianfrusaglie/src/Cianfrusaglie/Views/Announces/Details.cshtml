@@ -17,14 +17,22 @@
 {
     private User GetAuthor() { return ViewData["Author"] as User; }
 }
+
 @*
-    
-
-
 Nascondere tasto non lo voglio più quando sono stato scelto
-
-
 *@
+
+@{
+   var imgUrl = ( (IEnumerable<ImageUrl>) ViewData[ "Images" ] ).First().Url;
+   imgUrl = "http://cianfrusapp.net" + imgUrl;
+}
+
+@section metas {
+    <meta property="og:image" content="@imgUrl" />
+    <link rel="image_src" type="image/jpeg" href="@imgUrl" />
+    <meta property="og:title" content="@Model.Title" />
+}
+
 <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script src="/js/googleMaps.js" ></script>
 <script>
@@ -329,11 +337,6 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                             @*<div class="icon-detail">
                 <a class="btn btn-info" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]">Contatta</a>
                 </div>*@
-                        }
-
-                        @{
-                            var imgUrl = ( (IEnumerable< ImageUrl >) ViewData[ "Images" ] ).First().Url;
-                            imgUrl = "http://cianfrusapp.net" + imgUrl;
                         }
 
                         <button onclick="fbShare();" class="btn btn-block btn-social btn-facebook"><span class="fa fa-facebook"></span> Condividi</button>
