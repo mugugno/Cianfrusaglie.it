@@ -92,7 +92,7 @@
                     }
                     else
                     {
-                        <a href="~/Search/Advanced" style="margin-left:1em;">Ricerca Avanzata</a>
+                        <a href="~/Search/Advanced" class="slow-action" style="margin-left:1em;">Ricerca Avanzata</a>
                     }
                 </div>
             </div>
@@ -117,16 +117,16 @@
                     <ul class="dropdown-menu dropdown-menu-large" >
                         @foreach( var macro in GetCategories() ) {
                             <li>
-                                <a href="~/Search?categories=@macro.Id" >@macro.Name</a>
+                                <a href="~/Search?categories=@macro.Id" class="slow-action">@macro.Name</a>
                                 @if( GetSubCategories( @macro.Name ).ToList().Count > 0 ) {
                                     if( @macro.Name.Equals( "MisteryBox" ) ) {
                                         <ul class="dropdown-menu sub-menu" style="height: auto;" >
                                             <li class="dropdown-header" style="margin-top: 10px" >@macro.Name</li>
                                             <li class="divider" ></li>
-                                            <li><a href="~/Search?categories=@macro.Id" >Visualizza tutti</a></li>
+                                            <li><a href="~/Search?categories=@macro.Id" class="slow-action">Visualizza tutti</a></li>
                                             <li class="divider" ></li>
                                             @foreach( var sub in GetSubCategories( @macro.Name ) ) {
-                                                <li><a href="~/Search?categories=@sub.Id" >@sub.Name</a></li>
+                                                <li><a href="~/Search?categories=@sub.Id" class="slow-action">@sub.Name</a></li>
                                                 <li class="divider" ></li>
                                                 <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;" ><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
                                             }
@@ -135,10 +135,10 @@
                                         <ul class="dropdown-menu sub-menu" >
                                             <li class="dropdown-header" style="margin-top: 10px" >@macro.Name</li>
                                             <li class="divider" ></li>
-                                            <li><a href="~/Search?categories=@macro.Id" >Visualizza tutti</a></li>
+                                            <li><a href="~/Search?categories=@macro.Id" class="slow-action">Visualizza tutti</a></li>
                                             <li class="divider" ></li>
                                             @foreach( var sub in GetSubCategories( @macro.Name ) ) {
-                                                <li><a href="~/Search?categories=@sub.Id" >@sub.Name</a></li>
+                                                <li><a href="~/Search?categories=@sub.Id" class="slow-action">@sub.Name</a></li>
                                             }
                                         </ul>
                                     }
