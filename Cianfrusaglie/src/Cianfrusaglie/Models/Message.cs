@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Cianfrusaglie.Constants;
 
 namespace Cianfrusaglie.Models {
     public class Message {
         public int Id { get; set; }
 
-        [Required]
+        [Required, MaxLength(DomainConstraints.MessageMaxLenght)]
         public virtual string Text { get; set; }
 
         [DataType( DataType.DateTime )]

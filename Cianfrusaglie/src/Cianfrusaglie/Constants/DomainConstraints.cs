@@ -11,6 +11,7 @@ namespace Cianfrusaglie.Constants {
         public const int AnnounceTitleMinLenght = 3;
         public const int AnnounceTitleMaxLenght = 80;
         public const int AnnounceDescriptionMaxLenght = 255;
+        public const int MessageMaxLenght = 999;
         public const int AnnounceMeterRangeMinLenght = 0;
         public const int AnnounceMeterRangeMaxLenght = int.MaxValue;
         public const int AnnouncePriceMinLenght = 0;
@@ -23,7 +24,7 @@ namespace Cianfrusaglie.Constants {
         //Constrains per FeedBack
         public const int FeedBackVoteMinRange = 0;
         public const int FeedBackVoteMaxRange = 5;
-        public const int FeedBackTextMaxLenght = 99;
+        public const int FeedBackTextMaxLenght = 350;
 
         //Constrains per Gat
         public const int GatTextMinLenght = 3;
