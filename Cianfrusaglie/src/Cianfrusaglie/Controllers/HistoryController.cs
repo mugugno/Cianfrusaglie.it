@@ -6,6 +6,7 @@ using Cianfrusaglie.Constants;
 using Cianfrusaglie.Models;
 using Cianfrusaglie.Statics;
 using Cianfrusaglie.ViewModels.History;
+using Microsoft.AspNet.Http.Extensions;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
@@ -147,6 +148,7 @@ namespace Cianfrusaglie.Controllers {
             //ViewData["announceIWasChosenFor"] = _context.AnnounceChosenUsers.Where(u => u.ChosenUserId.Equals(User.GetUserId())).Select(u => u.Announce)
             //ViewData["announceIAlreadyGiveFeedback"] = _context.FeedBacks.Where(f => f.AuthorId.Equals(User.GetUserId())).Select(f => f.AnnounceId).ToList();
             ViewData["announceChoosen"] = GetChosenUserForAnnounceOfUser();
+            ViewData["rootFacebook"] = HttpContext.Request.GetDisplayUrl();
             var result = new List< IEnumerable< Announce > > {
                 GetLoggedUserOpenPublishedAnnounces(),
                 GetLoggedUserOpenInterestedAnnounces(),
