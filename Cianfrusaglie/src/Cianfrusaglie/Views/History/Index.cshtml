@@ -115,7 +115,7 @@
                                                                                var announceChoosen =(Dictionary<int,User>) ViewData["announceChoosen"];
                                                                                 
                                                                                 <p>
-                                                                                    Lascia il tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@announceChoosen[item.Id].Id"><u>feedback</u></a> a @announceChoosen[item.Id].UserName e dopo <a onclick="announceCloseConfirm(@item.Id)"><u>chiudi l'annuncio</u></a>
+                                                                                    Lascia il tuo <a href="~/Feedback/Create?announceId=@item.Id&receiverId=@announceChoosen[item.Id].Id"><u>feedback</u></a> a <a href="~/Profile/Index?userId=@announceChoosen[item.Id].Id"> <u>@announceChoosen[item.Id].UserName</u></a> e dopo <a onclick="announceCloseConfirm(@item.Id)"><u>chiudi l'annuncio</u></a>
                                                                                 </p>
                                                                                }
                                                                         
