@@ -61,14 +61,7 @@
                         }
                         <div class="col-item" style="height: 420px; width: 270px;" id="@idDiv">
                             <div class="photoThu">
-                                @if (User.Identity.IsAuthenticated)
-                                {
                                     <a href="~/Announces/Details/?id=@announce.Id"><img src="@GetImages(@announce.Id)" class="img-responsive"/></a>
-                                }
-                                else
-                                {
-                                    <a href="#" data-toggle="modal" data-target="#myWindow"><img src="@GetImages(@announce.Id)" class="img-responsive"/></a>
-                                }
                             </div>
 
                             <div class="info">
@@ -80,34 +73,17 @@
                                         int maxLength = 30;
                                     }
                                     @if( announce.Title.Length > maxLength ) {
-                                        if( User.Identity.IsAuthenticated ) {
                                             <div class="fixedTitle" >
                                                 <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
                                                     <h3>@announce.Title.Substring( 0, maxLength )... </h3>
                                                 </a>
                                             </div>
-                                        } else {
-                                            <div class="fixedTitle" >
-                                                <a data-toggle="modal" data-target="#myWindow" style="color: black" >
-                                                    <h3>@announce.Title.Substring( 0, maxLength )... </h3>
-                                                </a>
-                                            </div>
-
-                                        }
                                     } else {
-                                        if( User.Identity.IsAuthenticated ) {
                                             <div class="fixedTitle" >
                                                 <a href="~/Announces/Details/?id=@announce.Id" style="color: black" >
                                                     <h3>@announce.Title</h3>
                                                 </a>
                                             </div>
-                                        } else {
-                                            <div class="fixedTitle" >
-                                                <a data-toggle="modal" data-target="#myWindow" style="color: black" >
-                                                    <h3>@announce.Title</h3>
-                                                </a>
-                                            </div>
-                                        }
                                     }
                                 </h3>
                                 @{
