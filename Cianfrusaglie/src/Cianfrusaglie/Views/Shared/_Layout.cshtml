@@ -154,7 +154,7 @@
                 }
             </ul>
 
-            <ul class="nav navbar-nav" id="menuRight">
+            <ul class="nav navbar-nav navbar-right" >
                 @if (!User.Identity.IsAuthenticated)
                 {
                     <li>
@@ -435,7 +435,13 @@
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
-    window.cookieconsent_options = {"message":"Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.","dismiss":"Ho capito!","learnMore":"More info","link":null,"theme":"dark-top"};
+        window.cookieconsent_options = {
+            "message": "Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.",
+            "dismiss": "Ho capito!",
+            "learnMore": "Più informazioni",
+            "link": "/Privacy/index.html",
+            "theme": "dark-top"
+        };
     </script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
