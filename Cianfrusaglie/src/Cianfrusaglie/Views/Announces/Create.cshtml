@@ -128,13 +128,24 @@
                                                             </div>
                                                         break;
 
-                                                    case FormFieldType.Number:
-                                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                   case FormFieldType.Number:
+                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                            @if (field.Name.Equals("Altezza")
+                                                                || field.Name.Equals("Profondita'")
+                                                                || field.Name.Equals("Larghezza"))
+                                                            {
+                                                                <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name in cm</label>
+
+                                                            }
+                                                            else
+                                                            {
                                                                 <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                                <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
-                                                            </div>
-                                                        break;
-                                                }
+                                                            }
+                                                            
+                                                            <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                        </div>
+                                                       break;
+                                               }
 
                                                     @*
                                     <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
@@ -161,14 +172,19 @@
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
                                         <div>
-                                            <i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
+                                            <i style="color: grey" >I dati contrassegnati con * sono facoltativi</i>
                                             <br /><br />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">&nbsp;</div>
+                                            <div id="title_feedback" class="col-md-7" style="text-align: right;"></div>
                                         </div>
                                         <!-- MediaTypeNames.Text input-->
                                         <div class="form-group" >
                                             <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
                                             <div class="col-md-7" >
-                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
+                                                <input asp-for="Title" required="" maxlength="@DomainConstraints.AnnounceTitleMaxLenght" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -200,8 +216,7 @@
                                             <div class="form-group" >
                                                 <label asp-for="Price" class="col-md-4 control-label" for="price" >Prezzo</label>
                                                 <div class="col-md-7" >
-                                                    <div class="input-group" >
-
+                                                    <div class="input-group inputMargin " >
                                                         <input type="number" asp-for="Price" value="1" required="" min="1" step="1" class="form-control inputMargin" id="price" name="Price" />
                                                         <span class="input-group-addon">&euro;</span>
                                                     </div>
@@ -211,7 +226,7 @@
 
                                         <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
                                         <div class="form-group">
-                                            <label class="col-md-4">Dove si trova l'oggetto?</label>
+                                            <label class="col-md-4 control-label">Dove si trova l'oggetto?</label>
                                             <div class="col-md-7" >
                                                 <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo" >
                                             </div>
@@ -259,6 +274,7 @@
 <script>
     $(document).ready(function() {
         displayTextMaxLen(@DomainConstraints.AnnounceDescriptionMaxLenght, $("#description"), $("#description_feedback"));
+        displayTextMaxLen(@DomainConstraints.AnnounceTitleMaxLenght, $("#title-mandatory"), $("#title_feedback"));
     });
 
     clickForwardButton();

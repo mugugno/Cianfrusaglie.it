@@ -109,7 +109,7 @@
                 <li class="dropdown dropdown-large">
                     <a href="~/" class="navbar-item"><span class="glyphicon glyphicon-home"></span> Home</a>
                 </li>
-                <li class="dropdown dropdown-large" >
+                <li class="dropdown dropdown-large hidden-xs" >
                     <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" ><span class="glyphicon glyphicon-search"></span> Cerca per categoria <b class="caret" ></b></a>
                     <ul class="dropdown-menu dropdown-menu-large" >
                         @foreach( var macro in GetCategories() ) {
@@ -148,9 +148,24 @@
                     <li class="dropdown dropdown-large" >
                         <a href="~/History/Index" class="navbar-item" ><span class="glyphicon glyphicon-gift"></span> I miei annunci</a>
                     </li>
+                    <li class="visible-xs-block dropdown dropdown-large" >
+                        <a class="navbar-item" href="~/History/MyHistory" ><span class="glyphicon glyphicon-book"></span> Il mio storico</a>
+                    </li>
                     <li class="dropdown dropdown-large" >
                         <a href="~/Messages" class="navbar-item" ><span class="glyphicon glyphicon-envelope"></span> Messaggi</a>
                     </li>
+                    <li class="visible-xs-block dropdown dropdown-large" >
+                        <a class="navbar-item" href="~/Profile" ><span class="glyphicon glyphicon-king"></span> Il mio profilo</a>
+                    </li>
+                    <li class="visible-xs-block dropdown dropdown-large" >
+                        <a class="navbar-item" href="~/Preferences/Index" ><span class="glyphicon glyphicon-cog"></span> Impostazioni profilo</a>
+                    </li>
+                    if (ViewData["IsThereAnyNotification"] as bool? ?? false)
+                    {
+                        <li class="visible-xs-block dropdown dropdown-large">
+                            <a class="navbar-item"><span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span>&nbsp;&nbsp;Ci sono notifiche!</a>
+                        </li>
+                    }
                 }
             </ul>
 
@@ -185,14 +200,17 @@
                 else
                 {
                     @* Pulsante Notifiche *@
-                    <li class="dropdown dropdown-large">
+
+
+                    <li class="dropdown dropdown-large hidden-xs">
                         @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
                         @if (ViewData["IsThereAnyNotification"] as bool? ?? false)
                         {
                             Sentences sent = new Sentences();
-                            <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
-                                Notifiche <span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span> <b class="caret"></b>
+                            <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;" >
+                                Notifiche <span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span> <b class="caret" ></b>
                             </a>
+                            
                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
                                 @if ((int)ViewData["IsThereNewMessages"]==1)
                                 {
@@ -293,7 +311,7 @@
                         </li>
 
                         @* Menù profilo *@
-                    <li class="dropdown dropdown-large" >
+                    <li class="dropdown dropdown-large hidden-xs" >
                         <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" >
                             <div class="col-md-1" style="padding-left: 0px; padding-right: 3em; max-height: 2em;">
                                 <div class="photo navbar-avatar panel panel-default" style="margin-top: -4px;">
@@ -444,6 +462,10 @@
             </div>
         </div>
     </div>
+
+    
+
+    
     
             <div id="footer" class="panel-footer">
                 Copyright © 2016 Mugugno / All rights reserved.

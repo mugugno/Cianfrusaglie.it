@@ -41,6 +41,7 @@ namespace Cianfrusaglie.Controllers
                 return HttpNotFound();
             ViewData["announce"] = announceId;
             ViewData["receiver"] = receiver;
+            TempData["feedback"] = true;
             if(_context.FeedBacks.Any(f=> f.AnnounceId.Equals( announceId ) && f.ReceiverId.Equals( receiverId ) && f.AuthorId.Equals( User.GetUserId())))
             {
                 return HttpBadRequest();

@@ -190,17 +190,20 @@
                                         <div class="form-group">
                                             <label asp-for="Photo" class="control-label">Immagine profilo</label><br />
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-3" style="height :10em;width:10em">
                                                 <div class="photo profile-avatar panel panel-default">
-                                                    <img class="img-responsive" id="imgProfile" name="imgProfile" src=@user.ProfileImageUrl />
-                                                    
-                                                </div>
+                                                    <img class="img-responsive" id="imgProfile" name="imgProfile" src=@user.ProfileImageUrl />                                              
+                                                </div> 
+                                                <br />
+                                                <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*"><br /><br />
+                                                <span asp-validation-for="Photo" class="text-danger"></span>                                              
                                             </div>
-                                            <input asp-for="Photo" style="margin-top:4em; margin-left:2em" class="input-file" id="photo" name="photo" type="file" accept="image/*"><br /><br />
-                                            <span asp-validation-for="Photo" class="text-danger"></span>
-                                        </div>
 
-                                        <div class="form-group">
+                                            
+                                        </div>
+                                            
+                                        <br /><br /> <br />  
+                                        <div class="form-group" style="margin-top:10em">
                                             <label asp-for="Email" class="control-label">Indirizzo email</label><br />
                                             <input asp-for="Email" id="email" value="@user.Email" type="email" required="" class="form-control" />
                                             <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
