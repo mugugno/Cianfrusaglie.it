@@ -19,7 +19,7 @@
         <div class="panel-heading" id="my-conversations" >
             <h3>@ViewData[ "Title" ]</h3>
             @if( ViewData.ContainsKey( "chosenUserId" ) && !Model.Announce.Closed ) {
-                <span><a onclick="announceCloseConfirm()">Concludi transazione</a></span>
+                <span><a style="cursor: pointer" onclick="announceCloseConfirm()">Concludi transazione</a></span>
             } else if( Model.Announce.Closed ) {
                 <span>Annuncio chiuso</span>
             }
@@ -77,12 +77,17 @@
                                         //Check choosen user and set correct labels
                                         if (ViewData[chosenuserid].Equals(user.Id))
                                         {
-                                            <h4>Hai scelto questo utente come destinatario!</h4>
+                                            
+                                            <div style="color: green; font-family: 'Roboto', sans-serif;">
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                                <span style="font-size: large">Hai scelto questo utente come destinatario!</span>
+                                            </div>
                                         }
                                         else {
                                             const string allotherschosenuserid = "allOthersChosenUserId";
                                             var allOthers = (IEnumerable<string>)ViewData[allotherschosenuserid];
-                                            if( allOthers.Contains( user.Id ) ) {
+                                            if (allOthers.Contains(user.Id))
+                                            {
                                                 <h4>Questo utente non &egrave; pi&ugrave; il destinatario.</h4>
 
                                             }

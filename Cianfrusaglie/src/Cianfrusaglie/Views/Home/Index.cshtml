@@ -43,7 +43,7 @@
 
 }
 <div class="container-fluid" id="containerPrincipale" >
-<div class="carousel slide" data-ride="carousel" id="homeCarousel" >
+<div class="carousel slide hidden-xs" data-ride="carousel" id="homeCarousel" >
     <ol class="carousel-indicators" style="z-index: 1" >
         <li class="active" data-slide-to="0" data-target="#homeCarousel" ></li>
         <li data-slide-to="1" data-target="#homeCarousel" ></li>
@@ -143,15 +143,10 @@
                 <div class="col-item santinoHome" >
 
                     <div class="photoThu" >
-                        @if( !User.Identity.IsAuthenticated ) {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href >
-                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
-                            </a>
-                        } else {
+                        
                             <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
                                 <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                             </a>
-                        }
                     </div>
 
                     <div class="info" >
@@ -161,9 +156,8 @@
                         @{
                             int maxLength = 30;
                         }
-                        @if( User.Identity.IsAuthenticated ) {
                             <div class="fixedTitle">
-                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+                                <a style="color: blue;word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id">
 
                                     @if (annuncio.Title.Length > maxLength)
                                     {
@@ -175,23 +169,50 @@
                                 </a>  
                             </div>
                             
+                        
+                        
+
+                        @{
+                            bool hasDistance = false;
+                            int distance = 0;
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                var user = (User)ViewData["LoggedUser"];
+                                if (user.Latitude.HasValue && user.Longitude.HasValue)
+                                {
+                                    distance = (int)GeoCoordinate.Distance(user.Latitude.Value, user.Longitude.Value, annuncio.Latitude, annuncio.Longitude);
+                                    hasDistance = true;
+                                }
+
+                            }
+                        }
+                        @if (@annuncio.Price == 0)
+                        {
+                            if (hasDistance)
+                            {
+                                <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                            }
+                            else {
+                                <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
+                            }
+                            <a href="~/Announces/Details/?id=@annuncio.Id">
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                            </a>
                         }
                         else {
-                            <a style="word-wrap:break-word" title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
-                                <div class="fixedTitle">
-                                    @if (annuncio.Title.Length > maxLength)
-                                    {
-                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
-                                    }
-                                    else {
-                                        <h3>@annuncio.Title</h3>
-                                    }
-                                </div>
-                        </a> 
+                            if (hasDistance)
+                            {
+                                <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
+                            }
+                            else {
+                                <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
+                            }
+                            <a href="~/Announces/Details/?id=@annuncio.Id">
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                            </a>
                         }
 
-
-                        @if( @annuncio.Price == 0 ) {
+                        @*@if( @annuncio.Price == 0 ) {
                             <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
                             <a href="~/Announces/Details/?id=@annuncio.Id">
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
@@ -202,7 +223,7 @@
                             <a href="~/Announces/Details/?id=@annuncio.Id">
                                 <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
                             </a>
-                        }
+                        }*@
                            
 
 
@@ -273,7 +294,7 @@
 
                             <!--titolo su due linee-->
                             <div class="fixedTitle">
-                                <a style="word-wrap: normal" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" class="announceTitleSantino">
 
                                     @{
                                         int maxLength = 30;
@@ -301,32 +322,26 @@
 
                                 }
                             }
-                            @if (@annuncio.Price == 0)
-                            {
-                                if (hasDistance)
-                                {
-                                    <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                            @if( @annuncio.Price == 0 ) {
+                                if( hasDistance ) {
+                                    <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                                } else {
+                                    <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
                                 }
-                                else {
-                                    <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
-                                }
-                                <a href="~/Announces/Details/?id=@annuncio.Id">
+                                <a href="~/Announces/Details/?id=@annuncio.Id" >
                                     <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
                                 </a>
-                                    }
-                                    else {
-                                    if (hasDistance)
-                                    {
-                                    <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
-                                    }
-                                    else {
-                                    <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
-                                    }
-                                        <a href="~/Announces/Details/?id=@annuncio.Id">
-                                            <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                        </a>
-
-                                    }
+                            } else {
+                                if( hasDistance ) {
+                                    <h5 class="price-text-color" style="margin-left: 0" >Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
+                                } else {
+                                    <h5 class="price-text-color" style="margin-left: 0" >Prezzo: <b>@annuncio.Price €</b></h5>
+                                }
+                                <a href="~/Announces/Details/?id=@annuncio.Id" >
+                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                </a>
+                            }
+                                    
 
 
                                     <div class="price">
