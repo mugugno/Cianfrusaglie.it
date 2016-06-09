@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Cianfrusaglie.Constants
+@inject SignInManager<User> SignInManager
 @model Cianfrusaglie.ViewModels.Account.RegisterViewModel
 @{
     ViewData[ "Title" ] = "Register";
@@ -38,11 +39,13 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
     <link href= "https://fonts.googleapis.com/css?family=Source+Sans+Pro"  rel="stylesheet" type="text/css" >
     <link href= "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="~/Content/bootstrap-social.css" rel="stylesheet" type="text/css" />
     <link href= "~/Content/Register.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Style.css"  rel="stylesheet" type="text/css" />
     <link href= "~/Content/Search.css"  rel="stylesheet" type="text/css" />
+    <link href="~/Content/meter.css" rel="stylesheet" type="text/css" />
     <link href= "https://fonts.googleapis.com/css?family=Lato"  rel="stylesheet" type="text/css" >
-    <link href="~/css/maps.css" rel="stylesheet" type="text/css" />
 
     <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="/js/googleMaps.js" ></script>
@@ -59,33 +62,56 @@
 
 </head>
 <body>
-    <div id="wrapper-register">
-        <form asp-action="Register" asp-controller="Account" id="formRegister" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
-            
-            <div id="register" class="form-horizontal form-register form-register1" id="tabellaForm">
-                <h1>
+<div id="wrapper-register">
+<!--<div id="register" class="panel panel-footer form-horizontal form-register form-register1" id="tabellaForm" style="padding-top: 15px; background-color: #eee">
+    @{
+
+        var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+        if (loginProviders.Count != 0)
+        {
+
+            <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                <div>
+                    <p>
+                        @foreach (var provider in loginProviders)
+                        {
+                            <button type="submit" class="btn btn-block btn-social btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account"><span class="fa fa-facebook"></span> Login con Facebook</button>
+
+                        }
+                    </p>
+                </div>
+            </form>
+        }
+    }
+</div>-->
+
+
+    <form asp-action="Register" asp-controller="Account" id="formRegister" enctype="multipart/form-data" method="post" role="form" onsubmit="return onRegisterSubmit()">
+        <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+        <div id="register" class="panel panel-default form-horizontal form-register form-register1" id="tabellaForm">
+            <div class="panel panel-heading" style="background-color: #49586d;">
+                <h1 style="margin-bottom: 0">
                     <a href="~/">@CommonStrings.SiteName</a>
                 </h1>
-                <h5>Il posto giusto per le tue cianfrusaglie</h5>
+                <h5 style="margin-top: 0">Il posto giusto per le tue cianfrusaglie</h5>
+            </div>
 
-                <h2>
-                    <!--<i class="glyphicon glyphicon-user"></i>-->
-                </h2>
-                <hr/>
-                <div class="row top-reg">
+            <div class="panel panel-body">
+
+                <div class="row top-reg" style="text-align: center">
                     <span class="btn-warning btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
                     <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
                     <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
-
                 </div>
+
                 <hr/>
                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-                <!-------------------PRIMA PAGINA DELLA REGISTRAZIONE-->
+                
                 <div class="form-group">
-                    <i>I dati contrassegnati con * sono facoltativi</i>
+                    <i style="color: gray">I dati contrassegnati con * sono facoltativi</i>
                 </div>
                 <!--NOME-->
-                <div >
+                <div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label">Nome </label><label> *</label><br/>
                         <input asp-for="Name" class="form-control"/>
@@ -101,9 +127,9 @@
                     <div class="form-group row">
                         <label asp-for="Genre" class="control-label">Sesso </label><label> *</label><br/>
 
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Male)" class="form-control"/>Uomo</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Female)" class="form-control"/>Donna</label><br/>
-                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int)Genre.Unspecified)" class="form-control"/>Non specificato</label>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control"/>Uomo</label><br/>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control"/>Donna</label><br/>
+                        <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Unspecified)" class="form-control"/>Non specificato</label>
                         <span asp-validation-for="Genre" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -118,61 +144,66 @@
                         <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
                         <span asp-validation-for="Photo" class="text-danger"></span>
                     </div>
-                   
+
                 </div>
                 <div class="form-group">
                     <br/>
                     <span class="btn btn-default col-md-8 btn-next" onclick="clickNextButton(1)">Avanti</span>
                 </div>
-                <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
+                <span id="sottoForm"><h5> <a href="~/Account/Login"><strong>Effettua l'accesso</strong></a></h5></span>
             </div>
-            <!------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
-            <div id="register" class="form-horizontal form-register form-register2" id="tabellaForm">
-                <h1>
+        </div>
+        <!------------------SECONDA PAGINA DELLA REGISTRAZIONE-->
+        <div id="register" class="panel panel-default form-horizontal form-register form-register2" id="tabellaForm">
+            <div class="panel panel-heading" style="background-color: #49586d;">
+                <h1 style="margin-bottom: 0">
                     <a href="~/">@CommonStrings.SiteName</a>
                 </h1>
-                <h5>Il posto giusto per le tue cianfrusaglie</h5>
+                <h5 style="margin-top: 0">Il posto giusto per le tue cianfrusaglie</h5>
+            </div>
 
-                <hr />
-                <div class="row top-reg">
+            <div class="panel panel-body" style="padding-left: 0">
+                <div class="row top-reg" style="text-align: center; padding-left: 30px">
                     <span class="btn-gr btn" onclick="
 clickBackButton(2)"><span>1</span>Su di te</span>
                     <span class="btn-warning btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
                     <span class="btn-gr btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
-
                 </div>
-                <hr/>
+
                 <!---------------------------LE PREFERENZE DELL'UTENTE------------------->
-                <div class="panel">
+                <div class="panel" style="border: 0">
                     <div class="panel-body">
                         <h5>Scegli le tue categorie preferite per avere suggerimenti personalizzati</h5>
-                        <br />
+                        <br/>
                         <div class="panel-group" id="panel-423221" role="tablist" aria-multiselectable="true">
-                
-                            @foreach (var macroCategory in GetMacroCategories()) {
+
+                            @foreach (var macroCategory in GetMacroCategories())
+                            {
                                 <div class="panel panel-default">
-                                    <div class="panel-heading collapsed" role="tab" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()' >
+                                    <div class="panel-heading collapsed" role="tab" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
                                         @macroCategory.Name
                                     </div>
-                                        <div id="category-@macroCategory.Id" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <div class="form-group">
+                                    <div id="category-@macroCategory.Id" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="form-group">
 
-                                                    <div class="col-md-12">
-                                                        @foreach (var category in GetCategories(macroCategory)) {
-                                                            <div class="checkbox">
-                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
-                                                                    <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
-                                                                    @category.Name
-                                                                </label>
-                                                            </div>
-                                                        }
-                                                    </div>
+                                                <div class="col-md-12">
+                                                    @foreach (var category in GetCategories(macroCategory))
+                                                    {
+                                                        <div class="checkbox">
+                                                            <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="
+setFieldsVisibility();"/>
+                                                                @category.Name
+                                                            </label>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                
+                                </div>
+
                             }
 
 
@@ -180,70 +211,82 @@ clickBackButton(2)"><span>1</span>Su di te</span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <br />
+                <div class="form-group" style="padding-left: 30px">
+                    <br/>
                     <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(2)">Indietro</span>
                     <span class="btn btn-default col-md-5 btn-next" onclick="clickNextButton(2)">Avanti</span>
                 </div>
                 <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
 
             </div>
-            <!-------------------TERZA PAGINA DELLA REGISTRAZIONE-->
-    <div id="register" class="form-horizontal form-register form-register3" id="tabellaForm">
-      
-        <h1>
-            <a href="~/">@CommonStrings.SiteName</a>
-        </h1>
-        <h5>Il posto giusto per le tue cianfrusaglie</h5>
-
-        <hr />
-        <div class="row top-reg">
-            <span class="btn-gr btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
-            <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
-            <span class="btn-warning btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
         </div>
-           
-                    <hr />
+        <!-------------------TERZA PAGINA DELLA REGISTRAZIONE-->
+        <div id="register" class="panel panel-default form-horizontal form-register form-register3" id="tabellaForm">
 
-                    <div class="form-group">
-                        <label asp-for="UserName" class="control-label">Username</label><br />
-                        <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control" />
-                        <span asp-validation-for="UserName" id="unamedanger" class="text-danger"></span>
+            <div class="panel panel-heading" style="background-color: #49586d;">
+                <h1 style="margin-bottom: 0">
+                    <a href="~/">@CommonStrings.SiteName</a>
+                </h1>
+                <h5 style="margin-top: 0">Il posto giusto per le tue cianfrusaglie</h5>
+            </div>
 
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label">Indirizzo email</label><br />
-                        <input asp-for="Email" id="email" type="email" required="" class="form-control" />
-                        <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label">Password</label><br />
-                        <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData"/>
-                        <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br />
-                        <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" id="wrongpwd" class="text-danger"></span>
-
-                    </div>
-
-
-                    <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-
-                    <div class="form-group">
-                        <br />
-                        <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(3)">Indietro</span>
-                        <button class="btn btn-default col-md-5 btn-next" type="submit">Crea il tuo account</button>
-                    </div>
-                    <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
+            <div class="panel panel-body">
+                <div class="row top-reg" style="text-align: center">
+                    <span class="btn-gr btn" onclick="clickBackButton(2)"><span>1</span>Su di te</span>
+                    <span class="btn-gr btn" onclick="clickBackButton(3)"><span>2</span>I tuoi interessi</span>
+                    <span class="btn-warning btn" onclick="clickNextButton(2)"><span>3</span>Dati di accesso</span>
                 </div>
 
-</form>
-    </div>
 
-<script type="text/javascript" >
+                <hr />
+
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label">Username</label><br />
+                    <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control" />
+                    <span asp-validation-for="UserName" id="unamedanger" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Indirizzo email</label><br />
+                    <input asp-for="Email" id="email" type="email" required="" class="form-control" />
+                    <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Password</label><br />
+                    <input asp-for="Password" type="password" required="" minlength="8" class="form-control" id="popoverData" />
+                    <span asp-validation-for="Password" id="pwdlen" class="text-danger" data-trigger="hover" rel="popover"></span>
+                </div>
+
+                <div class="form-group" >
+                    <meter max="4" value="0" id="password-strength-meter"></meter>
+                    <p id="password-strength-text"></p>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="control-label">Ripeti password</label><br/>
+                    <input asp-for="ConfirmPassword" type="password" required="" id="confirmPassword" class="form-control"/>
+                    <span asp-validation-for="ConfirmPassword" id="wrongpwd" class="text-danger"></span>
+
+                </div>
+
+
+                <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+
+                <div class="form-group">
+                    <br/>
+                    <span class="btn btn-default col-md-5 btn-back" onclick="clickBackButton(3)">Indietro</span>
+                    <button class="btn btn-default col-md-5 btn-next" type="submit">Crea il tuo account</button>
+                </div>
+                <span id="sottoForm"><h5> <a href="~/Account/Login">Effettua l'accesso</a></h5></span>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="/js/passwordMeter.js"></script>
+<script>
     var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
     $('#popoverData').keyup( passwordCheck );
     $("#confirmPassword").keyup( passwordCheck );
@@ -257,9 +300,9 @@ clickBackButton(2)"><span>1</span>Su di te</span>
                            })
             .success(function(res){
                 if (res) {
-                    $('#unamedanger').html("Il nome utente inserito esiste già.")
+                    $('#unamedanger').html("Il nome utente inserito esiste già.");
                 } else {
-                    $('#unamedanger').html("")
+                    $('#unamedanger').html("");
                 }
             });
     });
@@ -273,18 +316,18 @@ clickBackButton(2)"><span>1</span>Su di te</span>
                            })
             .success(function (res) {
                 if (res) {
-                    $('#emaildanger').html("L'email inserita esiste già.")
+                    $('#emaildanger').html("L'email inserita esiste già.");
                 } else {
-                    $('#emaildanger').html("")
+                    $('#emaildanger').html("");
                 }
             });
     });
     function passwordCheck() {
-        if( $('#popoverData').val().length < 8 ) 
+        if( $('#popoverData').val().length < 8 )
             $('#pwdlen').html('La password deve contenere almeno 8 caratteri!');
         else
             $('#pwdlen').html('');
-        
+
         if( $("#popoverData").val() != $("#confirmPassword").val() )
             $("#wrongpwd").html('La password di conferma è diversa dalla password!');
         else
@@ -316,6 +359,6 @@ clickBackButton(2)"><span>1</span>Su di te</span>
             $('.form-register3').hide();
         }
     }
-</script>
+    </script>
 </body>
 </html>

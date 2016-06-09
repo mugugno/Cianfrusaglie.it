@@ -22,18 +22,61 @@ namespace Cianfrusaglie.Suggestions
 {
     public class RankAlgorithm {
         private readonly ApplicationDbContext _context;
+        private static readonly Dictionary<string, Dictionary<int, Tuple<int, DateTime> > > _usainBoltDictionary = new Dictionary< string, Dictionary< int, Tuple< int, DateTime > > >();
 
         public RankAlgorithm(ApplicationDbContext context) { _context = context; }
 
+        /* Caching */
         public int CalculateRank(Announce announce, User user) {
-            int score = CalculateDistanceScore( announce, user ) + CalculateMatchedCategoriesScore( announce, user ) + CalculateMatchedGatsScore( announce, user );
-            double rank = score * CalculateFeedbackMultiplier(announce.Author);
-            return (int) rank;
+
+            //return SumComponentsForRanking( announce, user );
+
+            /* il caching contiene gia' l'utente */
+            if( _usainBoltDictionary.ContainsKey( user.Id ) ) {
+
+                /* il caching contiene gia' l'annuncio */
+                var usainBoltUser = _usainBoltDictionary[ user.Id ];
+                if ( usainBoltUser.ContainsKey( announce.Id ) ) {
+
+                    /* il caching e' fresco */
+                    var usainBoltAnnounce = usainBoltUser[ announce.Id ];
+                    if(usainBoltAnnounce.Item2 < DateTime.Now.AddHours( 14 ) ) {
+
+                        return usainBoltAnnounce.Item1;
+
+                        /* il caching e' scaduto */
+                    } else {
+                        var result = SumComponentsForRanking( announce, user );
+                        _usainBoltDictionary[ user.Id ][ announce.Id ] = new Tuple< int, DateTime >( result, DateTime.Now );
+                        return result;
+
+                    }
+
+
+                } /* il caching non contiene ancora l'annuncio */ else {
+                    var result = SumComponentsForRanking( announce, user );
+                    usainBoltUser.Add( announce.Id, new Tuple< int, DateTime >( result, DateTime.Now ) );
+                    return result;
+                }
+
+            } /* il caching non contiene ancora l'utente */
+            else {
+                var result = SumComponentsForRanking(announce, user);
+                _usainBoltDictionary.Add( user.Id, new Dictionary< int, Tuple< int, DateTime > >() );
+                _usainBoltDictionary[user.Id].Add(announce.Id, new Tuple<int, DateTime>(result, DateTime.Now));
+                return result;
+            }
+        }
+
+        public int SumComponentsForRanking( Announce announce, User user ) {
+            int score = CalculateDistanceScore(announce, user) + CalculateMatchedCategoriesScore(announce, user) + CalculateMatchedGatsScore(announce, user);
+            double rank = score + CalculateFeedbackMultiplier(announce.Author);
+            return (int)rank;
         }
 
         public double CalculateFeedbackMultiplier(User user) {
-            double multiplier = Math.Sqrt(user.FeedbacksCount) * user.FeedbacksMean;
-            return multiplier <= 0.05 ? 1 : multiplier;
+            double userScore = user.FeedbacksCount + (user.FeedbacksMean <= 0.5 ? 5 : user.FeedbacksMean)*5;
+            return userScore;
         }
 
         public int CalculateDistanceScore( Announce announce, User user ) {

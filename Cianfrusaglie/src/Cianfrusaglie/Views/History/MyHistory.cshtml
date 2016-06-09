@@ -1,7 +1,16 @@
+@using System.Security.Claims
 @model Cianfrusaglie.ViewModels.History.MyHistoryViewModel
 
 @{
     ViewData["Title"] = "Il mio storico";
+}
+
+@functions {
+
+    private bool FeedbackExists( Announce announce, string receiverId ) { return announce.FeedBacks.Any( feedBack => feedBack.AnnounceId.Equals( announce.Id ) && feedBack.ReceiverId.Equals( announce.AuthorId ) && feedBack.AuthorId.Equals( User.GetUserId() ) ); }
+
+    private bool IsUserChoosenForTheAnnounce( Announce announce ) { return announce.ChosenUsers.Any( announceChosen => announceChosen.ChosenUserId.Equals( User.GetUserId() ) ); }
+
 }
 
 <div class="container-fluid" >
@@ -14,7 +23,7 @@
                 </div>
                 <div class="panel-body" >
                     
-                    <div >
+                    <div>
                         <ul class="nav nav-tabs centered" >
                             <li class="active" ><a data-toggle="tab" href="#home" style="font-size: 1.2em;">I miei vecchi annunci</a></li>
                             <li><a data-toggle="tab" href="#menu1" style="font-size: 1.2em;">Oggetti che ho preso</a></li>
@@ -33,7 +42,7 @@
                                         <div class="panel panel-default" >
                                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524234" href="#announce-number-@item.Id" style="cursor: pointer" >
 
-                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString( "d MMM yyyy" ) </span>
+                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString("d") </span>
                                                 <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
 
                                             </div>
@@ -70,7 +79,7 @@
                                         <div class="panel panel-default" >
                                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524235" href="#announce-number-@item.Id" style="cursor: pointer" >
 
-                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString( "d MMM yyyy" ) </span>
+                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString("d") </span>
                                                 <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
 
                                             </div>
@@ -87,8 +96,12 @@
                                                         <div class="col-md-7" >
 
                                                             <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
-                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a>
-
+                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a> <br />
+                                                            @if( !FeedbackExists( item, item.AuthorId ) ) {
+                                                                <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId" >Lascia un feedback all'autore</a>
+                                                            } else {
+                                                                <p>Hai gi&agrave; lasciato un feedback all'autore</p>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
@@ -107,7 +120,7 @@
                                         <div class="panel panel-default" >
                                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-524236" href="#announce-number-@item.Id" style="cursor: pointer" >
 
-                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString( "d MMM yyyy" ) </span>
+                                                <span style="float: right">Pubblicato il @item.PublishDate.ToString("d") </span>
                                                 <span style="font-size: 1.2em; display: block; word-wrap: break-word;"><b>@item.Title</b></span>
 
                                             </div>
@@ -124,8 +137,20 @@
                                                         <div class="col-md-7" >
 
                                                             <a href="~/Announces/Details/?id=@item.Id" >Visualizza annuncio</a> <br />
-                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a>
-
+                                                            <a href="~/Profile/?userId=@item.AuthorId" >Visualizza profilo dell'ex proprietario</a> <br />
+                                                            @if (IsUserChoosenForTheAnnounce(item))
+                                                            {
+                                                                if (!FeedbackExists(item, item.AuthorId))
+                                                                {
+                                                                    <a href="~/Feedback/Create/?announceId=@item.Id&receiverId=@item.AuthorId">Lascia un feedback all'autore</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>Hai gi&agrave; lasciato un feedback all'autore</p>
+                                                                }
+                       
+                                                            }
+                                  
                                                         </div>
                                                     </div>
                                                 </div>

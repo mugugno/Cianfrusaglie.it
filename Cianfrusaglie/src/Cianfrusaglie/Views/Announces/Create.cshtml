@@ -12,175 +12,186 @@
 }
 
 @functions {
-    private IEnumerable< Category > GetMacroCategories() {
-        for( int i = 0; i < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); i++ ) {
-            var categories = ViewData[ "formMacroCategories" ] as List< Category >;
-            if( categories != null && categories[ i ].OverCategory == null )
-                yield return categories[ i ];
-        }
-    }
+   private IEnumerable< Category > GetMacroCategories() {
+       for( int i = 0; i < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); i++ ) {
+           var categories = ViewData[ "formMacroCategories" ] as List< Category >;
+           if( categories != null && categories[ i ].OverCategory == null )
+               yield return categories[ i ];
+       }
+   }
 
 
-    private IEnumerable< Category > GetCategories( Category macro ) {
-        for( int j = 0; j < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); j++ ) {
-            var subCat = ViewData[ "formMacroCategories" ] as List< Category >;
-            if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Id == macro.Id )
-                yield return subCat[ j ];
-        }
-    }
+   private IEnumerable< Category > GetCategories( Category macro ) {
+       for( int j = 0; j < ( ViewData[ "numberOfMacroCategories" ] as int? ?? 0 ); j++ ) {
+           var subCat = ViewData[ "formMacroCategories" ] as List< Category >;
+           if( subCat != null && subCat[ j ].OverCategory != null && subCat[ j ].OverCategory.Id == macro.Id )
+               yield return subCat[ j ];
+       }
+   }
 
-    private IEnumerable< FormField > GetFormFields() {
-        return (IEnumerable< FormField >) ViewData[ "formFields" ];
-    }
+   private IEnumerable< FormField > GetFormFields() {
+       return (IEnumerable< FormField >) ViewData[ "formFields" ];
+   }
 
-    private string StringifyCategoriesFromFormField( int formFieldId ) {
-        string result = "";
-        var dictionary = ViewData[ "formField2CategoriesDictionary" ] as Dictionary< int, List< Category > >;
-        if( dictionary == null )
-            return result;
+   private string StringifyCategoriesFromFormField( FormField formFieldId ) {
+       string result = "";
 
-        foreach( var category in dictionary[ formFieldId ] ) {
-            result += category.Id + " ";
-        }
-        return result;
-    }
+       foreach( var category in formFieldId.CategoriesFormFields )
+           result += category.CategoryId + " ";
+
+       return result;
+   }
 
 }
 
-<script src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script>
-<script src="/js/googleMaps.js"></script>
-
 <div>
     <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
-        
-        
         <div class="panel">
-                <div class="panel-body"> 
-                    <div  class="row" id="page1">
-                        <div class="panel panel-default" id="sceltaCategorie">
-                            <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
-                        </div>
-                        <div class="col-md-6">
+                <div class="panel-body">
+                    <div class="row" id="page1" >
+                        <div class="col-md-6 col-md-offset-3 col-xs-12 col-sm-10 col-sm-offset-1">
+                            <div class="panel panel-default" id="sceltaCategorie">
+                                <h5 id="scelta"><strong>Scegli una o pi&ugrave; categorie appartenenti al tuo oggetto:</strong></h5>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
 
-                            <div class="panel-group" id="panel-423221">
-                               
-                                @foreach (var macroCategory in GetMacroCategories()) {
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
-                                            @macroCategory.Name
-                                        </div>
-                                        <div id="category-@macroCategory.Id" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <div class="form-group">
+                                <div class="panel-group" id="panel-423221">
 
-                                                    <div class="col-md-12">
-                                                        @foreach (var category in GetCategories(macroCategory)) {
-                                                            <div class="checkbox">
-                                                                <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
-                                                                    <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();"/>
-                                                                    @category.Name
-                                                                </label>
-                                                            </div>
+                                    @foreach( var macroCategory in GetMacroCategories() ) {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#panel-423221" style="cursor: pointer" onclick='$("#category-@macroCategory.Id").toggle()'>
+                                                @macroCategory.Name
+                                            </div>
+                                            <div id="category-@macroCategory.Id" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-12">
+                                                            @foreach( var category in GetCategories( macroCategory ) ) {
+                                                                <div class="checkbox">
+                                                                    <label asp-for="CategoryDictionary[category.Id]" for="@category.Id">
+                                                                        <input asp-for="CategoryDictionary[category.Id]" class="category-checkboxes" type="checkbox" name="category" id="@category.Id" onchange="setFieldsVisibility();" />
+                                                                        @category.Name
+                                                                    </label>
+                                                                </div>
                                                         }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                 }
 
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel-group">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">Informazioni aggiuntive</h3>
-                                    </div>
-                                    <div class="panel-body" >
-                                        <div><i style="color: grey">Tutti i campi sono facoltativi</i></div><br/>
-                                        @{var fieldDefault = (Dictionary< int, List< SelectListItem > >) ViewData[ "formFieldDefaultValue" ];
+                            <div class="col-md-6 col-xs-12">
+                                <div class="panel-group">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Informazioni aggiuntive</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <i style="color: grey">Tutti i campi sono facoltativi</i>
+                                            </div><br />
+                                            @{
                                             foreach( var field in GetFormFields() ) {
                                                 switch( field.Type ) {
                                                     case FormFieldType.Checkbox:
-                                                        <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
-                                                            <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label" >
+                                                            <div class="checkbox form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="CheckboxFormFieldDictionary[field.Id]" class="control-label">
 
-                                                                <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField" >
-                                                                @field.Name
-                                                            </label>
-                                                        </div>
+                                                                    <input asp-for="CheckboxFormFieldDictionary[field.Id]" class="category-checkboxes" type="checkbox" name="formField">
+                                                                    @field.Name
+                                                                </label>
+                                                            </div>
                                                         break;
 
                                                     case FormFieldType.Select:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
-                                                            <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
+                                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="SelectFormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
 
-                                                            <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control" asp-items="fieldDefault[field.Id]" >
-                                                                <option selected="selected" value="" >&nbsp;</option>
-                                                            </select>
-                                                        </div>
+                                                                <select asp-for="SelectFormFieldDictionary[field.Id]" class="form-control">
+                                                                    <option selected="selected" value="">&nbsp;</option>
+                                                                    @foreach( var o in field.DefaultValues ) {
+                                                                        <option>@o.Value</option>
+                                                                }
+                                                                </select>
+                                                            </div>
                                                         break;
 
                                                     case FormFieldType.Text:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none" >
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label" >@field.Name</label>
-                                                            <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
-                                                        </div>
+                                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                                <input type="text" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                            </div>
                                                         break;
 
-                                                   case FormFieldType.Number:
-                                                        <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field.Id )" style="display: none">
-                                                            <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                            <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
-                                                        </div>
-                                                       break;
-                                               }
+                                                    case FormFieldType.Number:
+                                                            <div class="form-group category-form-fields @StringifyCategoriesFromFormField( field )" style="display: none">
+                                                                <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                                                <input type="number" asp-for="FormFieldDictionary[field.Id]" class="form-control" />
+                                                            </div>
+                                                        break;
+                                                }
 
-                                                @*
-                                                <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
-                                                    <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
-                                                    <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
-                                                </div>
-                                                *@
+                                                    @*
+                                    <div class="form-group category-form-fields @StringifyCategoriesFromFormField(field.Id)" style="display: none">
+                                        <label asp-for="FormFieldDictionary[field.Id]" class="control-label">@field.Name</label>
+                                        <input type="" asp-for="FormFieldDictionary[field.Id]" class="form-control"/>
+                                    </div>
+                                                    *@
                                             }
-                                           }
+                                            }
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                    
                     <div class="row" id="page2" style="display: none;">
 
-                        <div class="">
+                        <div class="col-md-6 col-md-offset-3 col-xs-12 col-sm-10 col-sm-offset-1">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <fieldset>
 
                                         @*<div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>*@
-
+                                        <div>
+                                            <i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
+                                            <br /><br />
+                                        </div>
                                         <!-- MediaTypeNames.Text input-->
-                                        <div class="form-group">
-                                            <div><i style="color: grey">I dati contrassegnati con * sono facoltativi</i>
-                                                <br /><br />
-                                            </div>
-                                           
-                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory">Titolo</label>
-                                            <div class="col-md-7">
-                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text">
+                                        <div class="form-group" >
+                                            <label asp-for="Title" class="col-md-4 control-label" for="title-mandatory" >Titolo</label>
+                                            <div class="col-md-7" >
+                                                <input asp-for="Title" required="" class="form-control inputMargin" id="title-mandatory" placeholder="Il mio annuncio" style="padding-left: 12px" type="text" >
                                                 <span asp-validation-for="Title" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <br />
+                                        <div class="form-group" style="margin-top: 6px;">
+                                            <label class="col-md-4 control-label" for="photos">Immagini</label>
+                                            <div class="col-md-7">
+                                                <input asp-for="Photos" type="file" required="" class="form-control inputMargin" id="photos" multiple name="photos" accept="image/*">
+                                                <span asp-validation-for="Photos" class="text-danger"></span>
                                             </div>
                                         </div>
 
                                         <!-- Textarea -->
                                         <div class="form-group" >
+                                            <div class="col-md-4" >&nbsp;</div>
+                                            <div id="description_feedback" class="col-md-7" style="text-align: right;" ></div>
+                                        </div>
+
+                                        <div class="form-group" >
                                             <label asp-for="Description" class="col-md-4 control-label" for="description" >Descrizione*</label>
                                             <div class="col-md-7" >
-                                                <textarea asp-for="Description" class="form-control inputMargin" id="description" name="description" ></textarea>
+                                                <textarea asp-for="Description" maxlength="@DomainConstraints.AnnounceDescriptionMaxLenght" class="form-control inputMargin" id="description" name="description" ></textarea>
                                             </div>
                                         </div>
 
@@ -198,10 +209,18 @@
                                             </div>
                                         }
 
+                                        <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
+                                        <div class="form-group">
+                                            <label class="col-md-4">Dove si trova l'oggetto?</label>
+                                            <div class="col-md-7" >
+                                                <input type="text" id="pac-input" class="form-control inputMargin" placeholder="Metti indirizzo" >
+                                            </div>
+                                        </div>
+
                                         <div class="form-group" >
                                             <label asp-for="Range" class="col-md-4 control-label" for="range-input" >Sei disposto a spostarti?</label>
                                             <div class="col-md-7" >
-                                                <div class="input-group" >
+                                                <div class="input-group" style="margin-bottom: 11px;">
                                                     <span class="input-group-addon">
                                                         <input id="range-checkbox" onchange="clickRangeButton()" type="checkbox" checked="checked">
                                                     </span>
@@ -211,32 +230,12 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group" >
+                                            <div id="googleMap"></div>
+                                        </div>
+
                                         <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
                                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
-
-                                        <div class="form-group" >
-
-                                            <label class="col-md-4 control-label" for="photos" >Immagini</label>
-                                            <div class="col-md-6" >
-                                                <input asp-for="Photos" required="" class="input-file" id="photos" multiple name="photos" style="margin-top: 6px" type="file" accept="image/*" >
-                                                <span asp-validation-for="Photos" class="text-danger"></span>
-                                            </div>
-                                        </div>
-
-                                        <!-- questo searchbox serve per cercare l'indirizzo su googleMap -->
-
-                                        <div class="form-group" >
-                                            <label class="col-md-4" >Dove si trova l'oggetto?</label>
-                                            <div class="col-md-6" >
-                                                <input id="pac-input" class="controls" type="text" placeholder="Metti indirizzo" >
-                                            </div>
-                                        </div>
-                                        <div class="form-group" >
-                                            <div class="col-md-4" ></div>
-                                            <div class="col-md-7" >
-                                                <div id="googleMap" style="width: 500px; height: 380px;" ></div>
-                                            </div>
-                                        </div>
                                     </fieldset>
                                    
                                 </div>
@@ -246,7 +245,7 @@
                     <div class="nextprev">
                         <button class="btn btn-warning" id="back-button" onclick="clickBackButton()" style="display: none;" type="button">Indietro</button>
 
-                        <button class="btn btn-warning disabled" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
+                        <button class="btn btn-warning disabled ladda-button" data-style="zoom-in" id="forward-button" onclick="clickForwardButton()" type="button">Avanti</button>
                     </div>
                 </div>
             </div>
@@ -254,109 +253,48 @@
     </form>
 </div>
 
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="/js/googleMaps.js"></script>
+<script src="/js/createAnnounce.js"></script>
 <script>
+    $(document).ready(function() {
+        displayTextMaxLen(@DomainConstraints.AnnounceDescriptionMaxLenght, $("#description"), $("#description_feedback"));
+    });
+
     clickForwardButton();
     // TODO spostare tutto in un file js
     $("#announce-navbar").attr("data-offset-top", document.getElementById("pageHeader").offsetHeight);
     $("#range-input").val(1);
     setFieldsVisibility();
 
-                                           var mapLoaded= false;
-
-                                           function setFieldsVisibility() {
-        $(".category-form-fields").hide(0);
-                                               var checkboxesArray = document.getElementsByClassName("category-checkboxes");
-                                               for( var i = 0; i < checkboxesArray.length; i++ ) {
-                                                   var checkbox = checkboxesArray[ i ];
-                                                   if( checkbox.checked ) {
-                                                   var categoryFormFieldsArray = document.getElementsByClassName(checkbox.id);
-                                                   for( var j = 0; j < categoryFormFieldsArray.length; j++ )
-                                                       categoryFormFieldsArray[ j ].style.display = "block";
-                                               }
-                                           }
-     }
-
+    var mapLoaded= false;
 
     // 500 sono i millisecondi di durata della transizione
     var transitionTime = 350;
-                                           function disableForward(){
-                                               if (!atLeastOneCategorySelected()) {
-            $("#forward-button").addClass("disabled");
-                                               } else {
-            $("#forward-button").removeClass("disabled");
-                                               }
-                                           }
+
     disableForward();
-    $(".category-checkboxes").change(function () {
-                                               disableForward();
-                                           });
-    function clickForwardButton() {
-                                               if( !atLeastOneCategorySelected() ) {
-                                                   //$('#createError').show(0);
-                                                   //TODO mostrare errore nessuna categoria scelta
-                                                   return;
-                                               }
+    $(".category-checkboxes").change(disableForward);
 
-                                               if (document.getElementById("forward-button").innerHTML === "Pubblica") {
-            //aggiungiamo al form la posizione di google maps
-            $("#latitudeInput").val( marker.position.lat() );
-            $("#longitudeInput").val( marker.position.lng() );
+    function loadGmap() {
+        @{ var loggedUser= (User) ViewData[ "loggedUser" ]; }
+        var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
+        var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
+        var position = new google.maps.LatLng(latitude, longitude);
+        initialize(1, position);
 
-                                                   document.getElementById("forward-button").setAttribute("type", "submit");
-                                               } else
-                                                   document.getElementById("forward-button").innerHTML = "Pubblica";
-
-        $('#page1').hide(transitionTime);
-        $('#page2').show(transitionTime);
-        $('#back-button').show(0);
-
-                                               if (mapLoaded)
-                                                   return;
-        @{
-                                                   var loggedUser= (User) ViewData[ "loggedUser" ];
-                                               }
-                                               var latitude = parseFloatIgnoreCommas("@loggedUser.Latitude");
-                                               var longitude = parseFloatIgnoreCommas("@loggedUser.Longitude");
-                                               var position = new google.maps.LatLng(latitude, longitude);
-                                               initialize(1, position);
-                                               mapLoaded= true;
-                                           }
-
-                                           function clickBackButton() {
-        $('#page1').show(transitionTime);
-        $('#page2').hide(transitionTime);
-        $('#back-button').hide(0);
-
-                                               document.getElementById("forward-button").innerHTML = "Avanti";
-                                               document.getElementById("forward-button").setAttribute("type", "button");
-                                           }
-
-                                           function clickRangeButton() {
-                                               var checkbox = document.getElementById("range-checkbox");
-                                               var rangeInput = document.getElementById("range-input");
-                                               if( checkbox.checked ) {
-                                                       rangeInput.removeAttribute("disabled");
-                                                       rangeInput.value = 1;
-                                                       setCircle(marker.position, 1);
-                                                   } else {
-                                                       rangeInput.setAttribute("disabled", "");
-                                                       rangeInput.value = 0;
-                                                       cityCircle.setMap(null);
-                                                   }
-                                                   }
-
-                                               function atLeastOneCategorySelected() {
-                                                   var categoriesCheckBoxes = document.getElementsByClassName("category-checkboxes");
-                                                   for(var i = 0; i< categoriesCheckBoxes.length; i++)
-                                                       if( categoriesCheckBoxes[ i ].checked )
-                return true;
-                                                   return false;
-                                               }
+        geocodePosition(position);
+        mapLoaded= true;
+    }
 
     //google maps
     $("#range-input").change(function () {
-                                                   var range = $("#range-input").val();
-                                                   setCircle(marker.position, range);
-                                               });
-                                               clickForwardButton();
+        var range = $("#range-input").val();
+        setCircle(marker.position, range);
+    });
+    clickForwardButton();
+
+    $("#tabellaForm").submit(function (event) {
+        var l = Ladda.create(document.querySelector("#forward-button"));
+        l.start();
+    });
 </script>

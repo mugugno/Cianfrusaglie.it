@@ -17,14 +17,6 @@ namespace Cianfrusaglie.Tests {
             };
         }
 
-        private void CloseAnnounce( int announceId ) {
-            var announce = Context.Announces.SingleOrDefault( a => a.Id.Equals( announceId ) );
-            if( announce != null ) {
-                announce.Closed = true;
-                Context.SaveChanges();
-            }
-        }
-
         private IEnumerable< IEnumerable< Announce > > PartitionAnnounces( IEnumerable< Announce > announces, int size ) {
             for (int i = 0; i < Math.Ceiling(announces.Count() / (Double)size); i++)
                 yield return new List<Announce>(announces.Skip(size * i).Take(size));
@@ -35,7 +27,7 @@ namespace Cianfrusaglie.Tests {
             var usr = Context.Users.Single( u => u.UserName.Equals( FirstUserName ) );
             var history = CreateHistoryController( usr.Id );
             var announces = Context.Announces.Where( a => a.AuthorId.Equals( usr.Id ) && !a.Closed);
-            var result = history.GetLoggedUserPublishedAnnounces();
+            var result = history.GetLoggedUserOpenPublishedAnnounces();
             Assert.Equal( result, announces );
         }
 

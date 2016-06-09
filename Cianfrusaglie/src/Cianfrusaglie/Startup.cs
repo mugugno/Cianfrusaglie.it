@@ -102,7 +102,11 @@ namespace Cianfrusaglie {
             app.UseStaticFiles();
 
             app.UseIdentity();
-
+            app.UseFacebookAuthentication(options =>
+            {
+                options.AppId = "228034747580137";
+                options.AppSecret = "00da0b603fe8c817f4cd509eaab00b3b";
+            });
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc( routes => { routes.MapRoute( "default", "{controller=Home}/{action=Index}/{id?}" ); } );

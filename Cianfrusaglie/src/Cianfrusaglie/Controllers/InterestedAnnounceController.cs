@@ -80,16 +80,6 @@ namespace Cianfrusaglie.Controllers {
                 TypeNotification = MessageTypeNotification.NewFeedback
             });
 
-            var notChooseds = _context.Interested.Where(u => u.AnnounceId.Equals(announceId) && !u.UserId.Equals(userId));
-            foreach (var notChoosed in notChooseds)
-            {
-                var userNotChoosed = _context.Users.Single(u => u.Id.Equals(notChoosed.UserId));
-                _context.NotificationCenter.Add(new Notification
-                {
-                    User = userNotChoosed,
-                    TypeNotification = MessageTypeNotification.NewAnotherChoosed
-                });
-            }
 
             _context.SaveChanges();
             return RedirectToAction( "Index" , new { id=announceId } );
@@ -104,8 +94,19 @@ namespace Cianfrusaglie.Controllers {
              announce.Closed = true;
              _context.SaveChanges();
           }
+            var interested = _context.Interested.Where(i => i.AnnounceId == id);
+            foreach(var inter in interested)
+            {
+                var user = _context.Users.Single(u => u.Id.Equals(inter.UserId));
+                _context.NotificationCenter.Add(new Notification
+                {
+                    User = user,
+                    TypeNotification = MessageTypeNotification.NewAnotherChoosed
+                });
+            }
+            _context.SaveChanges();
 
-          return RedirectToAction( nameof( Index ), new { id = id } );
+            return RedirectToAction( nameof( Index ), new { id = id } );
        }
 
         

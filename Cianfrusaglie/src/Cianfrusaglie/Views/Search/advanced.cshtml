@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Cianfrusaglie.Constants
+@model Cianfrusaglie.ViewModels.Search.AdvancedSearchViewModel
 @{
     Layout = "";
 }
@@ -42,7 +43,8 @@
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Style.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/Home.css" rel ="stylesheet" type="text/css"/>
-    <link href="~/Content/Search.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Search.css" rel="stylesheet" type="text/css"/>
+    <link href="~/Content/StarRating.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 
 
@@ -50,77 +52,169 @@
 <body>
 
 <div id="wrapper-register">
-    <div class="col-md-6 col-lg-offset-3 " style="align-content: center; margin-top: 5em;">
-        <form class="panel panel-body" asp-action="SearchRedirect" asp-controller="Search" method="get">
-            <div id="title">
-                <a href="~/">
-                    <h1>
-                        @CommonStrings.SiteName
-                    </h1>
-                    <h5>Il posto giusto per le tue cianfrusaglie</h5>
+    <div class="col-md-6 col-lg-offset-3" style="align-content: center; margin-top: 3em;">
+            <form class="panel panel-default" asp-action="AdvancedSearch" asp-controller="Search" method="post" role="form">
+                <div id="title" class="panel panel-heading" style="background-color: #49586d">
+                    <a href="~/">
+                        <h1>
+                            @CommonStrings.SiteName
+                        </h1>
+                        <h5>Il posto giusto per le tue cianfrusaglie</h5>
 
-                </a>
-                <br/>
-            </div>
-            <br/>
-            <div class="input-group">
-                <span class="input-group-btn">
-                    
-                        <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie <span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-large">
-                            @foreach (var macro in GetCategories())
-                            {
-                                <li>
-                                    <a href="~/Search?categories=@macro.Id">@macro.Name</a>
-                                    @if (GetSubCategories(@macro.Name).ToList().Count > 0)
-                                    {
-                                        if (@macro.Name.Equals("MisteryBox"))
+                    </a>
+                </div>
+               
+                <div class="panel panel-body" style="background: #eee; margin-bottom:0">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+
+                            <button type="button" class="btn btn-warning btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">Categorie <span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-large">
+                                @foreach (var macro in GetCategories())
+                                {
+                                    <li>
+                                        <a href="~/Search?categories=@macro.Id">@macro.Name</a>
+                                        @if (GetSubCategories(@macro.Name).ToList().Count > 0)
                                         {
-                                            <ul class="dropdown-menu sub-menu">
-                                                <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
-                                                <li class="divider"></li>
-                                                <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
-                                                <li class="divider"></li>
-                                                @foreach (var sub in GetSubCategories(@macro.Name))
-                                                {
-                                                    <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                            if (@macro.Name.Equals("MisteryBox"))
+                                            {
+                                                <ul class="dropdown-menu sub-menu">
+                                                    <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
                                                     <li class="divider"></li>
-                                                    <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;"><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
-                                                }
-                                            </ul>
+                                                    <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                                    <li class="divider"></li>
+                                                    @foreach (var sub in GetSubCategories(@macro.Name))
+                                                    {
+                                                        <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                        <li class="divider"></li>
+                                                        <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;"><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <ul class="dropdown-menu sub-menu">
+                                                    <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
+                                                    <li class="divider"></li>
+                                                    @foreach (var sub in GetSubCategories(@macro.Name))
+                                                    {
+                                                        <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
+                                                    }
+                                                </ul>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <ul class="dropdown-menu sub-menu">
-                                                <li class="dropdown-header" style="margin-top: 10px">@macro.Name</li>
-                                                <li class="divider"></li>
-                                                <li><a href="~/Search?categories=@macro.Id">Visualizza tutti</a></li>
-                                                <li class="divider"></li>
-                                                @foreach (var sub in GetSubCategories(@macro.Name))
-                                                {
-                                                    <li><a href="~/Search?categories=@sub.Id">@sub.Name</a></li>
-                                                }
-                                            </ul>
-                                        }
-                                    }
-                                </li>
-                            }
-                        </ul>
-                      
-                </span>
-                
-                <input type="text" name="title" class="form-control input-lg" placeholder="Cerca">
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-warning btn-searchadv btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
-                </span>
-            </div>
-           
-        </form>
+                                    </li>
+                                }
+                            </ul>
+
+                        </span>
+
+                        <input type="text" name="title" class="form-control input-lg" placeholder="Cerca">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-warning btn-searchadv btn-primary btn-lg"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label>Mostra prima: &nbsp;</label>
+                        <label asp-for="OrderByDate" class="checkbox-inline"><input asp-for="OrderByDate" type="checkbox" id="LastFirst" name="optFirst" onclick="DateFirst()"/> Più recenti</label>
+                        <label asp-for="OrderByPrice" class="checkbox-inline"><input asp-for="OrderByPrice" type="checkbox" id="CheaperFirst" name="optFirst" onclick="PriceFirst()"/> Più economici</label>
+                        <label asp-for="OrderByDistance" class="checkbox-inline"><input asp-for="OrderByDistance" type="checkbox" id="DistanceFirst" name="optFirst" onclick="KmFirst()"/> Più vicini a me</label>
+                    </div>
+                    <br/>
+                    <!--Se utente non loggato deve sparire-->
+                    <div class="input-group" id="kmRange">
+                        <label>Mostra annunci compresi tra:</label>
+                        <label class="radio-inline"><input asp-for="KmRangeMin" type="number" style="width: 100px;" min="0" value="0"/> Km e <input asp-for="KmRangeMax" type="number" style="width: 100px;"/> Km</label>
+                    </div>
+                    <!---->
+                    <br/>
+                    <div class="input-group">
+                        <label class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowGifts" type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
+                        <label class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowOnSale" type="checkbox" checked="checked" id="salesON"/> Mostra oggetti in vendita</label>
+                    </div>
+                    <div class="input-group" id="priceRange">
+                        <br />
+                        <label class="radio-inline">Mostra annunci compresi tra: <input asp-for="PriceRangeMin" type="number" style="width: 100px;" min="0" value="0"/> € e <input asp-for="PriceRangeMax" type="number" style="width: 100px;"/> €</label>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <label>Mostra annunci di utenti con rating: </label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="1"/> &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="2"/> &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="3"/> &#x2605 &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="4"/> &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
+                        <label class="radio-inline" style="color: orange; font-size: 1.2em"><input type="radio" name="optFeed" value="5" checked/> &#x2605 &#x2605 &#x2605 &#x2605 &#x2605</label><br/>
+                        <br/>
+                        <input asp-for="FeedbackRangeMin" class="form-control" id="AspStarRatingValueMin" value="0" type="number" style="display: none" />
+                        <input asp-for="FeedbackRangeMax" class="form-control" id="AspStarRatingValueMax" value="5" type="number" style="display: none"/>
+                        <label>Mostra annunci con rating compreso tra: </label>
+                        <div>
+                            <div class="acidjs-rating-stars">
+                                <div>
+                                    <input type="radio" name="group-1" id="group-1-0" value="5" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-0"></label>
+                                    <input type="radio" name="group-1" id="group-1-1" value="4" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-1"></label>
+                                    <input type="radio" name="group-1" id="group-1-2" value="3" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-2"></label>
+                                    <input type="radio" name="group-1" id="group-1-3" value="2" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-3"></label>
+                                    <input type="radio" name="group-1" id="group-1-4" value="1" onclick="onStarClickMin(event)" onmousemove="onStarOver(event)"/><label for="group-1-4"></label>
+                                </div>
+                            </div>
+                        <label> e </label>
+                            <div class="acidjs-rating-stars">
+                                <div>
+                                    <input type="radio" name="group-2" id="group-2-0" value="5" checked="checked" onclick="onStarClick(event)" onmousemove="onStarOver(event)" /><label for="group-2-0"></label>
+                                    <input type="radio" name="group-2" id="group-2-1" value="4" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-1"></label>
+                                    <input type="radio" name="group-2" id="group-2-2" value="3" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-2"></label>
+                                    <input type="radio" name="group-2" id="group-2-3" value="2" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-3"></label>
+                                    <input type="radio" name="group-2" id="group-2-4" value="1" onclick="onStarClickMax(event)" onmousemove="onStarOver(event)" /><label for="group-2-4"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
+<script>
+    $('#salesON')
+        .click(function() {
+            $('#priceRange').toggle();
+        });
 
-    </div>
+    function DateFirst() {
+        if ($('#LastFirst').prop('checked')) {
+            $('#DistanceFirst').prop('checked', false);
+            $('#CheaperFirst').prop('checked', false);
+        }
+    };
+    
+    function KmFirst() {
+        if ($('#DistanceFirst').prop('checked')) {
+            $('#LastFirst').prop('checked', false);
+            $('#CheaperFirst').prop('checked', false);
+        }
+    };
 
+    function PriceFirst() {
+        if($('#CheaperFirst').prop('checked')) {
+            $('#LastFirst').prop('checked', false);
+            $('#DistanceFirst').prop('checked', false);
+        }
+    };
 
+    function onStarClickMin(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        document.getElementById("AspStarRatingValueMin").value = target.value;
+    }
+    function onStarClickMax(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        document.getElementById("AspStarRatingValueMax").value = target.value;
+    }
+</script>
 </body>
 </html>

@@ -67,17 +67,44 @@ button { padding: 0; }
     box-shadow: 0 4px 8px 0 rgba( 0, 0, 0, 0.03 ), 0 2px 5px 0 rgba( 0, 0, 0, 0.18 );
     z-index: 20;
 }
-
+.btn-facebook, .btn-facebook:hover{
+    color:white;
+    text-align:center;
+}
 #pageHeader {
     background-color: #49586d;
     border-bottom: 1px solid;
     border-bottom-color: #FFC107;
-    display: inline-block;
+    /*display: inline-block;*/
     min-height: 100px;
     padding-left: 0;
     padding-right: 0;
     position: relative;
     width: 100%;
+}
+
+#websiteNavbar {
+    background-color: #49586d;
+    
+}
+
+.navbar-default .navbar-nav > li > a.navbar-item {
+    color: white;
+}
+.navbar-default .navbar-nav > li > a.navbar-item:hover {
+    color: #FFC107;
+}
+.navbar-default .navbar-nav > .open > a.navbar-item, .navbar-default .navbar-nav > .open > a.navbar-item:focus, .navbar-default .navbar-nav > .open > a.navbar-item:hover {
+    background-color: #49586d;
+}
+.notification-icon {
+    text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+}
+
+.navbar-avatar {
+    height: 2em;
+    width: 2em;
+    overflow: hidden;
 }
 
 #barraRicerca {

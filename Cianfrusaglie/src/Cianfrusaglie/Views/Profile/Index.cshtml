@@ -51,6 +51,9 @@
                             @Model.Name
                             @Model.Surname
                         </h4>
+                        @if( !User.GetUserId().Equals( Model.Id ) ) {
+                            <a class="btn btn-info btn-det" href="~/Messages/Details/?id=@Model.Id" >Contatta</a>
+                        }
                     </div>
                     <div class="col-md-2">
                         @if (User.GetUserId().Equals(Model.Id))
@@ -105,7 +108,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2" style="margin-top: 0.8em;">
-                                @feedback.Author.UserName
+                                <span style="word-wrap :break-word;word-break:break-word"> <a href="~/Profile/Index?userId=@feedback.AuthorId">@feedback.Author.UserName</a> </span>
                                 <!-- Stelline col rating dell'utente (style.css)-->
                                 <div class="star-container">
                                     <div class="star-shape">
@@ -151,9 +154,9 @@
                             </div>
 
                             <div class="col-md-1">
-                                @if (feedback.AuthorId.Equals(User.GetUserId()))
+                                @if (feedback.AuthorId.Equals(User.GetUserId()) || feedback.ReceiverId.Equals( User.GetUserId() ))
                                 {
-                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <!-- l'autore sono io oppure sono io il destinatario, non posso autovotarmi, tutti e due colorati -->
                                     <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
 
                                     <br />
@@ -255,7 +258,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2" style="margin-top: 0.8em;">
-                                @feedback.Author.UserName
+                                <span style="word-wrap :break-word;word-break:break-word"> <a href="~/Profile/Index?userId=@feedback.AuthorId">@feedback.Author.UserName</a> </span>
                                 <!-- Stelline col rating dell'utente (style.css)-->
                                 <div class="star-container">
                                     <div class="star-shape">
@@ -301,9 +304,9 @@
                             </div>
 
                             <div class="col-md-1">
-                                @if (feedback.AuthorId.Equals(User.GetUserId()))
+                                @if (feedback.AuthorId.Equals(User.GetUserId()) || feedback.ReceiverId.Equals(User.GetUserId()))
                                 {
-                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                    <!-- l'autore sono io oppure sono io il destinatario, non posso autovotarmi, tutti e due colorati -->
                                     <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up"></div>
 
                                     <br />
@@ -405,7 +408,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2" style="margin-top: 0.8em;" >
-                                @feedback.Author.UserName
+                                <span style="word-wrap :break-word;word-break:break-word"><a href="~/Profile/Index?userId=@feedback.AuthorId">@feedback.Author.UserName</a></span>
                                 <!-- Stelline col rating dell'utente (style.css)-->
                                 <div class="star-container" >
                                     <div class="star-shape" >
@@ -450,8 +453,8 @@
                             </div>
 
                             <div class="col-md-1" >
-                                @if( feedback.AuthorId.Equals( User.GetUserId() ) ) {
-                                    <!-- l'autore sono io, non posso autovotarmi, tutti e due colorati -->
+                                @if(feedback.AuthorId.Equals(User.GetUserId()) || feedback.ReceiverId.Equals(User.GetUserId())) {
+                                    <!-- l'autore sono io oppure sono io il destinatario, non posso autovotarmi, tutti e due colorati -->
                                     <div class="feedback-thumbs-permanent-hover glyphicon glyphicon-thumbs-up" ></div>
 
                                     <br />

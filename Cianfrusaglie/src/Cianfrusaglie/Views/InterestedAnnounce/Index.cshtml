@@ -62,31 +62,51 @@
                                     @{
                                         const string chosenuserid = "chosenUserId";
                                     }
-                                    @if( ViewData.ContainsKey( chosenuserid ) ) {
-                                        const string feedbackgivenusers = "feedbackGivenUsers";
-                                        if( !( (List< string >) ViewData[ feedbackgivenusers ] ).Contains( user.Id ) ) {
-                                            if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
-                                                <h4>Hai scelto questo utente come destinatario!</h4>
-                                                <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recensione!</a></h4>
-                                            } else {
-                                                const string allotherschosenuserid = "allOthersChosenUserId";
-                                                if( ( (IEnumerable< string >) ViewData[ allotherschosenuserid ] ).Contains( user.Id ) ) {
-                                                    <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
-                                                    <h4><a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi la tua recesione</a></h4>
-                                                }
+                                    @if (ViewData.ContainsKey(chosenuserid))
+                                    {
+                                        //Check choosen user and set correct labels
+                                        if (ViewData[chosenuserid].Equals(user.Id))
+                                        {
+                                            <h4>Hai scelto questo utente come destinatario!</h4>
+                                        }
+                                        else {
+                                            const string allotherschosenuserid = "allOthersChosenUserId";
+                                            var allOthers = (IEnumerable<string>)ViewData[allotherschosenuserid];
+                                            if( allOthers.Contains( user.Id ) ) {
+                                                <h4>Questo utente non &egrave; pi&ugrave; il destinatario.</h4>
+
                                             }
-                                        } else {
-                                            if( ViewData[ chosenuserid ].Equals( user.Id ) ) {
-                                                <h4>Hai scelto questo utente come destinatario!</h4>
-                                                <h4>Hai gi&agrave; inviato la tua recensione!</h4>
-                                            } else {
-                                                const string allotherschosenuserid = "allOthersChosenUserId";
-                                                if( ( (IEnumerable< string >) ViewData[ allotherschosenuserid ] ).Contains( user.Id ) ) {
-                                                    <h4>Questo utente non &egrave; il pi&ugrave; il destinatario.</h4>
-                                                    <h4>Hai gi&agrave; inviato la tua recensione!</h4>
-                                                }
+                                            else {
+                                                <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id">Scegli come destinatario</a></h4>
                                             }
                                         }
+
+                                        //Check if user has already given feedback to user
+                                        const string feedbackgivenusers = "feedbackGivenUsers";
+                                        var feedbackGivenUsers = (List<string>)ViewData[feedbackgivenusers];
+
+                                        if (!feedbackGivenUsers.Contains(user.Id))
+                                        {
+
+                                            if (ViewData[chosenuserid].Equals(user.Id))
+                                            {
+
+                                                <h4>
+                                                    <a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Lascia il tuo feedback</a>
+                                                </h4>
+
+                                            } else {
+                                                const string allotherschosenuserid = "allOthersChosenUserId";
+                                                var allOthers = (IEnumerable< string >) ViewData[ allotherschosenuserid ];
+
+                                                if( allOthers.Contains( user.Id ) ) {
+                                                    <h4>
+                                                        <a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Lascia il tuo feedback</a>
+                                                    </h4>
+                                                }
+                                            }
+
+                                        } 
                                     } else {
                                         <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id" >Scegli come destinatario</a></h4>
                                     }
@@ -106,13 +126,14 @@
         <div class="modal-content">
             <div class="modal-body">
                 <p>
-                    Sicuro di voler concludere la transazione relativa a questo annuncio?
+                    Se chiudi l'annuncio non sar&agrave; più visibile, <br />
+                    sei sicuro di continuare?
                 </p>
             </div>
 
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmbtn">Conferma</button>
-                <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmbtn">Continua</button>
+                <button type="button" data-dismiss="modal" class="btn">Indietro</button>
             </div>
         </div>
     </div>

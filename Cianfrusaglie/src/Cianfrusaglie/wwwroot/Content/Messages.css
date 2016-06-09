@@ -37,12 +37,12 @@ h6 {
 }
 
 .conversation-box {
-    max-height: 45%;
+    max-height: 25em;
     overflow-y: auto;
 }
 
 #all-conversation-box {
-    max-height: 40%;
+    max-height: 25em;
     overflow-y: auto;
     position: relative;
 }
@@ -103,7 +103,7 @@ h6 {
 .triangle-isosceles.left {
     background: #FEEDAA;
     margin-left: 15px;
-    margin-right: -15px;
+    /*margin-right: 15em;*/
 }
 
 
@@ -111,8 +111,9 @@ h6 {
 ------------------------------------------ */
 
 .triangle-isosceles.right {
-    background: #FEE871;
+    background: #b8e2fc;
     margin-right: 0px;
+    /*margin-left: 15em;*/
 }
 
 .triangle-isosceles.bubble-no-margin {
@@ -165,7 +166,7 @@ h6 {
 ------------------------------------------ */
 
 .triangle-isosceles.right:after {
-    border-color: transparent #FEE871;
+    border-color: transparent #b8e2fc;
     border-width: 10px 0 10px 11px;
     bottom: auto;
     left: auto;

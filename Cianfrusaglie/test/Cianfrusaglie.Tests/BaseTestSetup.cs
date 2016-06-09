@@ -139,7 +139,8 @@ namespace Cianfrusaglie.Tests {
            var announce = new Announce {
               Author = secondUser,
               Title = "Libro di OST di Videogiochi",
-              Description = "Tutti i compositori da Uematsu in giù"
+              Description = "Tutti i compositori da Uematsu in giù",
+              PublishDate = DateTime.Now.AddDays( 1 )
            };
            Context.Announces.Add( announce );
 
@@ -170,7 +171,14 @@ namespace Cianfrusaglie.Tests {
             Context.SaveChanges();
 
             /*Annuncio 2*/
-            var announce2 = new Announce {Author = firstUser, Title = "Halo 5 Usato", Description = "Guardiani ovunque", Latitude = 0.1, Longitude = 0.1};
+            var announce2 = new Announce {
+                Author = firstUser,
+                Title = "Halo 5 Usato",
+                Description = "Guardiani ovunque",
+                Latitude = 0.1,
+                Longitude = 0.1,
+                Price = 30
+            };
            Context.Announces.Add( announce2 );
 
             var announceCategory2 = new AnnounceCategory {
@@ -268,6 +276,14 @@ namespace Cianfrusaglie.Tests {
                 ChosenUser = interestedUser.User
             } );
             Context.SaveChanges();
+        }
+
+        protected void CloseAnnounce( int announceId ) {
+            var announce = Context.Announces.SingleOrDefault( a => a.Id.Equals( announceId ) );
+            if( announce != null ) {
+                announce.Closed = true;
+                Context.SaveChanges();
+            }
         }
     }
 }

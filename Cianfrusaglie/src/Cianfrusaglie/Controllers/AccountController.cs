@@ -237,11 +237,18 @@ namespace Cianfrusaglie.Controllers {
             if( result.IsLockedOut ) {
                 return View( "Lockout" );
             }
+            CommonFunctions.SetMacroCategoriesViewData(this, _context);
             // If the user does not have an account, then ask the user to create an account.
             ViewData[ "ReturnUrl" ] = returnUrl;
             ViewData[ "LoginProvider" ] = info.LoginProvider;
             string email = info.ExternalPrincipal.FindFirstValue( ClaimTypes.Email );
-            return View( "ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel {Email = email} );
+            string name = info.ExternalPrincipal.FindFirstValue(ClaimTypes.GivenName);
+            string surname = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Surname);
+            string genre = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Gender);
+            string username = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Name);
+            
+            
+            return View( "ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel {Email = email, Name=name, Surname= surname, UserName=username.Replace(" ","")} );
         }
 
         //
@@ -252,18 +259,63 @@ namespace Cianfrusaglie.Controllers {
             if( User.IsSignedIn() ) {
                 return RedirectToAction( nameof( ManageController.Index ), "Manage" );
             }
-
             if( ModelState.IsValid ) {
+
+                var genre = Genre.Unspecified;
+                switch (model.Genre)
+                {
+                    case 1:
+                        genre = Genre.Female;
+                        break;
+                    case 2:
+                        genre = Genre.Male;
+                        break;
+                }
+
                 // Get the information about the user from the external login provider
                 var info = await _signInManager.GetExternalLoginInfoAsync();
                 if( info == null ) {
                     return View( "ExternalLoginFailure" );
                 }
-                var user = new User {UserName = model.Email, Email = model.Email};
-                var result = await _userManager.CreateAsync( user );
+                var user = new User
+                {
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    BirthDate = model.BirthDate,
+                    Genre = genre,
+                    UserName = model.UserName.Replace(" ", ""),
+                    Email = model.Email,
+                    Latitude = double.Parse(model.Latitude ?? "0", CultureInfo.InvariantCulture),
+                    Longitude = double.Parse(model.Longitude ?? "0", CultureInfo.InvariantCulture)
+                };
+                string imageUrl = "";
+                if (model.Photo != null)
+                {
+                    imageUrl = await UploadProfileImage(model.Photo, user);
+                }
+                else
+                {
+                    imageUrl = CommonStrings.DefaultProfileImageUrl;
+                }
+                user.ProfileImageUrl = imageUrl;
+
+                    var result = await _userManager.CreateAsync( user );
                 if( result.Succeeded ) {
                     result = await _userManager.AddLoginAsync( user, info );
-                    if( result.Succeeded ) {
+                    if (model.CategoryDictionary != null)
+                        foreach (var kvPair in model.CategoryDictionary)
+                        {
+                            if (kvPair.Value)
+                            {
+                                _context.UserCategoryPreferenceses.Add(new UserCategoryPreferences
+                                {
+                                    CategoryId = kvPair.Key,
+                                    UserId = user.Id
+                                });
+                            }
+                        }
+                    _context.SaveChanges();
+                    if ( result.Succeeded ) {
                         await _signInManager.SignInAsync( user, false );
                         _logger.LogInformation( 6, "L'utente ha creato un account mediante {Name}", info.LoginProvider );
                         return RedirectToLocal( returnUrl );

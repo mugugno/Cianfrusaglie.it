@@ -84,38 +84,14 @@ namespace Cianfrusaglie.Controllers {
             }
         }
 
-        /// <summary>
-        ///     Mette all'interno del dizionario ViewData una coppia (form Field ID, categorie) che rappresenta le categorie
-        ///     associate
-        ///     ad un FormField.
-        /// </summary>
-        private void SetViewDataWithFormFieldCategoryDictionary() {
-            var formField2CategoriesDictionary = new Dictionary< int, List< Category > >();
-            foreach( var formField in _context.FormFields.ToList() ) {
-                var categories =
-                    _context.CategoryFormFields.Where( cf => cf.FormFieldId == formField.Id ).Select( o => o.Category )
-                        .ToList();
-                formField2CategoriesDictionary.Add( formField.Id, categories );
-            }
-            ViewData[ "formField2CategoriesDictionary" ] = formField2CategoriesDictionary;
-        }
-
-
         private void SetViewDataForCreate( bool vendita ) {
-           CommonFunctions.SetRootLayoutViewData( this, _context );
-            //ViewData[ "listUsers" ] = _context.Users.ToList();
-            ViewData[ "listAnnounces" ] = _context.Announces.Include( a => a.Author ).OrderBy( u => u.PublishDate ).Take( 4 ).ToList();
+            CommonFunctions.SetRootLayoutViewData( this, _context );
             ViewData[ "formCategories" ] = _context.Categories.ToList();
-            ViewData[ "formFields" ] = _context.FormFields.ToList();
-            ViewData[ "formFieldDefaultValue" ] = _context.FormFields.ToList().ToDictionary( field => field.Id,
-                field => ( from defaultValue in _context.FieldDefaultValues.ToList()
-                    where field.Id.Equals( defaultValue.FormFieldId )
-                    select new SelectListItem {Text = defaultValue.Value, Value = defaultValue.Value} ).ToList() );
+            ViewData[ "formFields" ] = _context.FormFields.Include( p => p.DefaultValues ).Include( p => p.CategoriesFormFields ).ToList();
             CommonFunctions.SetMacroCategoriesViewData( this, _context );
             ViewData[ "isVendita" ] = vendita;
 
             ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
-            SetViewDataWithFormFieldCategoryDictionary();
         }
 
         /// <summary>
@@ -169,7 +145,12 @@ namespace Cianfrusaglie.Controllers {
 
             //ViewData Dato un annuncio ho tutti i nomi delle categorie di cui fa parte
             var announces = _context.Announces.Include(u => u.AnnounceCategories).Include(p=>p.Author).Single(a => a.Id == announce.Id);
-            ViewData["nameAnnounceCategories"] = announces.AnnounceCategories.ToList();
+
+            var annCat = announces.AnnounceCategories.ToList();
+            foreach( var ac in annCat )
+              ac.Category = _context.Categories.Single( c => c.Id == ac.CategoryId );
+            ViewData["nameAnnounceCategories"] = annCat;
+            
             ViewData["numInterested"] = announce.Interested.Count;
             ViewData[ "choosen" ] = IsUserChoosenForTheAnnounce( (int) id, User.GetUserId() );
             ViewData["someoneIsChoosen"] = announce.Interested.Where(u => u.ChooseDate != null).SingleOrDefault();
@@ -438,7 +419,9 @@ namespace Cianfrusaglie.Controllers {
                 Title = announce.Title,
                 AuthorId = announce.AuthorId
             };
-            SetViewDataWithFormFieldCategoryDictionary();
+
+            ViewData[ "formFields" ] = _context.FormFields.Include( p => p.DefaultValues ).Include( p => p.CategoriesFormFields ).ToList();
+
             return View( editAnnounce );
         }
 
@@ -538,7 +521,9 @@ namespace Cianfrusaglie.Controllers {
             var im = _context.ImageUrls.Where( i => i.AnnounceId.Equals( announce.Id ) );
             _context.ImageUrls.RemoveRange( im );
             _context.Interested.RemoveRange( _context.Interested.Where( i => i.AnnounceId == announce.Id ) );
+            _context.FeedBacks.RemoveRange(_context.FeedBacks.Where(f => f.AnnounceId == announce.Id));
             _context.Announces.Remove( announce );
+
 
             _context.SaveChanges();
             return RedirectToAction( nameof( HistoryController.Index ), "History" );
