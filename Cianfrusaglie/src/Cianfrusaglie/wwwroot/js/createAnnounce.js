@@ -22,7 +22,7 @@ function clickBackButton() {
     $('#page1').show(transitionTime);
     $('#page2').hide(transitionTime);
     $('#back-button').hide(0);
-
+    $(document).scrollTop(0);
     document.getElementById("forward-button").innerHTML = "Avanti";
     document.getElementById("forward-button").setAttribute("type", "button");
 }
@@ -55,11 +55,15 @@ function clickForwardButton() {
         //TODO mostrare errore nessuna categoria scelta
         return;
     }
+    if( document.getElementById("forward-button").innerHTML === "Avanti" ) {
+        $(document).scrollTop(0);
+    } else {
+        document.getElementById("forward-button").setAttribute("type", "submit");
+    }
 
-    $(document).scrollTop(0);
-    if (document.getElementById("forward-button").innerHTML === "Pubblica") {
+    if( document.getElementById("forward-button").innerHTML === "Pubblica" ) {
         //aggiungiamo al form la posizione di google maps
-        if (GMapsOnline()) {
+        if( GMapsOnline() ) {
             $("#latitudeInput").val(marker.position.lat());
             $("#longitudeInput").val(marker.position.lng());
         } else { //offline
@@ -68,10 +72,14 @@ function clickForwardButton() {
         }
 
         checkValidAddress();
-        if( validAddress )
-            document.getElementById("forward-button").setAttribute("type", "submit");
-    } else
+        
+
+    } else {
+        
         document.getElementById("forward-button").innerHTML = "Pubblica";
+        
+        
+    }
 
     $('#page1').hide(transitionTime);
     $('#page2').show(transitionTime);
