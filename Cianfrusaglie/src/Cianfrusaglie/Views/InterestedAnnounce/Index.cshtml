@@ -6,10 +6,20 @@
 
 <div class="panel-body" >
     <div class="panel panel-default" >
+        @if (TempData["feedback"] != null)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Hai scritto il feedback correttamente!
+            </div>
+
+        }
         <div class="panel-heading" id="my-conversations" >
             <h3>@ViewData[ "Title" ]</h3>
             @if( ViewData.ContainsKey( "chosenUserId" ) && !Model.Announce.Closed ) {
-                <span><a onclick="announceCloseConfirm()">Concludi transazione</a></span>
+                <span><a style="cursor: pointer" onclick="announceCloseConfirm()">Concludi transazione</a></span>
             } else if( Model.Announce.Closed ) {
                 <span>Annuncio chiuso</span>
             }
@@ -54,7 +64,7 @@
                                         </div>
                                     </div>
                                     <!-- Fine Stelline col rating dell'utente-->
-                                    @($"{user.FeedbacksMean:N1}") su 5 (@user.FeedbacksCount recensioni)
+                                    @($"{user.FeedbacksMean:N1}") su 5 (@user.FeedbacksCount feedback)
                                 </div>
                                 <div class="col-md-6" >
                                     <h4><a href="~/Messages/Create/?id=@user.Id" >Contatta</a></h4>
@@ -67,17 +77,22 @@
                                         //Check choosen user and set correct labels
                                         if (ViewData[chosenuserid].Equals(user.Id))
                                         {
-                                            <h4>Hai scelto questo utente come destinatario!</h4>
+                                            
+                                            <div style="color: green; font-family: 'Roboto', sans-serif;">
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                                <span style="font-size: large">Hai scelto questo utente come destinatario!</span>
+                                            </div>
                                         }
                                         else {
                                             const string allotherschosenuserid = "allOthersChosenUserId";
                                             var allOthers = (IEnumerable<string>)ViewData[allotherschosenuserid];
-                                            if( allOthers.Contains( user.Id ) ) {
+                                            if (allOthers.Contains(user.Id))
+                                            {
                                                 <h4>Questo utente non &egrave; pi&ugrave; il destinatario.</h4>
 
                                             }
                                             else {
-                                                <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id">Scegli come destinatario</a></h4>
+                                                <h4><a onclick="selectionUserConfirm('@user.Id')">Scegli come destinatario</a></h4>
                                             }
                                         }
 
@@ -92,7 +107,7 @@
                                             {
 
                                                 <h4>
-                                                    <a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Lascia il tuo feedback</a>
+                                                    <a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi il tuo feedback!</a>
                                                 </h4>
 
                                             } else {
@@ -101,14 +116,14 @@
 
                                                 if( allOthers.Contains( user.Id ) ) {
                                                     <h4>
-                                                        <a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Lascia il tuo feedback</a>
+                                                        <a href="~/Feedback/Create?announceId=@Model.Announce.Id&receiverId=@user.Id" >Scrivi il tuo feedback</a>
                                                     </h4>
                                                 }
                                             }
 
                                         } 
                                     } else {
-                                        <h4><a href="~/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId=@user.Id&announceId=@Model.Announce.Id" >Scegli come destinatario</a></h4>
+                                        <h4><a onclick="selectionUserConfirm('@user.Id')" >Scegli come destinatario</a></h4>
                                     }
                                 </div>
                             </div>
@@ -139,9 +154,34 @@
     </div>
 </div>
 
+<div id="confermaSelezioneUtente" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>
+                    Sicuro di voler scegliere questo utente come destinatario per il tuo oggetto?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="confirmbtn">Si</button>
+                <button type="button" data-dismiss="modal" class="btn">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function announceCloseConfirm() {
         $('#AnnounceCloseConfirm').modal({ backdrop : 'static', keyboard : false })
             .one('click', '#confirmbtn', function(err) { window.location.href = "/InterestedAnnounce/Close?id=@Model.Announce.Id"; });
+    }
+</script>
+
+<script>
+    function selectionUserConfirm(utente) {
+        $('#confermaSelezioneUtente').modal({ backdrop: 'static', keyboard: false })           
+            .one('click', '#confirmbtn', function (err) { window.location.href = "/InterestedAnnounce/ChooseUserAsReceiverForAnnounce?userId="+utente+"&announceId=@Model.Announce.Id" })
+
     }
 </script>

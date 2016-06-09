@@ -1,4 +1,5 @@
 @using System.Collections
+@using System.Collections
 @using System.Collections.Generic
 @using System.Security.Claims
 @using System.Threading.Tasks
@@ -206,7 +207,15 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                                     </div>
                                 </dt>
                                 <dd>
-                                    <a class="btn btn-info btn-det" href="~/Messages/Details/?id=@ViewData[ "AuthorId" ]" >Contatta</a>
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <a class="btn btn-info btn-det" data-target="#myWindow" data-toggle="modal" href="#" >Contatta</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-info btn-det" href="~/Messages/Details/?id=@ViewData["AuthorId"]">Contatta</a>
+
+                                    }
                                 </dd>
                             </dl>
                         }
@@ -261,19 +270,35 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                         }
                         else if (ViewData["interested"].Equals(false))
                         {
-                            <form action="#" method="POST" style="vertical-align: text-bottom">
-                                <button name="loVoglio" class="btn btn-success lovoglio">
-                                    <span class="text-det">Lo voglio</span>
-                                </button>
-                                <div class="nonLoVoglio">
-                                    @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; display: none"></span>
-                        <span name="seiInteressato" style="color: black; display: none">Sei gi&aacute; interessato all' annuncio</span>*@
-                                    
-                                    <button name="nonLoVoglio" class="btn btn-danger" style="display: none;float:right;">
-                                        <span class="text-det">Non lo voglio pi&ugrave;</span>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                       <button name="loVoglioNoAutenticato" data-target="#myWindow" data-toggle="modal" class="btn btn-success lovoglio">
+                                            <span class="text-det">Lo voglio</span>
+                                        </button>
+                            }
+                            else
+                            {
+                                <form action="#" method="POST" style="vertical-align: text-bottom">
+                                    <button name="loVoglio" class="btn btn-success lovoglio">
+                                        <span class="text-det">Lo voglio</span>
                                     </button>
-                                </div>
-                            </form>
+
+                                    <div class="nonLoVoglio">
+                                        @*<span name="spanGliphNonLoVoglioPiu" class="glyphicon glyphicon-ok" style="color: green; display: none"></span>
+                                            <span name="seiInteressato" style="color: black; display: none">Sei gi&aacute; interessato all' annuncio</span>*@
+
+                                        <button name="nonLoVoglio" class="btn btn-danger" style="display: none;float:right;">
+                                            <span class="text-det">Non lo voglio pi&ugrave;</span>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            }
+
+
+
+
+
 
                         }
                         else if (@ViewData["interested"].Equals(true))
@@ -296,7 +321,7 @@ Nascondere tasto non lo voglio più quando sono stato scelto
                 </div>*@
                         }
                         <script>
-                            document.write("    <br /><iframe src=\"https://www.facebook.com/plugins/share_button.php?href="+window.location+".href&layout=button_count&mobile_iframe=true&appId=228034747580137&width=115&height=20\" width=\"115\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
+                            document.write("    <br /><iframe src=\"https://www.facebook.com/plugins/share_button.php?href="+window.location+"&layout=button_count&mobile_iframe=true&appId=228034747580137&width=115&height=20\" width=\"115\" height=\"20\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\"></iframe>");
                         </script>
                         
                     </div>
@@ -371,6 +396,7 @@ Nascondere tasto non lo voglio più quando sono stato scelto
     @*        <a asp-action="Index">Back to List</a>*@
     @*    </p>*@
 </div>
+
 
 <script type="text/javascript">
 

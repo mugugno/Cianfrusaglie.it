@@ -39,6 +39,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <script src="~/js/site.js" ></script>
     <script src="~/js/StarRatingFunctions.js" ></script>
     <script src="~/dist/spin.min.js"></script>
@@ -69,8 +70,10 @@
         <form class="navbar-form" role="search" asp-action="SearchRedirect" asp-controller="Search" method="get">
             <div class="row container-fluid">
                 <div id="title" class="col-md-4 col-sm-12">
+                    
                     <a href="~/">
                         <h1>
+                            <img src="~/Logo/Logo-512.png" class="" height="60px" />
                             @CommonStrings.SiteName
                         </h1>
                         <h5>Il posto giusto per le tue cianfrusaglie</h5>
@@ -83,14 +86,7 @@
                         <button type="submit" class="btn btn-warning btn-search"><span class="glyphicon glyphicon-search"></span></button>
                     </div>
 
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="#" data-toggle="modal" data-target="#myWindow" style="margin-left:1em;">Ricerca Avanzata</a>
-                    }
-                    else
-                    {
-                        <a href="~/Search/Advanced" style="margin-left:1em;">Ricerca Avanzata</a>
-                    }
+                        <a href="~/Search/Advanced" class="slow-action" style="margin-left:1em;">Ricerca Avanzata</a>
                 </div>
             </div>
         </form>
@@ -109,21 +105,21 @@
                 <li class="dropdown dropdown-large">
                     <a href="~/" class="navbar-item"><span class="glyphicon glyphicon-home"></span> Home</a>
                 </li>
-                <li class="dropdown dropdown-large" >
+                <li class="dropdown dropdown-large hidden-xs" >
                     <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" ><span class="glyphicon glyphicon-search"></span> Cerca per categoria <b class="caret" ></b></a>
                     <ul class="dropdown-menu dropdown-menu-large" >
                         @foreach( var macro in GetCategories() ) {
                             <li>
-                                <a href="~/Search?categories=@macro.Id" >@macro.Name</a>
+                                <a href="~/Search?categories=@macro.Id" class="slow-action">@macro.Name</a>
                                 @if( GetSubCategories( @macro.Name ).ToList().Count > 0 ) {
                                     if( @macro.Name.Equals( "MisteryBox" ) ) {
                                         <ul class="dropdown-menu sub-menu" style="height: auto;" >
                                             <li class="dropdown-header" style="margin-top: 10px" >@macro.Name</li>
                                             <li class="divider" ></li>
-                                            <li><a href="~/Search?categories=@macro.Id" >Visualizza tutti</a></li>
+                                            <li><a href="~/Search?categories=@macro.Id" class="slow-action">Visualizza tutti</a></li>
                                             <li class="divider" ></li>
                                             @foreach( var sub in GetSubCategories( @macro.Name ) ) {
-                                                <li><a href="~/Search?categories=@sub.Id" >@sub.Name</a></li>
+                                                <li><a href="~/Search?categories=@sub.Id" class="slow-action">@sub.Name</a></li>
                                                 <li class="divider" ></li>
                                                 <li><a href="" style="text-align: justify; font-size: 0.8em; font-style: italic;" ><br />Il contenuto di un intero cassetto, collezioni di oggetti complete e non, le anticaglie di un baule emerso dalla cantina della nonna... Dentro una <strong>MisteryBox</strong> puoi trovare cianfrusaglie di qualsiasi tipo!</a></li>
                                             }
@@ -132,10 +128,10 @@
                                         <ul class="dropdown-menu sub-menu" >
                                             <li class="dropdown-header" style="margin-top: 10px" >@macro.Name</li>
                                             <li class="divider" ></li>
-                                            <li><a href="~/Search?categories=@macro.Id" >Visualizza tutti</a></li>
+                                            <li><a href="~/Search?categories=@macro.Id" class="slow-action">Visualizza tutti</a></li>
                                             <li class="divider" ></li>
                                             @foreach( var sub in GetSubCategories( @macro.Name ) ) {
-                                                <li><a href="~/Search?categories=@sub.Id" >@sub.Name</a></li>
+                                                <li><a href="~/Search?categories=@sub.Id" class="slow-action">@sub.Name</a></li>
                                             }
                                         </ul>
                                     }
@@ -148,13 +144,30 @@
                     <li class="dropdown dropdown-large" >
                         <a href="~/History/Index" class="navbar-item" ><span class="glyphicon glyphicon-gift"></span> I miei annunci</a>
                     </li>
+                    <li class="visible-xs-block dropdown dropdown-large" >
+                        <a class="navbar-item" href="~/History/MyHistory" ><span class="glyphicon glyphicon-book"></span> Il mio storico</a>
+                    </li>
                     <li class="dropdown dropdown-large" >
                         <a href="~/Messages" class="navbar-item" ><span class="glyphicon glyphicon-envelope"></span> Messaggi</a>
                     </li>
+                    <li class="visible-xs-block dropdown dropdown-large" >
+                        <a class="navbar-item" href="~/Profile" ><span class="glyphicon glyphicon-king"></span> Il mio profilo</a>
+                    </li>
+                    <li class="visible-xs-block dropdown dropdown-large" >
+                        <a class="navbar-item" href="~/Preferences/Index" ><span class="glyphicon glyphicon-cog"></span> Impostazioni profilo</a>
+                    </li>
+                    if (ViewData["IsThereAnyNotification"] as bool? ?? false)
+                    {
+                        <li class="visible-xs-block dropdown dropdown-large">
+                            <a class="navbar-item"><span class="fa fa-bell-o" style="font-size: 2em; vertical-align: middle"></span>&nbsp;&nbsp;Ci sono notifiche!</a>
+                            <span class="badge badge-notify"><i class="fa fa-exclamation" aria-hidden="true"></i></span>
+                            
+                        </li>
+                    }
                 }
             </ul>
 
-            <ul class="nav navbar-nav" id="menuRight">
+            <ul class="nav navbar-nav navbar-right" >
                 @if (!User.Identity.IsAuthenticated)
                 {
                     <li>
@@ -185,14 +198,18 @@
                 else
                 {
                     @* Pulsante Notifiche *@
-                    <li class="dropdown dropdown-large">
+
+
+                    <li class="dropdown dropdown-large hidden-xs">
                         @* TODO Sostituire con "IsThereAnyNotification" quando saranno presenti altri tipi di notifiche *@
                         @if (ViewData["IsThereAnyNotification"] as bool? ?? false)
                         {
                             Sentences sent = new Sentences();
-                            <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
-                                Notifiche <span class="glyphicon glyphicon-fire notification-icon" style="font-size: 2.2em; color: red; vertical-align: middle"></span> <b class="caret"></b>
+                            <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;" >
+                                Notifiche <span class="fa fa-bell-o " style="font-size: 2em; vertical-align: middle"></span> <b class="caret" ></b>
+                                <span class="badge badge-notify"><i class="fa fa-exclamation" aria-hidden="true"></i></span>
                             </a>
+                            
                             <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
                                 @if ((int)ViewData["IsThereNewMessages"]==1)
                                 {
@@ -244,7 +261,7 @@
                                     if (ViewData["IsThereNewAnnouncesWhereIAmNotChoosed"] as bool? ?? false)
                                     {
                                         <li class="dropdown-header">
-                                            <span class="glyphicon glyphicon-fire"></span>
+                                            <span class="fa fa-bell-o"></span>
                                             <span>
                                                 <a href=@sent.Sentence[(int) MessageTypeNotification.NewAnotherChoosed].Last()>
                                                     @sent.Sentence[(int) MessageTypeNotification.NewAnotherChoosed].First()
@@ -281,7 +298,7 @@
                                     {
                             <!-- Nessuna nuova notifica -->
                             <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" style="margin-top: -5px; padding-bottom: 0px;">
-                                Notifiche <span class="glyphicon glyphicon-fire" style="font-size: 2.2em; color: silver; vertical-align: middle"></span> <b class="caret" ></b>
+                                Notifiche <span class="fa fa-bell-o" style="font-size: 2em; color: white; vertical-align: middle"></span> <b class="caret" ></b>
                             </a>
 
                                         <ul class="dropdown-menu dropdown-menu-large" style="left: auto; right: 0">
@@ -293,7 +310,7 @@
                         </li>
 
                         @* Menù profilo *@
-                    <li class="dropdown dropdown-large" >
+                    <li class="dropdown dropdown-large hidden-xs" >
                         <a href="#" class="dropdown-toggle navbar-item" data-toggle="dropdown" >
                             <div class="col-md-1" style="padding-left: 0px; padding-right: 3em; max-height: 2em;">
                                 <div class="photo navbar-avatar panel panel-default" style="margin-top: -4px;">
@@ -444,19 +461,58 @@
             </div>
         </div>
     </div>
-    
-            <div id="footer" class="panel-footer">
-                Copyright © 2016 Mugugno / All rights reserved.
-            </div>
+
+
+
+
+
+<div id="footer" class="panel-footer" >
+    Copyright © 2016 Mugugno / All rights reserved. <a href="../Privacy/index.html" >Cookie Policy</a>
+</div>
+
+    <div id="loading">
+        <div id="loadingcontent">
+            <p id="loadingspinner">
+                Caricamento...
+            </p>
+        </div>
+    </div>
 
 <script src="~/js/AnnounceDetails.js"></script>
-<script type="text/javascript">
-    $('#popoverData').popover({ html: true });
+<script type="text/javascript" >
+    $('#popoverData').popover({ html : true });
 </script>
+
+    <script type="text/javascript">
+    $(function () {
+        $(".slow-action").click(function () {
+            $("#loading").fadeIn();
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 7, // The length of each line
+                width: 4, // The line thickness
+                radius: 10, // The radius of the inner circle
+                color: '#000', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 60, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('loading');
+            var spinner = new Spinner(opts).spin(target);
+        });
+    });
+    </script>
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
-    window.cookieconsent_options = {"message":"Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.","dismiss":"Ho capito!","learnMore":"More info","link":null,"theme":"dark-top"};
+        window.cookieconsent_options = {
+            "message": "Questo sito utilizza cookie per garantirti una migliore esperienza sul nostro sito.",
+            "dismiss": "Ho capito!",
+            "learnMore": "Più informazioni",
+            "link": "/Privacy/index.html",
+            "theme": "dark-bottom"
+        };
     </script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>

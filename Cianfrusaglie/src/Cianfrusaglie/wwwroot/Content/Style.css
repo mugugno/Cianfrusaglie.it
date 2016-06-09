@@ -21,6 +21,17 @@ html, body {
   content: "";
   display: block;
 }
+.badge-notify{
+   background:red;
+   position:relative;
+   top: -10px;
+   left: -30px;
+   height:20px;
+   width:20px;
+   font-size:1.1em;
+   font-family: 'Montserrat', sans-serif ;
+  }
+
 #footer, #wrap:after {
   /* .push must be the same height as footer */
 	height: 142px; 
@@ -48,8 +59,9 @@ button { padding: 0; }
 }
 #title a {
     color: #f0ad4e;
-    text-align: center;
+    text-align: left;
     text-decoration: none;
+    display: inline-block;
 }
 
 .input-search input{
@@ -227,4 +239,10 @@ button { padding: 0; }
 
 .panel-centered {
     text-align: center;
+}
+
+.announceTitleSantino {
+    color: rgba(38, 68, 250, 0.72);
+    word-wrap: break-word;
+    cursor: pointer;
 }

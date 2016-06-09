@@ -95,25 +95,25 @@
                             </button>
                             <strong>Ottimo! </strong> Aggiungi ancora qualche informazione su di te
                         </div>
-                        <i>I dati contrassegnati con * sono facoltativi</i>
+                        <i>I dati contrassegnati con * obbligatori</i>
 
                     </div>
                     <!--NOME-->
                     <div>
                         <div class="form-group">
-                            <label asp-for="Name" class="control-label">Nome </label><label> *</label><br />
+                            <label asp-for="Name" class="control-label">Nome </label><br />
                             <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <!--COGNOME-->
                         <div class="form-group">
-                            <label asp-for="Surname" class="control-label">Cognome </label><label> *</label><br />
+                            <label asp-for="Surname" class="control-label">Cognome </label><br />
                             <input asp-for="Surname" class="form-control" />
                             <span asp-validation-for="Surname" class="text-danger"></span>
                         </div>
                         <!--SESSO-->
                         <div class="form-group row">
-                            <label asp-for="Genre" class="control-label">Sesso </label><label> *</label><br />
+                            <label asp-for="Genre" class="control-label">Sesso </label><br />
 
                             <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Male)" class="form-control" />Uomo</label><br />
                             <label class="radio-inline"><input asp-for="Genre" type="radio" name="Genre" value="@((int) Genre.Female)" class="form-control" />Donna</label><br />
@@ -121,14 +121,14 @@
                             <span asp-validation-for="Genre" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label><label> *</label>
-                            <input id="pac-input" class="form-control" type="text" placeholder="">
+                            <label class="control-label">Inserisci il tuo indirizzo ( Citt&agrave;, indirizzo)</label>
+                            <input id="pac-input" class="form-control" type="text" placeholder="" data-toggle="popover" data-content="Indirizzo non valido">
                             <div id="googleMap" style="display: none;"></div>
                             <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
                             <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
                         </div>
                         <div class="form-group">
-                            <label asp-for="Photo" class="control-label">Immagine profilo </label><label> *</label>
+                            <label asp-for="Photo" class="control-label">Immagine profilo </label>
                             <input asp-for="Photo" class="input-file" id="photo" name="photo" type="file" accept="image/*">
                             <span asp-validation-for="Photo" class="text-danger"></span>
                         </div>
@@ -229,14 +229,14 @@
                     <hr />
 
                     <div class="form-group">
-                        <label asp-for="UserName" class="control-label">Username</label><br />
+                        <label asp-for="UserName" class="control-label">Username</label><label> *</label><br />
                         <input asp-for="UserName" id="uname" required="" minlength="3" class="form-control" />
                         <span asp-validation-for="UserName" id="unamedanger" class="text-danger"></span>
 
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="Email" class="control-label">Indirizzo email</label><br />
+                        <label asp-for="Email" class="control-label">Indirizzo email</label><label> *</label><br />
                         <input asp-for="Email" id="email" type="email" required="" class="form-control" />
                         <span asp-validation-for="Email" id="emaildanger" class="text-danger"></span>
                     </div>
@@ -255,79 +255,6 @@
         </form>
     </div>
 
- <script type="text/javascript">
-    var antiForgeryToken = $("input[name=__RequestVerificationToken]").val();
-    $('#popoverData').keyup( passwordCheck );
-    $("#confirmPassword").keyup( passwordCheck );
-    $("#uname").focusout(function () {
-        var uname = $('#uname').val();
-        $.post("/Account/CheckUserNameAlreadyExists",
-                           {
-                               user : uname,
-                               __RequestVerificationToken : antiForgeryToken
-
-                           })
-            .success(function(res){
-                if (res) {
-                    $('#unamedanger').html("Il nome utente inserito esiste già.")
-                } else {
-                    $('#unamedanger').html("")
-                }
-            });
-    });
-    $("#email").focusout(function () {
-        var email = $('#email').val();
-        $.post("/Account/CheckEmailAlreadyExists",
-                           {
-                               email: email,
-                               __RequestVerificationToken: antiForgeryToken
-
-                           })
-            .success(function (res) {
-                if (res) {
-                    $('#emaildanger').html("L'email inserita esiste già.")
-                } else {
-                    $('#emaildanger').html("")
-                }
-            });
-    });
-    function passwordCheck() {
-        if( $('#popoverData').val().length < 8 )
-            $('#pwdlen').html('La password deve contenere almeno 8 caratteri!');
-        else
-            $('#pwdlen').html('');
-
-        if( $("#popoverData").val() != $("#confirmPassword").val() )
-            $("#wrongpwd").html('La password di conferma è diversa dalla password!');
-        else
-            $("#wrongpwd").html('');
-    }
-
-    function clickNextButton(tmp) {
-        if (tmp === 1) {
-            $('.form-register1').hide();
-            $('.form-register3').hide();
-            $('.form-register2').show();
-        }
-        else if (tmp === 2) {
-            $('.form-register2').hide();
-            $('.form-register1').hide();
-            $('.form-register3').show();
-        }
-    }
-
-    function clickBackButton(tmp) {
-        if (tmp === 2) {
-            $('.form-register1').show();
-            $('.form-register2').hide();
-            $('.form-register3').hide();
-        }
-        else if (tmp === 3) {
-            $('.form-register2').show();
-            $('.form-register1').hide();
-            $('.form-register3').hide();
-        }
-    }
-    </script>
+    <script src="/js/register.js"></script>
 </body>
 </html>

@@ -21,7 +21,7 @@ namespace Cianfrusaglie.Controllers {
          /// </summary>
          /// <returns>Restituisce annunci, ancora aperti, pubblicati dall'utente loggato</returns>
         public IEnumerable< Announce > GetLoggedUserOpenPublishedAnnounces() {
-            return _context.Announces.Include( a => a.Images ).Include(a => a.Interested).Include( a=> a.ChosenUsers ).Where( a => a.AuthorId == User.GetUserId() && !a.Closed );
+            return _context.Announces.Include( a => a.Images ).Include(a => a.Interested).Include( a=> a.ChosenUsers ).Where( a => a.AuthorId == User.GetUserId() && !a.Closed ).OrderByDescending(a => a.PublishDate);
         } 
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>gli annunci aperti a cui l'utente è interessato</returns>
         public IEnumerable<Announce> GetLoggedUserOpenInterestedAnnounces()
         {
-           return _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals(User.GetUserId())) && !a.Closed);
+           return _context.Announces.Include(p => p.Images).Where(a => a.Interested.Any(u => u.UserId.Equals(User.GetUserId())) && !a.Closed).OrderByDescending(a=>a.PublishDate);
         }
 
         /// <summary>

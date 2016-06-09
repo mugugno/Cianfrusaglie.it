@@ -40,9 +40,10 @@
             <span aria-hidden="true">&times;</span></button>
         <strong>Ottimo! </strong> Il tuo annuncio è stato creato correttamente!
     </div>
+
 }
 <div class="container-fluid" id="containerPrincipale" >
-<div class="carousel slide" data-ride="carousel" id="homeCarousel" >
+<div class="carousel slide hidden-xs" data-ride="carousel" id="homeCarousel" >
     <ol class="carousel-indicators" style="z-index: 1" >
         <li class="active" data-slide-to="0" data-target="#homeCarousel" ></li>
         <li data-slide-to="1" data-target="#homeCarousel" ></li>
@@ -88,7 +89,7 @@
                 <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
                     <span class="glyphicon glyphicon-gift"></span></a>
             } else {
-                <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create" role="button" >
+                <a class="btn btn-warning btn-lg btn-round slow-action" href="~/Announces/Create" role="button" >
                     <span class="glyphicon glyphicon-gift"></span></a>
             }
             <br />
@@ -100,10 +101,10 @@
         </div>
         <div class="form-group" id="linkVendi" >
             @if( !User.Identity.IsAuthenticated ) {
-                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="~/Announces/Create?vendita=true" role="button" >
+                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
                     <span class="glyphicon glyphicon-eur"></span></a>
             } else {
-                <a class="btn btn-warning btn-lg btn-round" href="~/Announces/Create/?vendita=true" role="button" >
+                <a class="btn btn-warning btn-lg btn-round slow-action" href="~/Announces/Create/?vendita=true" role="button" >
                     <span class="glyphicon glyphicon-eur"></span></a>
             }
             <br />
@@ -112,13 +113,10 @@
             </h4>
         </div>
         <div class="form-group" id="linkCerca" >
-            @if( !User.Identity.IsAuthenticated ) {
-                <a class="btn btn-warning btn-lg btn-round" data-target="#myWindow" data-toggle="modal" href="#" role="button" >
+            
+                <a class="btn btn-warning btn-lg btn-round slow-action" href="~/Search/Advanced" role="button" >
                     <span class="glyphicon glyphicon-search"></span></a>
-            } else {
-                <a class="btn btn-warning btn-lg btn-round" href="~/Search/Advanced" role="button" >
-                    <span class="glyphicon glyphicon-search"></span></a>
-            }
+            
             <br />
             <h4>
                 <strong>CERCA<br />UN OGGETTO</strong>
@@ -142,27 +140,21 @@
                 <div class="col-item santinoHome" >
 
                     <div class="photoThu" >
-                        @if( !User.Identity.IsAuthenticated ) {
-                            <a title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" href >
+                        
+                            <a title="@annuncio.Title" class="slow-action" href="~/Announces/Details/?id=@annuncio.Id" >
                                 <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                             </a>
-                        } else {
-                            <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
-                                <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
-                            </a>
-                        }
                     </div>
 
                     <div class="info" >
 
 
-                        <!--titolo su una linea sola-->
+                        <!--titolo su due linee-->
                         @{
                             int maxLength = 30;
                         }
-                        @if( User.Identity.IsAuthenticated ) {
                             <div class="fixedTitle">
-                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+                                <a style="word-wrap:break-word" class="announceTitleSantino slow-action" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id">
 
                                     @if (annuncio.Title.Length > maxLength)
                                     {
@@ -174,33 +166,66 @@
                                 </a>  
                             </div>
                             
+                        
+                        
+
+                        @{
+                            bool hasDistance = false;
+                            int distance = 0;
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                var user = (User)ViewData["LoggedUser"];
+                                if (user.Latitude.HasValue && user.Longitude.HasValue)
+                                {
+                                    distance = (int)GeoCoordinate.Distance(user.Latitude.Value, user.Longitude.Value, annuncio.Latitude, annuncio.Longitude);
+                                    hasDistance = true;
+                                }
+
+                            }
+                        }
+                        @if (@annuncio.Price == 0)
+                        {
+                            if (hasDistance)
+                            {
+                                <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                            }
+                            else {
+                                <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
+                            }
+                            <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action">
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                            </a>
                         }
                         else {
-                            <a style="word-wrap:break-word" title="@annuncio.Title" data-target="#myWindow" data-toggle="modal" style="color: black">
-                                <div class="fixedTitle">
-                                    @if (annuncio.Title.Length > maxLength)
-                                    {
-                                        <h3>@annuncio.Title.Substring(0, maxLength)... </h3>
-                                    }
-                                    else {
-                                        <h3>@annuncio.Title</h3>
-                                    }
-                                </div>
-                        </a> 
+                            if (hasDistance)
+                            {
+                                <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
+                            }
+                            else {
+                                <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
+                            }
+                            <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action">
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                            </a>
                         }
 
-
-                        @if( @annuncio.Price == 0 ) {
-                            <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
+                        @*@if( @annuncio.Price == 0 ) {
+                            <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
+                            <a href="~/Announces/Details/?id=@annuncio.Id">
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                            </a>
                         }
                         else {
                             <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
-                        }
+                            <a href="~/Announces/Details/?id=@annuncio.Id">
+                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                            </a>
+                        }*@
                            
 
 
                         <div class="price" >
-                            <h5>Autore: @annuncio.Author.UserName</h5>
+                            <h5>Autore:<a href="~/Profile?id=@annuncio.AuthorId"> @annuncio.Author.UserName</a></h5>
                             <!-- Stelline col rating dell'utente (style.css)-->
                             <div class="star-container" >
                                 <div class="star-shape" >
@@ -254,7 +279,7 @@
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             } else {
-                                <a style="word-wrap:break-word" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
+                                <a style="word-wrap:break-word" class="slow-action" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" >
                                     <img src="@GetImages( @annuncio.Id )" class="img-responsive" />
                                 </a>
                             }
@@ -264,9 +289,9 @@
                         <div class="info" >
 
 
-                            <!--titolo su una linea sola-->
+                            <!--titolo su due linee-->
                             <div class="fixedTitle">
-                                <a style="word-wrap: normal" title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" style="color: black">
+                                <a title="@annuncio.Title" href="~/Announces/Details/?id=@annuncio.Id" class="announceTitleSantino slow-action">
 
                                     @{
                                         int maxLength = 30;
@@ -294,57 +319,55 @@
 
                                 }
                             }
-                            @if (@annuncio.Price == 0)
-                            {
-                                if (hasDistance)
-                                {
-                                    <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                            @if( @annuncio.Price == 0 ) {
+                                if( hasDistance ) {
+                                    <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b> a <b>@distance Km</b> da te</h5>
+                                } else {
+                                    <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
                                 }
-                                else {
-                                    <h5 class="price-text-color" style="margin-left: 0"><b>IN REGALO</b></h5>
+                                <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action" >
+                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                                </a>
+                            } else {
+                                if( hasDistance ) {
+                                    <h5 class="price-text-color" style="margin-left: 0" >Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
+                                } else {
+                                    <h5 class="price-text-color" style="margin-left: 0" >Prezzo: <b>@annuncio.Price €</b></h5>
                                 }
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-gift"></span></span>
+                                <a href="~/Announces/Details/?id=@annuncio.Id" class="slow-action" >
+                                    <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
+                                </a>
                             }
-                            else {
-                                if (hasDistance)
-                                {
-                                    <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b> a <b>@distance Km</b> da te</h5>
-                                }
-                                else {
-                                    <h5 class="price-text-color" style="margin-left: 0">Prezzo: <b>@annuncio.Price €</b></h5>
-                                }
-                                <span class="btn-warning btn-sm btn-round card-img"><span class="glyphicon glyphicon-euro"></span></span>
-                                
-                            }
+                                    
 
 
-                            <div class="price" >
-                                <h5>Autore: @annuncio.Author.UserName</h5>
-                                <!-- Stelline col rating dell'utente (style.css)-->
-                                <div class="star-container" >
-                                    <div class="star-shape" >
-                                        <svg viewbox="0 0 61 19" >
-                                            <defs>
-                                                <mask id="starmask" x="0" y="0" width="100" height="100" >
-                                                    <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
-                                                    <text text-anchor="middle" x="50%" y="70%" dy="1" > &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
-                                                </mask>
-                                            </defs>
-                                            <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
-                                            <text text-anchor="middle" x="50%" y="70%" dy="1" color="black" > &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
-                                        </svg>
+                                    <div class="price">
+                                        <h5>Autore: <a href="~/Profile?id=@annuncio.AuthorId">@annuncio.Author.UserName</a></h5>
+                                        <!-- Stelline col rating dell'utente (style.css)-->
+                                        <div class="star-container">
+                                            <div class="star-shape">
+                                                <svg viewbox="0 0 61 19">
+                                                    <defs>
+                                                        <mask id="starmask" x="0" y="0" width="100" height="100">
+                                                            <rect x="0" y="0" width="100%" height="100%" fill="#fff" />
+                                                            <text text-anchor="middle" x="50%" y="70%" dy="1"> &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</text>
+                                                        </mask>
+                                                    </defs>
+                                                    <rect x="0" y="0" width="100%" height="100%" mask="url(#starmask)" fill="#fff" fill-opacity="1" />
+                                                    <text text-anchor="middle" x="50%" y="70%" dy="1" color="black"> &#x2606;&#x2606;&#x2606;&#x2606;&#x2606;</text>
+                                                </svg>
+                                            </div>
+                                            @{ string starWidth = ((int)(20 * annuncio.Author.FeedbacksMean)).ToString(); }
+                                            <div class="star-colorbar" style="width: @starWidth%">
+                                            </div>
+                                        </div>
+                                        <!-- Fine Stelline col rating dell'utente-->
+                                        <br />
                                     </div>
-                                    @{ string starWidth = ( (int) ( 20 * annuncio.Author.FeedbacksMean ) ).ToString(); }
-                                    <div class="star-colorbar" style="width: @starWidth%" >
-                                    </div>
-                                </div>
-                                <!-- Fine Stelline col rating dell'utente-->
-                                <br />
-                            </div>
 
 
-                            <div class="clearfix" ></div>
-                        </div>
+                                    <div class="clearfix"></div>
+</div>
                     </div>
 
                 </div>

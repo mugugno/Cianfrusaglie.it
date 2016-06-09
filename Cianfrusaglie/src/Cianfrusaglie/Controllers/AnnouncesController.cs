@@ -112,8 +112,8 @@ namespace Cianfrusaglie.Controllers {
         /// <returns>La View contenente i dettagli dell'annuncio.</returns>
         // GET: Announces/Details/5
         public IActionResult Details( int? id ) {
-            if( !LoginChecker.HasLoggedUser( this ) )
-                return HttpBadRequest();
+            /*if( !LoginChecker.HasLoggedUser( this ) )
+                return HttpBadRequest();*/
             if( id == null ) {
                 return HttpNotFound();
             }
@@ -133,7 +133,8 @@ namespace Cianfrusaglie.Controllers {
             ViewData[ "IdAnnounce" ] = id;
             ViewData[ "Author" ] = _context.Users.First( u => u.Id.Equals( announce.AuthorId ) );
             ViewData["AuthorId"] = ((User)ViewData["Author"]).Id;
-            ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
+            if(LoginChecker.HasLoggedUser(this))
+                ViewData[ "loggedUser" ] = _context.Users.Single( u => u.Id == User.GetUserId() );
             if ( announce.Interested != null )
                 ViewData[ "int" ] =
                     announce.Interested.Where( c => c.UserId.Equals( User.GetUserId() ) ).Select( u => u.UserId )
@@ -496,6 +497,7 @@ namespace Cianfrusaglie.Controllers {
                 return HttpBadRequest();
 
             CommonFunctions.SetRootLayoutViewData( this,_context );
+            TempData["announceDeleted"] = true;
             return View( announce );
         }
 
