@@ -121,7 +121,9 @@ namespace Cianfrusaglie.Controllers {
         public IActionResult MapSearch()
         {
             ViewData["Images"] = _context.ImageUrls.ToList();
-            return View(_context.Announces.Where(announce => !announce.Closed).ToList());
+            ICollection < Announce > announces = _context.Announces.Where(announce => !announce.Closed).ToList();
+            MapSearchViewModel listOfPos = new MapSearchViewModel(announces);
+            return View(listOfPos);
         }
 
         public IActionResult SearchRedirect( string title, IEnumerable< int > categories ) {

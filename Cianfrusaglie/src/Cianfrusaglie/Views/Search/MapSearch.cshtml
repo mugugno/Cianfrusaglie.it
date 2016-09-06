@@ -6,9 +6,10 @@
 @using System.Net
 @using System.Net.Configuration
 @using Cianfrusaglie.GeoPosition
-@using Cianfrusaglie.Models
-@model  IEnumerable< Announce > 
 
+@using Cianfrusaglie.Models
+
+@model Cianfrusaglie.ViewModels.Search.MapSearchViewModel
 @{
     ViewData["Title"] = "MapSearch";
 }
@@ -38,60 +39,82 @@
     var markers = [];
     var infowindows = [];
     function addMarkers() {
-        @{var i = 0; }
-        @foreach (var item in Model) {
+        @{
+            var i = 0;
+            List<string> listOfKeys = new List<string>(Model.mapOfPos.Keys);
+        }
+        @foreach (var key in listOfKeys) {
+            List<Announce> listOfAnnounces;
+            if(Model.mapOfPos.TryGetValue(key, out listOfAnnounces))
+            {
+                String[] substrings = key.Split('+');
+                var lat = substrings[0].Replace(',', '.');
+                var lng = substrings[1].Replace(',', '.');
+                
+                <text>
+                var posMarker = new google.maps.LatLng(@lat, @lng);
+                var contentString = '';
+                </text>
+                foreach (var item in listOfAnnounces)
+                {
 
-            var lat = @item.Latitude.ToString().Replace(',', '.');
-            var lng = @item.Longitude.ToString().Replace(',', '.');
-            <text>
-            var posMarker = new google.maps.LatLng(@lat, @lng);
-            var contentString = '<div id="content">'+
-                '<div id="siteNotice">'+
-                '</div>'+
-                '<h1 id="firstHeading" class="firstHeading">@item.Title</h1>'+
-                '<div id="bodyContent">'+
-                '<div class="col-sm-12">' +
-                '<div class="col-sm-4">' +
-                '<img style="width:100px" src = "http://cianfrusapp.net/@item.Images.First().Url">' +
-                '</div>'+
+                    <text>
 
-                '<div class="col-sm-8">'+
-                '<p>@item.Description</p>'+
+                    contentString = contentString +'<div id="content\@i">'+
+                        '<div id="siteNotice\@i">'+
+                        '</div>'+
+                        '<h1 id="firstHeading\@i" class="firstHeading">@item.Title</h1>'+
+                        '<div id="bodyContent\@i">'+
+                        '<div class="col-sm-12">' +
+                        '<div class="col-sm-4">' +
+                        '<img style="width:100px" src = "http://cianfrusapp.net/@item.Images.First().Url">' +
+                        '</div>'+
 
-                '</div>'+
-                '</div>'+
-                '<a class="btn btn-success col-sm-4 col-sm-offset-4" href="~/Announces/Details/?id=@item.Id">Guarda annuncio</a>';
-            if(@item.Price == 0)
-                contentString = contentString + '<h5 class="pull-right">In regalo</h5>';
-            else
-                contentString = contentString + '<h5 class="pull-right">Al prezzo di @item.Price</h5>';
-                contentString = contentString +
-                '</div>'+
-                '</div>';
+                        '<div class="col-sm-8">'+
+                        '<p>@item.Description</p>'+
 
-            infowindows.push(new google.maps.InfoWindow({
-                content: contentString
-            }));
-            markers.push(new google.maps.Marker({
-                position: posMarker,
-                title: '@item.Title',
-                map: map
-            }));
-            markers[@i].addListener('click', function() {
-                infowindows.forEach(function(value){value.close()});
-            infowindows[@i].open(map, markers[@i]);
-            });
+                        '</div>'+
+                        '</div>'+
+                        '<a class="btn btn-success col-sm-4 col-sm-offset-4" href="~/Announces/Details/?id=@item.Id">Guarda annuncio</a>';
+                    if(@item.Price == 0)
+                        contentString = contentString + '<h5 class="pull-right">In regalo</h5>';
+                    else
+                        contentString = contentString + '<h5 class="pull-right">Al prezzo di @item.Price</h5>';
+                    contentString = contentString +
+                    '</div>'+
+                    '</div>';
+                    </text>
 
-            google.maps.event.addListener(map, "click", function(event) {
-                infowindows[@i].close();
-            });
-            </text>
 
-            i = i + 1;
+                }
+                
+                <text>
+                    infowindows.push(new google.maps.InfoWindow({
+                        content: contentString
+                    }));
+                    markers.push(new google.maps.Marker({
+                        position: posMarker,
+                        title: '@key',
+                        map: map
+                    }));
+                    markers[@i].addListener('click', function() {
+                        infowindows.forEach(function(value){value.close()});
+                    infowindows[@i].open(map, markers[@i]);
+                    });
+
+                    google.maps.event.addListener(map, "click", function(event) {
+                        infowindows[@i].close();
+                    });
+                    </text>
+                i = i + 1;
+            }
+
+
+
         }
 
     }
-    $(document).ready( function() {
+    $(document).ready(function () {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var posGmap = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -123,7 +146,7 @@
 
         }
 
-    } );
+    });
 </script>
 <div class="container" style="height:65vh">
     <div id="googleMap" style="height:100%"></div>
