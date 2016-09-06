@@ -231,6 +231,51 @@ namespace Cianfrusaglie.Tests {
 
         }
 
+        [Theory, InlineData("Liguria", 1),
+         InlineData("Piemonte", 2), InlineData("Toscana", 3)]
+        public void UserPerformsAdvancedSearchUsingRegion(string Region, int number)
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "cane",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = Region
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo cane");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo cane2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo cane3");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            switch (number)
+            {
+                case 1:
+                    Assert.DoesNotContain(announce1.Id, idFound);
+                    Assert.Contains(announce2.Id, idFound);
+                    Assert.Contains(announce3.Id, idFound);
+                    break;
+                case 2:
+                    Assert.Contains(announce1.Id, idFound);
+                    Assert.DoesNotContain(announce2.Id, idFound);
+                    Assert.DoesNotContain(announce3.Id, idFound);
+                    break;
+                case 3:
+                    Assert.Empty(result);
+                    break;
+            }
+            
+
+        }
+        /*
         [Fact]
         public void UserPerformsAdvancedSearchUsingRegion1()
         {
@@ -312,7 +357,7 @@ namespace Cianfrusaglie.Tests {
             var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
             Assert.Empty(result);
 
-        }
+        }*/
 
         [Fact]
         public void UserPerformsAdvancedSearchUsingDistanceAndRegionTooMuch()
@@ -340,6 +385,65 @@ namespace Cianfrusaglie.Tests {
 
         }
 
+        [Theory, InlineData(4, 1), InlineData(0, 2), InlineData(20, 3)]
+        public void UserPerformsAdvancedSearchUsingBrowserPositionAndDistance(int distance, int number)
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "gatto",
+                Lat = "0,0",
+                Lng = "0,0",
+                Distanza = distance,
+                ShowGifts = true,
+                ShowOnSale = true
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo gatto");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo gatto2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo gatto3");
+            var announce4 = Context.Announces.Single(ann => ann.Title == "Regalo gatto4");
+            var announce5 = Context.Announces.Single(ann => ann.Title == "Regalo gatto5");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+                
+            }
+            switch(number){
+                case 1:
+                    foreach (var announce in result)
+                    {
+                        idFound.Add(announce.Id);
+                        if (announce.Id == announce1.Id)
+                            Assert.True(announce.isInRange);
+                        else if (announce.Id == announce4.Id)
+                            Assert.False(announce.isInRange);
+                    }
+                    Assert.Contains(announce1.Id, idFound);
+                    Assert.DoesNotContain(announce2.Id, idFound);
+                    Assert.DoesNotContain(announce3.Id, idFound);
+                    Assert.Contains(announce4.Id, idFound);
+                    Assert.DoesNotContain(announce5.Id, idFound);
+                    break;
+                case 2:
+                    Assert.Empty(result);
+                    break;
+                case 3:
+                    Assert.All(result, r => Assert.True(r.isInRange));
+                    Assert.Contains(announce1.Id, idFound);
+                    Assert.Contains(announce2.Id, idFound);
+                    Assert.Contains(announce3.Id, idFound);
+                    Assert.Contains(announce4.Id, idFound);
+                    Assert.Contains(announce5.Id, idFound);
+                    break;
+            }
+            
+
+        }
+        /*
         [Fact]
         public void UserPerformsAdvancedSearchUsingBrowserPositionAndDistance4()
         {
@@ -446,7 +550,7 @@ namespace Cianfrusaglie.Tests {
             Assert.Contains(announce4.Id, idFound);
             Assert.Contains(announce5.Id, idFound);
 
-        }
+        }*/
 
         [Fact]
         public void UserPerformsAdvancedSearchUsingBrowserPosition()

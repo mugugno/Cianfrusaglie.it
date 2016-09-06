@@ -315,7 +315,7 @@ namespace Cianfrusaglie.Controllers {
                 ul1 = double.Parse(advancedSearchViewModel.Lat.Replace(".", ","));
                 ul2 = double.Parse(advancedSearchViewModel.Lng.Replace(".", ","));
                 distanza = (double)advancedSearchViewModel.Distanza;
-                if (advancedSearchViewModel.Regione != "NULL")
+                if (advancedSearchViewModel.Regione != null && advancedSearchViewModel.Regione != "NULL")
                 {
                     Region region = _context.Regions.Single(r => r.Name == advancedSearchViewModel.Regione);
                     double distancePointToRegion = GeoCoordinate.Distance(region.Latitudine, region.Longitudine, ul1, ul2);
