@@ -8,6 +8,7 @@ using Microsoft.AspNet.Mvc;
 using Moq;
 using Xunit;
 using Microsoft.Data.Entity;
+using Cianfrusaglie.ViewModels.Announce;
 
 namespace Cianfrusaglie.Tests {
     public class SearchControllerTests : BaseTestSetup {
@@ -154,8 +155,15 @@ namespace Cianfrusaglie.Tests {
             };
             var announce =
                 Context.Announces.Single(ann => ann.Author.UserName == FirstUserName && ann.Title == "Halo 5 Usato");
+            
             var result = searchController.PerformAdvancedSearch(advSearchByTitle);
-            Assert.Contains(announce, result);
+            List<int> idFound = new List<int>();
+            foreach (var singleAnnounce in result)
+            {
+                idFound.Add(singleAnnounce.Id);
+
+            }
+            Assert.Contains(announce.Id, idFound);
         }
 
         [Fact]
@@ -174,10 +182,338 @@ namespace Cianfrusaglie.Tests {
                 Context.Announces.Single(
                     ann => ann.Price == 1000);
             var result = searchController.PerformAdvancedSearch(advSearchByPriceRange);
-            Assert.Contains(announce, result);
-
+            
+            List<int> idFound = new List<int>();
+            foreach (var singleAnnounce in result)
+            {
+                idFound.Add(singleAnnounce.Id);
+                
+            }
+            Assert.Contains(announce.Id, idFound);
             var wrongAnnounce = Context.Announces.Single(ann => ann.Price == 15);
-            Assert.DoesNotContain(wrongAnnounce, result);
+            Assert.DoesNotContain(wrongAnnounce.Id, idFound);
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingDistanceAndRegion()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "cane",
+                Lat = "44,5425536",
+                Lng = "8,4636813",
+                Distanza = 100,
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "Liguria"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo cane");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo cane2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo cane3");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+                if (announce.Id == announce3.Id)
+                    Assert.False(announce.isInRange);
+                else if (announce.Id == announce2.Id)
+                    Assert.True(announce.isInRange);
+            }
+            Assert.DoesNotContain(announce1.Id, idFound);
+            Assert.Contains(announce2.Id, idFound);
+            Assert.Contains(announce3.Id, idFound);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingRegion1()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "cane",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "Liguria"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo cane");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo cane2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo cane3");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.DoesNotContain(announce1.Id, idFound);
+            Assert.Contains(announce2.Id, idFound);
+            Assert.Contains(announce3.Id, idFound);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingRegion2()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "cane",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "Piemonte"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo cane");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo cane2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo cane3");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.Contains(announce1.Id, idFound);
+            Assert.DoesNotContain(announce2.Id, idFound);
+            Assert.DoesNotContain(announce3.Id, idFound);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingRegion3()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "cane",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "Toscana"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo cane");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo cane2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo cane3");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            Assert.Empty(result);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingDistanceAndRegionTooMuch()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "cane",                
+                Lat = "38,1781678",
+                Lng = "15,4809987",
+                Distanza = 50,
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "Liguria"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo cane");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo cane2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo cane3");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            Assert.Empty(result);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingBrowserPositionAndDistance4()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "gatto",
+                Lat = "0,0",
+                Lng="0,0",
+                Distanza = 4,
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "NULL"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo gatto");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo gatto2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo gatto3");
+            var announce4 = Context.Announces.Single(ann => ann.Title == "Regalo gatto4");
+            var announce5 = Context.Announces.Single(ann => ann.Title == "Regalo gatto5");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach(var announce in result)
+            {
+                idFound.Add(announce.Id);
+                if (announce.Id == announce1.Id)
+                    Assert.True(announce.isInRange);
+                else if (announce.Id == announce4.Id)
+                    Assert.False(announce.isInRange);
+            }
+            
+            Assert.Contains(announce1.Id, idFound);
+            Assert.DoesNotContain(announce2.Id, idFound);
+            Assert.DoesNotContain(announce3.Id, idFound);
+            Assert.Contains(announce4.Id, idFound);
+            Assert.DoesNotContain(announce5.Id, idFound);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingBrowserPositionAndDistance1()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "gatto",
+                Lat = "0,0",
+                Lng = "0,0",
+                Distanza = 0,
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "NULL"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo gatto");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo gatto2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo gatto3");
+            var announce4 = Context.Announces.Single(ann => ann.Title == "Regalo gatto4");
+            var announce5 = Context.Announces.Single(ann => ann.Title == "Regalo gatto5");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            Assert.Empty(result);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingBrowserPositionAndDistance20()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "gatto",
+                Lat = "0,0",
+                Lng = "0,0",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "NULL",
+                Distanza = 20
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo gatto");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo gatto2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo gatto3");
+            var announce4 = Context.Announces.Single(ann => ann.Title == "Regalo gatto4");
+            var announce5 = Context.Announces.Single(ann => ann.Title == "Regalo gatto5");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.All(result, r => Assert.True(r.isInRange));
+            Assert.Contains(announce1.Id, idFound);
+            Assert.Contains(announce2.Id, idFound);
+            Assert.Contains(announce3.Id, idFound);
+            Assert.Contains(announce4.Id, idFound);
+            Assert.Contains(announce5.Id, idFound);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingBrowserPosition()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            //user.Latitude = 0.0;
+            //user.Longitude = 0.0;
+            //Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Title = "gatto",
+                Lat = "0,0",
+                Lng = "0,0",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "NULL"
+            };
+            var announce1 = Context.Announces.Single(ann => ann.Title == "Regalo gatto");
+            var announce2 = Context.Announces.Single(ann => ann.Title == "Regalo gatto2");
+            var announce3 = Context.Announces.Single(ann => ann.Title == "Regalo gatto3");
+            var announce4 = Context.Announces.Single(ann => ann.Title == "Regalo gatto4");
+            var announce5 = Context.Announces.Single(ann => ann.Title == "Regalo gatto5");
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announce in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.All(result, r => Assert.False(r.isInRange));
+            Assert.Contains(announce1.Id, idFound);
+            Assert.Contains(announce2.Id, idFound);
+            Assert.Contains(announce3.Id, idFound);
+            Assert.Contains(announce4.Id, idFound);
+            Assert.Contains(announce5.Id, idFound);
+
+        }
+
+        [Fact]
+        public void UserPerformsAdvancedSearchUsingProfilePosition()
+        {
+            var user = Context.Users.Single(u => u.UserName.Equals(FirstUserName));
+            user.Latitude = 0.0;
+            user.Longitude = 0.0;
+            Context.SaveChanges();
+            var searchController = CreateResearchController(user.Id);
+            var advSearchByProfilePosition = new AdvancedSearchViewModel()
+            {
+                Distanza = 10,
+                positionByProfile = "2",
+                ShowGifts = true,
+                ShowOnSale = true,
+                Regione = "NULL"
+            };
+            var announce = Context.Announces.Single(ann => ann.Title == "Regalo bicicletta arrugginita");
+            
+            var result = searchController.PerformAdvancedSearch(advSearchByProfilePosition);
+            List<int> idFound = new List<int>();
+            foreach (var announceFound in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.Contains(announce.Id, idFound);
+
+            var wrongAnnounce = Context.Announces.Single(ann => ann.Title == "Halo 5 Usato");
+            
+            Assert.DoesNotContain(wrongAnnounce.Id, idFound);
         }
 
         [Fact]
@@ -197,11 +533,15 @@ namespace Cianfrusaglie.Tests {
             };
             var announce = Context.Announces.Single(ann => ann.Title == "Regalo bicicletta arrugginita");
             var result = searchController.PerformAdvancedSearch(advSearchByKmRange);
-
-            Assert.Contains(announce, result);
+            List<int> idFound = new List<int>();
+            foreach (var announceFound in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.Contains(announce.Id, idFound);
 
             var wrongAnnounce = Context.Announces.Single(ann => ann.Title == "Halo 5 Usato");
-            Assert.DoesNotContain(wrongAnnounce, result);
+            Assert.DoesNotContain(wrongAnnounce.Id, idFound);
         }
 
         [Fact]
@@ -222,9 +562,13 @@ namespace Cianfrusaglie.Tests {
             var announce = Context.Announces.First(ann => ann.AuthorId.Equals(user.Id));
             var result = searchController.PerformAdvancedSearch(advSearchByFeedback);
             var wrongAnnounce = Context.Announces.First(ann => ann.AuthorId.Equals(user2.Id));
-
-            Assert.Contains(announce, result);
-            Assert.DoesNotContain(wrongAnnounce, result);
+            List<int> idFound = new List<int>();
+            foreach (var announceFound in result)
+            {
+                idFound.Add(announce.Id);
+            }
+            Assert.Contains(announce.Id, idFound);
+            Assert.DoesNotContain(wrongAnnounce.Id, idFound);
         }
 
         [Fact]

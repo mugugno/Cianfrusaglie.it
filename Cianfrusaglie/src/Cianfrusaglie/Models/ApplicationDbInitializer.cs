@@ -5,6 +5,48 @@ namespace Cianfrusaglie.Models {
     public static class ApplicationDbInitializer {
         public static void EnsureSeedData( this ApplicationDbContext ctx ) {
             if( !ctx.Categories.Any() ) {
+                var Liguria = new Region {Name="Liguria", Width=187.62, Latitudine= 44.48166, Longitudine = 8.904943, Height=67.78 };
+                ctx.Regions.Add(Liguria);
+                var Piemonte = new Region { Name = "Piemonte", Width = 205, Latitudine = 45.117516, Longitudine = 8.045775, Height = 214.59 };
+                ctx.Regions.Add(Piemonte);
+                var Valle = new Region { Name = "Valle d'Aosta", Width = 75.54, Latitudine = 45.739917, Longitudine = 7.362136, Height = 41.62 };
+                ctx.Regions.Add(Valle);
+                var Lombardia = new Region { Name = "Lombardia", Width = 147.27, Latitudine = 45.658433, Longitudine = 9.295998, Height = 135.16 };
+                ctx.Regions.Add(Lombardia);
+                var Trentino = new Region { Name = "Trentino-Alto Adige", Width = 97.25, Latitudine = 46.413957, Longitudine = 11.201271, Height = 124.77 };
+                ctx.Regions.Add(Trentino);
+                var Friuli = new Region { Name = "Friuli-Venezia Giulia", Width = 89.74, Latitudine = 46.197346, Longitudine = 13.010776, Height = 91.23 };
+                ctx.Regions.Add(Friuli);
+                var Veneto = new Region { Name = "Veneto", Width = 184.03, Latitudine = 45.577637, Longitudine = 11.909521, Height = 184.71 };
+                ctx.Regions.Add(Veneto);
+                var Emilia = new Region { Name = "Emilia-Romagna", Width = 235.94, Latitudine = 44.625617, Longitudine = 10.773202, Height = 87.53 };
+                ctx.Regions.Add(Emilia);
+                var Toscana = new Region { Name = "Toscana", Width = 164.06, Latitudine = 43.510501, Longitudine = 11.225882, Height = 181.17 };
+                ctx.Regions.Add(Toscana);
+                var Umbria = new Region { Name = "Umbria", Width = 95.69, Latitudine = 42.903212, Longitudine = 12.504107, Height = 123.74 };
+                ctx.Regions.Add(Umbria);
+                var Lazio = new Region { Name = "Lazio", Width = 186.91, Latitudine = 41.714497, Longitudine = 12.772019, Height = 138.56 };
+                ctx.Regions.Add(Lazio);
+                var Marche = new Region { Name = "Marche", Width = 88.71, Latitudine = 43.428789, Longitudine = 13.196984, Height = 118.89 };
+                ctx.Regions.Add(Marche);
+                var Abruzzo = new Region { Name = "Abruzzo", Width = 136.42, Latitudine = 42.202258, Longitudine = 13.806716, Height = 123.9 };
+                ctx.Regions.Add(Abruzzo);
+                var Molise = new Region { Name = "Molise", Width = 93.39, Latitudine = 41.638595, Longitudine = 14.591977, Height = 64.63 };
+                ctx.Regions.Add(Molise);
+                var Campania = new Region { Name = "Campania", Width = 117.62, Latitudine = 40.783778, Longitudine = 14.702837, Height = 141.78 };
+                ctx.Regions.Add(Campania);
+                var Puglia = new Region { Name = "Puglia", Width = 259, Latitudine = 40.972377, Longitudine = 16.726039, Height = 176.61 };
+                ctx.Regions.Add(Puglia);
+                var Basilicata = new Region { Name = "Basilicata", Width = 107, Latitudine = 40.587626, Longitudine = 16.107069, Height = 128.02 };
+                ctx.Regions.Add(Basilicata);
+                var Calabria = new Region { Name = "Calabria", Width = 103, Latitudine = 39.141147, Longitudine = 14.425686, Height = 225.07 };
+                ctx.Regions.Add(Calabria);
+                var Sicilia = new Region { Name = "Sicilia", Width = 272.32, Latitudine = 37.510592, Longitudine = 14.425686, Height = 167.92 };
+                ctx.Regions.Add(Sicilia);
+                var Sardegna = new Region { Name = "Sardegna", Width = 110, Latitudine = 40.080588, Longitudine = 9.067435, Height = 229.19 };
+                ctx.Regions.Add(Sardegna);
+                ctx.SaveChanges();
+                
                 var c = new Category {Name = "Libri, Musica e Film"};
                 ctx.Categories.Add( c );
                 ctx.SaveChanges();

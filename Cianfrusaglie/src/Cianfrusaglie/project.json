@@ -34,7 +34,8 @@
     "System.Linq.Parallel": "4.0.1-beta-23516",
     "System.Linq.Queryable": "4.0.1-beta-23516",
     "Microsoft.AspNet.Owin": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final"
+    "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final"
   },
 
   "commands" : {

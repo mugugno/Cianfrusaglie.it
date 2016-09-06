@@ -67,7 +67,7 @@ namespace Cianfrusaglie.Tests {
             _smsSender = new Mock< ISmsSender >().Object;
 
             var mockHttpContext = new Mock< HttpContext >();
-            mockHttpContext.SetupAllProperties();
+            
 
 
             _mockSignInManager.Setup(
@@ -129,6 +129,11 @@ namespace Cianfrusaglie.Tests {
                 UserManager.CreateAsync( new User {UserName = ThirdUserName, Email = "pippo3@gmail.com"},
                     registerViewModel.Password ).Result;
         
+        }
+
+        private void CreateRegions()
+        {
+            Context.EnsureSeedData();
         }
 
         private void CreateCategories() { Context.EnsureSeedData(); }
@@ -229,6 +234,102 @@ namespace Cianfrusaglie.Tests {
             };
             Context.AnnounceCategories.Add(announceCategory6);
             Context.SaveChanges();
+            /*Annuncio 7*/
+            var announce7 = new Announce { Author = secondUser, Title = "Regalo gatto", Description = "Cucciolo", Latitude = 0.000606, Longitude = 0.016306, Closed = false, MeterRange = 1 };
+            Context.Announces.Add(announce7);
+
+            var announceCategory7 = new AnnounceCategory
+            {
+                Announce = announce7,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory7);
+            Context.SaveChanges();
+
+            /*Annuncio 8*/
+            var announce8 = new Announce { Author = secondUser, Title = "Regalo gatto2", Description = "Cucciolo", Latitude = -0.000853, Longitude = 0.044289, Closed = false, MeterRange = 0 };
+            Context.Announces.Add(announce8);
+
+            var announceCategory8 = new AnnounceCategory
+            {
+                Announce = announce8,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory8);
+            Context.SaveChanges();
+            /*Annuncio 9*/
+            var announce9 = new Announce { Author = secondUser, Title = "Regalo gatto3", Description = "Cucciolo", Latitude = -0.000338, Longitude = 0.070724, Closed = false, MeterRange = 3 };
+            Context.Announces.Add(announce9);
+
+            var announceCategory9 = new AnnounceCategory
+            {
+                Announce = announce9,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory9);
+            Context.SaveChanges();
+
+            /*Annuncio 10*/
+            var announce10 = new Announce { Author = secondUser, Title = "Regalo gatto4", Description = "Cucciolo", Latitude = 0.001035, Longitude = 0.133209, Closed = false, MeterRange = 11 };
+            Context.Announces.Add(announce10);
+
+            var announceCategory10 = new AnnounceCategory
+            {
+                Announce = announce10,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory10);
+            Context.SaveChanges();
+            /*Annuncio 11*/
+            var announce11 = new Announce { Author = secondUser, Title = "Regalo gatto5", Description = "Cucciolo", Latitude = 0.015798, Longitude = 0.171661, Closed = false, MeterRange = 2 };
+            Context.Announces.Add(announce11);
+
+            var announceCategory11a = new AnnounceCategory
+            {
+                Announce = announce11,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory11a);
+            Context.SaveChanges();
+
+            /*Annuncio 12*/
+            var Piemonte = Context.Regions.Single(r => r.Name.Equals("Piemonte"));
+            var Liguria = Context.Regions.Single(r => r.Name.Equals("Liguria"));
+            var announce12 = new Announce { Author = secondUser, Title = "Regalo cane", Description = "Cucciolo", Latitude = 44.643692, Longitude = 8.661245, Closed = false, Region = Piemonte };
+            Context.Announces.Add(announce12);
+
+            var announceCategory12a = new AnnounceCategory
+            {
+                Announce = announce12,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory12a);
+            Context.SaveChanges();
+
+            /*Annuncio 13*/
+            var announce13 = new Announce { Author = secondUser, Title = "Regalo cane2", Description = "Cucciolo", Latitude = 44.475868, Longitude = 8.742786, Closed = false, Region = Liguria};
+            Context.Announces.Add(announce13);
+
+            var announceCategory13 = new AnnounceCategory
+            {
+                Announce = announce13,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory13);
+            Context.SaveChanges();
+            /*Annuncio 14*/
+            var announce14 = new Announce { Author = secondUser, Title = "Regalo cane3", Description = "Cucciolo", Latitude = 45.376106, Longitude = 8.978316, Closed = false, MeterRange=2, Region = Liguria };
+            Context.Announces.Add(announce14);
+
+            var announceCategory14 = new AnnounceCategory
+            {
+                Announce = announce14,
+                Category = Context.Categories.Single(a => a.Name.Equals("Tempo libero"))
+            };
+            Context.AnnounceCategories.Add(announceCategory14);
+            Context.SaveChanges();
+
+            
         }
 
         protected void CreateMessages() {

@@ -1,0 +1,144 @@
+﻿@using System.Security.Claims
+@using System.Threading.Tasks
+@using Microsoft.AspNet.Razor.CodeGenerators.Visitors
+@using System.Collections.Generic
+@using System.Collections.Immutable
+@using System.Net
+@using System.Net.Configuration
+@using Cianfrusaglie.GeoPosition
+@using Cianfrusaglie.Models
+@model  IEnumerable< Announce > 
+
+@{
+    ViewData["Title"] = "MapSearch";
+}
+
+@{
+    var imgUrl = ((IEnumerable<ImageUrl>)ViewData["Images"]).First().Url;
+    imgUrl = "http://cianfrusapp.net" + imgUrl;
+}
+
+@functions
+{
+
+
+
+    public IEnumerable<Announce> GetAnnounce(int idCat)
+    {
+        return ViewData["listAnnounce"] as List<Announce>;
+    }
+    
+
+}
+@Html.AntiForgeryToken()
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAazkV7HFriRZ_QywJOxCw9Kr-sNxHyH2w&libraries=places"></script>
+<script src="/js/googleMaps.js"></script>
+<script>
+    var markers = [];
+    var infowindows = [];
+    function addMarkers() {
+        @{var i = 0; }
+        @foreach (var item in Model) {
+
+            var lat = @item.Latitude.ToString().Replace(',', '.');
+            var lng = @item.Longitude.ToString().Replace(',', '.');
+            <text>
+            var posMarker = new google.maps.LatLng(@lat, @lng);
+            var contentString = '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h1 id="firstHeading" class="firstHeading">@item.Title</h1>'+
+                '<div id="bodyContent">'+
+                '<div class="col-sm-12">' +
+                '<div class="col-sm-4">' +
+                '<img style="width:100px" src = "http://cianfrusapp.net/@item.Images.First().Url">' +
+                '</div>'+
+
+                '<div class="col-sm-8">'+
+                '<p>@item.Description</p>'+
+
+                '</div>'+
+                '</div>'+
+                '<a class="btn btn-success col-sm-4 col-sm-offset-4" href="~/Announces/Details/?id=@item.Id">Guarda annuncio</a>';
+            if(@item.Price == 0)
+                contentString = contentString + '<h5 class="pull-right">In regalo</h5>';
+            else
+                contentString = contentString + '<h5 class="pull-right">Al prezzo di @item.Price</h5>';
+                contentString = contentString +
+                '</div>'+
+                '</div>';
+
+            infowindows.push(new google.maps.InfoWindow({
+                content: contentString
+            }));
+            markers.push(new google.maps.Marker({
+                position: posMarker,
+                title: '@item.Title',
+                map: map
+            }));
+            markers[@i].addListener('click', function() {
+                infowindows.forEach(function(value){value.close()});
+            infowindows[@i].open(map, markers[@i]);
+            });
+
+            google.maps.event.addListener(map, "click", function(event) {
+                infowindows[@i].close();
+            });
+            </text>
+
+            i = i + 1;
+        }
+
+    }
+    $(document).ready( function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var posGmap = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                var mapProp = {
+                    center: posGmap,
+                    zoom: 8,
+                    streetViewControl: false,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                addMarkers();
+                map.setCenter(posGmap);
+
+            }, function (positionError) {
+                console.log(positionError);
+                var posGmap = new google.maps.LatLng(41.9102415, 12.3959151);
+                var mapProp = {
+                    center: posGmap,
+                    zoom: 5,
+                    streetViewControl: false,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                initializeGMaps(position, true, 0, 8);
+                addMarkers();
+                map.setCenter(posGmap);
+            });
+        } else {
+
+        }
+
+    } );
+</script>
+<div class="container" style="height:65vh">
+    <div id="googleMap" style="height:100%"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

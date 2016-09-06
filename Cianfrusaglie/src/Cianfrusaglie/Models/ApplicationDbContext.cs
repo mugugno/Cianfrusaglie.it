@@ -8,6 +8,7 @@ namespace Cianfrusaglie.Models {
         public ApplicationDbContext( DbContextOptions options ) : base( options ) { }
 
         public DbSet< Category > Categories { get; set; }
+        public DbSet<Region> Regions { get; set; }
         public DbSet< Message > Messages { get; set; }
         public DbSet< Announce > Announces { get; set; }
         public DbSet< AnnounceExchange > AnnounceExchange { get; set; }

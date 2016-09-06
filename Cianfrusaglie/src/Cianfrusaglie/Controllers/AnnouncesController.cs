@@ -202,6 +202,7 @@ namespace Cianfrusaglie.Controllers {
             }
 
             if( ModelState.IsValid ) {
+                Region regionToAdd = _context.Regions.Single(r => r.Name == model.Region);
                 string idlogged = User.GetUserId();
                 var author = _context.Users.First( u => u.Id.Equals( idlogged ) );
                 var newAnnounce = new Announce {
@@ -212,7 +213,8 @@ namespace Cianfrusaglie.Controllers {
                     Longitude = double.Parse( model.Longitude, CultureInfo.InvariantCulture ),
                     MeterRange = model.Range,
                     Author = author,
-                    Price = model.Price
+                    Price = model.Price,
+                    Region = regionToAdd
                 };
                 _context.Announces.Add( newAnnounce );
                 _context.SaveChanges();

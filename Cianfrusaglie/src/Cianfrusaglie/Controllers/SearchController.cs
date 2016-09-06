@@ -9,8 +9,10 @@ using Cianfrusaglie.Statics;
 using Cianfrusaglie.Suggestions;
 using Cianfrusaglie.ViewModels.Search;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using static Cianfrusaglie.Constants.CommonFunctions;
+using Cianfrusaglie.ViewModels.Announce;
 
 namespace Cianfrusaglie.Controllers {
 
@@ -26,6 +28,12 @@ namespace Cianfrusaglie.Controllers {
 
         public IActionResult Advanced() {
             SetRootLayoutViewData( this, _context );
+
+            SelectList SubRegionList = new SelectList(_context.Regions.ToList(), "Id", "Name");
+               
+            ViewBag.SubRegionList = SubRegionList;
+
+
             return View();
         }
 
@@ -108,6 +116,12 @@ namespace Cianfrusaglie.Controllers {
                     iu => pageResults.SelectMany( p => p.Images.Select( i => i.Id ) ).Contains( iu.Id ) ).ToList();
 
             return View( pageResults );
+        }
+
+        public IActionResult MapSearch()
+        {
+            ViewData["Images"] = _context.ImageUrls.ToList();
+            return View(_context.Announces.Where(announce => !announce.Closed).ToList());
         }
 
         public IActionResult SearchRedirect( string title, IEnumerable< int > categories ) {
@@ -262,11 +276,10 @@ namespace Cianfrusaglie.Controllers {
             return View(nameof(Index), result);
         }
 
-        public IEnumerable< Announce > PerformAdvancedSearch(AdvancedSearchViewModel advancedSearchViewModel) {
+        public IEnumerable< AnnouncesFound > PerformAdvancedSearch(AdvancedSearchViewModel advancedSearchViewModel) {
             Predicate< Announce > truePredicate = (Announce a) => true;
-
             var rangeKmPredicate = truePredicate;
-
+            /*
             if ( LoginChecker.HasLoggedUser( this ) ) {
                 var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
                 double min = advancedSearchViewModel.KmRangeMin;
@@ -283,6 +296,39 @@ namespace Cianfrusaglie.Controllers {
                 }
                 
             }
+            */
+            
+            if(LoginChecker.HasLoggedUser(this) && advancedSearchViewModel.positionByProfile != null && advancedSearchViewModel.positionByProfile.Equals("2"))
+            {
+                var user = _context.Users.Single( u => u.Id.Equals( User.GetUserId() ) );
+                advancedSearchViewModel.Lat = user.Latitude.ToString();
+                advancedSearchViewModel.Lng = user.Longitude.ToString();
+
+            }
+            double ul1 = 0;
+            double ul2 = 0;
+            double distanza = 0;
+            bool filterByPosition = false;
+            if (advancedSearchViewModel.Lat != null && advancedSearchViewModel.Lng != null && advancedSearchViewModel.Distanza != null)
+            {
+                filterByPosition = true;
+                ul1 = double.Parse(advancedSearchViewModel.Lat.Replace(".", ","));
+                ul2 = double.Parse(advancedSearchViewModel.Lng.Replace(".", ","));
+                distanza = (double)advancedSearchViewModel.Distanza;
+                if (advancedSearchViewModel.Regione != "NULL")
+                {
+                    Region region = _context.Regions.Single(r => r.Name == advancedSearchViewModel.Regione);
+                    double distancePointToRegion = GeoCoordinate.Distance(region.Latitudine, region.Longitudine, ul1, ul2);
+                    if(distancePointToRegion - region.Height/2 >= distanza && distancePointToRegion - region.Width / 2 >= distanza)
+                    {
+                        return new List<AnnouncesFound>();
+                    }
+                }
+                
+                rangeKmPredicate =
+                    (Announce a) =>
+                    GeoCoordinate.Distance(a.Latitude, a.Longitude, ul1, ul2) <= distanza + a.MeterRange;
+            }
 
             int upperPrice = advancedSearchViewModel.PriceRangeMax ?? int.MaxValue;
             Predicate<Announce> pricePredicate =  a =>
@@ -297,37 +343,54 @@ namespace Cianfrusaglie.Controllers {
             var announces =
                 _context.Announces.Include( a => a.Author ).Where(
                     a => feedbackPredicate( a ) && pricePredicate( a ) && rangeKmPredicate( a ) );
-
+            
             if (!advancedSearchViewModel.ShowGifts)
                 announces = announces.Where(a => a.Price != 0);
 
             if (!advancedSearchViewModel.ShowOnSale)
                 announces = announces.Where(a => a.Price == 0);
-
-
+            
             if ( advancedSearchViewModel.Title != null ) {
                 var titleSearch = TitleBasedSearch(advancedSearchViewModel.Title);
                 announces = announces.Where( a => titleSearch.Select( i => i.Id ).Contains( a.Id ) );
             }
-
-            if( advancedSearchViewModel.OrderByDate)
+            
+            if ( advancedSearchViewModel.OrderByDate)
                 announces = announces.OrderByDescending( a => a.PublishDate );
-            else if( advancedSearchViewModel.OrderByDistance ) {
-                if( !LoginChecker.HasLoggedUser( this ) )
-                    return announces.ToList();
-                var user = _context.Users.Single( i => i.Id.Equals( User.GetUserId() ) );
-                if( !user.Latitude.HasValue || !user.Longitude.HasValue )
-                    return announces.ToList();
+            if ( advancedSearchViewModel.Regione != null && advancedSearchViewModel.Regione != "NULL")
+                announces = announces.Where(a => a.Region.Name.Equals(advancedSearchViewModel.Regione));
+            else if (advancedSearchViewModel.OrderByDistance)
+            {
+                if (!LoginChecker.HasLoggedUser(this))
+                { }
+                var user = _context.Users.Single(i => i.Id.Equals(User.GetUserId()));
+                if (!user.Latitude.HasValue || !user.Longitude.HasValue)
+                { }
                 double lat = user.Latitude.Value;
                 double lon = user.Longitude.Value;
                 announces =
                     announces.OrderBy(a => GeoCoordinate.Distance(lat, lon, a.Latitude, a.Longitude));
             }
-            else if(advancedSearchViewModel.OrderByPrice) {
+            else if (advancedSearchViewModel.OrderByPrice)
+            {
                 announces = announces.OrderBy(a => a.Price);
-            }   
+            } 
+              
+            
+            List<AnnouncesFound> announcesViewModel = new List<AnnouncesFound>();
+            AnnouncesFound announceFound;
+            foreach (var announce in announces)
+            {
+                announceFound = new AnnouncesFound(announce);
+                if (filterByPosition && GeoCoordinate.Distance(ul1, ul2, announceFound.Latitude, announceFound.Longitude) < distanza)
+                {
+                    announceFound.isInRange = true;
+                }
+                announcesViewModel.Add(announceFound);
 
-            return announces.ToList();
+            }
+            
+            return announcesViewModel;
         }
 
         protected override void Dispose( bool disposing ) {

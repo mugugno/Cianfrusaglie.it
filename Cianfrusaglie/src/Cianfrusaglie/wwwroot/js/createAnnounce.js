@@ -96,8 +96,14 @@ function geocodePosition(pos) {
     geocoder.geocode({
         latLng: pos
     }, function (responses) {
+        
         if (responses && responses.length > 0) {
             $("#pac-input").val(responses[0].formatted_address);
-        }
+            for (address of responses[0].address_components) {
+                if(address.types[0] == "administrative_area_level_1")
+                    $("#RegionInput").val(address.long_name)
+            }
+            }
+            
     });
 }

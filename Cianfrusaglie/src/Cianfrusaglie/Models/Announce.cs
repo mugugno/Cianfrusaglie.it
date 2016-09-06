@@ -52,5 +52,7 @@ namespace Cianfrusaglie.Models {
         public virtual ICollection< FeedBack > FeedBacks { get; set; }
 
         public virtual ICollection< AnnounceChosen > ChosenUsers { get; set; }
+        [Required]
+        public virtual Region Region { get; set; }
     }
 }

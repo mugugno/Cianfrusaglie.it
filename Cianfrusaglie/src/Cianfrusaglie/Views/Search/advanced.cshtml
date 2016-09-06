@@ -46,14 +46,47 @@
     <link href="~/Content/Search.css" rel="stylesheet" type="text/css"/>
     <link href="~/Content/StarRating.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAazkV7HFriRZ_QywJOxCw9Kr-sNxHyH2w&libraries=places"></script>
 
 </head>
 <body>
-
+    <script>
+        var latBrowser = null;
+        var lngBrowser = null;
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                latBrowser = position.coords.latitude;
+                lngBrowser = position.coords.longitude;
+            }
+                );
+        } else {
+               
+        }
+        
+        var lat = null;
+        var lng = null;
+        function onRegisterSubmit() {
+            if (document.activeElement == document.getElementById("pac-input")) return false;
+            
+            switch ($('input[name="positionByProfile"]:checked').val()) {
+                case ("0"):
+                    $("#latitudeInput").attr("value", lat);
+                    $("#longitudeInput").attr("value", lng);
+                    break;
+                case ("1"):
+                    $("#latitudeInput").attr("value", latBrowser);
+                    $("#longitudeInput").attr("value", lngBrowser);
+                    break;
+                case ("2"):
+                    break;
+            }
+            return true;
+        }
+    </script>
 <div id="wrapper-register">
     <div class="col-md-6 col-lg-offset-3" style="align-content: center; margin-top: 3em;">
-            <form class="panel panel-default" asp-action="AdvancedSearch" asp-controller="Search" method="post" role="form">
+            <form class="panel panel-default" asp-action="AdvancedSearch" asp-controller="Search" method="post" role="form" onsubmit="return onRegisterSubmit()">
                 <div id="title" class="panel panel-heading" style="background-color: #49586d;text-align:center;">
                     <a href="~/">
                         <h1>
@@ -124,12 +157,58 @@
                         <label asp-for="OrderByDistance" class="checkbox-inline"><input asp-for="OrderByDistance" type="checkbox" id="DistanceFirst" name="optFirst" onclick="KmFirst()"/> Più vicini a me</label>
                     </div>
                     <br/>
-                    
+                    <!--
                     <div class="input-group" id="kmRange">
                         <label>Mostra annunci compresi tra:</label>
                         <label class="radio-inline"><input asp-for="KmRangeMin" type="number" style="width: 100px;" min="0" value="0"/> Km e <input asp-for="KmRangeMax" type="number" style="width: 100px;"/> Km</label>
                     </div>
+                        -->
+                    <div class="input-group">
+                        <label>Seleziona posizione: &nbsp;</label>
+                        <input asp-for="positionByProfile" name="positionByProfile" type="radio" value="0"><input id="pac-input" name="maps" class="form-control" type="text" placeholder=""><br />
+                        <input asp-for="positionByProfile" name="positionByProfile" type="radio" value="1"><label>Usa la posizione del browser</label><br />
+                        <input asp-for="positionByProfile" name="positionByProfile" type="radio" value="2"><label>Usa la posizione del tuo profilo</label>
+                    </div>
+                    <div class="form-group">
+                        <input id="pac-input" name="maps" class="form-control" type="text" placeholder="">
+                        <label class="radio-inline">
+                            <label>Imposta distanza:</label>
+                            <input asp-for="Distanza" type="number" placeholder="" min="0" />
+                            <label>Km</label>
+                            @*<input id="pac-input" name="maps" class="form-control" type="text" placeholder="">*@
+                        </label>
+                        <input asp-for="Lat" id="latitudeInput" class="form-control" type="text" style="display: none;"/>
+                        <input asp-for="Lng" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                    </div>
                   
+                    <div class="input-group">
+                        <label>Mostra annunci della regione: &nbsp;</label>
+                        <select asp-for="Regione" class="selectpicker">
+                            <option selected value="NULL">Regione</option>
+                            <option value="Abruzzo">Abruzzo</option>
+                            <option value="Basilicata">Basilicata</option>
+                            <option value="Calabria">Calabria</option>
+                            <option value="Campagna">Campagna</option>
+                            <option value="Emilia-Romagna">Emilia-Romagna</option>
+                            <option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia</option>
+                            <option value="Lazio">Lazio</option>
+                            <option value="Liguria">Liguria</option>
+                            <option value="Lombardia">Lombardia</option>
+                            <option value="Marche">Marche</option>
+                            <option value="Molise">Molise</option>
+                            <option value="Piemonte">Piemonte</option>
+                            <option value="Puglia">Puglia</option>
+                            <option value="Sardegna">Sardegna</option>
+                            <option value="Sicilia">Sicilia</option>
+                            <option value="Toscana">Toscana</option>
+                            <option value="Trentino-Alto Adige">Trentino-Alto Adige</option>
+                            <option value="Umbria">Umbria</option>
+                            <option value="Valle d'Aosta">Valle d'Aosta</option>
+                            <option value="Veneto">Veneto</option>
+                        </select>
+
+                    </div>
+
                     <br/>
                     <div class="input-group">
                         <label class="checkbox-inline"><input type="checkbox"/><input asp-for="ShowGifts" type="checkbox" checked="checked"/> Mostra oggetti in regalo</label>
@@ -170,7 +249,38 @@
             </form>
         </div>
     </div>
+    <script>
 
+        var input = (document.getElementById('pac-input'));
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        var infowindow = new google.maps.InfoWindow();
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+
+            var place = autocomplete.getPlace();
+            lat = place.geometry.location.lat();
+            lng = place.geometry.location.lng();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+        });
+
+        
+
+
+    </script>
 <script>
     $('#salesON')
         .click(function() {

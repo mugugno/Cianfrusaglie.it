@@ -12,7 +12,7 @@ function unableToGeoLocalize(positionError) {
     initializeGMaps(new google.maps.LatLng(44.40678, 8.93391));
 }
 
-var map, marker, cityCircle, validAddress= false;
+var map, marker, cityCircle, validAddress = false;
 
 function checkValidAddress() {
     var geocoder = new google.maps.Geocoder();
@@ -30,15 +30,16 @@ function checkValidAddress() {
 
 /// inizializza Google Maps alla posizione position
 /// onlyView è true se non si può modificare la posizione del marker (usato con onlyView = true in visualizza annuncio o profilo utente)
-function initializeGMaps(position, onlyView, radius) {
+function initializeGMaps(position, onlyView, radius, zoom) {
     if( onlyView == null )
         onlyView = false;
     if( radius == null )
         radius = 0;
-
+    if (zoom == null)
+        zoom = 5;
     var mapProp = {
         center: position,
-        zoom: 5,
+        zoom: zoom,
         streetViewControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -67,7 +68,6 @@ function initializeGMaps(position, onlyView, radius) {
 
         //address check
         input.change(checkValidAddress);
-
         if (radius > 0)
             setCircle(marker.position, 1);
 
@@ -113,8 +113,11 @@ function setCircle(position, radius) {
         map.fitBounds(cityCircle.getBounds());
 }
 
-function placeMarker(location, title) {
-    if (marker != null)
+function placeMarker(location, title, set, add) {
+    
+    if (set == null)
+        set = true;
+    if (marker != null && !add)
         marker.setMap(null); //eliminare vecchio marker
 
     marker = new google.maps.Marker({
@@ -122,8 +125,23 @@ function placeMarker(location, title) {
         title: title,
         map: map
     });
+    if (document.getElementById("RegionInput")) {
+    geocoder.geocode({
+        latLng: location
+    }, function (responses) {
 
-    map.setCenter(location);
+        if (responses && responses.length > 0) {
+            $("#pac-input").val(responses[0].formatted_address);
+            for (address of responses[0].address_components) {
+                if (address.types[0] == "administrative_area_level_1")
+                    $("#RegionInput").val(address.long_name)
+            }
+        }
+        });
+    }
+    
+    if(set)
+        map.setCenter(location);
 }
 
 function GMapsOnline() {

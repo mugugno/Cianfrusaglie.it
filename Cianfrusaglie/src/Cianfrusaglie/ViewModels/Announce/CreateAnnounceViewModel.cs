@@ -19,6 +19,7 @@ namespace Cianfrusaglie.ViewModels.Announce {
 
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+        public string Region { get; set; }
 
         [Range(0,int.MaxValue), Display( Name = "Distanza" )]
         public int Range { get; set; }

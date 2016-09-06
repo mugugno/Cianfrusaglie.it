@@ -13,6 +13,8 @@ namespace Cianfrusaglie.ViewModels.Search
 
         public bool OrderByPrice { get; set; }
 
+        public string positionByProfile { get; set; }
+
         public bool OrderByDistance { get; set; }
 
         public int KmRangeMin { get; set; }
@@ -27,5 +29,9 @@ namespace Cianfrusaglie.ViewModels.Search
         public bool ShowGifts { get; set; }
 
         public bool ShowOnSale { get; set; }
+        public string Lat { get; set; }
+        public string Lng { get; set; }
+        public string Regione { get; set; }
+        public int? Distanza { get; set; }
     }
 }

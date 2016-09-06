@@ -21,7 +21,13 @@
     "test": "xunit.runner.dnx"
   },
   "frameworks": {
-
+    "dnx451": {
+      "frameworkAssemblies": {
+      },
+      "dependencies": {
+        "Moq": "4.5.21"
+      }
+    },
     "dnxcore50": {
       "dependencies": {
         "moq.netcore": "4.4.0-beta8"

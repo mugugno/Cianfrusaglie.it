@@ -6,8 +6,8 @@
 @using System.Net
 @using System.Net.Configuration
 @using Cianfrusaglie.GeoPosition
-@using Cianfrusaglie.Models
-@model  IEnumerable< Announce > 
+@using Cianfrusaglie.ViewModels.Announce
+@model  IEnumerable< AnnouncesFound > 
 
 @{
     ViewData[ "Title" ] = "Index";
@@ -26,8 +26,8 @@
         return null;
     }
 
-    public IEnumerable<Announce> GetAnnounce(int idCat) {
-        return ViewData["listAnnounce"] as List<Announce>;
+    public IEnumerable<AnnouncesFound> GetAnnounce(int idCat) {
+        return ViewData["listAnnounce"] as List<AnnouncesFound>;
     }
 
     public string idDiv = "";
@@ -98,6 +98,7 @@
 
                                     }
                                 }
+                                
                                 @if (announce.Price == 0)
                                 {
                                     if (hasDistance)
@@ -106,6 +107,10 @@
                                     }
                                     else {
                                         <h5 class="price-text-color" style="margin-left: 0" ><b>IN REGALO</b></h5>
+                                    }
+                                    @if (announce.isInRange)
+                                    {
+                                        <span class="btn-success btn-sm btn-round card-img" style="left: -10px"><span class="glyphicon glyphicon-check"></span></span>
                                     }
 
                                     <a href="~/Announces/Details/?id=@announce.Id">
@@ -128,6 +133,7 @@
 
 
                                         <!--DI quale categoria fa parte-->
+                                
                                         <div class="price">
                                             <br />
                                             <h5>Autore: <a href="~/Profile?id=@announce.AuthorId"></a>@announce.Author.UserName</h5>
@@ -148,9 +154,11 @@
                                                 @{ string starWidth = ((int)(20 * announce.Author.FeedbacksMean)).ToString(); }
                                                 <div class="star-colorbar" style="width: @starWidth%">
                                                 </div>
+
                                             </div>
                                             <!-- Fine Stelline col rating dell'utente-->
                                             <br />
+                                            
                                         </div>
 
                                         @*@if (!User.Identity.IsAuthenticated){/*

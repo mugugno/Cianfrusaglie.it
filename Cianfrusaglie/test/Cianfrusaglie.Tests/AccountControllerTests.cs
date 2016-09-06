@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
-using Cianfrusaglie.Controllers;
-using Cianfrusaglie.Models;
 using Cianfrusaglie.ViewModels.Account;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
 using Xunit;
 using Microsoft.Data.Entity;
-using System.Globalization;
 using Cianfrusaglie.Constants;
 
-namespace Cianfrusaglie.Tests {
+namespace Cianfrusaglie.Tests
+{
     public class AccountControllerTests : BaseTestSetup {
 
         [Fact]

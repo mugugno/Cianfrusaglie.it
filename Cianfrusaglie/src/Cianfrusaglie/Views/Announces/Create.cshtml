@@ -45,7 +45,7 @@
 }
 
 <div>
-    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post">
+    <form asp-action="Create" asp-controller="Announces" enctype="multipart/form-data" id="tabellaForm" name="tabellaForm" method="post" onsubmit="onRegisterSubmit()">
         <div class="panel">
                 <div class="panel-body">
                     <div class="row" id="page1" >
@@ -258,6 +258,7 @@
 
                                         <input asp-for="Latitude" id="latitudeInput" class="form-control" type="text" style="display: none;" />
                                         <input asp-for="Longitude" id="longitudeInput" class="form-control" type="text" style="display: none;" />
+                                        <input asp-for="Region" id="RegionInput" class="form-control" type="text" style="display: none;" />
                                     </fieldset>
                                    
                                 </div>
@@ -275,9 +276,18 @@
     </form>
 </div>
 
-<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAazkV7HFriRZ_QywJOxCw9Kr-sNxHyH2w&libraries=places"></script>
 <script src="/js/googleMaps.js"></script>
 <script src="/js/createAnnounce.js"></script>
+<script>
+    
+    var region = null;
+        function onRegisterSubmit() {
+            if (document.activeElement == document.getElementById("pac-input")) return false;
+            $("#RegionInput").attr("value", region);
+            return true;
+        }
+</script>
 <script>
     $(document).ready(function() {
         displayTextMaxLen(@DomainConstraints.AnnounceDescriptionMaxLenght, $("#description"), $("#description_feedback"));
